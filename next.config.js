@@ -24,12 +24,6 @@ const nextConfig = {
   
   images: {
     domains: ['localhost', '*.github.dev', '*.app.github.dev'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      }
-    ],
   },
   
   output: 'standalone',
