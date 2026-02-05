@@ -1,1 +1,5 @@
-export const i18n = { defaultLocale: 'ar', locales: ['ar', 'en'] };
+export default {
+  locales: ['ar', 'en'],
+  defaultLocale: 'ar',
+  localePrefix: 'always'
+};
