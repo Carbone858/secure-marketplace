@@ -3,17 +3,130 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  COMPANY
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  ACTIVE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PREMIUM
+  ENTERPRISE
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("USER")
-  createdAt DateTime @default(now())
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String?
+  phone         String?
+  role          UserRole  @default(USER)
+  avatar        String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  isActive      Boolean   @default(true)
+  
+  company       Company?
+  requests      ServiceRequest[]
   
   @@map("users")
+}
+
+model Company {
+  id                  String             @id @default(uuid())
+  userId              String             @unique
+  name                String
+  slug                String             @unique
+  description         String?            @db.Text
+  logo                String?
+  website             String?
+  email               String?
+  phone               String?
+  countryId           String
+  cityId              String
+  address             String?
+  verificationStatus  String             @default("UNVERIFIED")
+  isActive            Boolean            @default(true)
+  isFeatured          Boolean            @default(false)
+  rating              Float              @default(0)
+  reviewCount         Int                @default(0)
+  currentPlan         SubscriptionPlan   @default(FREE)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("companies")
+}
+
+model Country {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  nameAr      String
+  nameEn      String
+  cities      City[]
+  
+  @@map("countries")
+}
+
+model City {
+  id          String   @id @default(uuid())
+  countryId   String
+  nameAr      String
+  nameEn      String
+  slug        String
+  
+  country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  
+  @@unique([countryId, slug])
+  @@map("cities")
+}
+
+model ServiceRequest {
+  id              String        @id @default(uuid())
+  userId          String
+  title           String
+  description     String        @db.Text
+  cityId          String
+  budgetFrom      Float?
+  budgetTo        Float?
+  status          RequestStatus @default(ACTIVE)
+  visibilityLevel String        @default("PUBLIC")
+  viewCount       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("service_requests")
+}
+
+model CMSSection {
+  id            String    @id @default(uuid())
+  name          String    @unique
+  identifier    String    @unique
+  page          String    @default("home")
+  content       Json
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@map("cms_sections")
 }
