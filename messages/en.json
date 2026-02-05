@@ -1,6 +1,8 @@
 {
   "home": {
-    "title": "Service Marketplace",
-    "subtitle": "Secure platform for services"
+    "hero": {
+      "title": "Get Quotes from Top Companies",
+      "subtitle": "Leading service marketplace in the Arab world"
+    }
   }
 }
