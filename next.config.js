@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
-  
   async headers() {
     return [
       {
@@ -42,7 +38,7 @@ const nextConfig = {
   i18n: {
     locales: ['ar', 'en'],
     defaultLocale: 'ar',
-    localeDetection: true,
+    localeDetection: false,
   },
 };
 
