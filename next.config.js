@@ -1,39 +1,8 @@
+const withNextIntl = require('next-intl/plugin')('./src/i18n.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
-          }
-        ]
-      }
-    ];
-  },
-  
-  images: {
-    domains: ['localhost', '*.github.dev', '*.app.github.dev'],
-  },
-  
-  output: 'standalone',
-  poweredByHeader: false,
-  
-  i18n: {
-    locales: ['ar', 'en'],
-    defaultLocale: 'ar',
-    localeDetection: false,
-  },
+  // your existing config
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);
