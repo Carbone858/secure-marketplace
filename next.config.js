@@ -1,8 +1,6 @@
+// next.config.js
 const withNextIntl = require('next-intl/plugin')('./src/i18n.ts');
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // your existing config
-};
-
-module.exports = withNextIntl(nextConfig);
+module.exports = withNextIntl({
+  // Optional: Configure locale handling here if middleware fails
+});
