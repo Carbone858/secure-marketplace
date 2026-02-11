@@ -102,7 +102,7 @@ export function NotificationSettingsForm() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -118,16 +118,16 @@ export function NotificationSettingsForm() {
         <div
           className={`p-4 rounded-lg flex items-start gap-3 ${
             message.type === 'success'
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-red-50 border border-red-200'
+              ? 'bg-success/10 border border-success/30'
+              : 'bg-destructive/10 border border-destructive/30'
           }`}
         >
           {message.type === 'success' ? (
-            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
           ) : (
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
           )}
-          <p className={message.type === 'success' ? 'text-green-700' : 'text-red-700'}>
+          <p className={message.type === 'success' ? 'text-success' : 'text-destructive'}>
             {message.text}
           </p>
         </div>
@@ -136,7 +136,7 @@ export function NotificationSettingsForm() {
       {/* Email Notifications */}
       <div className="space-y-4">
         <div className="flex items-center gap-3 pb-2 border-b">
-          <Mail className="w-5 h-5 text-blue-600" />
+          <Mail className="w-5 h-5 text-primary" />
           <h3 className="text-lg font-semibold">{t('sections.email.title')}</h3>
         </div>
         <div className="space-y-3">
@@ -177,7 +177,7 @@ export function NotificationSettingsForm() {
       {/* Push Notifications */}
       <div className="space-y-4">
         <div className="flex items-center gap-3 pb-2 border-b">
-          <Bell className="w-5 h-5 text-blue-600" />
+          <Bell className="w-5 h-5 text-primary" />
           <h3 className="text-lg font-semibold">{t('sections.push.title')}</h3>
         </div>
         <div className="space-y-3">
@@ -205,7 +205,7 @@ export function NotificationSettingsForm() {
       {/* SMS Notifications */}
       <div className="space-y-4">
         <div className="flex items-center gap-3 pb-2 border-b">
-          <Smartphone className="w-5 h-5 text-blue-600" />
+          <Smartphone className="w-5 h-5 text-primary" />
           <h3 className="text-lg font-semibold">{t('sections.sms.title')}</h3>
         </div>
         <div className="space-y-3">
@@ -229,7 +229,7 @@ export function NotificationSettingsForm() {
       <button
         type="submit"
         disabled={isSaving}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:ring-4 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
       >
         {isSaving ? (
           <>
@@ -254,27 +254,27 @@ interface ToggleItemProps {
 
 function ToggleItem({ label, description, checked, onChange, important }: ToggleItemProps) {
   return (
-    <div className="flex items-start justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors">
+    <div className="flex items-start justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors">
       <div className="flex-1 pr-4">
         <div className="flex items-center gap-2">
           <span className="font-medium">{label}</span>
           {important && (
-            <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full">
               Recommended
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-500 mt-1">{description}</p>
+        <p className="text-sm text-muted-foreground mt-1">{description}</p>
       </div>
       <button
         type="button"
         onClick={onChange}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-          checked ? 'bg-blue-600' : 'bg-gray-200'
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+          checked ? 'bg-primary' : 'bg-muted'
         }`}
       >
         <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+          className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
             checked ? 'translate-x-6' : 'translate-x-1'
           }`}
         />

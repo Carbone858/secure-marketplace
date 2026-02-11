@@ -87,17 +87,17 @@ export function ForgotPasswordForm() {
         className="w-full max-w-md mx-auto p-6"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-green-800 mb-2">
+        <div className="bg-success/10 border border-success/30 rounded-lg p-8 text-center">
+          <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-success mb-2">
             {t('success.title')}
           </h2>
-          <p className="text-green-700 mb-6">
+          <p className="text-success mb-6">
             {t('success.message', { email })}
           </p>
           <Link
             href={`/${locale}/auth/login`}
-            className="inline-flex items-center gap-2 text-green-600 hover:text-green-800 font-medium"
+            className="inline-flex items-center gap-2 text-success hover:text-success font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
             {t('success.backToLogin')}
@@ -115,31 +115,31 @@ export function ForgotPasswordForm() {
     >
       {/* Error message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-red-700 text-sm">{error}</p>
+        <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+          <p className="text-destructive text-sm">{error}</p>
         </div>
       )}
 
       {/* Description */}
-      <p className="text-gray-600 text-center">
+      <p className="text-muted-foreground text-center">
         {t('description')}
       </p>
 
       {/* Email field */}
       <div className="space-y-2">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          {t('fields.email.label')} <span className="text-red-500">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-foreground">
+          {t('fields.email.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t('fields.email.placeholder')}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors"
             disabled={isLoading}
             required
             autoComplete="email"
@@ -151,7 +151,7 @@ export function ForgotPasswordForm() {
       <button
         type="submit"
         disabled={isLoading || !email}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:ring-4 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>
@@ -164,10 +164,10 @@ export function ForgotPasswordForm() {
       </button>
 
       {/* Back to login link */}
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-muted-foreground">
         <Link
           href={`/${locale}/auth/login`}
-          className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium"
+          className="inline-flex items-center gap-2 text-primary hover:text-primary font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backToLogin')}

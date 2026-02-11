@@ -127,15 +127,15 @@ export function LoginForm() {
         className="w-full max-w-md mx-auto p-6"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
-          <Lock className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-red-800 mb-2">
+        <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-8 text-center">
+          <Lock className="w-16 h-16 text-destructive mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-destructive mb-2">
             {t('locked.title')}
           </h2>
-          <p className="text-red-700 mb-4">
+          <p className="text-destructive mb-4">
             {t('locked.message', { minutes: lockInfo.remainingMinutes })}
           </p>
-          <p className="text-sm text-red-600">
+          <p className="text-sm text-destructive">
             {t('locked.help')}
           </p>
         </div>
@@ -150,17 +150,17 @@ export function LoginForm() {
         className="w-full max-w-md mx-auto p-6"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-8 text-center">
-          <Mail className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-yellow-800 mb-2">
+        <div className="bg-warning/10 border border-warning/30 rounded-lg p-8 text-center">
+          <Mail className="w-16 h-16 text-warning mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-warning mb-2">
             {t('verify.title')}
           </h2>
-          <p className="text-yellow-700 mb-4">
+          <p className="text-warning mb-4">
             {t('verify.message', { email: unverifiedEmail })}
           </p>
           <Link
             href={`/${locale}/auth/verify-email/resend?email=${encodeURIComponent(unverifiedEmail)}`}
-            className="inline-block bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
+            className="inline-block bg-warning text-white px-6 py-2 rounded-lg hover:bg-warning transition-colors"
           >
             {t('verify.resend')}
           </Link>
@@ -177,19 +177,19 @@ export function LoginForm() {
     >
       {/* General error */}
       {errors.general && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-red-700 text-sm">{errors.general}</p>
+        <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+          <p className="text-destructive text-sm">{errors.general}</p>
         </div>
       )}
 
       {/* Email field */}
       <div className="space-y-2">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          {t('fields.email.label')} <span className="text-red-500">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-foreground">
+          {t('fields.email.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type="email"
             id="email"
@@ -197,23 +197,23 @@ export function LoginForm() {
             value={formData.email}
             onChange={handleChange}
             placeholder={t('fields.email.placeholder')}
-            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.email ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
             autoComplete="email"
           />
         </div>
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        {errors.email && <p className="text-destructive text-sm">{errors.email}</p>}
       </div>
 
       {/* Password field */}
       <div className="space-y-2">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          {t('fields.password.label')} <span className="text-red-500">*</span>
+        <label htmlFor="password" className="block text-sm font-medium text-foreground">
+          {t('fields.password.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type={showPassword ? 'text' : 'password'}
             id="password"
@@ -221,8 +221,8 @@ export function LoginForm() {
             value={formData.password}
             onChange={handleChange}
             placeholder={t('fields.password.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.password ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
             autoComplete="current-password"
@@ -230,13 +230,13 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
-        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        {errors.password && <p className="text-destructive text-sm">{errors.password}</p>}
       </div>
 
       {/* Remember me & Forgot password */}
@@ -247,14 +247,14 @@ export function LoginForm() {
             name="rememberMe"
             checked={formData.rememberMe}
             onChange={handleChange}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="w-4 h-4 text-primary border-input rounded focus:ring-ring"
             disabled={isLoading}
           />
-          <span className="text-sm text-gray-700">{t('fields.rememberMe.label')}</span>
+          <span className="text-sm text-foreground">{t('fields.rememberMe.label')}</span>
         </label>
         <Link
           href={`/${locale}/auth/forgot-password`}
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+          className="text-sm text-primary hover:text-primary font-medium"
         >
           {t('fields.forgotPassword.link')}
         </Link>
@@ -264,7 +264,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:ring-4 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>
@@ -277,11 +277,11 @@ export function LoginForm() {
       </button>
 
       {/* Register link */}
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-muted-foreground">
         {t('noAccount')}{' '}
         <Link
           href={`/${locale}/auth/register`}
-          className="text-blue-600 hover:text-blue-800 font-medium"
+          className="text-primary hover:text-primary font-medium"
         >
           {t('registerLink')}
         </Link>

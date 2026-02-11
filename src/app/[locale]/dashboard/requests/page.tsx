@@ -36,23 +36,23 @@ interface Request {
 }
 
 const statusColors: Record<string, string> = {
-  DRAFT: 'bg-gray-500',
-  PENDING: 'bg-yellow-500',
-  ACTIVE: 'bg-blue-500',
-  MATCHING: 'bg-purple-500',
-  REVIEWING_OFFERS: 'bg-orange-500',
-  ACCEPTED: 'bg-green-500',
-  IN_PROGRESS: 'bg-cyan-500',
-  COMPLETED: 'bg-emerald-500',
-  CANCELLED: 'bg-red-500',
-  EXPIRED: 'bg-gray-400',
+  DRAFT: 'bg-muted-foreground',
+  PENDING: 'bg-warning',
+  ACTIVE: 'bg-info',
+  MATCHING: 'bg-primary',
+  REVIEWING_OFFERS: 'bg-warning',
+  ACCEPTED: 'bg-success',
+  IN_PROGRESS: 'bg-info',
+  COMPLETED: 'bg-success',
+  CANCELLED: 'bg-destructive',
+  EXPIRED: 'bg-muted-foreground',
 };
 
 const urgencyColors: Record<string, string> = {
-  LOW: 'bg-green-500',
-  MEDIUM: 'bg-yellow-500',
-  HIGH: 'bg-orange-500',
-  URGENT: 'bg-red-500',
+  LOW: 'bg-success',
+  MEDIUM: 'bg-warning',
+  HIGH: 'bg-warning',
+  URGENT: 'bg-destructive',
 };
 
 export default function MyRequestsPage() {

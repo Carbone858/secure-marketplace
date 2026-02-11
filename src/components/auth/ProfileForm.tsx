@@ -176,16 +176,16 @@ export function ProfileForm({ user }: ProfileFormProps) {
         <div
           className={`p-4 rounded-lg flex items-start gap-3 ${
             message.type === 'success'
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-red-50 border border-red-200'
+              ? 'bg-success/10 border border-success/30'
+              : 'bg-destructive/10 border border-destructive/30'
           }`}
         >
           {message.type === 'success' ? (
-            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
           ) : (
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
           )}
-          <p className={message.type === 'success' ? 'text-green-700' : 'text-red-700'}>
+          <p className={message.type === 'success' ? 'text-success' : 'text-destructive'}>
             {message.text}
           </p>
         </div>
@@ -195,7 +195,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       <div className="flex flex-col items-center space-y-4">
         <div className="relative">
           <div
-            className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+            className="w-32 h-32 rounded-full bg-muted flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
             onClick={handleAvatarClick}
           >
             {avatar ? (
@@ -207,7 +207,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <User className="w-16 h-16 text-gray-400" />
+              <User className="w-16 h-16 text-muted-foreground/60" />
             )}
             {isUploading && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -218,7 +218,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <button
             type="button"
             onClick={handleAvatarClick}
-            className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+            className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full hover:bg-primary/90 transition-colors"
           >
             <Camera className="w-4 h-4" />
           </button>
@@ -234,48 +234,48 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <button
             type="button"
             onClick={handleDeleteAvatar}
-            className="text-red-600 hover:text-red-800 text-sm flex items-center gap-1"
+            className="text-destructive hover:text-destructive text-sm flex items-center gap-1"
           >
             <Trash2 className="w-4 h-4" />
             {t('removeAvatar')}
           </button>
         )}
-        <p className="text-sm text-gray-500">{t('avatarHint')}</p>
+        <p className="text-sm text-muted-foreground">{t('avatarHint')}</p>
       </div>
 
       {/* Email (read-only) */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-foreground">
           {t('fields.email.label')}
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type="email"
             value={user.email}
             disabled
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+            className="w-full pl-10 pr-4 py-3 border border-input rounded-lg bg-muted/50 text-muted-foreground"
           />
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           {user.emailVerified ? (
-            <span className="text-green-600 flex items-center gap-1">
+            <span className="text-success flex items-center gap-1">
               <CheckCircle className="w-4 h-4" />
               {t('emailVerified')}
             </span>
           ) : (
-            <span className="text-yellow-600">{t('emailNotVerified')}</span>
+            <span className="text-warning">{t('emailNotVerified')}</span>
           )}
         </p>
       </div>
 
       {/* Name field */}
       <div className="space-y-2">
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="name" className="block text-sm font-medium text-foreground">
           {t('fields.name.label')}
         </label>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type="text"
             id="name"
@@ -283,22 +283,22 @@ export function ProfileForm({ user }: ProfileFormProps) {
             value={formData.name}
             onChange={handleChange}
             placeholder={t('fields.name.placeholder')}
-            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.name ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.name ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
           />
         </div>
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+        {errors.name && <p className="text-destructive text-sm">{errors.name}</p>}
       </div>
 
       {/* Phone field */}
       <div className="space-y-2">
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="phone" className="block text-sm font-medium text-foreground">
           {t('fields.phone.label')}
         </label>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type="tel"
             id="phone"
@@ -306,21 +306,21 @@ export function ProfileForm({ user }: ProfileFormProps) {
             value={formData.phone}
             onChange={handleChange}
             placeholder={t('fields.phone.placeholder')}
-            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.phone ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.phone ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
           />
         </div>
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
-        <p className="text-xs text-gray-500">{t('fields.phone.hint')}</p>
+        {errors.phone && <p className="text-destructive text-sm">{errors.phone}</p>}
+        <p className="text-xs text-muted-foreground">{t('fields.phone.hint')}</p>
       </div>
 
       {/* Submit button */}
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:ring-4 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>

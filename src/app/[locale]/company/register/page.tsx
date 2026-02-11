@@ -65,14 +65,14 @@ export default async function CompanyRegisterPage({ params: { locale } }: Compan
   const countries = await getCountries();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-muted/50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             {isRTL ? 'تسجيل شركة جديدة' : 'Register Your Company'}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {isRTL
               ? 'أضف شركتك إلى منصتنا وابدأ في تلقي طلبات الخدمة'
               : 'Add your company to our platform and start receiving service requests'}

@@ -53,17 +53,17 @@ export default async function CompanyDocumentsPage({ params: { locale, id } }: C
   const isRTL = locale === 'ar';
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-muted/50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-3xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-success/10 rounded-full mb-4">
+            <CheckCircle className="w-8 h-8 text-success" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             {isRTL ? 'تم التسجيل بنجاح!' : 'Registration Successful!'}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {isRTL
               ? 'الآن، يرجى رفع المستندات المطلوبة للتحقق من شركتك'
               : 'Now, please upload the required documents to verify your company'}
@@ -71,7 +71,7 @@ export default async function CompanyDocumentsPage({ params: { locale, id } }: C
         </div>
 
         {/* Document Upload */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-card rounded-xl shadow-lg p-6 mb-6">
           <DocumentUpload
             companyId={company.id}
             existingDocuments={company.documents.map((d) => ({
@@ -88,7 +88,7 @@ export default async function CompanyDocumentsPage({ params: { locale, id } }: C
         <div className="flex justify-center">
           <Link
             href={`/${locale}/dashboard/company`}
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary font-medium"
           >
             {isRTL ? 'الذهاب إلى لوحة تحكم الشركة' : 'Go to Company Dashboard'}
             <ArrowRight className="w-4 h-4" />

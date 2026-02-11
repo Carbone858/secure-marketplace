@@ -246,64 +246,64 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('steps.basic.name')} <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-foreground mb-1">
+                {t('steps.basic.name')} <span className="text-destructive">*</span>
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => updateFormData('name', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 placeholder={t('steps.basic.namePlaceholder')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 {t('steps.basic.description')}
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => updateFormData('description', e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none"
                 placeholder={t('steps.basic.descriptionPlaceholder')}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   {t('steps.basic.email')}
                 </label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                   placeholder={t('steps.basic.emailPlaceholder')}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   {t('steps.basic.phone')}
                 </label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                   placeholder={t('steps.basic.phonePlaceholder')}
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 {t('steps.basic.website')}
               </label>
               <input
                 type="url"
                 value={formData.website}
                 onChange={(e) => updateFormData('website', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 placeholder={t('steps.basic.websitePlaceholder')}
               />
             </div>
@@ -313,13 +313,13 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('steps.location.country')} <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-foreground mb-1">
+                {t('steps.location.country')} <span className="text-destructive">*</span>
               </label>
               <select
                 value={formData.countryId}
                 onChange={(e) => handleCountryChange(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
               >
                 <option value="">{t('steps.location.selectCountry')}</option>
                 {countries.map((country) => (
@@ -330,14 +330,14 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('steps.location.city')} <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-foreground mb-1">
+                {t('steps.location.city')} <span className="text-destructive">*</span>
               </label>
               <select
                 value={formData.cityId}
                 onChange={(e) => updateFormData('cityId', e.target.value)}
                 disabled={!formData.countryId}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted"
               >
                 <option value="">{t('steps.location.selectCity')}</option>
                 {cities.map((city) => (
@@ -348,14 +348,14 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 {t('steps.location.address')}
               </label>
               <textarea
                 value={formData.address}
                 onChange={(e) => updateFormData('address', e.target.value)}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none"
                 placeholder={t('steps.location.addressPlaceholder')}
               />
             </div>
@@ -365,14 +365,14 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
         return (
           <div className="space-y-4">
             {formData.services.map((service, index) => (
-              <div key={index} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+              <div key={index} className="p-4 border border-border rounded-lg bg-muted/50">
                 <div className="flex justify-between items-center mb-3">
                   <h4 className="font-medium">{t('steps.services.service')} {index + 1}</h4>
                   {formData.services.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeService(index)}
-                      className="text-red-600 hover:text-red-800 text-sm"
+                      className="text-destructive hover:text-destructive text-sm"
                     >
                       {t('steps.services.remove')}
                     </button>
@@ -383,14 +383,14 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
                     type="text"
                     value={service.name}
                     onChange={(e) => updateService(index, 'name', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                     placeholder={t('steps.services.namePlaceholder')}
                   />
                   <textarea
                     value={service.description}
                     onChange={(e) => updateService(index, 'description', e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none"
                     placeholder={t('steps.services.descriptionPlaceholder')}
                   />
                   <div className="grid grid-cols-2 gap-3">
@@ -398,7 +398,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
                       type="number"
                       value={service.priceFrom}
                       onChange={(e) => updateService(index, 'priceFrom', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                       placeholder={t('steps.services.priceFrom')}
                       min="0"
                       step="0.01"
@@ -407,7 +407,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
                       type="number"
                       value={service.priceTo}
                       onChange={(e) => updateService(index, 'priceTo', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                       placeholder={t('steps.services.priceTo')}
                       min="0"
                       step="0.01"
@@ -419,7 +419,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
             <button
               type="button"
               onClick={addService}
-              className="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors"
+              className="w-full py-2 border-2 border-dashed border-input rounded-lg text-muted-foreground hover:border-primary hover:text-primary transition-colors"
             >
               + {t('steps.services.add')}
             </button>
@@ -441,9 +441,9 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
                     }))
                   }
                   placeholder="09:00-17:00"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 />
-                <span className="text-sm text-gray-500">{t('steps.hours.format')}</span>
+                <span className="text-sm text-muted-foreground">{t('steps.hours.format')}</span>
               </div>
             ))}
           </div>
@@ -453,7 +453,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
           <div className="space-y-4">
             {Object.entries(formData.socialLinks).map(([platform, url]) => (
               <div key={platform}>
-                <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
+                <label className="block text-sm font-medium text-foreground mb-1 capitalize">
                   {platform}
                 </label>
                 <input
@@ -465,7 +465,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
                       socialLinks: { ...prev.socialLinks, [platform]: e.target.value },
                     }))
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                   placeholder={`https://${platform}.com/yourcompany`}
                 />
               </div>
@@ -487,8 +487,8 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
               <div
                 className={`flex items-center justify-center w-10 h-10 rounded-full ${
                   currentStep >= step.id
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-500'
+                    ? 'bg-primary text-white'
+                    : 'bg-muted text-muted-foreground'
                 }`}
               >
                 <step.icon className="w-5 h-5" />
@@ -496,7 +496,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
               {index < steps.length - 1 && (
                 <div
                   className={`w-12 h-1 mx-2 ${
-                    currentStep > step.id ? 'bg-blue-600' : 'bg-gray-200'
+                    currentStep > step.id ? 'bg-primary' : 'bg-muted'
                   }`}
                 />
               )}
@@ -508,7 +508,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
             <span
               key={step.id}
               className={`text-sm ${
-                currentStep >= step.id ? 'text-blue-600 font-medium' : 'text-gray-400'
+                currentStep >= step.id ? 'text-primary font-medium' : 'text-muted-foreground/60'
               }`}
             >
               {t(`steps.${step.key}.title`)}
@@ -519,15 +519,15 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
 
       {/* Error */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-red-700">{error}</p>
+        <div className="mb-6 p-4 bg-destructive/10 border border-destructive/30 rounded-lg flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+          <p className="text-destructive">{error}</p>
         </div>
       )}
 
       {/* Step Content */}
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+      <div className="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <h2 className="text-xl font-semibold text-foreground mb-6">
           {t(`steps.${steps[currentStep - 1].key}.title`)}
         </h2>
         {renderStepContent()}
@@ -539,7 +539,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
           type="button"
           onClick={handleBack}
           disabled={currentStep === 1 || isLoading}
-          className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-2 px-6 py-3 border border-input rounded-lg text-foreground hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
           {t('navigation.back')}
@@ -550,7 +550,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
             type="button"
             onClick={handleNext}
             disabled={isLoading}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {t('navigation.next')}
             <ChevronRight className="w-5 h-5" />
@@ -560,7 +560,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
             type="button"
             onClick={handleSubmit}
             disabled={isLoading}
-            className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-success text-white rounded-lg hover:bg-success/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? (
               <>

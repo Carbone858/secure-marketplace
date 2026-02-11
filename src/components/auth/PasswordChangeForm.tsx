@@ -131,16 +131,16 @@ export function PasswordChangeForm() {
         <div
           className={`p-4 rounded-lg flex items-start gap-3 ${
             message.type === 'success'
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-red-50 border border-red-200'
+              ? 'bg-success/10 border border-success/30'
+              : 'bg-destructive/10 border border-destructive/30'
           }`}
         >
           {message.type === 'success' ? (
-            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
           ) : (
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
           )}
-          <p className={message.type === 'success' ? 'text-green-700' : 'text-red-700'}>
+          <p className={message.type === 'success' ? 'text-success' : 'text-destructive'}>
             {message.text}
           </p>
         </div>
@@ -148,11 +148,11 @@ export function PasswordChangeForm() {
 
       {/* Current Password */}
       <div className="space-y-2">
-        <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
-          {t('fields.currentPassword.label')} <span className="text-red-500">*</span>
+        <label htmlFor="currentPassword" className="block text-sm font-medium text-foreground">
+          {t('fields.currentPassword.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type={showPasswords.current ? 'text' : 'password'}
             id="currentPassword"
@@ -160,15 +160,15 @@ export function PasswordChangeForm() {
             value={formData.currentPassword}
             onChange={handleChange}
             placeholder={t('fields.currentPassword.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.currentPassword ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.currentPassword ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
           />
           <button
             type="button"
             onClick={() => togglePasswordVisibility('current')}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPasswords.current ? (
@@ -179,17 +179,17 @@ export function PasswordChangeForm() {
           </button>
         </div>
         {errors.currentPassword && (
-          <p className="text-red-500 text-sm">{errors.currentPassword}</p>
+          <p className="text-destructive text-sm">{errors.currentPassword}</p>
         )}
       </div>
 
       {/* New Password */}
       <div className="space-y-2">
-        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
-          {t('fields.newPassword.label')} <span className="text-red-500">*</span>
+        <label htmlFor="newPassword" className="block text-sm font-medium text-foreground">
+          {t('fields.newPassword.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type={showPasswords.new ? 'text' : 'password'}
             id="newPassword"
@@ -197,21 +197,21 @@ export function PasswordChangeForm() {
             value={formData.newPassword}
             onChange={handleChange}
             placeholder={t('fields.newPassword.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.newPassword ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.newPassword ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
           />
           <button
             type="button"
             onClick={() => togglePasswordVisibility('new')}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPasswords.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
-        {errors.newPassword && <p className="text-red-500 text-sm">{errors.newPassword}</p>}
+        {errors.newPassword && <p className="text-destructive text-sm">{errors.newPassword}</p>}
 
         {/* Password strength */}
         <PasswordStrength password={formData.newPassword} locale={locale} />
@@ -219,11 +219,11 @@ export function PasswordChangeForm() {
 
       {/* Confirm Password */}
       <div className="space-y-2">
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-          {t('fields.confirmPassword.label')} <span className="text-red-500">*</span>
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground">
+          {t('fields.confirmPassword.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type={showPasswords.confirm ? 'text' : 'password'}
             id="confirmPassword"
@@ -231,15 +231,15 @@ export function PasswordChangeForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder={t('fields.confirmPassword.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.confirmPassword ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
           />
           <button
             type="button"
             onClick={() => togglePasswordVisibility('confirm')}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPasswords.confirm ? (
@@ -250,7 +250,7 @@ export function PasswordChangeForm() {
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+          <p className="text-destructive text-sm">{errors.confirmPassword}</p>
         )}
       </div>
 
@@ -258,7 +258,7 @@ export function PasswordChangeForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:ring-4 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>

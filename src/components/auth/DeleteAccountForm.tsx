@@ -73,14 +73,14 @@ export function DeleteAccountForm() {
   if (!showConfirmation) {
     return (
       <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+        <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-6">
           <div className="flex items-start gap-4">
-            <AlertTriangle className="w-8 h-8 text-red-600 flex-shrink-0" />
+            <AlertTriangle className="w-8 h-8 text-destructive flex-shrink-0" />
             <div>
-              <h3 className="text-lg font-semibold text-red-800 mb-2">
+              <h3 className="text-lg font-semibold text-destructive mb-2">
                 {t('warning.title')}
               </h3>
-              <ul className="space-y-2 text-red-700">
+              <ul className="space-y-2 text-destructive">
                 <li>{t('warning.point1')}</li>
                 <li>{t('warning.point2')}</li>
                 <li>{t('warning.point3')}</li>
@@ -93,7 +93,7 @@ export function DeleteAccountForm() {
         <button
           type="button"
           onClick={() => setShowConfirmation(true)}
-          className="w-full bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition-colors"
+          className="w-full bg-destructive text-white py-3 px-4 rounded-lg font-medium hover:bg-destructive focus:ring-4 focus:ring-destructive/50 transition-colors"
         >
           {t('continueButton')}
         </button>
@@ -112,30 +112,30 @@ export function DeleteAccountForm() {
         <div
           className={`p-4 rounded-lg flex items-start gap-3 ${
             message.type === 'success'
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-red-50 border border-red-200'
+              ? 'bg-success/10 border border-success/30'
+              : 'bg-destructive/10 border border-destructive/30'
           }`}
         >
           {message.type === 'success' ? (
-            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
           ) : (
-            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
           )}
-          <p className={message.type === 'success' ? 'text-green-700' : 'text-red-700'}>
+          <p className={message.type === 'success' ? 'text-success' : 'text-destructive'}>
             {message.text}
           </p>
         </div>
       )}
 
       {/* Warning */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <p className="text-yellow-800 text-sm">{t('finalWarning')}</p>
+      <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
+        <p className="text-warning text-sm">{t('finalWarning')}</p>
       </div>
 
       {/* Password */}
       <div className="space-y-2">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          {t('fields.password.label')} <span className="text-red-500">*</span>
+        <label htmlFor="password" className="block text-sm font-medium text-foreground">
+          {t('fields.password.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
           <input
@@ -144,13 +144,13 @@ export function DeleteAccountForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={t('fields.password.placeholder')}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
+            className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-destructive focus:border-destructive transition-colors"
             disabled={isLoading}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -160,7 +160,7 @@ export function DeleteAccountForm() {
 
       {/* Reason (optional) */}
       <div className="space-y-2">
-        <label htmlFor="reason" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="reason" className="block text-sm font-medium text-foreground">
           {t('fields.reason.label')}
         </label>
         <textarea
@@ -169,17 +169,17 @@ export function DeleteAccountForm() {
           onChange={(e) => setReason(e.target.value)}
           placeholder={t('fields.reason.placeholder')}
           rows={3}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors resize-none"
+          className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-destructive focus:border-destructive transition-colors resize-none"
           disabled={isLoading}
           maxLength={500}
         />
-        <p className="text-xs text-gray-500">{t('fields.reason.optional')}</p>
+        <p className="text-xs text-muted-foreground">{t('fields.reason.optional')}</p>
       </div>
 
       {/* Confirmation */}
       <div className="space-y-2">
-        <label htmlFor="confirmation" className="block text-sm font-medium text-gray-700">
-          {t('fields.confirmation.label')} <span className="text-red-500">*</span>
+        <label htmlFor="confirmation" className="block text-sm font-medium text-foreground">
+          {t('fields.confirmation.label')} <span className="text-destructive">*</span>
         </label>
         <input
           type="text"
@@ -187,10 +187,10 @@ export function DeleteAccountForm() {
           value={confirmation}
           onChange={(e) => setConfirmation(e.target.value)}
           placeholder="DELETE"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors uppercase"
+          className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-destructive focus:border-destructive transition-colors uppercase"
           disabled={isLoading}
         />
-        <p className="text-sm text-gray-500">{t('fields.confirmation.hint')}</p>
+        <p className="text-sm text-muted-foreground">{t('fields.confirmation.hint')}</p>
       </div>
 
       {/* Buttons */}
@@ -199,14 +199,14 @@ export function DeleteAccountForm() {
           type="button"
           onClick={() => setShowConfirmation(false)}
           disabled={isLoading}
-          className="flex-1 bg-gray-200 text-gray-800 py-3 px-4 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          className="flex-1 bg-muted text-foreground py-3 px-4 rounded-lg font-medium hover:bg-muted transition-colors"
         >
           {t('cancelButton')}
         </button>
         <button
           type="submit"
           disabled={isLoading || confirmation !== 'DELETE' || !password}
-          className="flex-1 bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 focus:ring-4 focus:ring-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-destructive text-white py-3 px-4 rounded-lg font-medium hover:bg-destructive focus:ring-4 focus:ring-destructive/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>

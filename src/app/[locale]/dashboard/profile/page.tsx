@@ -46,14 +46,14 @@ export default async function ProfilePage({ params: { locale } }: ProfilePagePro
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
+      <h1 className="text-3xl font-bold text-foreground mb-8">
         {t('title')}
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Profile Information */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        <div className="bg-card rounded-2xl shadow-lg p-8">
+          <h2 className="text-xl font-semibold mb-6">
             {t('sections.profileInfo')}
           </h2>
           <ProfileForm user={user as {
@@ -69,8 +69,8 @@ export default async function ProfilePage({ params: { locale } }: ProfilePagePro
         </div>
 
         {/* Password Change */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        <div className="bg-card rounded-2xl shadow-lg p-8">
+          <h2 className="text-xl font-semibold mb-6">
             {t('sections.password')}
           </h2>
           <PasswordChangeForm />

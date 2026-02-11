@@ -91,25 +91,25 @@ export default function CompanyDashboardPage() {
       title: 'Total Projects',
       value: data.stats.totalProjects,
       icon: Briefcase,
-      color: 'text-blue-500',
+      color: 'text-primary',
     },
     {
       title: 'Active Projects',
       value: data.stats.activeProjects,
       icon: Clock,
-      color: 'text-yellow-500',
+      color: 'text-warning',
     },
     {
       title: 'Completed',
       value: data.stats.completedProjects,
       icon: CheckCircle,
-      color: 'text-green-500',
+      color: 'text-success',
     },
     {
       title: 'Total Offers',
       value: data.stats.totalOffers,
       icon: FileText,
-      color: 'text-purple-500',
+      color: 'text-info',
     },
   ];
 
@@ -139,11 +139,11 @@ export default function CompanyDashboardPage() {
 
       {/* Membership Status */}
       {data.membership ? (
-        <Card className="mb-8 border-green-500/50 bg-green-50/50">
+        <Card className="mb-8 border-success/50 bg-success/10/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Crown className="h-5 w-5 text-green-600" />
+                <Crown className="h-5 w-5 text-success" />
                 <div>
                   <p className="font-medium">
                     {data.membership.plan.name} Plan Active
@@ -153,16 +153,16 @@ export default function CompanyDashboardPage() {
                   </p>
                 </div>
               </div>
-              <Badge className="bg-green-500">Active</Badge>
+              <Badge className="bg-success/100">Active</Badge>
             </div>
           </CardContent>
         </Card>
       ) : (
-        <Card className="mb-8 border-yellow-500/50 bg-yellow-50/50">
+        <Card className="mb-8 border-warning/50 bg-warning/10/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Crown className="h-5 w-5 text-yellow-600" />
+                <Crown className="h-5 w-5 text-warning" />
                 <div>
                   <p className="font-medium">No Active Membership</p>
                   <p className="text-sm text-muted-foreground">
@@ -202,7 +202,7 @@ export default function CompanyDashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <Star className="h-5 w-5 text-yellow-500" />
+              <Star className="h-5 w-5 text-warning" />
               Rating
             </CardTitle>
           </CardHeader>
@@ -218,8 +218,8 @@ export default function CompanyDashboardPage() {
                       key={i}
                       className={`h-5 w-5 ${
                         i < Math.round(data.stats.averageRating)
-                          ? 'fill-yellow-500 text-yellow-500'
-                          : 'text-gray-300'
+                          ? 'fill-warning text-warning'
+                          : 'text-muted-foreground/40'
                       }`}
                     />
                   ))}
@@ -235,7 +235,7 @@ export default function CompanyDashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-500" />
+              <TrendingUp className="h-5 w-5 text-success" />
               Offer Success Rate
             </CardTitle>
           </CardHeader>
@@ -299,10 +299,10 @@ export default function CompanyDashboardPage() {
                     <Badge
                       className={
                         project.status === 'ACTIVE'
-                          ? 'bg-green-500'
+                          ? 'bg-success/100'
                           : project.status === 'PENDING'
-                          ? 'bg-yellow-500'
-                          : 'bg-gray-500'
+                          ? 'bg-warning/100'
+                          : 'bg-muted/500'
                       }
                     >
                       {project.status}
@@ -349,10 +349,10 @@ export default function CompanyDashboardPage() {
                     <Badge
                       className={
                         offer.status === 'ACCEPTED'
-                          ? 'bg-green-500'
+                          ? 'bg-success/100'
                           : offer.status === 'PENDING'
-                          ? 'bg-yellow-500'
-                          : 'bg-red-500'
+                          ? 'bg-warning/100'
+                          : 'bg-destructive/100'
                       }
                     >
                       {offer.status}

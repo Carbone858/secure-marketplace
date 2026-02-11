@@ -40,22 +40,26 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
 
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    categoryId: '',
-    subcategoryId: '',
-    countryId: '',
-    cityId: '',
-    address: '',
-    budgetMin: '',
-    budgetMax: '',
-    currency: 'USD',
-    deadline: '',
-    urgency: 'MEDIUM',
-    visibility: 'PUBLIC',
-    allowRemote: false,
-    requireVerification: false,
+  const [formData, setFormData] = useState(() => {
+    // Auto-select Syria as default country if available
+    const syriaCountry = countries.find((c) => 'code' in c && (c as any).code === 'SY');
+    return {
+      title: '',
+      description: '',
+      categoryId: '',
+      subcategoryId: '',
+      countryId: syriaCountry?.id || '',
+      cityId: '',
+      address: '',
+      budgetMin: '',
+      budgetMax: '',
+      currency: 'SYP',
+      deadline: '',
+      urgency: 'MEDIUM',
+      visibility: 'PUBLIC',
+      allowRemote: false,
+      requireVerification: false,
+    };
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -102,6 +106,13 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
       setCities([]);
     }
   };
+
+  // Auto-load cities for default country (Syria) on mount
+  useEffect(() => {
+    if (formData.countryId) {
+      handleCountryChange(formData.countryId);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addTag = () => {
     if (tagInput.trim() && !tags.includes(tagInput.trim()) && tags.length < 10) {
@@ -225,9 +236,9 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
   if (success) {
     return (
       <div className="text-center py-12" dir={isRTL ? 'rtl' : 'ltr'}>
-        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('success.title')}</h2>
-        <p className="text-gray-600">{t('success.message')}</p>
+        <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-foreground mb-2">{t('success.title')}</h2>
+        <p className="text-muted-foreground">{t('success.message')}</p>
       </div>
     );
   }
@@ -238,41 +249,41 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('title')} <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('title')} <span className="text-destructive">*</span>
               </label>
               <input
                 type="text"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 placeholder={t('titlePlaceholder')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t('description')} <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('description')} <span className="text-destructive">*</span>
               </label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none"
                 placeholder={t('descriptionPlaceholder')}
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('category')} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  {t('category')} <span className="text-destructive">*</span>
                 </label>
                 <select
                   name="categoryId"
                   value={formData.categoryId}
                   onChange={(e) => handleCategoryChange(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 >
                   <option value="">{t('selectCategory')}</option>
                   {categories.map((cat) => (
@@ -283,7 +294,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   {t('subcategory')}
                 </label>
                 <select
@@ -291,7 +302,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   value={formData.subcategoryId}
                   onChange={handleChange}
                   disabled={!formData.categoryId}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted"
                 >
                   <option value="">{t('selectSubcategory')}</option>
                   {subcategories.map((sub) => (
@@ -309,14 +320,14 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('country')} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  {t('country')} <span className="text-destructive">*</span>
                 </label>
                 <select
                   name="countryId"
                   value={formData.countryId}
                   onChange={(e) => handleCountryChange(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 >
                   <option value="">{t('selectCountry')}</option>
                   {countries.map((country) => (
@@ -327,15 +338,15 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t('city')} <span className="text-red-500">*</span>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  {t('city')} <span className="text-destructive">*</span>
                 </label>
                 <select
                   name="cityId"
                   value={formData.cityId}
                   onChange={handleChange}
                   disabled={!formData.countryId}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted"
                 >
                   <option value="">{t('selectCity')}</option>
                   {cities.map((city) => (
@@ -347,7 +358,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('address')}
               </label>
               <textarea
@@ -355,7 +366,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                 value={formData.address}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none"
                 placeholder={t('addressPlaceholder')}
               />
             </div>
@@ -366,9 +377,9 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   name="allowRemote"
                   checked={formData.allowRemote}
                   onChange={handleChange}
-                  className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-5 h-5 text-primary rounded focus:ring-ring"
                 />
-                <span className="text-gray-700">{t('allowRemote')}</span>
+                <span className="text-foreground">{t('allowRemote')}</span>
               </label>
             </div>
           </div>
@@ -378,48 +389,48 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   {t('budgetMin')}
                 </label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
                   <input
                     type="number"
                     name="budgetMin"
                     value={formData.budgetMin}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                     placeholder="0"
                     min="0"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   {t('budgetMax')}
                 </label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
                   <input
                     type="number"
                     name="budgetMax"
                     value={formData.budgetMax}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                     placeholder="0"
                     min="0"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   {t('currency')}
                 </label>
                 <select
                   name="currency"
                   value={formData.currency}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 >
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
@@ -431,29 +442,29 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   {t('deadline')}
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
                   <input
                     type="date"
                     name="deadline"
                     value={formData.deadline}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   {t('urgency')}
                 </label>
                 <select
                   name="urgency"
                   value={formData.urgency}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 >
                   <option value="LOW">{t('urgencyLow')}</option>
                   <option value="MEDIUM">{t('urgencyMedium')}</option>
@@ -468,7 +479,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('images')}
               </label>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -477,16 +488,16 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                     <img src={image} alt="" className="w-full h-full object-cover rounded-lg" />
                     <button
                       onClick={() => removeImage(index)}
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center"
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-destructive/100 text-white rounded-full flex items-center justify-center"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
                 {images.length < 10 && (
-                  <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
-                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                    <span className="text-sm text-gray-500">{t('addImage')}</span>
+                  <label className="aspect-square border-2 border-dashed border-input rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/10 transition-colors">
+                    <Upload className="w-8 h-8 text-muted-foreground/60 mb-2" />
+                    <span className="text-sm text-muted-foreground">{t('addImage')}</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -497,10 +508,10 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   </label>
                 )}
               </div>
-              <p className="text-sm text-gray-500 mt-2">{t('imagesHint')}</p>
+              <p className="text-sm text-muted-foreground mt-2">{t('imagesHint')}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('tags')}
               </label>
               <div className="flex gap-2 mb-2">
@@ -509,13 +520,13 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="flex-1 px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                   placeholder={t('tagsPlaceholder')}
                 />
                 <button
                   onClick={addTag}
                   disabled={!tagInput.trim() || tags.length >= 10}
-                  className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -524,10 +535,10 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
                   >
                     {tag}
-                    <button onClick={() => removeTag(tag)} className="hover:text-blue-900">
+                    <button onClick={() => removeTag(tag)} className="hover:text-primary">
                       <X className="w-3 h-3" />
                     </button>
                   </span>
@@ -540,11 +551,11 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
         return (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('visibility')}
               </label>
               <div className="space-y-3">
-                <label className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-start gap-3 p-4 border border-border rounded-lg cursor-pointer hover:bg-muted/50">
                   <input
                     type="radio"
                     name="visibility"
@@ -555,10 +566,10 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   />
                   <div>
                     <div className="font-medium">{t('visibilityPublic')}</div>
-                    <div className="text-sm text-gray-500">{t('visibilityPublicDesc')}</div>
+                    <div className="text-sm text-muted-foreground">{t('visibilityPublicDesc')}</div>
                   </div>
                 </label>
-                <label className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-start gap-3 p-4 border border-border rounded-lg cursor-pointer hover:bg-muted/50">
                   <input
                     type="radio"
                     name="visibility"
@@ -569,10 +580,10 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   />
                   <div>
                     <div className="font-medium">{t('visibilityRegistered')}</div>
-                    <div className="text-sm text-gray-500">{t('visibilityRegisteredDesc')}</div>
+                    <div className="text-sm text-muted-foreground">{t('visibilityRegisteredDesc')}</div>
                   </div>
                 </label>
-                <label className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-start gap-3 p-4 border border-border rounded-lg cursor-pointer hover:bg-muted/50">
                   <input
                     type="radio"
                     name="visibility"
@@ -583,7 +594,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   />
                   <div>
                     <div className="font-medium">{t('visibilityVerified')}</div>
-                    <div className="text-sm text-gray-500">{t('visibilityVerifiedDesc')}</div>
+                    <div className="text-sm text-muted-foreground">{t('visibilityVerifiedDesc')}</div>
                   </div>
                 </label>
               </div>
@@ -595,11 +606,11 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   name="requireVerification"
                   checked={formData.requireVerification}
                   onChange={handleChange}
-                  className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500"
+                  className="w-5 h-5 text-primary rounded focus:ring-ring"
                 />
                 <div>
                   <div className="font-medium">{t('requireVerification')}</div>
-                  <div className="text-sm text-gray-500">{t('requireVerificationDesc')}</div>
+                  <div className="text-sm text-muted-foreground">{t('requireVerificationDesc')}</div>
                 </div>
               </label>
             </div>
@@ -618,13 +629,13 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
           <div key={s} className="flex items-center">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                s <= step ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                s <= step ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
               }`}
             >
               {s}
             </div>
             {s < 5 && (
-              <div className={`w-12 h-1 mx-2 ${s < step ? 'bg-blue-600' : 'bg-gray-200'}`} />
+              <div className={`w-12 h-1 mx-2 ${s < step ? 'bg-primary' : 'bg-muted'}`} />
             )}
           </div>
         ))}
@@ -632,28 +643,28 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
 
       {/* Error */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-red-700">{error}</p>
+        <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-lg flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+          <p className="text-destructive">{error}</p>
         </div>
       )}
 
       {/* Step Content */}
-      <div className="bg-white rounded-xl shadow-sm p-6">{renderStep()}</div>
+      <div className="bg-card rounded-xl shadow-sm p-6">{renderStep()}</div>
 
       {/* Navigation */}
       <div className="flex justify-between">
         <button
           onClick={() => setStep((s) => Math.max(1, s - 1))}
           disabled={step === 1 || isLoading}
-          className="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+          className="px-6 py-3 border border-input rounded-lg text-foreground hover:bg-muted/50 disabled:opacity-50"
         >
           {t('back')}
         </button>
         {step < 5 ? (
           <button
             onClick={() => validateStep() && setStep((s) => s + 1)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90"
           >
             {t('next')}
           </button>
@@ -661,7 +672,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
           <button
             onClick={handleSubmit}
             disabled={isLoading}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+            className="px-6 py-3 bg-success text-white rounded-lg hover:bg-success/90 disabled:opacity-50 flex items-center gap-2"
           >
             {isLoading ? (
               <>

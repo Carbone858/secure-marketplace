@@ -87,12 +87,12 @@ export function VerifyEmail({ token }: VerifyEmailProps) {
         className="w-full max-w-md mx-auto p-6 text-center"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-8">
-          <Loader2 className="w-16 h-16 text-blue-500 mx-auto mb-4 animate-spin" />
-          <h2 className="text-xl font-semibold text-blue-800 mb-2">
+        <div className="bg-primary/10 border border-primary/30 rounded-lg p-8">
+          <Loader2 className="w-16 h-16 text-primary mx-auto mb-4 animate-spin" />
+          <h2 className="text-xl font-semibold text-primary mb-2">
             {t('loading.title')}
           </h2>
-          <p className="text-blue-600">{t('loading.message')}</p>
+          <p className="text-primary">{t('loading.message')}</p>
         </div>
       </div>
     );
@@ -104,18 +104,18 @@ export function VerifyEmail({ token }: VerifyEmailProps) {
         className="w-full max-w-md mx-auto p-6"
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-green-800 mb-2">
+        <div className="bg-success/10 border border-success/30 rounded-lg p-8 text-center">
+          <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-success mb-2">
             {t('success.title')}
           </h2>
-          <p className="text-green-700 mb-4">{t('success.message')}</p>
-          <p className="text-sm text-green-600 mb-6">
+          <p className="text-success mb-4">{t('success.message')}</p>
+          <p className="text-sm text-success mb-6">
             {t('success.redirect', { seconds: countdown })}
           </p>
           <Link
             href={`/${locale}/auth/login`}
-            className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="inline-block bg-success text-white px-6 py-2 rounded-lg hover:bg-success/90 transition-colors"
           >
             {t('success.loginNow')}
           </Link>
@@ -129,19 +129,19 @@ export function VerifyEmail({ token }: VerifyEmailProps) {
       className="w-full max-w-md mx-auto p-6"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
-        <XCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-red-800 mb-2">
+      <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-8 text-center">
+        <XCircle className="w-16 h-16 text-destructive mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-destructive mb-2">
           {t('error.title')}
         </h2>
-        <p className="text-red-700 mb-6">{errorMessage}</p>
+        <p className="text-destructive mb-6">{errorMessage}</p>
         
         <ResendVerificationForm />
         
-        <div className="mt-6 pt-6 border-t border-red-200">
+        <div className="mt-6 pt-6 border-t border-destructive/30">
           <Link
             href={`/${locale}/auth/login`}
-            className="text-red-600 hover:text-red-800 font-medium"
+            className="text-destructive hover:text-destructive font-medium"
           >
             {t('error.goToLogin')}
           </Link>
@@ -206,12 +206,12 @@ function ResendVerificationForm() {
 
   if (isSent) {
     return (
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
         <div className="flex items-center gap-3">
-          <Mail className="w-6 h-6 text-blue-500" />
+          <Mail className="w-6 h-6 text-primary" />
           <div>
-            <p className="text-blue-800 font-medium">{t('success.title')}</p>
-            <p className="text-blue-600 text-sm">{t('success.message')}</p>
+            <p className="text-primary font-medium">{t('success.title')}</p>
+            <p className="text-primary text-sm">{t('success.message')}</p>
           </div>
         </div>
       </div>
@@ -220,10 +220,10 @@ function ResendVerificationForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <p className="text-red-600 text-sm">{t('description')}</p>
+      <p className="text-destructive text-sm">{t('description')}</p>
       
       {error && (
-        <p className="text-red-500 text-sm">{error}</p>
+        <p className="text-destructive text-sm">{error}</p>
       )}
       
       <div className="flex gap-2">
@@ -232,14 +232,14 @@ function ResendVerificationForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('placeholder')}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="flex-1 px-4 py-2 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
           required
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading || !email}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 animate-spin" />

@@ -206,7 +206,7 @@ export default function MessagesPage() {
                               {conversation.partner.name}
                             </p>
                             {conversation.unreadCount > 0 && (
-                              <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-0.5">
+                              <span className="bg-primary text-white text-xs rounded-full px-2 py-0.5">
                                 {conversation.unreadCount}
                               </span>
                             )}
@@ -269,7 +269,7 @@ export default function MessagesPage() {
                           <div
                             className={`max-w-[70%] rounded-lg px-4 py-2 ${
                               message.senderId === user?.id
-                                ? 'bg-primary text-primary-foreground'
+                                ? 'bg-primary text-white'
                                 : 'bg-muted'
                             }`}
                           >
@@ -277,7 +277,7 @@ export default function MessagesPage() {
                             <p
                               className={`text-xs mt-1 ${
                                 message.senderId === user?.id
-                                  ? 'text-primary-foreground/70'
+                                  ? 'text-white/70'
                                   : 'text-muted-foreground'
                               }`}
                             >

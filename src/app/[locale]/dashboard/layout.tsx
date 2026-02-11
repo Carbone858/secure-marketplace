@@ -30,15 +30,15 @@ export default async function DashboardLayout({
   const isRTL = locale === 'ar';
 
   return (
-    <div className="min-h-screen bg-gray-50" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Dashboard Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-card shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link
               href={`/${locale}`}
-              className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+              className="text-xl font-bold text-primary hover:text-primary transition-colors"
             >
               {isRTL ? 'سوق الخدمات' : 'Service Marketplace'}
             </Link>
@@ -47,19 +47,19 @@ export default async function DashboardLayout({
             <nav className="flex items-center gap-6">
               <Link
                 href={`/${locale}/dashboard`}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {isRTL ? 'لوحة التحكم' : 'Dashboard'}
               </Link>
               <Link
                 href={`/${locale}/dashboard/profile`}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {isRTL ? 'الملف الشخصي' : 'Profile'}
               </Link>
               <Link
                 href={`/${locale}/dashboard/settings`}
-                className="text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {isRTL ? 'الإعدادات' : 'Settings'}
               </Link>
@@ -67,13 +67,13 @@ export default async function DashboardLayout({
 
             {/* User Menu */}
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-muted-foreground">
                 {session.user?.name || session.user?.email}
               </span>
               <form action={`/${locale}/api/auth/logout`} method="POST">
                 <button
                   type="submit"
-                  className="text-sm text-red-600 hover:text-red-800 transition-colors"
+                  className="text-sm text-destructive hover:text-destructive transition-colors"
                 >
                   {isRTL ? 'تسجيل الخروج' : 'Logout'}
                 </button>

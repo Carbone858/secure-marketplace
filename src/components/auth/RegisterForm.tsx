@@ -36,8 +36,13 @@ function useRecaptcha() {
       }
 
       const grecaptcha = (window as unknown as { grecaptcha: { ready: (cb: () => void) => void; execute: (key: string, options: { action: string }) => Promise<string> } }).grecaptcha;
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '';
+      if (!siteKey) {
+        reject(new Error('reCAPTCHA site key not configured'));
+        return;
+      }
+
       grecaptcha.ready(() => {
-        const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '';
         grecaptcha.execute(siteKey, { action })
           .then((token: string) => resolve(token))
           .catch((err: Error) => reject(err));
@@ -211,18 +216,18 @@ export function RegisterForm() {
   if (isSuccess) {
     return (
       <div className="w-full max-w-md mx-auto p-6">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-green-800 mb-2">
+        <div className="bg-success/10 border border-success/30 rounded-lg p-6 text-center">
+          <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-success mb-2">
             {t('success.title')}
           </h2>
-          <p className="text-green-700 mb-4">{t('success.message')}</p>
-          <p className="text-sm text-green-600 mb-6">
+          <p className="text-success mb-4">{t('success.message')}</p>
+          <p className="text-sm text-success mb-6">
             {t('success.checkEmail', { email: formData.email })}
           </p>
           <Link
             href={`/${locale}/auth/login`}
-            className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+            className="inline-block bg-success text-white px-6 py-2 rounded-lg hover:bg-success/90 transition-colors"
           >
             {t('success.goToLogin')}
           </Link>
@@ -239,16 +244,16 @@ export function RegisterForm() {
     >
       {/* General error */}
       {errors.general && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-red-700 text-sm">{errors.general}</p>
+        <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+          <p className="text-destructive text-sm">{errors.general}</p>
         </div>
       )}
 
       {/* Name field */}
       <div className="space-y-2">
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          {t('fields.name.label')} <span className="text-red-500">*</span>
+        <label htmlFor="name" className="block text-sm font-medium text-foreground">
+          {t('fields.name.label')} <span className="text-destructive">*</span>
         </label>
         <input
           type="text"
@@ -257,18 +262,18 @@ export function RegisterForm() {
           value={formData.name}
           onChange={handleChange}
           placeholder={t('fields.name.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-            errors.name ? 'border-red-500' : 'border-gray-300'
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+            errors.name ? 'border-destructive' : 'border-input'
           }`}
           disabled={isLoading}
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+        {errors.name && <p className="text-destructive text-sm">{errors.name}</p>}
       </div>
 
       {/* Email field */}
       <div className="space-y-2">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          {t('fields.email.label')} <span className="text-red-500">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-foreground">
+          {t('fields.email.label')} <span className="text-destructive">*</span>
         </label>
         <input
           type="email"
@@ -277,19 +282,19 @@ export function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           placeholder={t('fields.email.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-            errors.email ? 'border-red-500' : 'border-gray-300'
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+            errors.email ? 'border-destructive' : 'border-input'
           }`}
           disabled={isLoading}
           autoComplete="email"
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        {errors.email && <p className="text-destructive text-sm">{errors.email}</p>}
       </div>
 
       {/* Phone field */}
       <div className="space-y-2">
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-          {t('fields.phone.label')} <span className="text-red-500">*</span>
+        <label htmlFor="phone" className="block text-sm font-medium text-foreground">
+          {t('fields.phone.label')} <span className="text-destructive">*</span>
         </label>
         <input
           type="tel"
@@ -298,20 +303,20 @@ export function RegisterForm() {
           value={formData.phone}
           onChange={handleChange}
           placeholder={t('fields.phone.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-            errors.phone ? 'border-red-500' : 'border-gray-300'
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+            errors.phone ? 'border-destructive' : 'border-input'
           }`}
           disabled={isLoading}
           autoComplete="tel"
         />
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
-        <p className="text-xs text-gray-500">{t('fields.phone.hint')}</p>
+        {errors.phone && <p className="text-destructive text-sm">{errors.phone}</p>}
+        <p className="text-xs text-muted-foreground">{t('fields.phone.hint')}</p>
       </div>
 
       {/* Password field */}
       <div className="space-y-2">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          {t('fields.password.label')} <span className="text-red-500">*</span>
+        <label htmlFor="password" className="block text-sm font-medium text-foreground">
+          {t('fields.password.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
           <input
@@ -321,8 +326,8 @@ export function RegisterForm() {
             value={formData.password}
             onChange={handleChange}
             placeholder={t('fields.password.placeholder')}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.password ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
             autoComplete="new-password"
@@ -330,13 +335,13 @@ export function RegisterForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
-        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        {errors.password && <p className="text-destructive text-sm">{errors.password}</p>}
         
         {/* Password strength indicator */}
         <PasswordStrength password={formData.password} locale={locale} />
@@ -344,8 +349,8 @@ export function RegisterForm() {
 
       {/* Confirm Password field */}
       <div className="space-y-2">
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-          {t('fields.confirmPassword.label')} <span className="text-red-500">*</span>
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground">
+          {t('fields.confirmPassword.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
           <input
@@ -355,8 +360,8 @@ export function RegisterForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder={t('fields.confirmPassword.placeholder')}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-              errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+              errors.confirmPassword ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
             autoComplete="new-password"
@@ -364,14 +369,14 @@ export function RegisterForm() {
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+          <p className="text-destructive text-sm">{errors.confirmPassword}</p>
         )}
       </div>
 
@@ -383,14 +388,14 @@ export function RegisterForm() {
             name="termsAccepted"
             checked={formData.termsAccepted}
             onChange={handleChange}
-            className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="mt-1 w-4 h-4 text-primary border-input rounded focus:ring-ring"
             disabled={isLoading}
           />
-          <span className="text-sm text-gray-700">
+          <span className="text-sm text-foreground">
             {t('fields.terms.label')}{' '}
             <Link
               href={`/${locale}/terms`}
-              className="text-blue-600 hover:text-blue-800 underline"
+              className="text-primary hover:text-primary underline"
               target="_blank"
             >
               {t('fields.terms.link')}
@@ -398,7 +403,7 @@ export function RegisterForm() {
             {t('fields.terms.and')}{' '}
             <Link
               href={`/${locale}/privacy`}
-              className="text-blue-600 hover:text-blue-800 underline"
+              className="text-primary hover:text-primary underline"
               target="_blank"
             >
               {t('fields.terms.privacyLink')}
@@ -406,7 +411,7 @@ export function RegisterForm() {
           </span>
         </label>
         {errors.termsAccepted && (
-          <p className="text-red-500 text-sm">{errors.termsAccepted}</p>
+          <p className="text-destructive text-sm">{errors.termsAccepted}</p>
         )}
       </div>
 
@@ -414,7 +419,7 @@ export function RegisterForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:ring-4 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>
@@ -427,11 +432,11 @@ export function RegisterForm() {
       </button>
 
       {/* Login link */}
-      <p className="text-center text-sm text-gray-600">
+      <p className="text-center text-sm text-muted-foreground">
         {t('haveAccount')}{' '}
         <Link
           href={`/${locale}/auth/login`}
-          className="text-blue-600 hover:text-blue-800 font-medium"
+          className="text-primary hover:text-primary font-medium"
         >
           {t('loginLink')}
         </Link>

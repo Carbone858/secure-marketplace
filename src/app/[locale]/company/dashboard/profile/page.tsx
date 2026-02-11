@@ -1,0 +1,171 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { Building2, Loader2, Save, Globe, Phone, Mail, MapPin } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { useLocale } from 'next-intl';
+import { useAuth } from '@/components/providers/AuthProvider';
+
+export default function CompanyProfilePage() {
+  const locale = useLocale();
+  const { user } = useAuth();
+  const [company, setCompany] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [form, setForm] = useState({
+    name: '',
+    description: '',
+    phone: '',
+    website: '',
+    address: '',
+  });
+
+  useEffect(() => {
+    const fetchCompany = async () => {
+      try {
+        const res = await fetch('/api/company/dashboard');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (data.company) {
+          setCompany(data.company);
+          setForm({
+            name: data.company.name || '',
+            description: data.company.description || '',
+            phone: data.company.phone || '',
+            website: data.company.website || '',
+            address: data.company.address || '',
+          });
+        }
+      } catch {
+        toast.error('Failed to load company data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCompany();
+  }, []);
+
+  const handleSave = async () => {
+    if (!company) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch(`/api/companies/${company.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      toast.success('Profile updated successfully');
+    } catch {
+      toast.error('Failed to update profile');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <Building2 className="h-8 w-8" />
+            Company Profile
+          </h1>
+          <p className="text-muted-foreground mt-1">Update your company information</p>
+        </div>
+        {company && (
+          <Badge className={company.verificationStatus === 'VERIFIED' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}>
+            {company.verificationStatus}
+          </Badge>
+        )}
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Basic Information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-1">
+                <Building2 className="h-3 w-3" /> Company Name (English)
+              </label>
+              <Input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-1">
+                <Building2 className="h-3 w-3" /> Company Name
+              </label>
+              <Input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Description</label>
+            <textarea
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              className="w-full border rounded-md px-3 py-2 text-sm min-h-[100px]"
+              placeholder="Describe your company and services..."
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-1">
+                <Phone className="h-3 w-3" /> Phone
+              </label>
+              <Input
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-1">
+                <Globe className="h-3 w-3" /> Website
+              </label>
+              <Input
+                value={form.website}
+                onChange={(e) => setForm({ ...form, website: e.target.value })}
+                placeholder="https://"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium flex items-center gap-1">
+              <MapPin className="h-3 w-3" /> Address
+            </label>
+            <Input
+              value={form.address}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
+            />
+          </div>
+
+          <Button onClick={handleSave} disabled={isSaving} className="mt-4">
+            {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
+            Save Changes
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -47,18 +47,18 @@ export function PasswordStrength({ password, locale = 'en' }: PasswordStrengthPr
   // Determine strength label and color
   const getStrengthInfo = () => {
     if (password.length === 0) {
-      return { label: t('strength.empty'), color: 'bg-gray-200', textColor: 'text-gray-500' };
+      return { label: t('strength.empty'), color: 'bg-muted', textColor: 'text-muted-foreground' };
     }
     if (strengthScore <= 2) {
-      return { label: t('strength.weak'), color: 'bg-red-500', textColor: 'text-red-600' };
+      return { label: t('strength.weak'), color: 'bg-destructive/100', textColor: 'text-destructive' };
     }
     if (strengthScore <= 3) {
-      return { label: t('strength.fair'), color: 'bg-yellow-500', textColor: 'text-yellow-600' };
+      return { label: t('strength.fair'), color: 'bg-warning/100', textColor: 'text-warning' };
     }
     if (strengthScore <= 4) {
-      return { label: t('strength.good'), color: 'bg-blue-500', textColor: 'text-blue-600' };
+      return { label: t('strength.good'), color: 'bg-primary/100', textColor: 'text-primary' };
     }
-    return { label: t('strength.strong'), color: 'bg-green-500', textColor: 'text-green-600' };
+    return { label: t('strength.strong'), color: 'bg-success/100', textColor: 'text-success' };
   };
 
   const strengthInfo = getStrengthInfo();
@@ -68,12 +68,12 @@ export function PasswordStrength({ password, locale = 'en' }: PasswordStrengthPr
       {/* Strength bar */}
       <div className="space-y-2">
         <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-600">{t('strength.label')}</span>
+          <span className="text-sm text-muted-foreground">{t('strength.label')}</span>
           <span className={`text-sm font-medium ${strengthInfo.textColor}`}>
             {strengthInfo.label}
           </span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-300 ${strengthInfo.color}`}
             style={{ width: `${(strengthScore / 5) * 100}%` }}
@@ -83,7 +83,7 @@ export function PasswordStrength({ password, locale = 'en' }: PasswordStrengthPr
 
       {/* Requirements list */}
       <div className="space-y-2">
-        <p className="text-sm text-gray-600">{t('requirements.title')}</p>
+        <p className="text-sm text-muted-foreground">{t('requirements.title')}</p>
         <ul className="space-y-1">
           {requirements.map((req) => {
             const isMet = req.test(password);
@@ -91,13 +91,13 @@ export function PasswordStrength({ password, locale = 'en' }: PasswordStrengthPr
               <li
                 key={req.key}
                 className={`flex items-center gap-2 text-sm ${
-                  isMet ? 'text-green-600' : 'text-gray-500'
+                  isMet ? 'text-success' : 'text-muted-foreground'
                 }`}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
                 <span
                   className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
-                    isMet ? 'bg-green-100' : 'bg-gray-100'
+                    isMet ? 'bg-success/10' : 'bg-muted'
                   }`}
                 >
                   {isMet ? (
