@@ -2,26 +2,299 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* ============================================================
+   DESIGN TOKENS — Central Theme System
+   
+   All colors use HSL format: "H S% L%"
+   To change the entire look & feel, edit ONLY these variables.
+   
+   Naming convention (shadcn/ui compatible):
+     --{semantic-name}           → background color
+     --{semantic-name}-foreground → text color on that background
+   ============================================================ */
+
+@layer base {
+  /* ──────────── LIGHT THEME (default) ──────────── */
+  :root {
+    /* Primary brand color — used for CTAs, links, active states */
+    --primary: 217 91% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary — used for secondary buttons, less prominent elements */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 9% 20%;
+
+    /* Accent — used for hover states, highlights */
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 9% 20%;
+
+    /* Destructive — used for errors, delete actions, danger states */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Success — used for success messages, verified badges */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning — used for pending states, caution messages */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Info — used for informational badges, tips */
+    --info: 217 91% 60%;
+    --info-foreground: 0 0% 100%;
+
+    /* Page background and text */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover/dropdown surfaces */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Muted backgrounds — subtle sections, disabled states */
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    /* Borders, inputs, focus rings */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 50%;
+
+    /* Chart colors for data visualizations */
+    --chart-1: 217 91% 50%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 67% 55%;
+    --chart-5: 0 84% 60%;
+
+    /* Sidebar specific tokens */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 9% 46%;
+    --sidebar-primary: 217 91% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 220 9% 20%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 50%;
+
+    /* Status indicator tokens (semantic) */
+    --status-verified: 142 71% 45%;
+    --status-pending: 38 92% 50%;
+    --status-rejected: 0 84% 60%;
+    --status-open: 217 91% 60%;
+    --status-closed: 220 9% 46%;
+    --status-active: 142 71% 45%;
+    --status-cancelled: 0 84% 60%;
+    --status-completed: 217 91% 50%;
+
+    /* Typography */
+    --font-sans: 'Inter', sans-serif;
+    --font-arabic: 'Noto Sans Arabic', 'Inter', sans-serif;
+
+    /* Spacing scale (used via Tailwind extend) */
+    --radius: 0.5rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 9999px;
+
+    /* Density — multiplier for component internal padding/gaps.
+       compact = 0.75, default = 1, spacious = 1.25            */
+    --density: 1;
+
+    /* Spacing base unit (all component padding/gaps derive from this) */
+    --space-unit: 0.25rem;
+
+    /* Z-index scale */
+    --z-dropdown: 50;
+    --z-sticky: 40;
+    --z-overlay: 60;
+    --z-modal: 70;
+    --z-toast: 80;
+
+    /* Motion / transition tokens */
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+    --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+
+    /* Overlay */
+    --overlay: 0 0% 0% / 0.4;
+  }
+
+  /* ──────────── DARK THEME ──────────── */
+  .dark {
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 45%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 217 91% 55%;
+    --info-foreground: 0 0% 100%;
+
+    --background: 222 47% 5%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 65%;
+
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 217 91% 60%;
+
+    --chart-1: 217 91% 60%;
+    --chart-2: 142 71% 40%;
+    --chart-3: 38 92% 45%;
+    --chart-4: 280 67% 50%;
+    --chart-5: 0 63% 50%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 215 20% 65%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 18%;
+    --sidebar-ring: 217 91% 60%;
+
+    --status-verified: 142 71% 40%;
+    --status-pending: 38 92% 45%;
+    --status-rejected: 0 63% 50%;
+    --status-open: 217 91% 55%;
+    --status-closed: 215 20% 65%;
+    --status-active: 142 71% 40%;
+    --status-cancelled: 0 63% 50%;
+    --status-completed: 217 91% 55%;
+
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -2px hsl(0 0% 0% / 0.2);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.3), 0 4px 6px -4px hsl(0 0% 0% / 0.2);
+
+    --overlay: 0 0% 0% / 0.6;
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* RTL / LTR direction */
+  .rtl {
+    direction: rtl;
+    font-family: var(--font-arabic);
+  }
+
+  .ltr {
+    direction: ltr;
+    font-family: var(--font-sans);
+  }
 }
 
-.rtl {
-  direction: rtl;
-}
+/* ============================================================
+   UTILITY LAYER — Reusable helper classes built on tokens
+   ============================================================ */
 
-.ltr {
-  direction: ltr;
+@layer utilities {
+  /* Focus ring utility */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Overlay backdrop */
+  .overlay-backdrop {
+    background-color: hsl(var(--overlay));
+  }
+
+  /* Section spacing helpers */
+  .section-spacing {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+
+  .section-spacing-sm {
+    @apply py-8 md:py-12 lg:py-16;
+  }
+
+  /* Container widths */
+  .container-narrow {
+    @apply max-w-3xl mx-auto px-4 sm:px-6;
+  }
+
+  .container-default {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-wide {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Heading scales */
+  .heading-1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+  }
+
+  .heading-2 {
+    @apply text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  .heading-3 {
+    @apply text-2xl md:text-3xl font-semibold;
+  }
+
+  .heading-4 {
+    @apply text-xl md:text-2xl font-semibold;
+  }
+
+  /* Card hover effect */
+  .card-interactive {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5;
+  }
+
+  /* Skeleton loading animation */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
+  }
 }
