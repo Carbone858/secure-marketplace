@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
       // Pending verifications
       prisma.company.count({
-        where: { verificationStatus: 'PENDING_VERIFICATION' },
+        where: { verificationStatus: 'PENDING' },
       }),
 
       // Recent users

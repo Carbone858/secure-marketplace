@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status') || 'PENDING_VERIFICATION';
+    const status = searchParams.get('status') || 'PENDING';
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
 
@@ -122,7 +122,7 @@ export async function PUT(
     await prisma.notification.create({
       data: {
         userId: company.userId,
-        type: 'VERIFICATION',
+        type: 'SYSTEM',
         title: `Verification ${validatedData.status}`,
         message:
           validatedData.status === 'VERIFIED'

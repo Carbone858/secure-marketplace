@@ -49,7 +49,6 @@ export async function GET(request: NextRequest) {
           emailVerified: true,
           isActive: true,
           createdAt: true,
-          lastLoginAt: true,
           _count: {
             select: {
               requests: true,
