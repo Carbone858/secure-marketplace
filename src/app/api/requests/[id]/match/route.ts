@@ -81,7 +81,7 @@ export async function POST(
             id: true,
             name: true,
             email: true,
-            image: true,
+            avatar: true,
           },
         },
         country: true,
@@ -92,11 +92,9 @@ export async function POST(
             rating: true,
           },
         },
-        _count: {
-          select: {
-            reviews: true,
-            completedProjects: true,
-          },
+        projects: {
+          where: { status: 'COMPLETED' },
+          select: { id: true },
         },
       },
       take: 20,
@@ -150,7 +148,7 @@ export async function POST(
       }
 
       // Experience bonus
-      if (company._count.completedProjects >= 10) {
+      if (company.projects.length >= 10) {
         score += 5;
         reasons.push('Experienced');
       }

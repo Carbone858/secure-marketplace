@@ -27,6 +27,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             rating: true,
             reviewCount: true,
             verificationStatus: true,
+            userId: true,
           },
         },
         request: {

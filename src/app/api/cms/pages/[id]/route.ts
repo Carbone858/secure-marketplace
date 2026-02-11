@@ -21,7 +21,7 @@ export async function GET(
   try {
     const { id } = params;
 
-    const page = await prisma.cmsPage.findUnique({
+    const page = await prisma.cMSPage.findUnique({
       where: { id },
     });
 
@@ -62,7 +62,7 @@ export async function PUT(
 
     const { id } = params;
 
-    const page = await prisma.cmsPage.findUnique({
+    const page = await prisma.cMSPage.findUnique({
       where: { id },
     });
 
@@ -76,7 +76,7 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updatePageSchema.parse(body);
 
-    const updatedPage = await prisma.cmsPage.update({
+    const updatedPage = await prisma.cMSPage.update({
       where: { id },
       data: {
         ...validatedData,
@@ -120,7 +120,7 @@ export async function DELETE(
 
     const { id } = params;
 
-    const page = await prisma.cmsPage.findUnique({
+    const page = await prisma.cMSPage.findUnique({
       where: { id },
     });
 
@@ -131,7 +131,7 @@ export async function DELETE(
       );
     }
 
-    await prisma.cmsPage.delete({
+    await prisma.cMSPage.delete({
       where: { id },
     });
 

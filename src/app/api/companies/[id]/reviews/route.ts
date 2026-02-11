@@ -28,7 +28,7 @@ export async function GET(
           user: {
             select: {
               name: true,
-              image: true,
+              avatar: true,
             },
           },
         },
@@ -117,7 +117,7 @@ export async function POST(
         user: {
           select: {
             name: true,
-            image: true,
+            avatar: true,
           },
         },
       },

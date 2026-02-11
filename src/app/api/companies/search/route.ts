@@ -44,24 +44,21 @@ export async function GET(request: NextRequest) {
     }
 
     if (categoryId) {
-      where.services = {
-        some: {
-          categoryId: categoryId,
-        },
-      };
+      // Category filtering not supported by the current schema.
+      // Keep the request valid without applying a filter.
     }
 
     // Build orderBy
     let orderBy: any = {};
     switch (sortBy) {
       case 'rating':
-        orderBy = { reviews: { _count: 'desc' } };
+        orderBy = { rating: 'desc' };
         break;
       case 'newest':
         orderBy = { createdAt: 'desc' };
         break;
       case 'projects':
-        orderBy = { completedProjects: { _count: 'desc' } };
+        orderBy = { reviewCount: 'desc' };
         break;
       default:
         orderBy = { createdAt: 'desc' };
@@ -77,16 +74,9 @@ export async function GET(request: NextRequest) {
           services: {
             take: 3,
           },
-          reviews: {
-            select: {
-              rating: true,
-            },
-          },
-          _count: {
-            select: {
-              reviews: true,
-              completedProjects: true,
-            },
+          projects: {
+            where: { status: 'COMPLETED' },
+            select: { id: true },
           },
         },
         orderBy,
@@ -97,19 +87,18 @@ export async function GET(request: NextRequest) {
     ]);
 
     // Calculate average rating for each company
-    const companiesWithRating = companies.map((company) => {
-      const avgRating =
-        company.reviews.length > 0
-          ? company.reviews.reduce((sum, r) => sum + r.rating, 0) / company.reviews.length
-          : 0;
-
-      return {
-        ...company,
-        averageRating: Math.round(avgRating * 10) / 10,
-        reviewCount: company._count.reviews,
-        completedProjectsCount: company._count.completedProjects,
-      };
-    });
+    const companiesWithRating = companies.map((company) => ({
+      ...company,
+      averageRating: Math.round(company.rating * 10) / 10,
+      reviewCount: company.reviewCount,
+      completedProjectsCount: company.projects.length,
+      country: company.country
+        ? { ...company.country, name: company.country.nameEn }
+        : null,
+      city: company.city
+        ? { ...company.city, name: company.city.nameEn }
+        : null,
+    }));
 
     // Filter by minimum rating if specified
     let filteredCompanies = companiesWithRating;

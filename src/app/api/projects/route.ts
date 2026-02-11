@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
             select: {
               name: true,
               email: true,
-              image: true,
+              avatar: true,
             },
           },
           company: {
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
               user: {
                 select: {
                   name: true,
-                  image: true,
+                  avatar: true,
                 },
               },
             },

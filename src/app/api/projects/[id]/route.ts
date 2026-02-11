@@ -32,7 +32,7 @@ export async function GET(
           select: {
             name: true,
             email: true,
-            image: true,
+            avatar: true,
           },
         },
         company: {
@@ -40,7 +40,7 @@ export async function GET(
             user: {
               select: {
                 name: true,
-                image: true,
+                avatar: true,
               },
             },
           },
@@ -55,7 +55,7 @@ export async function GET(
             sender: {
               select: {
                 name: true,
-                image: true,
+                avatar: true,
               },
             },
           },

@@ -24,10 +24,14 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       include: {
         user: {
           select: {
+            id: true,
             name: true,
             avatar: true,
+            image: true,
           },
         },
+        country: true,
+        city: true,
         services: {
           where: { isActive: true },
         },
@@ -39,6 +43,22 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             type: true,
             status: true,
           },
+        },
+        reviews: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                image: true,
+                avatar: true,
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        },
+        projects: {
+          where: { status: 'COMPLETED' },
+          select: { id: true },
         },
       },
     });
@@ -54,10 +74,22 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    const { projects, country, city, reviews, ...rest } = company;
+    const normalizedCompany = {
+      ...rest,
+      country: country ? { ...country, name: country.nameEn } : null,
+      city: city ? { ...city, name: city.nameEn } : null,
+      reviews,
+      _count: {
+        reviews: reviews.length,
+        completedProjects: projects.length,
+      },
+    };
+
     return NextResponse.json(
       {
         success: true,
-        data: { company },
+        data: { company: normalizedCompany },
       },
       { status: 200 }
     );

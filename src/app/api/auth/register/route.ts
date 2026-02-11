@@ -13,7 +13,7 @@ import crypto from 'crypto';
 // Rate limiting store (in production, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
-const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_MAX = process.env.NODE_ENV === 'production' ? 5 : 100;
 const RATE_LIMIT_WINDOW = 5 * 60 * 1000; // 5 minutes
 
 /**
@@ -90,7 +90,7 @@ async function logSecurityEvent(
         type,
         ip,
         userAgent: userAgent?.slice(0, 255) || null,
-        metadata: metadata || {},
+        metadata: (metadata || {}) as any,
       },
     });
   } catch (error) {

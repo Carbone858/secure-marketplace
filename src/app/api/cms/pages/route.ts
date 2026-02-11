@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const publishedOnly = searchParams.get('publishedOnly') !== 'false';
 
     if (slug) {
-      const page = await prisma.cmsPage.findUnique({
+      const page = await prisma.cMSPage.findUnique({
         where: {
           slug,
           ...(publishedOnly && { isPublished: true }),
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ page });
     }
 
-    const pages = await prisma.cmsPage.findMany({
+    const pages = await prisma.cMSPage.findMany({
       where: publishedOnly ? { isPublished: true } : undefined,
       orderBy: { createdAt: 'desc' },
     });
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     const validatedData = pageSchema.parse(body);
 
     // Check if slug already exists
-    const existingPage = await prisma.cmsPage.findUnique({
+    const existingPage = await prisma.cMSPage.findUnique({
       where: { slug: validatedData.slug },
     });
 
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const page = await prisma.cmsPage.create({
+    const page = await prisma.cMSPage.create({
       data: {
         ...validatedData,
         createdBy: user.id,

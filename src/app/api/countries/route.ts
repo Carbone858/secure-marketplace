@@ -15,42 +15,27 @@ export async function GET(request: NextRequest) {
         ? {
             cities: {
               where: { isActive: true },
-              orderBy: { name: 'asc' },
+              orderBy: { nameEn: 'asc' },
             },
           }
         : undefined,
-      orderBy: { name: 'asc' },
+      orderBy: { nameEn: 'asc' },
     });
 
-    return NextResponse.json({ countries });
+    const normalized = countries.map((country: any) => ({
+      ...country,
+      name: country.nameEn,
+      cities: includeCities && country.cities
+        ? country.cities.map((city: any) => ({
+            ...city,
+            name: city.nameEn,
+          }))
+        : undefined,
+    }));
+
+    return NextResponse.json({ countries: normalized });
   } catch (error) {
     console.error('Get countries error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// GET /api/countries/[id]/cities - Get cities for a country
-export async function GET_CITIES(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const { id } = params;
-
-    const cities = await prisma.city.findMany({
-      where: {
-        countryId: id,
-        isActive: true,
-      },
-      orderBy: { name: 'asc' },
-    });
-
-    return NextResponse.json({ cities });
-  } catch (error) {
-    console.error('Get cities error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

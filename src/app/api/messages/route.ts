@@ -33,13 +33,13 @@ export async function GET(request: NextRequest) {
           sender: {
             select: {
               name: true,
-              image: true,
+              avatar: true,
             },
           },
           recipient: {
             select: {
               name: true,
-              image: true,
+              avatar: true,
             },
           },
         },
@@ -69,14 +69,14 @@ export async function GET(request: NextRequest) {
           select: {
             id: true,
             name: true,
-            image: true,
+            avatar: true,
           },
         },
         recipient: {
           select: {
             id: true,
             name: true,
-            image: true,
+            avatar: true,
           },
         },
       },
@@ -148,13 +148,13 @@ export async function POST(request: NextRequest) {
         sender: {
           select: {
             name: true,
-            image: true,
+            avatar: true,
           },
         },
         recipient: {
           select: {
             name: true,
-            image: true,
+            avatar: true,
           },
         },
       },

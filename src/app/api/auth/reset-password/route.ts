@@ -50,7 +50,7 @@ async function logSecurityEvent(
         userId,
         ip,
         userAgent: userAgent?.slice(0, 255) || null,
-        metadata: metadata || {},
+        metadata: (metadata || {}) as any,
       },
     });
   } catch (error) {
