@@ -2,7 +2,58 @@
   "home": {
     "hero": {
       "title": "احصل على عروض أسعار من أفضل الشركات",
-      "subtitle": "منصة الخدمات الرائدة في الوطن العربي"
+      "subtitle": "منصة الخدمات الرائدة في الوطن العربي",
+      "badge": "سوق الخدمات رقم 1 في العالم العربي",
+      "searchPlaceholder": "ما الخدمة التي تحتاجها؟",
+      "searchButton": "بحث",
+      "postRequest": "نشر طلب",
+      "registerCompany": "سجل كشركة"
+    },
+    "categories": {
+      "title": "تصفح حسب الفئة",
+      "subtitle": "اعثر على الخدمة المناسبة لاحتياجاتك من مجموعة واسعة من الفئات",
+      "companyCount": "{count} شركة",
+      "viewAll": "عرض جميع الفئات"
+    },
+    "whyChooseUs": {
+      "title": "لماذا تختارنا",
+      "subtitle": "نوفر أفضل منصة لربط العملاء بمقدمي الخدمات"
+    },
+    "features": {
+      "verified": {
+        "title": "شركات موثقة",
+        "description": "جميع الشركات موثقة ومراجعة لضمان الجودة."
+      },
+      "quickResponse": {
+        "title": "استجابة سريعة",
+        "description": "احصل على عروض أسعار من شركات متعددة خلال ساعات."
+      },
+      "trustedNetwork": {
+        "title": "شبكة موثوقة",
+        "description": "انضم إلى آلاف العملاء والشركات الراضية."
+      },
+      "growBusiness": {
+        "title": "نمّي أعمالك",
+        "description": "يمكن للشركات توسيع نطاق وصولها وإيجاد عملاء جدد."
+      }
+    },
+    "stats": {
+      "verifiedCompanies": "شركات موثقة",
+      "serviceRequests": "طلبات خدمة",
+      "happyCustomers": "عملاء سعداء",
+      "averageRating": "متوسط التقييم"
+    },
+    "featured": {
+      "title": "الشركات المميزة",
+      "subtitle": "شركات بأعلى التقييمات وموثقة وجاهزة لخدمتك",
+      "verified": "موثقة",
+      "reviewCount": "({count} تقييم)"
+    },
+    "cta": {
+      "title": "مستعد للبدء؟",
+      "subtitle": "انضم إلى آلاف العملاء والشركات التي تستخدم منصتنا بالفعل",
+      "postRequest": "نشر طلب",
+      "registerCompany": "سجل كشركة"
     }
   },
   "auth": {
@@ -839,6 +890,132 @@
       "EGP": "جنيه مصري",
       "JOD": "دينار أردني",
       "LBP": "ليرة لبنانية"
+    }
+  },
+  "nav": {
+    "brand": "سوق الخدمات",
+    "links": {
+      "home": "الرئيسية",
+      "companies": "الشركات",
+      "requests": "الطلبات"
+    },
+    "userMenu": {
+      "dashboard": "لوحة التحكم",
+      "companyDashboard": "لوحة الشركة",
+      "adminPanel": "لوحة الإدارة",
+      "logout": "تسجيل الخروج"
+    },
+    "auth": {
+      "signIn": "تسجيل الدخول",
+      "getStarted": "ابدأ الآن"
+    }
+  },
+  "footer": {
+    "brand": "سوق الخدمات",
+    "tagline": "سوق الخدمات الرائد الذي يربط العملاء بالشركات الموثقة في جميع أنحاء الوطن العربي.",
+    "contact": {
+      "location": "دمشق، سوريا"
+    },
+    "sections": {
+      "company": "الشركة",
+      "support": "الدعم",
+      "services": "الخدمات"
+    },
+    "company": {
+      "aboutUs": "من نحن",
+      "careers": "الوظائف",
+      "press": "الصحافة",
+      "blog": "المدونة"
+    },
+    "support": {
+      "helpCenter": "مركز المساعدة",
+      "contactUs": "اتصل بنا",
+      "privacyPolicy": "سياسة الخصوصية",
+      "termsOfService": "شروط الخدمة"
+    },
+    "services": {
+      "forCompanies": "للشركات",
+      "forCustomers": "للعملاء",
+      "pricing": "الأسعار",
+      "successStories": "قصص النجاح"
+    },
+    "copyright": "© {year} سوق الخدمات. جميع الحقوق محفوظة."
+  },
+  "admin": {
+    "title": "لوحة الإدارة",
+    "subtitle": "نظرة عامة على نشاط المنصة",
+    "retry": "إعادة المحاولة",
+    "errors": {
+      "loadFailed": "فشل تحميل بيانات لوحة التحكم"
+    },
+    "stats": {
+      "totalUsers": "إجمالي المستخدمين",
+      "totalCompanies": "إجمالي الشركات",
+      "totalRequests": "إجمالي الطلبات",
+      "totalProjects": "إجمالي المشاريع"
+    },
+    "pendingVerifications": {
+      "title": "التحققات المعلقة",
+      "description": "{count} شركة بانتظار التحقق",
+      "review": "مراجعة"
+    },
+    "recentUsers": {
+      "title": "المستخدمون الجدد",
+      "unknown": "غير معروف"
+    },
+    "recentRequests": {
+      "title": "الطلبات الأخيرة"
+    },
+    "sidebar": {
+      "title": "الإدارة",
+      "dashboard": "لوحة التحكم",
+      "users": "المستخدمون",
+      "companies": "الشركات",
+      "verifications": "التحققات",
+      "requests": "الطلبات",
+      "projects": "المشاريع",
+      "offers": "العروض",
+      "categories": "التصنيفات",
+      "reviews": "التقييمات",
+      "staff": "الموظفون",
+      "featureFlags": "إعدادات الميزات",
+      "messages": "الرسائل",
+      "settings": "الإعدادات"
+    }
+  },
+  "companies": {
+    "title": "دليل الشركات",
+    "subtitle": "ابحث عن شركات موثقة لمشاريعك",
+    "searchPlaceholder": "البحث عن شركات، خدمات...",
+    "searchButton": "بحث",
+    "noResults": "لم يتم العثور على شركات",
+    "noResultsDesc": "حاول تعديل البحث أو عوامل التصفية",
+    "noRating": "غ/م",
+    "projectCount": "{count} مشروع",
+    "filters": {
+      "title": "التصفية",
+      "country": "الدولة",
+      "allCountries": "جميع الدول",
+      "category": "الفئة",
+      "allCategories": "جميع الفئات",
+      "verifiedOnly": "الشركات الموثقة فقط",
+      "verifiedOnlyShort": "موثقة فقط",
+      "clear": "مسح"
+    },
+    "sort": {
+      "label": "ترتيب:",
+      "relevance": "الصلة",
+      "rating": "الأعلى تقييمًا",
+      "newest": "الأحدث",
+      "projects": "الأكثر مشاريع"
+    },
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي",
+      "pageOf": "صفحة {page} من {total}"
+    },
+    "errors": {
+      "loadFailed": "فشل تحميل الشركات"
     }
   }
 }

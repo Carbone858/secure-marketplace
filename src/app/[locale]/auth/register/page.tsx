@@ -21,13 +21,13 @@ export default function RegisterPage({ params: { locale } }: RegisterPageProps) 
   const isRTL = locale === 'ar';
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
+    <div className="bg-card rounded-2xl shadow-xl p-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           {isRTL ? 'إنشاء حساب جديد' : 'Create Your Account'}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           {isRTL
             ? 'انضم إلى سوق الخدمات واحصل على عروض أسعار من أفضل الشركات'
             : 'Join Service Marketplace and get quotes from top companies'}
@@ -38,11 +38,11 @@ export default function RegisterPage({ params: { locale } }: RegisterPageProps) 
       <RegisterForm />
 
       {/* Trust badges */}
-      <div className="mt-8 pt-6 border-t border-gray-200">
-        <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
+      <div className="mt-8 pt-6 border-t border-border">
+        <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <svg
-              className="w-5 h-5 text-green-500"
+              className="w-5 h-5 text-success"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -58,7 +58,7 @@ export default function RegisterPage({ params: { locale } }: RegisterPageProps) 
           </div>
           <div className="flex items-center gap-2">
             <svg
-              className="w-5 h-5 text-green-500"
+              className="w-5 h-5 text-success"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -74,7 +74,7 @@ export default function RegisterPage({ params: { locale } }: RegisterPageProps) 
           </div>
           <div className="flex items-center gap-2">
             <svg
-              className="w-5 h-5 text-green-500"
+              className="w-5 h-5 text-success"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

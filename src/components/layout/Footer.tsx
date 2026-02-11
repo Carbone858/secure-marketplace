@@ -1,30 +1,31 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Building2, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 export function Footer() {
   const locale = useLocale();
+  const t = useTranslations('footer');
 
   const footerLinks = {
     company: [
-      { name: 'About Us', href: `/${locale}/about` },
-      { name: 'Careers', href: `/${locale}/careers` },
-      { name: 'Press', href: `/${locale}/press` },
-      { name: 'Blog', href: `/${locale}/blog` },
+      { name: t('company.aboutUs'), href: `/${locale}/about` },
+      { name: t('company.careers'), href: `/${locale}/careers` },
+      { name: t('company.press'), href: `/${locale}/press` },
+      { name: t('company.blog'), href: `/${locale}/blog` },
     ],
     support: [
-      { name: 'Help Center', href: `/${locale}/help` },
-      { name: 'Contact Us', href: `/${locale}/contact` },
-      { name: 'Privacy Policy', href: `/${locale}/privacy` },
-      { name: 'Terms of Service', href: `/${locale}/terms` },
+      { name: t('support.helpCenter'), href: `/${locale}/help` },
+      { name: t('support.contactUs'), href: `/${locale}/contact` },
+      { name: t('support.privacyPolicy'), href: `/${locale}/privacy` },
+      { name: t('support.termsOfService'), href: `/${locale}/terms` },
     ],
     services: [
-      { name: 'For Companies', href: `/${locale}/for-companies` },
-      { name: 'For Customers', href: `/${locale}/for-customers` },
-      { name: 'Pricing', href: `/${locale}/pricing` },
-      { name: 'Success Stories', href: `/${locale}/stories` },
+      { name: t('services.forCompanies'), href: `/${locale}/for-companies` },
+      { name: t('services.forCustomers'), href: `/${locale}/for-customers` },
+      { name: t('services.pricing'), href: `/${locale}/pricing` },
+      { name: t('services.successStories'), href: `/${locale}/stories` },
     ],
   };
 
@@ -43,11 +44,10 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href={`/${locale}`} className="flex items-center gap-2 mb-4">
               <Building2 className="h-6 w-6" />
-              <span className="text-xl font-bold">ServiceMarket</span>
+              <span className="text-xl font-bold">{t('brand')}</span>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
-              The leading service marketplace connecting customers with verified
-              companies across the Arab world.
+              {t('tagline')}
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
@@ -56,18 +56,18 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                <span>+966 12 345 6789</span>
+                <span>+963 11 000 0000</span>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>Riyadh, Saudi Arabia</span>
+                <span>{t('contact.location')}</span>
               </div>
             </div>
           </div>
 
           {/* Links */}
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
+            <h3 className="font-semibold mb-4">{t('sections.company')}</h3>
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
@@ -83,7 +83,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
+            <h3 className="font-semibold mb-4">{t('sections.support')}</h3>
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.href}>
@@ -99,7 +99,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Services</h3>
+            <h3 className="font-semibold mb-4">{t('sections.services')}</h3>
             <ul className="space-y-2">
               {footerLinks.services.map((link) => (
                 <li key={link.href}>
@@ -118,7 +118,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} ServiceMarket. All rights reserved.
+            {t('copyright', { year: new Date().getFullYear().toString() })}
           </p>
           <div className="flex items-center gap-4">
             {socialLinks.map((social) => (

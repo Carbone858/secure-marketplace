@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Noto_Sans_Arabic } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { NextIntlClientProvider } from 'next-intl';
@@ -7,7 +7,17 @@ import { getMessages } from 'next-intl/server';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const notoSansArabic = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  variable: '--font-arabic',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Service Marketplace',
@@ -31,8 +41,10 @@ export default async function RootLayout({
   const isRTL = locale === 'ar';
 
   return (
-    <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'}>
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+    <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <body
+        className={`${inter.variable} ${notoSansArabic.variable} ${isRTL ? 'font-arabic' : 'font-sans'} min-h-screen flex flex-col antialiased`}
+      >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers>
             <Navbar />

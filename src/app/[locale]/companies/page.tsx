@@ -57,17 +57,17 @@ interface Category {
 }
 
 const sortOptions = [
-  { value: 'relevance', label: 'Relevance' },
-  { value: 'rating', label: 'Highest Rated' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'projects', label: 'Most Projects' },
+  { value: 'relevance', labelKey: 'sort.relevance' },
+  { value: 'rating', labelKey: 'sort.rating' },
+  { value: 'newest', labelKey: 'sort.newest' },
+  { value: 'projects', labelKey: 'sort.projects' },
 ];
 
 export default function CompaniesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const locale = useLocale();
-  const t = useTranslations();
+  const t = useTranslations('companies');
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
@@ -164,9 +164,9 @@ export default function CompaniesPage() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Company Directory</h1>
+        <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
         <p className="text-muted-foreground">
-          Find verified companies for your projects
+          {t('subtitle')}
         </p>
       </div>
 
@@ -176,13 +176,13 @@ export default function CompaniesPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search companies, services..."
+              placeholder={t('searchPlaceholder')}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="pl-10"
             />
           </div>
-          <Button type="submit">Search</Button>
+          <Button type="submit">{t('searchButton')}</Button>
         </form>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -191,17 +191,17 @@ export default function CompaniesPage() {
             <SheetTrigger asChild>
               <Button variant="outline" className="lg:hidden">
                 <Filter className="h-4 w-4 mr-2" />
-                Filters
+                {t('filters.title')}
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-80">
               <SheetHeader>
-                <SheetTitle>Filters</SheetTitle>
+                <SheetTitle>{t('filters.title')}</SheetTitle>
               </SheetHeader>
               <div className="space-y-6 mt-6">
                 {/* Country Filter */}
                 <div className="space-y-2">
-                  <Label>Country</Label>
+                  <Label>{t('filters.country')}</Label>
                   <select
                     value={selectedCountry}
                     onChange={(e) => {
@@ -210,7 +210,7 @@ export default function CompaniesPage() {
                     }}
                     className="w-full px-3 py-2 border rounded-md"
                   >
-                    <option value="">All Countries</option>
+                    <option value="">{t('filters.allCountries')}</option>
                     {countries.map((country) => (
                       <option key={country.id} value={country.id}>
                         {locale === 'ar' && country.nameAr ? country.nameAr : country.name}
@@ -221,7 +221,7 @@ export default function CompaniesPage() {
 
                 {/* Category Filter */}
                 <div className="space-y-2">
-                  <Label>Category</Label>
+                  <Label>{t('filters.category')}</Label>
                   <select
                     value={selectedCategory}
                     onChange={(e) => {
@@ -230,7 +230,7 @@ export default function CompaniesPage() {
                     }}
                     className="w-full px-3 py-2 border rounded-md"
                   >
-                    <option value="">All Categories</option>
+                    <option value="">{t('filters.allCategories')}</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {locale === 'ar' && category.nameAr ? category.nameAr : category.name}
@@ -249,7 +249,7 @@ export default function CompaniesPage() {
                       handleFilterChange();
                     }}
                   />
-                  <Label htmlFor="verified-mobile">Verified companies only</Label>
+                  <Label htmlFor="verified-mobile">{t('filters.verifiedOnly')}</Label>
                 </div>
               </div>
             </SheetContent>
@@ -263,13 +263,13 @@ export default function CompaniesPage() {
                   <MapPin className="h-4 w-4 mr-2" />
                   {selectedCountry
                     ? countries.find((c) => c.id === selectedCountry)?.name
-                    : 'All Countries'}
+                    : t('filters.allCountries')}
                   <ChevronDown className="h-4 w-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuItem onClick={() => { setSelectedCountry(''); handleFilterChange(); }}>
-                  All Countries
+                  {t('filters.allCountries')}
                 </DropdownMenuItem>
                 {countries.map((country) => (
                   <DropdownMenuItem
@@ -288,13 +288,13 @@ export default function CompaniesPage() {
                   <Building2 className="h-4 w-4 mr-2" />
                   {selectedCategory
                     ? categories.find((c) => c.id === selectedCategory)?.name
-                    : 'All Categories'}
+                    : t('filters.allCategories')}
                   <ChevronDown className="h-4 w-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuItem onClick={() => { setSelectedCategory(''); handleFilterChange(); }}>
-                  All Categories
+                  {t('filters.allCategories')}
                 </DropdownMenuItem>
                 {categories.map((category) => (
                   <DropdownMenuItem
@@ -312,7 +312,7 @@ export default function CompaniesPage() {
               onClick={() => { setVerifiedOnly(!verifiedOnly); handleFilterChange(); }}
             >
               <CheckCircle className="h-4 w-4 mr-2" />
-              Verified Only
+              {t('filters.verifiedOnlyShort')}
             </Button>
           </div>
 
@@ -322,7 +322,7 @@ export default function CompaniesPage() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
-                Sort: {sortOptions.find((o) => o.value === sortBy)?.label}
+                {t('sort.label')} {sortOptions.find((o) => o.value === sortBy) ? t(sortOptions.find((o) => o.value === sortBy)!.labelKey) : ''}
                 <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
             </DropdownMenuTrigger>
@@ -332,7 +332,7 @@ export default function CompaniesPage() {
                   key={option.value}
                   onClick={() => { setSortBy(option.value); handleFilterChange(); }}
                 >
-                  {option.label}
+                  {t(option.labelKey)}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -341,7 +341,7 @@ export default function CompaniesPage() {
           {hasActiveFilters && (
             <Button variant="ghost" onClick={clearFilters}>
               <X className="h-4 w-4 mr-2" />
-              Clear
+              {t('filters.clear')}
             </Button>
           )}
         </div>
@@ -355,9 +355,9 @@ export default function CompaniesPage() {
       ) : companies.length === 0 ? (
         <div className="text-center py-12">
           <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No companies found</h3>
+          <h3 className="text-lg font-semibold mb-2">{t('noResults')}</h3>
           <p className="text-muted-foreground">
-            Try adjusting your search or filters
+            {t('noResultsDesc')}
           </p>
         </div>
       ) : (
@@ -386,7 +386,7 @@ export default function CompaniesPage() {
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold truncate">{company.name}</h3>
                         {company.verificationStatus === 'VERIFIED' && (
-                          <CheckCircle className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary flex-shrink-0" />
                         )}
                       </div>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
@@ -411,12 +411,12 @@ export default function CompaniesPage() {
 
                   <div className="flex items-center gap-4 mt-4 text-sm">
                     <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-500" />
-                      <span className="font-medium">{company.averageRating || 'N/A'}</span>
+                      <Star className="h-4 w-4 text-warning" />
+                      <span className="font-medium">{company.averageRating || t('noRating')}</span>
                       <span className="text-muted-foreground">({company.reviewCount})</span>
                     </div>
                     <div className="text-muted-foreground">
-                      {company.completedProjectsCount} projects
+                      {t('projectCount', { count: company.completedProjectsCount })}
                     </div>
                   </div>
 
@@ -442,17 +442,17 @@ export default function CompaniesPage() {
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(currentPage - 1)}
               >
-                Previous
+                {t('pagination.previous')}
               </Button>
               <span className="flex items-center px-4">
-                Page {currentPage} of {totalPages}
+                {t('pagination.pageOf', { page: currentPage, total: totalPages })}
               </span>
               <Button
                 variant="outline"
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}
               >
-                Next
+                {t('pagination.next')}
               </Button>
             </div>
           )}

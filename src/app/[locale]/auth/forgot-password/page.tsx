@@ -21,13 +21,13 @@ export default function ForgotPasswordPage({ params: { locale } }: ForgotPasswor
   const isRTL = locale === 'ar';
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
+    <div className="bg-card rounded-2xl shadow-xl p-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           {isRTL ? 'نسيت كلمة المرور؟' : 'Forgot Password?'}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           {isRTL
             ? 'لا تقلق، سنساعدك في استعادة حسابك'
             : "Don't worry, we'll help you recover your account"}

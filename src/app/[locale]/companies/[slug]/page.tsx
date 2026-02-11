@@ -51,6 +51,7 @@ interface Company {
   country: { name: string; nameAr: string | null };
   city: { name: string; nameAr: string | null };
   user: {
+    id: string;
     name: string | null;
     image: string | null;
   };
@@ -222,7 +223,7 @@ export default function CompanyDetailPage() {
                 <div className="flex flex-wrap items-center gap-2 mb-2">
                   <h1 className="text-2xl md:text-3xl font-bold">{company.name}</h1>
                   {company.verificationStatus === 'VERIFIED' && (
-                    <Badge className="bg-blue-500">
+                    <Badge className="bg-primary/100">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Verified
                     </Badge>
@@ -235,7 +236,7 @@ export default function CompanyDetailPage() {
                     {company.city?.name}, {company.country?.name}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-yellow-500" />
+                    <Star className="h-4 w-4 text-warning" />
                     <span className="font-medium">{averageRating.toFixed(1)}</span>
                     <span>({company._count.reviews} reviews)</span>
                   </div>
@@ -359,8 +360,8 @@ export default function CompanyDetailPage() {
                             <Star
                               className={`h-6 w-6 ${
                                 star <= reviewRating
-                                  ? 'fill-yellow-500 text-yellow-500'
-                                  : 'text-gray-300'
+                                  ? 'fill-warning text-warning'
+                                  : 'text-muted-foreground/30'
                               }`}
                             />
                           </button>
@@ -425,8 +426,8 @@ export default function CompanyDetailPage() {
                                     key={i}
                                     className={`h-4 w-4 ${
                                       i < review.rating
-                                        ? 'fill-yellow-500 text-yellow-500'
-                                        : 'text-gray-300'
+                                        ? 'fill-warning text-warning'
+                                        : 'text-muted-foreground/30'
                                     }`}
                                   />
                                 ))}

@@ -22,15 +22,15 @@ export default async function AuthLayout({
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col"
+      className="min-h-screen bg-gradient-to-br from-primary/5 to-primary/10 flex flex-col"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <a
             href={`/${locale}`}
-            className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+            className="text-2xl font-bold text-primary hover:text-primary/80 transition-colors"
           >
             {isRTL ? 'سوق الخدمات' : 'Service Marketplace'}
           </a>
@@ -47,9 +47,9 @@ export default async function AuthLayout({
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t">
+      <footer className="bg-card border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm text-muted-foreground">
             {isRTL
               ? '© 2024 سوق الخدمات. جميع الحقوق محفوظة.'
               : '© 2024 Service Marketplace. All rights reserved.'}

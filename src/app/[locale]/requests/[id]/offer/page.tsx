@@ -225,10 +225,11 @@ export default function SubmitOfferPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="timeline">{t('fields.timeline')}</Label>
+                    <Label htmlFor="estimatedDays">{t('fields.timeline')}</Label>
                     <Input
-                      id="timeline"
-                      {...register('timeline')}
+                      id="estimatedDays"
+                      type="number"
+                      {...register('estimatedDays', { valueAsNumber: true })}
                       placeholder={t('fields.timelinePlaceholder')}
                     />
                   </div>

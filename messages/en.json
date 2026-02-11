@@ -2,7 +2,58 @@
   "home": {
     "hero": {
       "title": "Get Quotes from Top Companies",
-      "subtitle": "Leading service marketplace in the Arab world"
+      "subtitle": "Leading service marketplace in the Arab world",
+      "badge": "#1 Service Marketplace in the Arab World",
+      "searchPlaceholder": "What service do you need?",
+      "searchButton": "Search",
+      "postRequest": "Post a Request",
+      "registerCompany": "Register as Company"
+    },
+    "categories": {
+      "title": "Browse by Category",
+      "subtitle": "Find the right service for your needs from our wide range of categories",
+      "companyCount": "{count} companies",
+      "viewAll": "View All Categories"
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Us",
+      "subtitle": "We provide the best platform for connecting customers with service providers"
+    },
+    "features": {
+      "verified": {
+        "title": "Verified Companies",
+        "description": "All companies are verified and reviewed for quality assurance."
+      },
+      "quickResponse": {
+        "title": "Quick Response",
+        "description": "Get quotes from multiple companies within hours, not days."
+      },
+      "trustedNetwork": {
+        "title": "Trusted Network",
+        "description": "Join thousands of satisfied customers and businesses."
+      },
+      "growBusiness": {
+        "title": "Grow Your Business",
+        "description": "Companies can expand their reach and find new customers."
+      }
+    },
+    "stats": {
+      "verifiedCompanies": "Verified Companies",
+      "serviceRequests": "Service Requests",
+      "happyCustomers": "Happy Customers",
+      "averageRating": "Average Rating"
+    },
+    "featured": {
+      "title": "Featured Companies",
+      "subtitle": "Top-rated and verified companies ready to serve you",
+      "verified": "Verified",
+      "reviewCount": "({count} reviews)"
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Join thousands of customers and companies already using our platform",
+      "postRequest": "Post a Request",
+      "registerCompany": "Register as Company"
     }
   },
   "auth": {
@@ -839,6 +890,132 @@
       "EGP": "EGP",
       "JOD": "JOD",
       "LBP": "LBP"
+    }
+  },
+  "nav": {
+    "brand": "ServiceMarket",
+    "links": {
+      "home": "Home",
+      "companies": "Companies",
+      "requests": "Requests"
+    },
+    "userMenu": {
+      "dashboard": "Dashboard",
+      "companyDashboard": "Company Dashboard",
+      "adminPanel": "Admin Panel",
+      "logout": "Logout"
+    },
+    "auth": {
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    }
+  },
+  "footer": {
+    "brand": "ServiceMarket",
+    "tagline": "The leading service marketplace connecting customers with verified companies across the Arab world.",
+    "contact": {
+      "location": "Damascus, Syria"
+    },
+    "sections": {
+      "company": "Company",
+      "support": "Support",
+      "services": "Services"
+    },
+    "company": {
+      "aboutUs": "About Us",
+      "careers": "Careers",
+      "press": "Press",
+      "blog": "Blog"
+    },
+    "support": {
+      "helpCenter": "Help Center",
+      "contactUs": "Contact Us",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
+    },
+    "services": {
+      "forCompanies": "For Companies",
+      "forCustomers": "For Customers",
+      "pricing": "Pricing",
+      "successStories": "Success Stories"
+    },
+    "copyright": "© {year} ServiceMarket. All rights reserved."
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "subtitle": "Overview of platform activity",
+    "retry": "Retry",
+    "errors": {
+      "loadFailed": "Failed to load dashboard data"
+    },
+    "stats": {
+      "totalUsers": "Total Users",
+      "totalCompanies": "Total Companies",
+      "totalRequests": "Total Requests",
+      "totalProjects": "Total Projects"
+    },
+    "pendingVerifications": {
+      "title": "Pending Verifications",
+      "description": "{count} companies awaiting verification",
+      "review": "Review"
+    },
+    "recentUsers": {
+      "title": "Recent Users",
+      "unknown": "Unknown"
+    },
+    "recentRequests": {
+      "title": "Recent Requests"
+    },
+    "sidebar": {
+      "title": "Admin",
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "companies": "Companies",
+      "verifications": "Verifications",
+      "requests": "Requests",
+      "projects": "Projects",
+      "offers": "Offers",
+      "categories": "Categories",
+      "reviews": "Reviews",
+      "staff": "Staff",
+      "featureFlags": "Feature Flags",
+      "messages": "Messages",
+      "settings": "Settings"
+    }
+  },
+  "companies": {
+    "title": "Company Directory",
+    "subtitle": "Find verified companies for your projects",
+    "searchPlaceholder": "Search companies, services...",
+    "searchButton": "Search",
+    "noResults": "No companies found",
+    "noResultsDesc": "Try adjusting your search or filters",
+    "noRating": "N/A",
+    "projectCount": "{count} projects",
+    "filters": {
+      "title": "Filters",
+      "country": "Country",
+      "allCountries": "All Countries",
+      "category": "Category",
+      "allCategories": "All Categories",
+      "verifiedOnly": "Verified companies only",
+      "verifiedOnlyShort": "Verified Only",
+      "clear": "Clear"
+    },
+    "sort": {
+      "label": "Sort:",
+      "relevance": "Relevance",
+      "rating": "Highest Rated",
+      "newest": "Newest",
+      "projects": "Most Projects"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}"
+    },
+    "errors": {
+      "loadFailed": "Failed to load companies"
     }
   }
 }

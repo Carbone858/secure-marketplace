@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
@@ -36,9 +37,9 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: 'Home', href: `/${locale}` },
-    { name: 'Companies', href: `/${locale}/companies` },
-    { name: 'Requests', href: `/${locale}/requests` },
+    { name: t('nav.links.home'), href: `/${locale}` },
+    { name: t('nav.links.companies'), href: `/${locale}/companies` },
+    { name: t('nav.links.requests'), href: `/${locale}/requests` },
   ];
 
   const isActive = (href: string) => pathname === href;
@@ -50,7 +51,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center gap-2">
             <Building2 className="h-6 w-6" />
-            <span className="text-xl font-bold">ServiceMarket</span>
+            <span className="text-xl font-bold">{t('nav.brand')}</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -72,6 +73,7 @@ export function Navbar() {
 
           {/* Right Side */}
           <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
             <LanguageSwitcher />
 
             {user ? (
@@ -106,7 +108,7 @@ export function Navbar() {
                     <DropdownMenuItem asChild>
                       <Link href={`/${locale}/dashboard`}>
                         <User className="h-4 w-4 mr-2" />
-                        Dashboard
+                        {t('nav.userMenu.dashboard')}
                       </Link>
                     </DropdownMenuItem>
 
@@ -114,7 +116,7 @@ export function Navbar() {
                       <DropdownMenuItem asChild>
                         <Link href={`/${locale}/company/dashboard`}>
                           <Building2 className="h-4 w-4 mr-2" />
-                          Company Dashboard
+                          {t('nav.userMenu.companyDashboard')}
                         </Link>
                       </DropdownMenuItem>
                     )}
@@ -123,7 +125,7 @@ export function Navbar() {
                       <DropdownMenuItem asChild>
                         <Link href={`/${locale}/admin`}>
                           <Briefcase className="h-4 w-4 mr-2" />
-                          Admin Panel
+                          {t('nav.userMenu.adminPanel')}
                         </Link>
                       </DropdownMenuItem>
                     )}
@@ -132,7 +134,7 @@ export function Navbar() {
 
                     <DropdownMenuItem onClick={logout}>
                       <LogOut className="h-4 w-4 mr-2" />
-                      Logout
+                      {t('nav.userMenu.logout')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -140,10 +142,10 @@ export function Navbar() {
             ) : (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" asChild>
-                  <Link href={`/${locale}/auth/login`}>Sign In</Link>
+                  <Link href={`/${locale}/auth/login`}>{t('nav.auth.signIn')}</Link>
                 </Button>
                 <Button asChild>
-                  <Link href={`/${locale}/auth/register`}>Get Started</Link>
+                  <Link href={`/${locale}/auth/register`}>{t('nav.auth.getStarted')}</Link>
                 </Button>
               </div>
             )}
@@ -183,7 +185,8 @@ export function Navbar() {
                 </Link>
               ))}
 
-              <div className="pt-4 border-t">
+              <div className="pt-4 border-t flex items-center gap-4">
+                <ThemeToggle />
                 <LanguageSwitcher />
               </div>
 
@@ -194,7 +197,7 @@ export function Navbar() {
                     className="block py-2 text-sm"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Dashboard
+                    {t('nav.userMenu.dashboard')}
                   </Link>
                   <button
                     onClick={() => {
@@ -203,16 +206,16 @@ export function Navbar() {
                     }}
                     className="block py-2 text-sm text-destructive"
                   >
-                    Logout
+                    {t('nav.userMenu.logout')}
                   </button>
                 </div>
               ) : (
                 <div className="flex flex-col gap-2 pt-4 border-t">
                   <Button variant="outline" asChild>
-                    <Link href={`/${locale}/auth/login`}>Sign In</Link>
+                    <Link href={`/${locale}/auth/login`}>{t('nav.auth.signIn')}</Link>
                   </Button>
                   <Button asChild>
-                    <Link href={`/${locale}/auth/register`}>Get Started</Link>
+                    <Link href={`/${locale}/auth/register`}>{t('nav.auth.getStarted')}</Link>
                   </Button>
                 </div>
               )}

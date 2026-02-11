@@ -32,13 +32,13 @@ export default function ResetPasswordPage({ params }: ResetPasswordPageProps) {
   const isRTL = locale === 'ar';
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-8">
+    <div className="bg-card rounded-2xl shadow-xl p-8">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-2">
           {isRTL ? 'إعادة تعيين كلمة المرور' : 'Reset Password'}
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           {isRTL
             ? 'أدخل كلمة مرور جديدة لحسابك'
             : 'Enter a new password for your account'}

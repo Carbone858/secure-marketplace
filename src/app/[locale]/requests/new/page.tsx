@@ -57,14 +57,14 @@ export default async function NewRequestPage({ params: { locale } }: NewRequestP
   const [categories, countries] = await Promise.all([getCategories(), getCountries()]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-muted/50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-3xl mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('new.title')}</h1>
-          <p className="text-gray-600">{t('new.subtitle')}</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t('new.title')}</h1>
+          <p className="text-muted-foreground">{t('new.subtitle')}</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8">
+        <div className="bg-card rounded-xl shadow-lg p-8">
           <RequestForm categories={categories} countries={countries} />
         </div>
       </div>

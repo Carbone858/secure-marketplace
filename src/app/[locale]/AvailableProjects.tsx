@@ -14,13 +14,13 @@ export default function AvailableProjects() {
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-muted/50">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">Available Projects</h2>
         
         {userPlan.type === 'FREE' && (
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-warning/10 text-warning rounded-full">
               <Crown className="w-4 h-4" />
               Free Plan - 3 views daily
             </span>
@@ -32,22 +32,22 @@ export default function AvailableProjects() {
             <div 
               key={project.id}
               onClick={() => !userPlan.canViewFull && setShowUpgrade(true)}
-              className="bg-white rounded-xl border p-6 cursor-pointer hover:shadow-lg"
+              className="bg-card rounded-xl border p-6 cursor-pointer hover:shadow-lg"
             >
               <h3 className={`font-bold text-lg mb-2 ${!userPlan.canViewFull && 'blur-sm'}`}>
                 {userPlan.canViewFull ? project.title : 'Project Title Hidden'}
               </h3>
-              <p className="text-gray-600 mb-4">{project.location}</p>
+              <p className="text-muted-foreground mb-4">{project.location}</p>
               
               {!userPlan.canViewFull ? (
-                <div className="relative h-20 bg-gray-100 rounded">
+                <div className="relative h-20 bg-muted rounded">
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <Lock className="w-6 h-6 text-purple-600 mb-1" />
+                    <Lock className="w-6 h-6 text-accent mb-1" />
                     <span className="text-xs">Upgrade to view</span>
                   </div>
                 </div>
               ) : (
-                <p className="text-green-600 font-bold">${project.budget}</p>
+                <p className="text-success font-bold">${project.budget}</p>
               )}
             </div>
           ))}
@@ -55,14 +55,14 @@ export default function AvailableProjects() {
 
         {showUpgrade && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-white rounded-xl p-6 w-96 text-center">
-              <Crown className="w-12 h-12 text-purple-600 mx-auto mb-4" />
+            <div className="bg-card rounded-xl p-6 w-96 text-center">
+              <Crown className="w-12 h-12 text-accent mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Upgrade to Premium</h3>
-              <p className="text-gray-600 mb-4">View all project details</p>
-              <button className="w-full py-2 bg-purple-600 text-white rounded-lg mb-2">
+              <p className="text-muted-foreground mb-4">View all project details</p>
+              <button className="w-full py-2 bg-accent text-white rounded-lg mb-2">
                 Upgrade Now - $29/month
               </button>
-              <button onClick={() => setShowUpgrade(false)} className="text-gray-600">
+              <button onClick={() => setShowUpgrade(false)} className="text-muted-foreground">
                 Later
               </button>
             </div>

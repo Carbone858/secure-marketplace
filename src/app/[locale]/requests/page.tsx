@@ -116,28 +116,28 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
       case 'URGENT':
-        return 'bg-red-100 text-red-700';
+        return 'bg-destructive/10 text-destructive';
       case 'HIGH':
-        return 'bg-orange-100 text-orange-700';
+        return 'bg-warning/10 text-warning';
       case 'MEDIUM':
-        return 'bg-yellow-100 text-yellow-700';
+        return 'bg-warning/10 text-warning';
       default:
-        return 'bg-green-100 text-green-700';
+        return 'bg-success/10 text-success';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-muted/50 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{t('list.title')}</h1>
-            <p className="text-gray-600 mt-1">{t('list.subtitle', { count: total })}</p>
+            <h1 className="text-3xl font-bold text-foreground">{t('list.title')}</h1>
+            <p className="text-muted-foreground mt-1">{t('list.subtitle', { count: total })}</p>
           </div>
           <Link
             href={`/${locale}/requests/new`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
           >
             <Plus className="w-5 h-5" />
             {t('list.newRequest')}
@@ -145,22 +145,22 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+        <div className="bg-card rounded-xl shadow-sm p-4 mb-6">
           <form className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
               <input
                 type="text"
                 name="search"
                 defaultValue={searchParams.search as string}
                 placeholder={t('list.searchPlaceholder')}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
               />
             </div>
             <select
               name="category"
               defaultValue={searchParams.category as string}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
             >
               <option value="">{t('list.allCategories')}</option>
               {categories.map((cat) => (
@@ -172,7 +172,7 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
             <select
               name="country"
               defaultValue={searchParams.country as string}
-              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
             >
               <option value="">{t('list.allCountries')}</option>
               {countries.map((country) => (
@@ -183,7 +183,7 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
             </select>
             <button
               type="submit"
-              className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-foreground text-white rounded-lg hover:bg-foreground/90 flex items-center justify-center gap-2"
             >
               <Filter className="w-5 h-5" />
               {t('list.filter')}
@@ -194,17 +194,17 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
         {/* Requests List */}
         <div className="space-y-4">
           {requests.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-xl">
-              <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">{t('list.noRequests')}</h3>
-              <p className="text-gray-500">{t('list.noRequestsDesc')}</p>
+            <div className="text-center py-12 bg-card rounded-xl">
+              <Briefcase className="w-16 h-16 text-muted-foreground/40 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">{t('list.noRequests')}</h3>
+              <p className="text-muted-foreground">{t('list.noRequestsDesc')}</p>
             </div>
           ) : (
             requests.map((request) => (
               <Link
                 key={request.id}
                 href={`/${locale}/requests/${request.id}`}
-                className="block bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                className="block bg-card rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -212,15 +212,15 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(request.urgency)}`}>
                         {t(`urgency.${request.urgency.toLowerCase()}`)}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-muted-foreground">
                         {new Date(request.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600">
+                    <h3 className="text-lg font-semibold text-foreground mb-2 hover:text-primary">
                       {request.title}
                     </h3>
-                    <p className="text-gray-600 line-clamp-2 mb-4">{request.description}</p>
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                    <p className="text-muted-foreground line-clamp-2 mb-4">{request.description}</p>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Briefcase className="w-4 h-4" />
                         {isRTL ? request.category?.nameAr : request.category?.nameEn}
@@ -248,8 +248,8 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
                     </div>
                   </div>
                   <div className="ml-4 text-center">
-                    <div className="text-2xl font-bold text-blue-600">{request._count.offers}</div>
-                    <div className="text-sm text-gray-500">{t('list.offers')}</div>
+                    <div className="text-2xl font-bold text-primary">{request._count.offers}</div>
+                    <div className="text-sm text-muted-foreground">{t('list.offers')}</div>
                   </div>
                 </div>
               </Link>
@@ -265,7 +265,7 @@ export default async function RequestsPage({ params: { locale }, searchParams }:
                 key={p}
                 href={`/${locale}/requests?page=${p}`}
                 className={`w-10 h-10 rounded-lg flex items-center justify-center font-medium ${
-                  p === page ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+                  p === page ? 'bg-primary text-white' : 'bg-card text-foreground hover:bg-muted'
                 }`}
               >
                 {p}

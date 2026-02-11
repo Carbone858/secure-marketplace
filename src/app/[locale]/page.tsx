@@ -84,31 +84,31 @@ export default function HomePage() {
   const features = [
     {
       icon: Shield,
-      title: 'Verified Companies',
-      description: 'All companies are verified and reviewed for quality assurance.',
+      title: t('features.verified.title'),
+      description: t('features.verified.description'),
     },
     {
       icon: Clock,
-      title: 'Quick Response',
-      description: 'Get quotes from multiple companies within hours, not days.',
+      title: t('features.quickResponse.title'),
+      description: t('features.quickResponse.description'),
     },
     {
       icon: Users,
-      title: 'Trusted Network',
-      description: 'Join thousands of satisfied customers and businesses.',
+      title: t('features.trustedNetwork.title'),
+      description: t('features.trustedNetwork.description'),
     },
     {
       icon: TrendingUp,
-      title: 'Grow Your Business',
-      description: 'Companies can expand their reach and find new customers.',
+      title: t('features.growBusiness.title'),
+      description: t('features.growBusiness.description'),
     },
   ];
 
   const stats = [
-    { value: '10K+', label: 'Verified Companies' },
-    { value: '50K+', label: 'Service Requests' },
-    { value: '100K+', label: 'Happy Customers' },
-    { value: '4.8', label: 'Average Rating' },
+    { value: '10K+', label: t('stats.verifiedCompanies') },
+    { value: '50K+', label: t('stats.serviceRequests') },
+    { value: '100K+', label: t('stats.happyCustomers') },
+    { value: '4.8', label: t('stats.averageRating') },
   ];
 
   return (
@@ -118,7 +118,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <Badge className="mb-4" variant="secondary">
-              #1 Service Marketplace in the Arab World
+              {t('hero.badge')}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               {t('hero.title')}
@@ -133,14 +133,14 @@ export default function HomePage() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <Input
-                    placeholder="What service do you need?"
+                    placeholder={t('hero.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-12 h-14 text-lg"
                   />
                 </div>
                 <Button type="submit" size="lg" className="h-14 px-8">
-                  Search
+                  {t('hero.searchButton')}
                 </Button>
               </div>
             </form>
@@ -148,13 +148,13 @@ export default function HomePage() {
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Button variant="outline" asChild>
                 <Link href={`/${locale}/requests/new`}>
-                  Post a Request
+                  {t('hero.postRequest')}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href={`/${locale}/company/register`}>
-                  Register as Company
+                  {t('hero.registerCompany')}
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Link>
               </Button>
@@ -183,9 +183,9 @@ export default function HomePage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Browse by Category</h2>
+            <h2 className="text-3xl font-bold mb-4">{t('categories.title')}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Find the right service for your needs from our wide range of categories
+              {t('categories.subtitle')}
             </p>
           </div>
 
@@ -206,7 +206,7 @@ export default function HomePage() {
                         : category.name}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      {category._count.companies} companies
+                      {t('categories.companyCount', { count: category._count.companies })}
                     </p>
                   </CardContent>
                 </Card>
@@ -217,7 +217,7 @@ export default function HomePage() {
           <div className="text-center mt-8">
             <Button variant="outline" asChild>
               <Link href={`/${locale}/companies`}>
-                View All Categories
+                {t('categories.viewAll')}
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Link>
             </Button>
@@ -229,9 +229,9 @@ export default function HomePage() {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Choose Us</h2>
+            <h2 className="text-3xl font-bold mb-4">{t('whyChooseUs.title')}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              We provide the best platform for connecting customers with service providers
+              {t('whyChooseUs.subtitle')}
             </p>
           </div>
 
@@ -258,9 +258,9 @@ export default function HomePage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Featured Companies</h2>
+              <h2 className="text-3xl font-bold mb-4">{t('featured.title')}</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Top-rated and verified companies ready to serve you
+                {t('featured.subtitle')}
               </p>
             </div>
 
@@ -287,20 +287,20 @@ export default function HomePage() {
                         <div>
                           <h3 className="font-semibold">{company.name}</h3>
                           <div className="flex items-center gap-1 text-sm">
-                            <CheckCircle className="h-4 w-4 text-blue-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                             <span className="text-muted-foreground">
-                              Verified
+                              {t('featured.verified')}
                             </span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                        <Star className="h-4 w-4 text-warning fill-warning" />
                         <span className="font-medium">
                           {company.averageRating.toFixed(1)}
                         </span>
                         <span className="text-muted-foreground">
-                          ({company.reviewCount} reviews)
+                          {t('featured.reviewCount', { count: company.reviewCount })}
                         </span>
                       </div>
                     </CardContent>
@@ -313,13 +313,13 @@ export default function HomePage() {
       )}
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-20 bg-primary text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Get Started?
+            {t('cta.title')}
           </h2>
           <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
-            Join thousands of customers and companies already using our platform
+            {t('cta.subtitle')}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button
@@ -328,7 +328,7 @@ export default function HomePage() {
               asChild
             >
               <Link href={`/${locale}/requests/new`}>
-                Post a Request
+                {t('cta.postRequest')}
               </Link>
             </Button>
             <Button
@@ -338,7 +338,7 @@ export default function HomePage() {
               asChild
             >
               <Link href={`/${locale}/company/register`}>
-                Register as Company
+                {t('cta.registerCompany')}
               </Link>
             </Button>
           </div>
