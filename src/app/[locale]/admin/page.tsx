@@ -14,7 +14,9 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useRouter, useLocale } from '@/i18n/navigation';
+import { StatusBadge } from '@/components/ui/composite';
+import { useRouter } from '@/i18n/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface DashboardStats {
   stats: {
@@ -33,6 +35,7 @@ interface DashboardStats {
 export default function AdminDashboardPage() {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations('admin');
   const [data, setData] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -64,9 +67,9 @@ export default function AdminDashboardPage() {
   if (!data) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Failed to load dashboard data</p>
+        <p className="text-muted-foreground">{t('errors.loadFailed')}</p>
         <Button onClick={fetchStats} className="mt-4">
-          Retry
+          {t('retry')}
         </Button>
       </div>
     );
@@ -74,31 +77,31 @@ export default function AdminDashboardPage() {
 
   const statCards = [
     {
-      title: 'Total Users',
+      title: t('stats.totalUsers'),
       value: data.stats.totalUsers,
       icon: Users,
-      color: 'text-blue-500',
+      color: 'text-info',
       href: `/${locale}/admin/users`,
     },
     {
-      title: 'Total Companies',
+      title: t('stats.totalCompanies'),
       value: data.stats.totalCompanies,
       icon: Building2,
-      color: 'text-green-500',
+      color: 'text-success',
       href: `/${locale}/admin/companies`,
     },
     {
-      title: 'Total Requests',
+      title: t('stats.totalRequests'),
       value: data.stats.totalRequests,
       icon: FileText,
-      color: 'text-purple-500',
+      color: 'text-primary',
       href: `/${locale}/admin/requests`,
     },
     {
-      title: 'Total Projects',
+      title: t('stats.totalProjects'),
       value: data.stats.totalProjects,
       icon: Briefcase,
-      color: 'text-orange-500',
+      color: 'text-warning',
       href: `/${locale}/admin/projects`,
     },
   ];
@@ -106,8 +109,8 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-muted-foreground">Overview of platform activity</p>
+        <h1 className="text-3xl font-bold">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('subtitle')}</p>
       </div>
 
       {/* Stats Grid */}
@@ -133,22 +136,22 @@ export default function AdminDashboardPage() {
 
       {/* Pending Verifications Alert */}
       {data.stats.pendingVerifications > 0 && (
-        <Card className="border-yellow-500/50 bg-yellow-50/50">
+        <Card className="border-warning/50 bg-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-yellow-600" />
+                <CheckCircle className="h-5 w-5 text-warning" />
                 <div>
-                  <p className="font-medium">Pending Verifications</p>
+                  <p className="font-medium">{t('pendingVerifications.title')}</p>
                   <p className="text-sm text-muted-foreground">
-                    {data.stats.pendingVerifications} companies awaiting verification
+                    {t('pendingVerifications.description', { count: data.stats.pendingVerifications })}
                   </p>
                 </div>
               </div>
               <Button
                 onClick={() => router.push(`/${locale}/admin/verifications`)}
               >
-                Review
+                {t('pendingVerifications.review')}
               </Button>
             </div>
           </CardContent>
@@ -160,7 +163,7 @@ export default function AdminDashboardPage() {
         {/* Recent Users */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Recent Users</CardTitle>
+            <CardTitle className="text-lg">{t('recentUsers.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -170,7 +173,7 @@ export default function AdminDashboardPage() {
                   className="flex items-center justify-between py-2 border-b last:border-0"
                 >
                   <div>
-                    <p className="font-medium">{user.name || 'Unknown'}</p>
+                    <p className="font-medium">{user.name || t('recentUsers.unknown')}</p>
                     <p className="text-sm text-muted-foreground">{user.email}</p>
                   </div>
                   <Badge variant={user.role === 'COMPANY' ? 'default' : 'secondary'}>
@@ -185,7 +188,7 @@ export default function AdminDashboardPage() {
         {/* Recent Requests */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Recent Requests</CardTitle>
+            <CardTitle className="text-lg">{t('recentRequests.title')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -203,10 +206,10 @@ export default function AdminDashboardPage() {
                   <Badge
                     className={
                       req.status === 'ACTIVE'
-                        ? 'bg-green-500'
+                        ? 'bg-success/10 text-success'
                         : req.status === 'PENDING'
-                        ? 'bg-yellow-500'
-                        : 'bg-gray-500'
+                        ? 'bg-warning/10 text-warning'
+                        : 'bg-muted text-muted-foreground'
                     }
                   >
                     {req.status}
