@@ -1,0 +1,353 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  COMPANY
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  ACTIVE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PREMIUM
+  ENTERPRISE
+}
+
+model User {
+  id                 String    @id @default(uuid())
+  email              String    @unique
+  emailHash          String    @unique
+  password           String
+  name               String?
+  phone              String?
+  role               UserRole  @default(USER)
+  avatar             String?
+  emailVerified      DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  isActive           Boolean   @default(true)
+  
+  // Account lockout fields
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  
+  // Relations
+  company               Company?
+  requests              ServiceRequest[]
+  securityLogs          SecurityLog[]
+  refreshTokens         RefreshToken[]
+  notificationSettings  NotificationSettings?
+  userSettings          UserSettings?
+  
+  @@map("users")
+}
+
+enum CompanyVerificationStatus {
+  PENDING
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+model Company {
+  id                  String                     @id @default(uuid())
+  userId              String                     @unique
+  name                String
+  slug                String                     @unique
+  description         String?                    @db.Text
+  logo                String?
+  website             String?
+  email               String?
+  phone               String?
+  countryId           String?
+  cityId              String?
+  address             String?
+  verificationStatus  CompanyVerificationStatus  @default(PENDING)
+  isActive            Boolean                    @default(true)
+  isFeatured          Boolean                    @default(false)
+  rating              Float                      @default(0)
+  reviewCount         Int                        @default(0)
+  currentPlan         SubscriptionPlan           @default(FREE)
+  createdAt           DateTime                   @default(now())
+  updatedAt           DateTime                   @updatedAt
+  
+  // Relations
+  user                User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents           CompanyDocument[]
+  services            CompanyService[]
+  workingHours        CompanyWorkingHours?
+  socialLinks         CompanySocialLinks?
+  
+  @@map("companies")
+}
+
+model CompanyDocument {
+  id            String    @id @default(uuid())
+  companyId     String
+  type          String    // LICENSE, ID_CARD, COMMERCIAL_REGISTER, etc.
+  fileUrl       String
+  fileName      String
+  mimeType      String
+  fileSize      Int
+  status        String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  adminNotes    String?
+  uploadedAt    DateTime  @default(now())
+  reviewedAt    DateTime?
+  
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  @@index([companyId])
+  @@map("company_documents")
+}
+
+model CompanyService {
+  id            String    @id @default(uuid())
+  companyId     String
+  name          String
+  description   String?   @db.Text
+  priceFrom     Float?
+  priceTo       Float?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  @@index([companyId])
+  @@map("company_services")
+}
+
+model CompanyWorkingHours {
+  id            String    @id @default(uuid())
+  companyId     String    @unique
+  
+  // Working hours for each day (format: "09:00-17:00" or null for closed)
+  monday        String?
+  tuesday       String?
+  wednesday     String?
+  thursday      String?
+  friday        String?
+  saturday      String?
+  sunday        String?
+  
+  timeZone      String    @default("UTC")
+  
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  @@map("company_working_hours")
+}
+
+model CompanySocialLinks {
+  id            String    @id @default(uuid())
+  companyId     String    @unique
+  
+  facebook      String?
+  twitter       String?
+  instagram     String?
+  linkedin      String?
+  youtube       String?
+  
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  @@map("company_social_links")
+}
+
+model Country {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  nameAr      String
+  nameEn      String
+  cities      City[]
+  
+  @@map("countries")
+}
+
+model City {
+  id          String   @id @default(uuid())
+  countryId   String
+  nameAr      String
+  nameEn      String
+  slug        String
+  
+  country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  
+  @@unique([countryId, slug])
+  @@map("cities")
+}
+
+model ServiceRequest {
+  id              String        @id @default(uuid())
+  userId          String
+  title           String
+  description     String        @db.Text
+  cityId          String
+  budgetFrom      Float?
+  budgetTo        Float?
+  status          RequestStatus @default(ACTIVE)
+  visibilityLevel String        @default("PUBLIC")
+  viewCount       Int           @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("service_requests")
+}
+
+model CMSSection {
+  id            String    @id @default(uuid())
+  name          String    @unique
+  identifier    String    @unique
+  page          String    @default("home")
+  content       Json
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@map("cms_sections")
+}
+
+model VerificationToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+  
+  @@unique([email, token])
+  @@map("verification_tokens")
+}
+
+enum SecurityLogType {
+  LOGIN
+  LOGIN_FAILED
+  LOGOUT
+  REGISTER
+  REGISTER_FAILED
+  PASSWORD_RESET
+  PASSWORD_RESET_FAILED
+  EMAIL_VERIFIED
+  EMAIL_VERIFICATION_FAILED
+  ACCOUNT_LOCKED
+  SUSPICIOUS_ACTIVITY
+}
+
+model SecurityLog {
+  id        String        @id @default(uuid())
+  userId    String?
+  type      SecurityLogType
+  ip        String
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime      @default(now())
+  
+  user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("security_logs")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+  usedAt    DateTime?
+  
+  @@unique([email, token])
+  @@index([email])
+  @@index([token])
+  @@map("password_reset_tokens")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  revokedAt DateTime?
+  ipAddress String?
+  userAgent String?
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([token])
+  @@map("refresh_tokens")
+}
+
+model NotificationSettings {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  
+  // Email notifications
+  emailNewOffers        Boolean  @default(true)
+  emailRequestUpdates   Boolean  @default(true)
+  emailMessages         Boolean  @default(true)
+  emailMarketing        Boolean  @default(false)
+  emailSecurityAlerts   Boolean  @default(true)
+  
+  // Push notifications
+  pushNewOffers         Boolean  @default(true)
+  pushRequestUpdates    Boolean  @default(true)
+  pushMessages          Boolean  @default(true)
+  
+  // SMS notifications
+  smsSecurityAlerts     Boolean  @default(true)
+  smsMarketing          Boolean  @default(false)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("notification_settings")
+}
+
+model UserSettings {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  
+  // Privacy settings
+  profileVisible        Boolean  @default(true)
+  showEmail             Boolean  @default(false)
+  showPhone             Boolean  @default(false)
+  allowDirectMessages   Boolean  @default(true)
+  
+  // Language & Region
+  language              String   @default("en")
+  timezone              String   @default("UTC")
+  
+  // Account deletion
+  deletionRequestedAt   DateTime?
+  deletionReason        String?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_settings")
+}

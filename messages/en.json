@@ -1,0 +1,844 @@
+{
+  "home": {
+    "hero": {
+      "title": "Get Quotes from Top Companies",
+      "subtitle": "Leading service marketplace in the Arab world"
+    }
+  },
+  "auth": {
+    "register": {
+      "meta": {
+        "title": "Register - Service Marketplace",
+        "description": "Create your account on Service Marketplace and get quotes from top companies"
+      },
+      "fields": {
+        "name": {
+          "label": "Full Name",
+          "placeholder": "Enter your full name"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "your@email.com"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "+1234567890",
+          "hint": "Include country code (e.g., +1, +966)"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Create a strong password"
+        },
+        "confirmPassword": {
+          "label": "Confirm Password",
+          "placeholder": "Re-enter your password"
+        },
+        "terms": {
+          "label": "I agree to the",
+          "link": "Terms of Service",
+          "and": "and",
+          "privacyLink": "Privacy Policy"
+        }
+      },
+      "password": {
+        "strength": {
+          "label": "Password Strength",
+          "empty": "Enter a password",
+          "weak": "Weak",
+          "fair": "Fair",
+          "good": "Good",
+          "strong": "Strong"
+        },
+        "requirements": {
+          "title": "Password must have:",
+          "minLength": "At least 12 characters",
+          "uppercase": "One uppercase letter (A-Z)",
+          "lowercase": "One lowercase letter (a-z)",
+          "number": "One number (0-9)",
+          "specialChar": "One special character (!@#$...)"
+        }
+      },
+      "errors": {
+        "email": {
+          "required": "Email is required",
+          "invalid": "Please enter a valid email address",
+          "tooLong": "Email is too long"
+        },
+        "password": {
+          "required": "Password is required",
+          "minLength": "Password must be at least 12 characters",
+          "maxLength": "Password is too long",
+          "uppercase": "Password must contain an uppercase letter",
+          "lowercase": "Password must contain a lowercase letter",
+          "number": "Password must contain a number",
+          "specialChar": "Password must contain a special character"
+        },
+        "confirmPassword": {
+          "required": "Please confirm your password",
+          "mismatch": "Passwords do not match"
+        },
+        "name": {
+          "required": "Full name is required",
+          "minLength": "Name must be at least 2 characters",
+          "maxLength": "Name is too long"
+        },
+        "phone": {
+          "required": "Phone number is required",
+          "invalid": "Please enter a valid phone number with country code"
+        },
+        "terms": {
+          "required": "You must accept the Terms of Service"
+        },
+        "recaptcha": "Security verification failed. Please try again.",
+        "general": "An error occurred. Please try again later."
+      },
+      "submit": {
+        "button": "Create Account",
+        "loading": "Creating account..."
+      },
+      "success": {
+        "title": "Registration Successful!",
+        "message": "Your account has been created successfully.",
+        "checkEmail": "Please check your email ({email}) to verify your account.",
+        "goToLogin": "Go to Login"
+      },
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "verifyEmail": {
+      "meta": {
+        "title": "Verify Email - Service Marketplace",
+        "description": "Verify your email address to complete registration"
+      },
+      "loading": {
+        "title": "Verifying...",
+        "message": "Please wait while we verify your email address."
+      },
+      "success": {
+        "title": "Email Verified!",
+        "message": "Your email has been successfully verified.",
+        "redirect": "Redirecting to login in {seconds} seconds...",
+        "loginNow": "Login Now"
+      },
+      "error": {
+        "title": "Verification Failed",
+        "goToLogin": "Go to Login"
+      },
+      "errors": {
+        "invalid": "The verification link is invalid or has expired.",
+        "general": "An error occurred. Please try again later."
+      },
+      "resend": {
+        "description": "Enter your email to receive a new verification link.",
+        "placeholder": "Enter your email address",
+        "button": "Resend",
+        "success": {
+          "title": "Email Sent!",
+          "message": "If an account exists with this email, a verification link has been sent."
+        },
+        "errors": {
+          "recaptcha": "Security verification failed. Please try again.",
+          "failed": "Failed to send verification email. Please try again.",
+          "general": "An error occurred. Please try again later."
+        }
+      }
+    },
+    "login": {
+      "meta": {
+        "title": "Login - Service Marketplace",
+        "description": "Sign in to your Service Marketplace account"
+      },
+      "fields": {
+        "email": {
+          "label": "Email Address",
+          "placeholder": "your@email.com"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "rememberMe": {
+          "label": "Remember me"
+        },
+        "forgotPassword": {
+          "link": "Forgot password?"
+        }
+      },
+      "errors": {
+        "email": {
+          "required": "Email is required",
+          "invalid": "Please enter a valid email address"
+        },
+        "password": {
+          "required": "Password is required"
+        },
+        "invalid": "Invalid email or password.",
+        "general": "An error occurred. Please try again later."
+      },
+      "submit": {
+        "button": "Sign In",
+        "loading": "Signing in..."
+      },
+      "locked": {
+        "title": "Account Locked",
+        "message": "Your account has been temporarily locked due to too many failed login attempts. Please try again in {minutes} minutes.",
+        "help": "If you need immediate assistance, please contact support."
+      },
+      "verify": {
+        "title": "Email Verification Required",
+        "message": "Please verify your email address ({email}) before logging in.",
+        "resend": "Resend Verification Email"
+      },
+      "noAccount": "Don't have an account?",
+      "registerLink": "Create one"
+    },
+    "forgotPassword": {
+      "meta": {
+        "title": "Forgot Password - Service Marketplace",
+        "description": "Reset your Service Marketplace account password"
+      },
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "fields": {
+        "email": {
+          "label": "Email Address",
+          "placeholder": "your@email.com"
+        }
+      },
+      "errors": {
+        "recaptcha": "Security verification failed. Please try again.",
+        "general": "An error occurred. Please try again later."
+      },
+      "submit": {
+        "button": "Send Reset Link",
+        "loading": "Sending..."
+      },
+      "success": {
+        "title": "Check Your Email",
+        "message": "If an account exists with {email}, you will receive a password reset link.",
+        "backToLogin": "Back to Login"
+      },
+      "backToLogin": "Back to Login"
+    },
+    "resetPassword": {
+      "meta": {
+        "title": "Reset Password - Service Marketplace",
+        "description": "Create a new password for your account"
+      },
+      "fields": {
+        "password": {
+          "label": "New Password",
+          "placeholder": "Create a strong password"
+        },
+        "confirmPassword": {
+          "label": "Confirm New Password",
+          "placeholder": "Re-enter your new password"
+        }
+      },
+      "errors": {
+        "password": {
+          "required": "Password is required",
+          "minLength": "Password must be at least 12 characters",
+          "uppercase": "Password must contain an uppercase letter",
+          "lowercase": "Password must contain a lowercase letter",
+          "number": "Password must contain a number",
+          "specialChar": "Password must contain a special character"
+        },
+        "confirmPassword": {
+          "required": "Please confirm your password",
+          "mismatch": "Passwords do not match"
+        },
+        "general": "An error occurred. Please try again later."
+      },
+      "submit": {
+        "button": "Reset Password",
+        "loading": "Resetting..."
+      },
+      "success": {
+        "title": "Password Reset Successful!",
+        "message": "Your password has been reset successfully. You can now log in with your new password.",
+        "loginButton": "Go to Login"
+      },
+      "backToLogin": "Back to Login"
+    },
+    "profile": {
+      "meta": {
+        "title": "My Profile - Service Marketplace",
+        "description": "Manage your profile information"
+      },
+      "settings": {
+        "meta": {
+          "title": "Settings - Service Marketplace",
+          "description": "Manage your account settings"
+        },
+        "title": "Settings",
+        "sections": {
+          "notifications": "Notification Preferences",
+          "deleteAccount": "Delete Account"
+        }
+      },
+      "title": "My Profile",
+      "sections": {
+        "profileInfo": "Profile Information",
+        "password": "Change Password"
+      },
+      "fields": {
+        "email": {
+          "label": "Email Address"
+        },
+        "name": {
+          "label": "Full Name",
+          "placeholder": "Enter your full name"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "+1234567890",
+          "hint": "Include country code (e.g., +1, +966)"
+        }
+      },
+      "emailVerified": "Email verified",
+      "emailNotVerified": "Email not verified",
+      "avatarHint": "JPG, PNG or WebP. Max 5MB.",
+      "removeAvatar": "Remove photo",
+      "errors": {
+        "name": {
+          "minLength": "Name must be at least 2 characters"
+        },
+        "phone": {
+          "invalid": "Please enter a valid phone number with country code"
+        },
+        "avatarUpload": "Failed to upload avatar. Please try again.",
+        "avatarDelete": "Failed to delete avatar. Please try again.",
+        "general": "An error occurred. Please try again later."
+      },
+      "success": {
+        "profileUpdated": "Profile updated successfully.",
+        "avatarUpdated": "Avatar updated successfully.",
+        "avatarDeleted": "Avatar removed successfully."
+      },
+      "submit": {
+        "button": "Save Changes",
+        "loading": "Saving..."
+      },
+      "confirm": {
+        "deleteAvatar": "Are you sure you want to remove your avatar?"
+      },
+      "password": {
+        "fields": {
+          "currentPassword": {
+            "label": "Current Password",
+            "placeholder": "Enter your current password"
+          },
+          "newPassword": {
+            "label": "New Password",
+            "placeholder": "Create a new password"
+          },
+          "confirmPassword": {
+            "label": "Confirm New Password",
+            "placeholder": "Re-enter your new password"
+          }
+        },
+        "errors": {
+          "currentPassword": {
+            "required": "Current password is required"
+          },
+          "newPassword": {
+            "required": "New password is required",
+            "minLength": "Password must be at least 12 characters",
+            "uppercase": "Password must contain an uppercase letter",
+            "lowercase": "Password must contain a lowercase letter",
+            "number": "Password must contain a number",
+            "specialChar": "Password must contain a special character"
+          },
+          "confirmPassword": {
+            "required": "Please confirm your password",
+            "mismatch": "Passwords do not match"
+          },
+          "general": "An error occurred. Please try again later."
+        },
+        "success": {
+          "passwordChanged": "Password changed successfully. Please log in again."
+        },
+        "submit": {
+          "button": "Change Password",
+          "loading": "Changing..."
+        }
+      },
+      "notifications": {
+        "submit": {
+          "button": "Save Preferences",
+          "loading": "Saving..."
+        },
+        "success": {
+          "saved": "Notification preferences saved successfully."
+        },
+        "errors": {
+          "general": "An error occurred. Please try again later."
+        },
+        "sections": {
+          "email": {
+            "title": "Email Notifications",
+            "newOffers": "New Offers",
+            "newOffersDesc": "Receive emails when companies send offers for your requests",
+            "requestUpdates": "Request Updates",
+            "requestUpdatesDesc": "Receive emails about status changes to your requests",
+            "messages": "New Messages",
+            "messagesDesc": "Receive emails when you get new messages",
+            "securityAlerts": "Security Alerts",
+            "securityAlertsDesc": "Receive emails about important security events",
+            "marketing": "Marketing & Promotions",
+            "marketingDesc": "Receive emails about new features and promotions"
+          },
+          "push": {
+            "title": "Push Notifications",
+            "newOffers": "New Offers",
+            "newOffersDesc": "Get push notifications for new offers",
+            "requestUpdates": "Request Updates",
+            "requestUpdatesDesc": "Get push notifications for request updates",
+            "messages": "New Messages",
+            "messagesDesc": "Get push notifications for new messages"
+          },
+          "sms": {
+            "title": "SMS Notifications",
+            "securityAlerts": "Security Alerts",
+            "securityAlertsDesc": "Receive SMS for important security events",
+            "marketing": "Marketing",
+            "marketingDesc": "Receive SMS about promotions"
+          }
+        }
+      },
+      "deleteAccount": {
+        "warning": {
+          "title": "Warning: This action cannot be undone",
+          "point1": "All your personal data will be permanently deleted",
+          "point2": "Your requests and offers will be anonymized",
+          "point3": "You will lose access to all your account information",
+          "point4": "This action cannot be reversed"
+        },
+        "continueButton": "I understand, continue",
+        "finalWarning": "This is your last chance to cancel. Once confirmed, your account will be permanently deleted.",
+        "fields": {
+          "password": {
+            "label": "Current Password",
+            "placeholder": "Enter your password to confirm"
+          },
+          "reason": {
+            "label": "Reason for leaving (optional)",
+            "placeholder": "Tell us why you're leaving...",
+            "optional": "Your feedback helps us improve"
+          },
+          "confirmation": {
+            "label": "Type DELETE to confirm",
+            "hint": "Type DELETE in all caps to confirm account deletion"
+          }
+        },
+        "errors": {
+          "password": {
+            "required": "Password is required"
+          },
+          "confirmation": "Please type DELETE to confirm",
+          "general": "An error occurred. Please try again later."
+        },
+        "success": {
+          "deleted": "Your account has been deleted successfully."
+        },
+        "submit": {
+          "button": "Permanently Delete Account",
+          "loading": "Deleting..."
+        },
+        "cancelButton": "Cancel"
+      }
+    }
+  },
+  "dashboard": {
+    "meta": {
+      "title": "Dashboard - Service Marketplace",
+      "description": "Your personal dashboard"
+    },
+    "welcome": "Welcome, {name}!",
+    "subtitle": "Manage your account and activities from here",
+    "stats": {
+      "activeRequests": "Active Requests",
+      "offers": "Offers Received",
+      "messages": "Unread Messages"
+    },
+    "menu": {
+      "profile": "My Profile",
+      "profileDesc": "Update your personal information",
+      "settings": "Settings",
+      "settingsDesc": "Manage notifications and preferences",
+      "requests": "My Requests",
+      "requestsDesc": "View and manage your service requests",
+      "messages": "Messages",
+      "messagesDesc": "View your conversations",
+      "company": "Company Profile",
+      "companyDesc": "Manage your company information"
+    }
+  },
+  "company": {
+    "registration": {
+      "meta": {
+        "title": "Register Company - Service Marketplace",
+        "description": "Register your company on Service Marketplace"
+      },
+      "steps": {
+        "basic": {
+          "title": "Basic Info",
+          "name": "Company Name",
+          "namePlaceholder": "Enter your company name",
+          "description": "Description",
+          "descriptionPlaceholder": "Tell us about your company...",
+          "email": "Company Email",
+          "emailPlaceholder": "company@example.com",
+          "phone": "Company Phone",
+          "phonePlaceholder": "+1234567890",
+          "website": "Website",
+          "websitePlaceholder": "https://yourcompany.com"
+        },
+        "location": {
+          "title": "Location",
+          "country": "Country",
+          "selectCountry": "Select country",
+          "city": "City",
+          "selectCity": "Select city",
+          "address": "Address",
+          "addressPlaceholder": "Street address, building, etc."
+        },
+        "services": {
+          "title": "Services",
+          "service": "Service",
+          "namePlaceholder": "Service name",
+          "descriptionPlaceholder": "Service description",
+          "priceFrom": "Price from",
+          "priceTo": "Price to",
+          "add": "Add Service",
+          "remove": "Remove"
+        },
+        "hours": {
+          "title": "Working Hours",
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday",
+          "sunday": "Sunday",
+          "format": "Format: HH:MM-HH:MM or leave empty for closed"
+        },
+        "social": {
+          "title": "Social Links"
+        }
+      },
+      "navigation": {
+        "back": "Back",
+        "next": "Next",
+        "submit": "Complete Registration",
+        "submitting": "Registering..."
+      },
+      "errors": {
+        "nameRequired": "Company name is required",
+        "emailInvalid": "Please enter a valid email address",
+        "phoneInvalid": "Please enter a valid phone number with country code",
+        "countryRequired": "Please select a country",
+        "cityRequired": "Please select a city",
+        "serviceRequired": "Please add at least one service",
+        "general": "An error occurred. Please try again later."
+      }
+    },
+    "documents": {
+      "meta": {
+        "title": "Upload Documents - Service Marketplace",
+        "description": "Upload verification documents for your company"
+      },
+      "uploadTitle": "Upload Verification Documents",
+      "documentType": "Document Type",
+      "uploading": "Uploading...",
+      "dropzone": {
+        "title": "Click or drag file here",
+        "subtitle": "PDF, JPG, PNG up to 10MB"
+      },
+      "uploadedDocuments": "Uploaded Documents",
+      "status": {
+        "pending": "Pending Review",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this document?",
+      "info": {
+        "title": "Document Requirements",
+        "point1": "Business license or commercial registration",
+        "point2": "Valid ID of company representative",
+        "point3": "Documents will be reviewed within 2-3 business days"
+      },
+      "success": {
+        "uploaded": "Document uploaded successfully",
+        "deleted": "Document deleted successfully"
+      },
+      "errors": {
+        "upload": "Failed to upload document. Please try again.",
+        "delete": "Failed to delete document. Please try again."
+      }
+    },
+    "dashboard": {
+      "meta": {
+        "title": "Company Dashboard - Service Marketplace",
+        "description": "Manage your company profile and activities"
+      }
+    }
+  },
+  "requests": {
+    "meta": {
+      "title": "Service Requests - Service Marketplace",
+      "description": "Browse and manage service requests"
+    },
+    "new": {
+      "meta": {
+        "title": "New Request - Service Marketplace",
+        "description": "Create a new service request"
+      },
+      "title": "Create New Request",
+      "steps": {
+        "category": {
+          "title": "Category",
+          "selectCategory": "Select Category",
+          "selectSubcategory": "Select Subcategory (Optional)"
+        },
+        "details": {
+          "title": "Details",
+          "requestTitle": "Request Title",
+          "titlePlaceholder": "e.g., Website Development for Restaurant",
+          "description": "Description",
+          "descriptionPlaceholder": "Describe your requirements in detail...",
+          "urgency": "Urgency Level",
+          "urgencyOptions": {
+            "LOW": "Low - Flexible timeline",
+            "MEDIUM": "Medium - Within a month",
+            "HIGH": "High - Within 2 weeks",
+            "URGENT": "Urgent - ASAP"
+          }
+        },
+        "location": {
+          "title": "Location",
+          "country": "Country",
+          "selectCountry": "Select country",
+          "city": "City",
+          "selectCity": "Select city"
+        },
+        "budget": {
+          "title": "Budget",
+          "minBudget": "Minimum Budget",
+          "maxBudget": "Maximum Budget",
+          "currency": "Currency",
+          "deadline": "Deadline (Optional)",
+          "negotiable": "Budget is negotiable"
+        },
+        "visibility": {
+          "title": "Visibility",
+          "visibilityLabel": "Who can see this request?",
+          "options": {
+            "PUBLIC": "Public - Anyone can see",
+            "REGISTERED_ONLY": "Registered Users Only",
+            "VERIFIED_COMPANIES": "Verified Companies Only"
+          },
+          "tags": "Tags (Optional)",
+          "tagsPlaceholder": "Add tags separated by commas"
+        }
+      },
+      "navigation": {
+        "back": "Back",
+        "next": "Next",
+        "submit": "Create Request",
+        "submitting": "Creating..."
+      },
+      "errors": {
+        "titleRequired": "Title is required",
+        "titleMinLength": "Title must be at least 5 characters",
+        "descriptionRequired": "Description is required",
+        "descriptionMinLength": "Description must be at least 20 characters",
+        "categoryRequired": "Please select a category",
+        "countryRequired": "Please select a country",
+        "cityRequired": "Please select a city",
+        "invalidBudget": "Invalid budget range",
+        "general": "An error occurred. Please try again later."
+      },
+      "success": {
+        "title": "Request Created!",
+        "message": "Your request has been created successfully.",
+        "viewRequest": "View Request",
+        "createAnother": "Create Another"
+      }
+    },
+    "list": {
+      "title": "Service Requests",
+      "filters": {
+        "category": "Category",
+        "country": "Country",
+        "city": "City",
+        "urgency": "Urgency",
+        "budget": "Budget Range",
+        "status": "Status"
+      },
+      "sort": {
+        "newest": "Newest First",
+        "oldest": "Oldest First",
+        "budgetHigh": "Budget: High to Low",
+        "budgetLow": "Budget: Low to High"
+      },
+      "results": "{count} requests found",
+      "noResults": "No requests found",
+      "noResultsDesc": "Try adjusting your filters or search criteria",
+      "clearFilters": "Clear Filters",
+      "createRequest": "Create Request"
+    },
+    "detail": {
+      "meta": {
+        "title": "{title} - Service Marketplace",
+        "description": "View service request details"
+      },
+      "postedBy": "Posted by {name}",
+      "postedOn": "Posted on {date}",
+      "location": "Location",
+      "budget": "Budget",
+      "budgetNegotiable": "Negotiable",
+      "deadline": "Deadline",
+      "noDeadline": "No deadline specified",
+      "urgency": "Urgency",
+      "category": "Category",
+      "tags": "Tags",
+      "description": "Description",
+      "offers": {
+        "title": "Offers",
+        "count": "{count} offers",
+        "noOffers": "No offers yet",
+        "noOffersDesc": "Be the first to submit an offer",
+        "submitOffer": "Submit Offer",
+        "yourOffer": "Your Offer",
+        "editOffer": "Edit Offer",
+        "withdrawOffer": "Withdraw",
+        "status": {
+          "PENDING": "Pending",
+          "ACCEPTED": "Accepted",
+          "REJECTED": "Rejected",
+          "WITHDRAWN": "Withdrawn"
+        }
+      },
+      "actions": {
+        "edit": "Edit Request",
+        "cancel": "Cancel Request",
+        "share": "Share",
+        "report": "Report"
+      },
+      "status": {
+        "DRAFT": "Draft",
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "MATCHING": "Matching",
+        "REVIEWING_OFFERS": "Reviewing Offers",
+        "ACCEPTED": "Accepted",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled",
+        "EXPIRED": "Expired"
+      }
+    },
+    "offer": {
+      "meta": {
+        "title": "Submit Offer - Service Marketplace",
+        "description": "Submit an offer for a service request"
+      },
+      "title": "Submit Offer",
+      "requestInfo": "Request Information",
+      "fields": {
+        "price": "Your Price",
+        "currency": "Currency",
+        "description": "Proposal Description",
+        "descriptionPlaceholder": "Describe your approach, timeline, and why you're the best choice...",
+        "timeline": "Estimated Timeline",
+        "timelinePlaceholder": "e.g., 2 weeks",
+        "attachments": "Attachments (Optional)",
+        "attachmentsHint": "Upload relevant documents, portfolios, etc."
+      },
+      "errors": {
+        "priceRequired": "Price is required",
+        "pricePositive": "Price must be greater than 0",
+        "descriptionRequired": "Description is required",
+        "descriptionMinLength": "Description must be at least 50 characters",
+        "general": "An error occurred. Please try again later."
+      },
+      "submit": {
+        "button": "Submit Offer",
+        "loading": "Submitting..."
+      },
+      "success": {
+        "title": "Offer Submitted!",
+        "message": "Your offer has been submitted successfully.",
+        "viewRequest": "View Request"
+      }
+    },
+    "myRequests": {
+      "meta": {
+        "title": "My Requests - Service Marketplace",
+        "description": "Manage your service requests"
+      },
+      "title": "My Requests",
+      "tabs": {
+        "all": "All",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "createNew": "Create New Request",
+      "noRequests": "No requests yet",
+      "noRequestsDesc": "Create your first service request to get quotes from companies"
+    }
+  },
+  "offers": {
+    "actions": {
+      "accept": "Accept",
+      "reject": "Reject",
+      "message": "Message"
+    },
+    "messages": {
+      "acceptConfirm": "Are you sure you want to accept this offer?",
+      "rejectConfirm": "Are you sure you want to reject this offer?",
+      "accepted": "Offer accepted successfully",
+      "rejected": "Offer rejected successfully",
+      "withdrawn": "Offer withdrawn successfully"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "close": "Close",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "showMore": "Show More",
+    "showLess": "Show Less",
+    "readMore": "Read More",
+    "currency": {
+      "USD": "USD",
+      "EUR": "EUR",
+      "GBP": "GBP",
+      "SAR": "SAR",
+      "AED": "AED",
+      "QAR": "QAR",
+      "KWD": "KWD",
+      "BHD": "BHD",
+      "OMR": "OMR",
+      "EGP": "EGP",
+      "JOD": "JOD",
+      "LBP": "LBP"
+    }
+  }
+}
