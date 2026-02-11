@@ -10,7 +10,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@servicemarketplace.com';
 const FROM_NAME = process.env.FROM_NAME || 'Service Marketplace';
 
 // Create transporter
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
   port: SMTP_PORT,
   secure: SMTP_PORT === 465,

@@ -81,3 +81,7 @@ export type UpdateRequestInput = z.infer<typeof updateRequestSchema>;
 export type RequestFilterInput = z.infer<typeof requestFilterSchema>;
 export type OfferInput = z.infer<typeof offerSchema>;
 export type UpdateOfferInput = z.infer<typeof updateOfferSchema>;
+
+// Alias for backward compatibility
+export const createOfferSchema = offerSchema;
+export type CreateOfferInput = z.input<typeof offerSchema>;

@@ -6,7 +6,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   
   // Provide a default if middleware didn't run
   if (!locale) {
-    locale = 'en';
+    locale = 'ar';
   }
   
   return {

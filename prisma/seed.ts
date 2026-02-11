@@ -9,17 +9,19 @@ async function main() {
   await prisma.company.createMany({
     data: [
       {
+        userId: '', // Will be replaced with actual user ID
         name: 'شركة البناء الذهبي',
         slug: 'golden-construction',
         description: 'شركة متخصصة في أعمال البناء',
-        location: 'دمشق - المزة',
+        address: 'دمشق - المزة',
         rating: 4.8,
       },
       {
+        userId: '', // Will be replaced with actual user ID
         name: 'الكهربائي المحترف',
         slug: 'pro-electrician',
         description: 'خدمات كهربائية شاملة',
-        location: 'حلب - الفرقان',
+        address: 'حلب - الفرقان',
         rating: 4.5,
       },
     ],
