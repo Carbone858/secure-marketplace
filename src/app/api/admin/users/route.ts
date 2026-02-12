@@ -88,11 +88,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// PUT /api/admin/users/[id] - Update user (Admin only)
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+// PUT /api/admin/users - Update user (Admin only)
+// Accepts `id` in request body since this is not a dynamic [id] route
+export async function PUT(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
@@ -106,8 +104,15 @@ export async function PUT(
       );
     }
 
-    const { id } = params;
     const body = await request.json();
+    const id = body.id;
+
+    if (!id || typeof id !== 'string') {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
 
     const parsed = updateUserSchema.safeParse(body);
     if (!parsed.success) {
