@@ -9,7 +9,17 @@
     "lint": "next lint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "test": "jest --verbose",
+    "test:security": "jest tests/security/ --verbose",
+    "test:regression": "jest tests/regression/ --verbose",
+    "test:ui": "jest tests/ui/ --verbose",
+    "test:backup": "jest tests/backup/ --verbose",
+    "test:api": "jest tests/api/ --verbose --testTimeout=30000",
+    "test:e2e": "npx playwright test",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:perf": "npx tsx tests/performance/load-test.ts",
+    "test:all": "npm run test:security && npm run test:regression && npm run test:ui && npm run test:backup"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.0.14",
@@ -39,11 +49,15 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.48",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.1.0",
+    "jest": "^30.2.0",
     "prisma": "^5.8.0",
+    "ts-jest": "^29.4.6",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
