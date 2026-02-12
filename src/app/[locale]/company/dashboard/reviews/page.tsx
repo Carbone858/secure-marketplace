@@ -1,16 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
 import { Star, Loader2, TrendingUp } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useLocale } from 'next-intl';
-import { useAuth } from '@/components/providers/AuthProvider';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function CompanyReviewsPage() {
   const locale = useLocale();
-  const { user } = useAuth();
+  const t = useTranslations('company_dashboard');
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [avgRating, setAvgRating] = useState(0);
@@ -18,12 +16,10 @@ export default function CompanyReviewsPage() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        // Try to get company reviews from company dashboard API
         const res = await fetch('/api/company/dashboard');
         if (!res.ok) throw new Error();
         const data = await res.json();
         setAvgRating(data.stats?.averageRating || 0);
-        // Fetch reviews separately if available
         if (data.company?.id) {
           const reviewsRes = await fetch(`/api/companies/${data.company.id}/reviews`);
           if (reviewsRes.ok) {
@@ -43,10 +39,7 @@ export default function CompanyReviewsPage() {
   const renderStars = (rating: number) => (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
-        <Star
-          key={i}
-          className={`h-4 w-4 ${i <= rating ? 'fill-warning text-warning' : 'text-muted-foreground/30'}`}
-        />
+        <Star key={i} className={`h-4 w-4 ${i <= rating ? 'fill-warning text-warning' : 'text-muted-foreground/30'}`} />
       ))}
     </div>
   );
@@ -56,32 +49,31 @@ export default function CompanyReviewsPage() {
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Star className="h-8 w-8" />
-          My Reviews
+          {t('reviews.title')}
         </h1>
-        <p className="text-muted-foreground mt-1">Reviews from your clients</p>
+        <p className="text-muted-foreground mt-1">{t('reviews.subtitle')}</p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="p-6 text-center">
             <TrendingUp className="h-8 w-8 mx-auto text-warning mb-2" />
             <p className="text-3xl font-bold">{avgRating.toFixed(1)}</p>
-            <p className="text-sm text-muted-foreground">Average Rating</p>
+            <p className="text-sm text-muted-foreground">{t('reviews.averageRating')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6 text-center">
             <Star className="h-8 w-8 mx-auto text-info mb-2" />
             <p className="text-3xl font-bold">{reviews.length}</p>
-            <p className="text-sm text-muted-foreground">Total Reviews</p>
+            <p className="text-sm text-muted-foreground">{t('reviews.totalReviews')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6 text-center">
             <Star className="h-8 w-8 mx-auto text-success mb-2" />
-            <p className="text-3xl font-bold">{reviews.filter(r => r.rating >= 4).length}</p>
-            <p className="text-sm text-muted-foreground">Positive Reviews</p>
+            <p className="text-3xl font-bold">{reviews.filter((r: any) => r.rating >= 4).length}</p>
+            <p className="text-sm text-muted-foreground">{t('reviews.positiveReviews')}</p>
           </CardContent>
         </Card>
       </div>
@@ -94,26 +86,26 @@ export default function CompanyReviewsPage() {
         <Card>
           <CardContent className="p-12 text-center">
             <Star className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No reviews yet</h3>
-            <p className="text-muted-foreground mt-1">Reviews will appear after projects are completed</p>
+            <h3 className="text-lg font-medium">{t('reviews.noReviews')}</h3>
+            <p className="text-muted-foreground mt-1">{t('reviews.noReviewsDesc')}</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
-          {reviews.map((review) => (
+          {reviews.map((review: any) => (
             <Card key={review.id}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                      <p className="font-medium">{review.user?.name || 'Anonymous'}</p>
+                      <p className="font-medium">{review.user?.name || t('reviews.anonymous')}</p>
                       {renderStars(review.rating)}
                     </div>
                     {review.comment && (
                       <p className="text-sm text-muted-foreground">{review.comment}</p>
                     )}
                     {review.project && (
-                      <Badge variant="outline">Project: {review.project.title}</Badge>
+                      <Badge variant="outline">{t('reviews.project', { title: review.project.title })}</Badge>
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">

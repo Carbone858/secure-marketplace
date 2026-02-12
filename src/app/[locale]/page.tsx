@@ -131,12 +131,12 @@ export default function HomePage() {
             <form onSubmit={handleSearch} className="max-w-xl mx-auto">
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <Input
                     placeholder={t('hero.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-14 text-lg"
+                    className="ps-12 h-14 text-lg"
                   />
                 </div>
                 <Button type="submit" size="lg" className="h-14 px-8">
@@ -149,13 +149,13 @@ export default function HomePage() {
               <Button variant="outline" asChild>
                 <Link href={`/${locale}/requests/new`}>
                   {t('hero.postRequest')}
-                  <ArrowRight className="h-4 w-4 ml-2" />
+                  <ArrowRight className="h-4 w-4 ms-2" />
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href={`/${locale}/company/register`}>
                   {t('hero.registerCompany')}
-                  <ArrowRight className="h-4 w-4 ml-2" />
+                  <ArrowRight className="h-4 w-4 ms-2" />
                 </Link>
               </Button>
             </div>
@@ -218,7 +218,7 @@ export default function HomePage() {
             <Button variant="outline" asChild>
               <Link href={`/${locale}/companies`}>
                 {t('categories.viewAll')}
-                <ArrowRight className="h-4 w-4 ml-2" />
+                <ArrowRight className="h-4 w-4 ms-2" />
               </Link>
             </Button>
           </div>

@@ -171,10 +171,10 @@ export default function MyRequestsPage() {
                       <div className="flex-1">
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                           <Badge className={statusColors[request.status]}>
-                            {request.status}
+                            {td(`status.${request.status}`)}
                           </Badge>
                           <Badge className={urgencyColors[request.urgency]}>
-                            {request.urgency}
+                            {td(`urgency.${request.urgency}`)}
                           </Badge>
                         </div>
                         <h3 className="text-lg font-semibold mb-1">{request.title}</h3>
@@ -194,7 +194,7 @@ export default function MyRequestsPage() {
                             {request._count.offers} {td('offers')}
                           </span>
                           <span>
-                            {new Date(request.createdAt).toLocaleDateString()}
+                            {new Date(request.createdAt).toLocaleDateString(locale)}
                           </span>
                         </div>
                       </div>

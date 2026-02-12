@@ -7,12 +7,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { StatusBadge } from '@/components/ui/composite';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 export default function BrowseRequestsPage() {
   const locale = useLocale();
+  const t = useTranslations('company_dashboard');
   const [requests, setRequests] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -22,7 +22,11 @@ export default function BrowseRequestsPage() {
   const fetchRequests = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams({ page: String(page), limit: '12', status: 'OPEN' });
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: '12',
+        status: 'ACTIVE',
+      });
       if (search) params.set('search', search);
       const res = await fetch(`/api/requests?${params}`);
       if (!res.ok) throw new Error();
@@ -30,30 +34,30 @@ export default function BrowseRequestsPage() {
       setRequests(data.requests || []);
       setTotalPages(data.pagination?.totalPages || 1);
     } catch {
-      toast.error('Failed to load requests');
+      toast.error(t('browse.noResults'));
     } finally {
       setIsLoading(false);
     }
-  }, [page, search]);
+  }, [page, search, t]);
 
   useEffect(() => { fetchRequests(); }, [fetchRequests]);
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Browse Requests</h1>
-        <p className="text-muted-foreground mt-1">Find service requests to submit offers</p>
+        <h1 className="text-3xl font-bold">{t('browse.title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('browse.subtitle')}</p>
       </div>
 
       <Card>
         <CardContent className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search requests by title, description..."
+              placeholder={t('browse.searchPlaceholder')}
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              className="pl-9"
+              className="ps-9"
             />
           </div>
         </CardContent>
@@ -67,8 +71,8 @@ export default function BrowseRequestsPage() {
         <Card>
           <CardContent className="p-12 text-center">
             <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No open requests found</h3>
-            <p className="text-muted-foreground mt-1">Check back later for new opportunities</p>
+            <h3 className="text-lg font-medium">{t('browse.noResults')}</h3>
+            <p className="text-muted-foreground mt-1">{t('browse.noResultsDesc')}</p>
           </CardContent>
         </Card>
       ) : (
@@ -78,20 +82,20 @@ export default function BrowseRequestsPage() {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <CardTitle className="text-lg line-clamp-2">{req.title}</CardTitle>
-                  <StatusBadge variant="open" className="flex-shrink-0 ml-2">OPEN</StatusBadge>
+                  <Badge variant="secondary" className="flex-shrink-0 ms-2">{t(`status.${req.status}`)}</Badge>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-sm text-muted-foreground line-clamp-3">{req.description}</p>
                 <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                  {req.budget && (
+                  {req.budgetMax && (
                     <span className="flex items-center gap-1">
-                      <DollarSign className="h-3 w-3" />${req.budget}
+                      <DollarSign className="h-3 w-3" />{req.budgetMin ? `${req.budgetMin}-` : ''}{req.budgetMax} {req.currency}
                     </span>
                   )}
                   {req.city && (
                     <span className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3" />{req.city.nameEn || req.city.nameAr}
+                      <MapPin className="h-3 w-3" />{locale === 'ar' && req.city.nameAr ? req.city.nameAr : req.city.nameEn}
                     </span>
                   )}
                   <span className="flex items-center gap-1">
@@ -99,10 +103,10 @@ export default function BrowseRequestsPage() {
                   </span>
                 </div>
                 {req.category && (
-                  <Badge variant="outline">{req.category.nameEn || req.category.nameAr}</Badge>
+                  <Badge variant="outline">{locale === 'ar' && req.category.nameAr ? req.category.nameAr : req.category.nameEn}</Badge>
                 )}
                 <Link href={`/${locale}/requests/${req.id}`}>
-                  <Button className="w-full mt-2">View Details & Submit Offer</Button>
+                  <Button className="w-full mt-2">{t('browse.viewDetails')}</Button>
                 </Link>
               </CardContent>
             </Card>
@@ -112,9 +116,9 @@ export default function BrowseRequestsPage() {
 
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
-          <Button variant="outline" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>Previous</Button>
-          <span className="text-sm text-muted-foreground">Page {page} of {totalPages}</span>
-          <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>Next</Button>
+          <Button variant="outline" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>{t('browse.previous')}</Button>
+          <span className="text-sm text-muted-foreground">{t('browse.pageOf', { page, total: totalPages })}</span>
+          <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>{t('browse.next')}</Button>
         </div>
       )}
     </div>

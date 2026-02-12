@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const includeCities = searchParams.get('includeCities') === 'true';
+    const locale = searchParams.get('locale') || 'en';
 
     const countries = await prisma.country.findMany({
       where: {
@@ -24,11 +25,11 @@ export async function GET(request: NextRequest) {
 
     const normalized = countries.map((country: any) => ({
       ...country,
-      name: country.nameEn,
+      name: locale === 'ar' ? country.nameAr : country.nameEn,
       cities: includeCities && country.cities
         ? country.cities.map((city: any) => ({
             ...city,
-            name: city.nameEn,
+            name: locale === 'ar' ? city.nameAr : city.nameEn,
           }))
         : undefined,
     }));

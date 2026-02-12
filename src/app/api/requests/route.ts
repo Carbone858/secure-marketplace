@@ -72,7 +72,10 @@ export async function GET(request: NextRequest) {
     }
 
     // User filter (for "my requests")
-    if (userId) {
+    const userOnly = searchParams.get('userOnly');
+    if (userOnly === 'true' && session?.isAuthenticated && session.user?.id) {
+      where.userId = session.user.id;
+    } else if (userId) {
       where.userId = userId;
     }
 

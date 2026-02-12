@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
     const minRating = searchParams.get('minRating');
     const verifiedOnly = searchParams.get('verifiedOnly') === 'true';
     const sortBy = searchParams.get('sortBy') || 'relevance';
+    const locale = searchParams.get('locale') || 'en';
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '12');
 
@@ -45,8 +46,14 @@ export async function GET(request: NextRequest) {
     }
 
     if (categoryId) {
-      // Category filtering not supported by the current schema.
-      // Keep the request valid without applying a filter.
+      // Find companies associated with this category through their offers or projects
+      if (!where.AND) where.AND = [];
+      where.AND.push({
+        OR: [
+          { offers: { some: { request: { categoryId } } } },
+          { projects: { some: { request: { categoryId } } } },
+        ],
+      });
     }
 
     // Build orderBy
@@ -94,10 +101,10 @@ export async function GET(request: NextRequest) {
       reviewCount: company.reviewCount,
       completedProjectsCount: company.projects.length,
       country: company.country
-        ? { ...company.country, name: company.country.nameEn }
+        ? { ...company.country, name: locale === 'ar' ? company.country.nameAr : company.country.nameEn }
         : null,
       city: company.city
-        ? { ...company.city, name: company.city.nameEn }
+        ? { ...company.city, name: locale === 'ar' ? company.city.nameAr : company.city.nameEn }
         : null,
     }));
 

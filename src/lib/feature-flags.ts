@@ -15,6 +15,7 @@ export const FEATURE_FLAG_KEYS = {
   isRequestLimitEnabled: 'isRequestLimitEnabled',
   isCompanyPaidPlanActive: 'isCompanyPaidPlanActive',
   isYellowPagesFeatured: 'isYellowPagesFeatured',
+  isMilestoneTrackingEnabled: 'isMilestoneTrackingEnabled',
 } as const;
 
 export type FeatureFlagKey = keyof typeof FEATURE_FLAG_KEYS;
@@ -87,6 +88,14 @@ export async function isPaidPlanActive(): Promise<boolean> {
  */
 export async function isYellowPagesFeaturedActive(): Promise<boolean> {
   return getFeatureFlag(FEATURE_FLAG_KEYS.isYellowPagesFeatured);
+}
+
+/**
+ * Check if milestone tracking is enabled for projects (Phase 2).
+ * When enabled, projects can have milestones with progress tracking.
+ */
+export async function isMilestoneTrackingActive(): Promise<boolean> {
+  return getFeatureFlag(FEATURE_FLAG_KEYS.isMilestoneTrackingEnabled);
 }
 
 /**

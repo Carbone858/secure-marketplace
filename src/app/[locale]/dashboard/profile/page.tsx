@@ -4,6 +4,7 @@ import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import { ProfileForm } from '@/components/auth/ProfileForm';
 import { PasswordChangeForm } from '@/components/auth/PasswordChangeForm';
+import { prisma } from '@/lib/db/client';
 
 interface ProfilePageProps {
   params: { locale: string };
@@ -30,19 +31,22 @@ export default async function ProfilePage({ params: { locale } }: ProfilePagePro
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'auth.profile' });
 
-  // Fetch user profile data
-  const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user/profile`, {
-    headers: {
-      Cookie: `access_token=${session.user?.id}`, // This is a workaround - in production use proper auth
+  // Fetch user profile directly from database (server component has session access)
+  const dbUser = await prisma.user.findUnique({
+    where: { id: session.user!.id },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      phone: true,
+      role: true,
+      avatar: true,
+      emailVerified: true,
+      createdAt: true,
     },
-    cache: 'no-store',
   });
 
-  let user = session.user;
-  if (response.ok) {
-    const data = await response.json();
-    user = data.data.user;
-  }
+  const user = dbUser || session.user;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8" dir={isRTL ? 'rtl' : 'ltr'}>

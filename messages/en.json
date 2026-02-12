@@ -1289,13 +1289,145 @@
       "deleteRequest": "Delete Request",
       "deleteConfirm": "Are you sure you want to delete this request? This action cannot be undone.",
       "offers": "offers",
+      "status": {
+        "DRAFT": "Draft",
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "MATCHING": "Matching",
+        "REVIEWING_OFFERS": "Reviewing",
+        "IN_PROGRESS": "In Progress",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled",
+        "CLOSED": "Closed",
+        "EXPIRED": "Expired"
+      },
+      "urgency": {
+        "LOW": "Low",
+        "MEDIUM": "Medium",
+        "HIGH": "High",
+        "URGENT": "Urgent"
+      },
       "toasts": {
         "loadFailed": "Failed to load requests",
         "deleted": "Request deleted successfully",
         "deleteFailed": "Failed to delete request"
       }
     }
-  }
+  },
+  "company_dashboard": {
+    "title": "Company Dashboard",
+    "welcome": "Welcome back, {name}",
+    "upgradePlan": "Upgrade Plan",
+    "editProfile": "Edit Profile",
+    "retry": "Retry",
+    "loadFailed": "Failed to load dashboard data",
+    "noData": "Failed to load dashboard data",
+    "membership": {
+      "planActive": "{plan} Plan Active",
+      "expiresOn": "Expires on {date}",
+      "active": "Active",
+      "noMembership": "No Active Membership",
+      "upgradeDescription": "Upgrade to access premium features",
+      "viewPlans": "View Plans"
+    },
+    "stats": {
+      "totalProjects": "Total Projects",
+      "activeProjects": "Active Projects",
+      "completed": "Completed",
+      "totalOffers": "Total Offers",
+      "rating": "Rating",
+      "basedOnReviews": "Based on {count} reviews",
+      "offerSuccessRate": "Offer Success Rate",
+      "accepted": "Accepted: {count}",
+      "pending": "Pending: {count}",
+      "acceptanceRate": "{rate}% acceptance rate",
+      "noOffers": "No offers yet"
+    },
+    "recent": {
+      "recentProjects": "Recent Projects",
+      "recentOffers": "Recent Offers",
+      "viewAll": "View All",
+      "noProjects": "No projects yet",
+      "noOffers": "No offers yet",
+      "client": "Client: {name}"
+    },
+    "browse": {
+      "title": "Browse Requests",
+      "subtitle": "Find service requests to submit offers",
+      "searchPlaceholder": "Search requests by title, description...",
+      "noResults": "No open requests found",
+      "noResultsDesc": "Check back later for new opportunities",
+      "viewDetails": "View Details & Submit Offer",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}"
+    },
+    "offers": {
+      "title": "My Offers",
+      "subtitle": "Track your submitted offers",
+      "all": "All",
+      "noOffers": "No offers yet",
+      "noOffersDesc": "Browse requests to start submitting offers",
+      "browseRequests": "Browse Requests",
+      "untitledRequest": "Untitled Request",
+      "amount": "Amount: ${amount}",
+      "duration": "Duration: {days} days",
+      "loadFailed": "Failed to load offers"
+    },
+    "projects": {
+      "title": "My Projects",
+      "subtitle": "Manage your active projects",
+      "noProjects": "No projects yet",
+      "noProjectsDesc": "Projects start when your offers are accepted",
+      "client": "Client: {name}",
+      "unknown": "Unknown",
+      "messages": "{count} messages",
+      "files": "{count} files",
+      "created": "Created: {date}",
+      "viewRequest": "View Request",
+      "loadFailed": "Failed to load projects"
+    },
+    "reviews": {
+      "title": "My Reviews",
+      "subtitle": "Reviews from your clients",
+      "averageRating": "Average Rating",
+      "totalReviews": "Total Reviews",
+      "positiveReviews": "Positive Reviews",
+      "noReviews": "No reviews yet",
+      "noReviewsDesc": "Reviews will appear after projects are completed",
+      "anonymous": "Anonymous",
+      "project": "Project: {title}"
+    },
+    "profile": {
+      "title": "Company Profile",
+      "subtitle": "Update your company information",
+      "basicInfo": "Basic Information",
+      "companyNameEn": "Company Name (English)",
+      "companyName": "Company Name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your company and services...",
+      "phone": "Phone",
+      "website": "Website",
+      "address": "Address",
+      "saveChanges": "Save Changes",
+      "updateSuccess": "Profile updated successfully",
+      "updateFailed": "Failed to update profile",
+      "loadFailed": "Failed to load company data"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "ACTIVE": "Active",
+      "IN_PROGRESS": "In Progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "ON_HOLD": "On Hold",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Rejected",
+      "WITHDRAWN": "Withdrawn",
+      "MATCHING": "Matching",
+      "REVIEWING_OFFERS": "Reviewing Offers",
+      "OPEN": "Open"
+    }
   },
   "companies": {
     "title": "Company Directory",

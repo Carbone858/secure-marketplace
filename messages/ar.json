@@ -1289,13 +1289,145 @@
       "deleteRequest": "حذف الطلب",
       "deleteConfirm": "هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.",
       "offers": "عروض",
+      "status": {
+        "DRAFT": "مسودة",
+        "PENDING": "قيد الانتظار",
+        "ACTIVE": "نشط",
+        "MATCHING": "مطابقة",
+        "REVIEWING_OFFERS": "مراجعة",
+        "IN_PROGRESS": "قيد التنفيذ",
+        "COMPLETED": "مكتمل",
+        "CANCELLED": "ملغي",
+        "CLOSED": "مغلق",
+        "EXPIRED": "منتهي"
+      },
+      "urgency": {
+        "LOW": "منخفض",
+        "MEDIUM": "متوسط",
+        "HIGH": "عالي",
+        "URGENT": "عاجل"
+      },
       "toasts": {
         "loadFailed": "فشل تحميل الطلبات",
         "deleted": "تم حذف الطلب بنجاح",
         "deleteFailed": "فشل حذف الطلب"
       }
     }
-  }
+  },
+  "company_dashboard": {
+    "title": "لوحة تحكم الشركة",
+    "welcome": "مرحبًا بعودتك، {name}",
+    "upgradePlan": "ترقية الخطة",
+    "editProfile": "تعديل الملف",
+    "retry": "إعادة المحاولة",
+    "loadFailed": "فشل تحميل بيانات لوحة التحكم",
+    "noData": "فشل تحميل بيانات لوحة التحكم",
+    "membership": {
+      "planActive": "خطة {plan} نشطة",
+      "expiresOn": "تنتهي في {date}",
+      "active": "نشطة",
+      "noMembership": "لا يوجد اشتراك نشط",
+      "upgradeDescription": "قم بالترقية للوصول إلى الميزات المتميزة",
+      "viewPlans": "عرض الخطط"
+    },
+    "stats": {
+      "totalProjects": "إجمالي المشاريع",
+      "activeProjects": "المشاريع النشطة",
+      "completed": "المكتملة",
+      "totalOffers": "إجمالي العروض",
+      "rating": "التقييم",
+      "basedOnReviews": "بناءً على {count} تقييم",
+      "offerSuccessRate": "معدل نجاح العروض",
+      "accepted": "مقبولة: {count}",
+      "pending": "معلقة: {count}",
+      "acceptanceRate": "معدل القبول {rate}%",
+      "noOffers": "لا توجد عروض بعد"
+    },
+    "recent": {
+      "recentProjects": "المشاريع الأخيرة",
+      "recentOffers": "العروض الأخيرة",
+      "viewAll": "عرض الكل",
+      "noProjects": "لا توجد مشاريع بعد",
+      "noOffers": "لا توجد عروض بعد",
+      "client": "العميل: {name}"
+    },
+    "browse": {
+      "title": "تصفح الطلبات",
+      "subtitle": "ابحث عن طلبات خدمة لتقديم عروض",
+      "searchPlaceholder": "البحث في الطلبات بالعنوان، الوصف...",
+      "noResults": "لا توجد طلبات مفتوحة",
+      "noResultsDesc": "تحقق لاحقًا من الفرص الجديدة",
+      "viewDetails": "عرض التفاصيل وتقديم عرض",
+      "previous": "السابق",
+      "next": "التالي",
+      "pageOf": "صفحة {page} من {total}"
+    },
+    "offers": {
+      "title": "عروضي",
+      "subtitle": "تتبع العروض المقدمة",
+      "all": "الكل",
+      "noOffers": "لا توجد عروض بعد",
+      "noOffersDesc": "تصفح الطلبات لبدء تقديم العروض",
+      "browseRequests": "تصفح الطلبات",
+      "untitledRequest": "طلب بدون عنوان",
+      "amount": "المبلغ: ${amount}",
+      "duration": "المدة: {days} يوم",
+      "loadFailed": "فشل تحميل العروض"
+    },
+    "projects": {
+      "title": "مشاريعي",
+      "subtitle": "إدارة مشاريعك النشطة",
+      "noProjects": "لا توجد مشاريع بعد",
+      "noProjectsDesc": "تبدأ المشاريع عندما يتم قبول عروضك",
+      "client": "العميل: {name}",
+      "unknown": "غير معروف",
+      "messages": "{count} رسالة",
+      "files": "{count} ملف",
+      "created": "تاريخ الإنشاء: {date}",
+      "viewRequest": "عرض الطلب",
+      "loadFailed": "فشل تحميل المشاريع"
+    },
+    "reviews": {
+      "title": "تقييماتي",
+      "subtitle": "تقييمات من عملائك",
+      "averageRating": "متوسط التقييم",
+      "totalReviews": "إجمالي التقييمات",
+      "positiveReviews": "التقييمات الإيجابية",
+      "noReviews": "لا توجد تقييمات بعد",
+      "noReviewsDesc": "ستظهر التقييمات بعد إكمال المشاريع",
+      "anonymous": "مجهول",
+      "project": "المشروع: {title}"
+    },
+    "profile": {
+      "title": "ملف الشركة",
+      "subtitle": "تحديث معلومات الشركة",
+      "basicInfo": "المعلومات الأساسية",
+      "companyNameEn": "اسم الشركة (بالإنجليزية)",
+      "companyName": "اسم الشركة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "صف شركتك وخدماتك...",
+      "phone": "الهاتف",
+      "website": "الموقع الإلكتروني",
+      "address": "العنوان",
+      "saveChanges": "حفظ التغييرات",
+      "updateSuccess": "تم تحديث الملف بنجاح",
+      "updateFailed": "فشل تحديث الملف",
+      "loadFailed": "فشل تحميل بيانات الشركة"
+    },
+    "status": {
+      "PENDING": "قيد الانتظار",
+      "ACTIVE": "نشط",
+      "IN_PROGRESS": "قيد التنفيذ",
+      "COMPLETED": "مكتمل",
+      "CANCELLED": "ملغى",
+      "ON_HOLD": "معلق",
+      "ACCEPTED": "مقبول",
+      "REJECTED": "مرفوض",
+      "WITHDRAWN": "مسحوب",
+      "MATCHING": "مطابقة",
+      "REVIEWING_OFFERS": "مراجعة العروض",
+      "OPEN": "مفتوح"
+    }
   },
   "companies": {
     "title": "دليل الشركات",
