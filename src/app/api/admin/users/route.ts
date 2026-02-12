@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
+import { z } from 'zod';
+
+const updateUserSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  role: z.enum(['USER', 'COMPANY', 'ADMIN', 'SUPER_ADMIN']).optional(),
+  isActive: z.boolean().optional(),
+});
 
 // GET /api/admin/users - Get all users (Admin only)
 export async function GET(request: NextRequest) {
@@ -102,9 +109,25 @@ export async function PUT(
     const { id } = params;
     const body = await request.json();
 
+    const parsed = updateUserSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: parsed.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    // Prevent non-SUPER_ADMIN from assigning SUPER_ADMIN role
+    if (parsed.data.role === 'SUPER_ADMIN' && user.role !== 'SUPER_ADMIN') {
+      return NextResponse.json(
+        { error: 'Only SUPER_ADMIN can assign SUPER_ADMIN role' },
+        { status: 403 }
+      );
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: body,
+      data: parsed.data,
       select: {
         id: true,
         name: true,
@@ -116,6 +139,12 @@ export async function PUT(
 
     return NextResponse.json({ user: updatedUser });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: error.errors },
+        { status: 400 }
+      );
+    }
     console.error('Update user error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

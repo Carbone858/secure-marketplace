@@ -901,6 +901,8 @@
     },
     "userMenu": {
       "dashboard": "لوحة التحكم",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
       "companyDashboard": "لوحة الشركة",
       "adminPanel": "لوحة الإدارة",
       "logout": "تسجيل الخروج"
@@ -981,7 +983,319 @@
       "featureFlags": "إعدادات الميزات",
       "messages": "الرسائل",
       "settings": "الإعدادات"
+    },
+    "common": {
+      "search": "بحث",
+      "searchPlaceholder": "بحث...",
+      "noResults": "لم يتم العثور على نتائج",
+      "previous": "السابق",
+      "next": "التالي",
+      "create": "إنشاء",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "delete": "حذف",
+      "edit": "تعديل",
+      "actions": "إجراءات",
+      "status": "الحالة",
+      "date": "التاريخ",
+      "loading": "جاري التحميل...",
+      "enabled": "مفعّل",
+      "disabled": "معطّل",
+      "required": "مطلوب",
+      "allStatus": "جميع الحالات",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "verified": "موثّق",
+      "unverified": "غير موثّق",
+      "page": "صفحة {page} من {total}"
+    },
+    "users": {
+      "title": "إدارة المستخدمين",
+      "subtitle": "إدارة مستخدمي المنصة",
+      "searchPlaceholder": "البحث بالاسم أو البريد الإلكتروني...",
+      "allRoles": "جميع الأدوار",
+      "roleUser": "مستخدم",
+      "roleCompany": "شركة",
+      "roleAdmin": "مدير",
+      "roleSuperAdmin": "مدير أعلى",
+      "noUsers": "لم يتم العثور على مستخدمين",
+      "tableHeaders": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "role": "الدور",
+        "status": "الحالة",
+        "joined": "تاريخ الانضمام"
+      }
+    },
+    "companies_mgmt": {
+      "title": "إدارة الشركات",
+      "subtitle": "إدارة الشركات المسجلة",
+      "searchPlaceholder": "البحث عن الشركات...",
+      "allStatus": "جميع الحالات",
+      "pending": "قيد الانتظار",
+      "verified": "موثّقة",
+      "rejected": "مرفوضة",
+      "noCompanies": "لم يتم العثور على شركات",
+      "tableHeaders": {
+        "company": "الشركة",
+        "email": "البريد الإلكتروني",
+        "status": "الحالة",
+        "plan": "الخطة",
+        "featured": "مميزة",
+        "actions": "إجراءات"
+      }
+    },
+    "requests_mgmt": {
+      "title": "إدارة الطلبات",
+      "subtitle": "إدارة طلبات الخدمات",
+      "searchPlaceholder": "البحث عن الطلبات...",
+      "allStatus": "جميع الحالات",
+      "open": "مفتوح",
+      "inProgress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغي",
+      "closed": "مغلق",
+      "noRequests": "لم يتم العثور على طلبات",
+      "tableHeaders": {
+        "title": "العنوان",
+        "user": "المستخدم",
+        "category": "التصنيف",
+        "status": "الحالة",
+        "budget": "الميزانية",
+        "created": "تاريخ الإنشاء",
+        "actions": "إجراءات"
+      }
+    },
+    "projects_mgmt": {
+      "title": "إدارة المشاريع",
+      "subtitle": "متابعة وإدارة المشاريع",
+      "noProjects": "لم يتم العثور على مشاريع",
+      "tableHeaders": {
+        "title": "العنوان",
+        "user": "المستخدم",
+        "company": "الشركة",
+        "status": "الحالة",
+        "messages": "الرسائل",
+        "created": "تاريخ الإنشاء"
+      }
+    },
+    "offers_mgmt": {
+      "title": "إدارة العروض",
+      "subtitle": "الإشراف على عروض السوق",
+      "noOffers": "لم يتم العثور على عروض",
+      "tableHeaders": {
+        "request": "الطلب",
+        "company": "الشركة",
+        "amount": "المبلغ",
+        "status": "الحالة",
+        "created": "تاريخ الإنشاء"
+      }
+    },
+    "categories_mgmt": {
+      "title": "التصنيفات",
+      "subtitle": "إدارة تصنيفات الخدمات",
+      "addCategory": "إضافة تصنيف",
+      "editCategory": "تعديل التصنيف",
+      "newCategory": "تصنيف جديد",
+      "nameEn": "الاسم (إنجليزي)",
+      "nameAr": "الاسم (عربي)",
+      "slug": "الرابط",
+      "iconName": "اسم الأيقونة",
+      "noCategories": "لم يتم العثور على تصنيفات",
+      "confirmDelete": "حذف هذا التصنيف؟",
+      "tableHeaders": {
+        "nameEn": "الاسم (EN)",
+        "nameAr": "الاسم (AR)",
+        "slug": "الرابط",
+        "requests": "الطلبات",
+        "actions": "إجراءات"
+      },
+      "toasts": {
+        "loadFailed": "فشل تحميل التصنيفات",
+        "created": "تم إنشاء التصنيف",
+        "updated": "تم تحديث التصنيف",
+        "saveFailed": "فشل حفظ التصنيف",
+        "deleted": "تم حذف التصنيف",
+        "deleteFailed": "فشل الحذف"
+      }
+    },
+    "reviews_mgmt": {
+      "title": "إدارة التقييمات",
+      "subtitle": "مراجعة وإدارة التقييمات",
+      "noReviews": "لم يتم العثور على تقييمات",
+      "tableHeaders": {
+        "user": "المستخدم",
+        "company": "الشركة",
+        "rating": "التقييم",
+        "comment": "التعليق",
+        "date": "التاريخ",
+        "actions": "إجراءات"
+      }
+    },
+    "verifications_mgmt": {
+      "title": "تحققات الشركات",
+      "subtitle": "مراجعة طلبات تحقق الشركات",
+      "noPending": "لا توجد تحققات معلقة"
+    },
+    "staff_mgmt": {
+      "title": "إدارة الموظفين",
+      "subtitle": "إدارة الأدوار والأقسام وتعيينات الموظفين",
+      "tabs": {
+        "staffMembers": "أعضاء الطاقم",
+        "roles": "الأدوار",
+        "departments": "الأقسام"
+      },
+      "assignStaff": "تعيين موظف",
+      "assignStaffMember": "تعيين عضو طاقم",
+      "userIdPlaceholder": "معرّف المستخدم",
+      "selectRole": "اختر الدور",
+      "selectDepartment": "اختر القسم",
+      "assign": "تعيين",
+      "noStaff": "لم يتم تعيين موظفين",
+      "addRole": "إضافة دور",
+      "createRole": "إنشاء دور",
+      "addDepartment": "إضافة قسم",
+      "createDepartment": "إنشاء قسم",
+      "namePlaceholder": "الاسم",
+      "nameArPlaceholder": "الاسم (عربي)",
+      "descriptionPlaceholder": "الوصف",
+      "members": "أعضاء",
+      "messages": "رسائل",
+      "tableHeaders": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "role": "الدور",
+        "department": "القسم",
+        "actions": "إجراءات"
+      },
+      "toasts": {
+        "loadFailed": "فشل تحميل بيانات الموظفين",
+        "roleCreated": "تم إنشاء الدور",
+        "roleCreateFailed": "فشل إنشاء الدور",
+        "deptCreated": "تم إنشاء القسم",
+        "deptCreateFailed": "فشل إنشاء القسم",
+        "staffAssigned": "تم تعيين الموظف",
+        "staffAssignFailed": "فشل تعيين الموظف",
+        "roleDeleted": "تم حذف الدور",
+        "deptDeleted": "تم حذف القسم",
+        "staffRemoved": "تم إزالة الموظف",
+        "failed": "فشل"
+      },
+      "confirmDeleteRole": "حذف هذا الدور؟",
+      "confirmDeleteDept": "حذف هذا القسم؟",
+      "confirmRemoveStaff": "إزالة هذا الموظف؟"
+    },
+    "featureFlags_mgmt": {
+      "title": "إعدادات الميزات",
+      "subtitle": "التحكم في ميزات المنصة وإمكانيات المرحلة الثانية",
+      "newFlag": "إعداد جديد",
+      "createFlag": "إنشاء إعداد ميزة",
+      "keyPlaceholder": "المفتاح (مثال: isFeatureEnabled)",
+      "categoryPlaceholder": "الفئة",
+      "descriptionPlaceholder": "الوصف",
+      "disabledFalse": "معطّل (false)",
+      "enabledTrue": "مفعّل (true)",
+      "on": "مفعّل",
+      "off": "معطّل",
+      "enabled": "مفعّل",
+      "disabled": "معطّل",
+      "toasts": {
+        "loadFailed": "فشل تحميل إعدادات الميزات",
+        "toggleFailed": "فشل تبديل الإعداد",
+        "flagCreated": "تم إنشاء الإعداد",
+        "createFailed": "فشل إنشاء الإعداد"
+      }
+    },
+    "messages_mgmt": {
+      "title": "الرسائل الداخلية",
+      "subtitle": "الاتصالات الداخلية ورسائل المنصة",
+      "noMessages": "لا توجد رسائل بعد",
+      "noMessagesDescription": "ستظهر الرسائل الداخلية هنا",
+      "noSubject": "بدون موضوع",
+      "new": "جديد",
+      "from": "من:"
+    },
+    "settings_mgmt": {
+      "title": "إعدادات المنصة",
+      "subtitle": "تكوين وإعدادات المنصة",
+      "general": "الإعدادات العامة",
+      "platformName": "اسم المنصة",
+      "platformNameDesc": "الاسم المعروض للسوق",
+      "defaultLanguage": "اللغة الافتراضية",
+      "defaultLanguageDesc": "اللغة الرئيسية للمنصة",
+      "defaultCountry": "الدولة الافتراضية",
+      "defaultCountryDesc": "الدولة الرئيسية للعمل",
+      "moderation": "المحتوى والإشراف",
+      "securityMaintenance": "الأمان والصيانة",
+      "maintenanceMode": "وضع الصيانة",
+      "maintenanceModeOn": "المنصة في وضع الصيانة — لا يمكن للمستخدمين الوصول إلى الموقع",
+      "maintenanceModeOff": "المنصة تعمل بشكل طبيعي",
+      "enableMaintenance": "تفعيل الصيانة",
+      "disableMaintenance": "إيقاف الصيانة",
+      "reviewModeration": "إشراف التقييمات",
+      "reviewModerationDesc": "تتطلب التقييمات موافقة المدير قبل النشر",
+      "emailVerification": "التحقق من البريد الإلكتروني",
+      "emailVerificationDesc": "يتطلب التحقق من البريد الإلكتروني للحسابات الجديدة",
+      "notifications": "الإشعارات",
+      "adminNotifications": "إشعارات المدير",
+      "adminNotificationsDesc": "تلقي إشعارات للتسجيلات والتحققات الجديدة",
+      "emailReports": "تقارير البريد الإلكتروني",
+      "emailReportsDesc": "تلقي تقارير أسبوعية عبر البريد الإلكتروني",
+      "toasts": {
+        "maintenanceUpdated": "تم تحديث وضع الصيانة",
+        "updateFailed": "فشل التحديث"
+      }
     }
+  },
+  "dashboard_pages": {
+    "messages": {
+      "title": "الرسائل",
+      "searchPlaceholder": "البحث في المحادثات...",
+      "noConversations": "لا توجد محادثات بعد",
+      "typePlaceholder": "اكتب رسالة...",
+      "selectConversation": "اختر محادثة لبدء المراسلة",
+      "you": "أنت: ",
+      "toasts": {
+        "loadFailed": "فشل تحميل المحادثات",
+        "messagesFailed": "فشل تحميل الرسائل",
+        "sendFailed": "فشل إرسال الرسالة"
+      }
+    },
+    "reviews": {
+      "title": "تقييماتي",
+      "subtitle": "التقييمات التي قدمتها للشركات",
+      "noReviews": "لا توجد تقييمات بعد",
+      "noReviewsDescription": "يمكنك ترك تقييمات بعد إتمام المشاريع مع الشركات",
+      "company": "الشركة",
+      "project": "المشروع: "
+    },
+    "projects": {
+      "title": "مشاريعي",
+      "subtitle": "تتبع مشاريعك النشطة والمكتملة",
+      "noProjects": "لا توجد مشاريع بعد",
+      "noProjectsDescription": "يتم إنشاء المشاريع عند قبولك لعرض على طلبك",
+      "createRequest": "إنشاء طلب",
+      "company": "الشركة: ",
+      "unknown": "غير معروف",
+      "messages": "رسائل",
+      "created": "تاريخ الإنشاء: ",
+      "toasts": {
+        "loadFailed": "فشل تحميل المشاريع"
+      }
+    },
+    "requests": {
+      "deleteRequest": "حذف الطلب",
+      "deleteConfirm": "هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.",
+      "offers": "عروض",
+      "toasts": {
+        "loadFailed": "فشل تحميل الطلبات",
+        "deleted": "تم حذف الطلب بنجاح",
+        "deleteFailed": "فشل حذف الطلب"
+      }
+    }
+  }
   },
   "companies": {
     "title": "دليل الشركات",

@@ -70,7 +70,7 @@ const spacingClasses = {
 const variantClasses = {
   default: '',
   muted: 'bg-muted/30',
-  primary: 'bg-primary text-white',
+  primary: 'bg-primary text-primary-foreground',
   card: 'bg-card',
 } as const;
 

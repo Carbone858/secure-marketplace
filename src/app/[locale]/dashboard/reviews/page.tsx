@@ -5,10 +5,11 @@ import { toast } from 'sonner';
 import { Star, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function UserReviewsPage() {
   const locale = useLocale();
+  const t = useTranslations('dashboard_pages.reviews');
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,9 +46,9 @@ export default function UserReviewsPage() {
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Star className="h-8 w-8" />
-          My Reviews
+          {t('title')}
         </h1>
-        <p className="text-muted-foreground mt-1">Reviews you have given to companies</p>
+        <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
       </div>
 
       {isLoading ? (
@@ -58,9 +59,9 @@ export default function UserReviewsPage() {
         <Card>
           <CardContent className="p-12 text-center">
             <Star className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No reviews yet</h3>
+            <h3 className="text-lg font-medium">{t('noReviews')}</h3>
             <p className="text-muted-foreground mt-1">
-              You can leave reviews after completing projects with companies
+              {t('noReviewsDescription')}
             </p>
           </CardContent>
         </Card>
@@ -72,14 +73,14 @@ export default function UserReviewsPage() {
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                      <p className="font-medium">{review.company?.nameEn || review.company?.nameAr || 'Company'}</p>
+                      <p className="font-medium">{review.company?.nameEn || review.company?.nameAr || t('company')}</p>
                       {renderStars(review.rating)}
                     </div>
                     {review.comment && (
                       <p className="text-sm text-muted-foreground">{review.comment}</p>
                     )}
                     {review.project && (
-                      <Badge variant="outline">Project: {review.project.title}</Badge>
+                      <Badge variant="outline">{t('project')}{review.project.title}</Badge>
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">

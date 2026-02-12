@@ -59,6 +59,7 @@ export default function MyRequestsPage() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('requests.myRequests');
+  const td = useTranslations('dashboard_pages.requests');
   const { user, isLoading: authLoading } = useAuth();
   
   const [requests, setRequests] = useState<Request[]>([]);
@@ -85,7 +86,7 @@ export default function MyRequestsPage() {
       const data = await response.json();
       setRequests(data.requests);
     } catch (err) {
-      toast.error('Failed to load requests');
+      toast.error(td('toasts.loadFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -101,12 +102,12 @@ export default function MyRequestsPage() {
 
       if (!response.ok) throw new Error('Failed to delete request');
 
-      toast.success('Request deleted successfully');
+      toast.success(td('toasts.deleted'));
       setRequests(requests.filter(r => r.id !== requestToDelete));
       setDeleteDialogOpen(false);
       setRequestToDelete(null);
     } catch (err) {
-      toast.error('Failed to delete request');
+      toast.error(td('toasts.deleteFailed'));
     }
   };
 
@@ -133,7 +134,7 @@ export default function MyRequestsPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">{t('title')}</h1>
         <Button onClick={() => router.push(`/${locale}/requests/new`)}>
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="h-4 w-4 me-2" />
           {t('createNew')}
         </Button>
       </div>
@@ -156,7 +157,7 @@ export default function MyRequestsPage() {
                   {t('noRequestsDesc')}
                 </p>
                 <Button onClick={() => router.push(`/${locale}/requests/new`)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 me-2" />
                   {t('createNew')}
                 </Button>
               </CardContent>
@@ -190,7 +191,7 @@ export default function MyRequestsPage() {
                           </span>
                           <span className="flex items-center gap-1">
                             <MessageSquare className="h-4 w-4" />
-                            {request._count.offers} offers
+                            {request._count.offers} {td('offers')}
                           </span>
                           <span>
                             {new Date(request.createdAt).toLocaleDateString()}
@@ -203,8 +204,8 @@ export default function MyRequestsPage() {
                           size="sm"
                           onClick={() => router.push(`/${locale}/requests/${request.id}`)}
                         >
-                          <Eye className="h-4 w-4 mr-2" />
-                          View
+                          <Eye className="h-4 w-4 me-2" />
+                          {t('view')}
                         </Button>
                         {['DRAFT', 'PENDING', 'ACTIVE'].includes(request.status) && (
                           <Button
@@ -212,8 +213,8 @@ export default function MyRequestsPage() {
                             size="sm"
                             onClick={() => router.push(`/${locale}/requests/${request.id}/edit`)}
                           >
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
+                            <Edit className="h-4 w-4 me-2" />
+                            {t('edit')}
                           </Button>
                         )}
                         {['DRAFT', 'PENDING'].includes(request.status) && (
@@ -226,8 +227,8 @@ export default function MyRequestsPage() {
                               setDeleteDialogOpen(true);
                             }}
                           >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
+                            <Trash2 className="h-4 w-4 me-2" />
+                            {t('delete')}
                           </Button>
                         )}
                       </div>
@@ -243,17 +244,17 @@ export default function MyRequestsPage() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Request</DialogTitle>
+            <DialogTitle>{td('deleteRequest')}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this request? This action cannot be undone.
+              {td('deleteConfirm')}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
-              Delete
+              {t('delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

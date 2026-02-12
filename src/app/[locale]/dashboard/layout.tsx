@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
@@ -28,6 +28,7 @@ export default async function DashboardLayout({
   }
 
   const isRTL = locale === 'ar';
+  const t = await getTranslations({ locale, namespace: 'nav' });
 
   return (
     <div className="min-h-screen bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -38,36 +39,36 @@ export default async function DashboardLayout({
             {/* Logo */}
             <Link
               href={`/${locale}`}
-              className="text-xl font-bold text-primary hover:text-primary transition-colors"
+              className="text-lg sm:text-xl font-bold text-primary hover:text-primary transition-colors truncate"
             >
-              {isRTL ? 'سوق الخدمات' : 'Service Marketplace'}
+              {t('brand')}
             </Link>
 
-            {/* Navigation */}
-            <nav className="flex items-center gap-6">
+            {/* Navigation — hidden on mobile */}
+            <nav className="hidden sm:flex items-center gap-4 md:gap-6">
               <Link
                 href={`/${locale}/dashboard`}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {isRTL ? 'لوحة التحكم' : 'Dashboard'}
+                {t('userMenu.dashboard')}
               </Link>
               <Link
                 href={`/${locale}/dashboard/profile`}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {isRTL ? 'الملف الشخصي' : 'Profile'}
+                {t('userMenu.profile')}
               </Link>
               <Link
                 href={`/${locale}/dashboard/settings`}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {isRTL ? 'الإعدادات' : 'Settings'}
+                {t('userMenu.settings')}
               </Link>
             </nav>
 
             {/* User Menu */}
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <span className="hidden sm:inline text-sm text-muted-foreground max-w-[120px] truncate">
                 {session.user?.name || session.user?.email}
               </span>
               <form action={`/${locale}/api/auth/logout`} method="POST">
@@ -75,16 +76,38 @@ export default async function DashboardLayout({
                   type="submit"
                   className="text-sm text-destructive hover:text-destructive transition-colors"
                 >
-                  {isRTL ? 'تسجيل الخروج' : 'Logout'}
+                  {t('userMenu.logout')}
                 </button>
               </form>
             </div>
           </div>
+
+          {/* Mobile navigation — visible on small screens */}
+          <nav className="sm:hidden flex items-center gap-4 pb-3 overflow-x-auto">
+            <Link
+              href={`/${locale}/dashboard`}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+            >
+              {t('userMenu.dashboard')}
+            </Link>
+            <Link
+              href={`/${locale}/dashboard/profile`}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+            >
+              {t('userMenu.profile')}
+            </Link>
+            <Link
+              href={`/${locale}/dashboard/settings`}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+            >
+              {t('userMenu.settings')}
+            </Link>
+          </nav>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="py-8">
+      <main className="py-4 sm:py-6 lg:py-8">
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
         </NextIntlClientProvider>

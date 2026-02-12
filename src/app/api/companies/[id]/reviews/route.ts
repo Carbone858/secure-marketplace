@@ -123,6 +123,21 @@ export async function POST(
       },
     });
 
+    // Recalculate company rating and reviewCount
+    const stats = await prisma.review.aggregate({
+      where: { companyId: id },
+      _avg: { rating: true },
+      _count: { rating: true },
+    });
+
+    await prisma.company.update({
+      where: { id },
+      data: {
+        rating: Math.round((stats._avg.rating || 0) * 100) / 100,
+        reviewCount: stats._count.rating,
+      },
+    });
+
     return NextResponse.json({ review }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

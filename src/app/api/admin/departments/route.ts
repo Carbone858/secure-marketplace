@@ -64,7 +64,19 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Department ID required' }, { status: 400 });
     }
 
-    const dept = await prisma.department.update({ where: { id }, data });
+    const updateDeptSchema = z.object({
+      name: z.string().min(1).max(100).optional(),
+      nameAr: z.string().min(1).max(100).optional(),
+      description: z.string().optional(),
+      isActive: z.boolean().optional(),
+    });
+
+    const parsed = updateDeptSchema.safeParse(data);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Validation error', details: parsed.error.flatten() }, { status: 400 });
+    }
+
+    const dept = await prisma.department.update({ where: { id }, data: parsed.data });
     return NextResponse.json({ department: dept });
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -6,11 +6,12 @@ import { Briefcase, Loader2, MessageSquare } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/composite';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 export default function UserProjectsPage() {
   const locale = useLocale();
+  const t = useTranslations('dashboard_pages.projects');
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +23,7 @@ export default function UserProjectsPage() {
         const data = await res.json();
         setProjects(data.projects || []);
       } catch {
-        toast.error('Failed to load projects');
+        toast.error(t('toasts.loadFailed'));
       } finally {
         setIsLoading(false);
       }
@@ -46,9 +47,9 @@ export default function UserProjectsPage() {
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Briefcase className="h-8 w-8" />
-          My Projects
+          {t('title')}
         </h1>
-        <p className="text-muted-foreground mt-1">Track your active and completed projects</p>
+        <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
       </div>
 
       {isLoading ? (
@@ -59,12 +60,12 @@ export default function UserProjectsPage() {
         <Card>
           <CardContent className="p-12 text-center">
             <Briefcase className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">No projects yet</h3>
+            <h3 className="text-lg font-medium">{t('noProjects')}</h3>
             <p className="text-muted-foreground mt-1">
-              Projects are created when you accept an offer on your request
+              {t('noProjectsDescription')}
             </p>
             <Link href={`/${locale}/requests/new`}>
-              <Button className="mt-4">Create a Request</Button>
+              <Button className="mt-4">{t('createRequest')}</Button>
             </Link>
           </CardContent>
         </Card>
@@ -77,7 +78,7 @@ export default function UserProjectsPage() {
                   <div>
                     <h3 className="text-lg font-semibold">{project.title}</h3>
                     <p className="text-sm text-muted-foreground">
-                      Company: {project.company?.nameEn || project.company?.nameAr || 'Unknown'}
+                      {t('company')}{project.company?.nameEn || project.company?.nameAr || t('unknown')}
                     </p>
                   </div>
                   {getStatusBadge(project.status)}
@@ -88,9 +89,9 @@ export default function UserProjectsPage() {
                 <div className="flex items-center gap-4 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <MessageSquare className="h-4 w-4" />
-                    {project._count?.messages || 0} messages
+                    {project._count?.messages || 0} {t('messages')}
                   </span>
-                  <span>Created: {new Date(project.createdAt).toLocaleDateString()}</span>
+                  <span>{t('created')}{new Date(project.createdAt).toLocaleDateString()}</span>
                 </div>
               </CardContent>
             </Card>

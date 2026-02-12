@@ -2,10 +2,23 @@ import { hash, verify } from 'argon2';
 import { SignJWT, jwtVerify } from 'jose';
 import crypto from 'crypto';
 
-// JWT Configuration
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-fallback-secret-min-32-characters-long'
-);
+// JWT Configuration - no fallback secret in production
+function getJwtSecret(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('JWT_SECRET environment variable is required in production');
+    }
+    console.warn('WARNING: JWT_SECRET not set. Using development-only fallback. NEVER deploy without setting JWT_SECRET.');
+    return new TextEncoder().encode('dev-only-insecure-secret-do-not-use-in-production!!');
+  }
+  if (secret.length < 32) {
+    throw new Error('JWT_SECRET must be at least 32 characters long');
+  }
+  return new TextEncoder().encode(secret);
+}
+
+const JWT_SECRET = getJwtSecret();
 
 const ACCESS_TOKEN_EXPIRY = '15m'; // 15 minutes
 const REFRESH_TOKEN_EXPIRY = '7d'; // 7 days

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
 import { prisma } from '@/lib/db/client';
+import { apiLimiter, getClientIp } from '@/lib/rate-limit';
 
 export interface AuthenticatedUser {
   id: string;
@@ -86,4 +87,34 @@ export async function authenticateRequest(
       { status: 401 }
     );
   }
+}
+
+/**
+ * Require admin role. Returns 403 if user is not ADMIN or SUPER_ADMIN.
+ */
+export function requireAdmin(user: AuthenticatedUser): NextResponse | null {
+  if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  }
+  return null;
+}
+
+/**
+ * Apply API rate limiting. Returns 429 response if limit exceeded.
+ */
+export function applyRateLimit(request: NextRequest, prefix = 'api'): NextResponse | null {
+  const ip = getClientIp(request);
+  const result = apiLimiter.check(`${prefix}:${ip}`);
+  if (!result.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests', retryAfter: result.retryAfter },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(result.retryAfter || 60),
+        },
+      }
+    );
+  }
+  return null;
 }

@@ -13,6 +13,15 @@ const updateProjectSchema = z.object({
   progress: z.number().min(0).max(100).optional(),
 });
 
+// Valid status transitions for project lifecycle
+const VALID_STATUS_TRANSITIONS: Record<string, string[]> = {
+  'PENDING': ['ACTIVE', 'CANCELLED'],
+  'ACTIVE': ['ON_HOLD', 'COMPLETED', 'CANCELLED'],
+  'ON_HOLD': ['ACTIVE', 'CANCELLED'],
+  'COMPLETED': [], // Terminal state
+  'CANCELLED': [], // Terminal state
+};
+
 // GET /api/projects/[id] - Get project details
 export async function GET(
   request: NextRequest,
@@ -142,6 +151,18 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updateProjectSchema.parse(body);
 
+    // Validate status transitions
+    if (validatedData.status) {
+      const currentStatus = project.status;
+      const allowed = VALID_STATUS_TRANSITIONS[currentStatus] || [];
+      if (!allowed.includes(validatedData.status)) {
+        return NextResponse.json(
+          { error: `Cannot transition from ${currentStatus} to ${validatedData.status}` },
+          { status: 400 }
+        );
+      }
+    }
+
     const updatedProject = await prisma.project.update({
       where: { id },
       data: {
@@ -163,6 +184,22 @@ export async function PUT(
         company: true,
       },
     });
+
+    // If completed, also update the linked service request
+    if (validatedData.status === 'COMPLETED' && project.requestId) {
+      await prisma.serviceRequest.update({
+        where: { id: project.requestId },
+        data: { status: 'COMPLETED' },
+      });
+    }
+
+    // If cancelled, reopen the request
+    if (validatedData.status === 'CANCELLED' && project.requestId) {
+      await prisma.serviceRequest.update({
+        where: { id: project.requestId },
+        data: { status: 'CANCELLED' },
+      });
+    }
 
     // Notify the other party about status change
     if (validatedData.status) {

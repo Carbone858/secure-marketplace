@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { createRequestSchema, requestFilterSchema } from '@/lib/validations/request';
+import { isRequestLimitActive, isPaidPlanActive } from '@/lib/feature-flags';
 
 /**
  * GET /api/requests
@@ -200,6 +201,33 @@ export async function POST(request: NextRequest) {
     }
 
     const data = validationResult.data;
+
+    // Phase 2: Check request limits if feature flag is enabled
+    const requestLimitEnabled = await isRequestLimitActive();
+    if (requestLimitEnabled) {
+      const monthStart = new Date();
+      monthStart.setDate(1);
+      monthStart.setHours(0, 0, 0, 0);
+
+      const requestCount = await prisma.serviceRequest.count({
+        where: {
+          userId: session.user.id,
+          createdAt: { gte: monthStart },
+        },
+      });
+
+      const FREE_REQUEST_LIMIT = 10; // Configurable
+      if (requestCount >= FREE_REQUEST_LIMIT) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'request.limitReached',
+            message: 'You have reached the monthly request limit. Upgrade your plan for unlimited requests.',
+          },
+          { status: 403 }
+        );
+      }
+    }
 
     // Create request
     const serviceRequest = await prisma.serviceRequest.create({

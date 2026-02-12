@@ -63,7 +63,20 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Role ID required' }, { status: 400 });
     }
 
-    const role = await prisma.staffRole.update({ where: { id }, data });
+    const updateRoleSchema = z.object({
+      name: z.string().min(1).max(100).optional(),
+      nameAr: z.string().min(1).max(100).optional(),
+      description: z.string().optional(),
+      permissions: z.record(z.boolean()).optional(),
+      isActive: z.boolean().optional(),
+    });
+
+    const parsed = updateRoleSchema.safeParse(data);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Validation error', details: parsed.error.flatten() }, { status: 400 });
+    }
+
+    const role = await prisma.staffRole.update({ where: { id }, data: parsed.data });
     return NextResponse.json({ role });
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

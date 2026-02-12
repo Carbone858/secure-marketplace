@@ -148,32 +148,101 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         );
       }
 
+      // Prevent accepting/rejecting already finalized offers
+      if (offer.status !== 'PENDING') {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'offer.alreadyProcessed',
+            message: `This offer has already been ${offer.status.toLowerCase()}.`,
+          },
+          { status: 400 }
+        );
+      }
+
+      // Use a transaction to prevent race conditions
+      if (body.status === 'ACCEPTED') {
+        const result = await prisma.$transaction(async (tx) => {
+          // Re-check offer status inside transaction to prevent race conditions
+          const freshOffer = await tx.offer.findUnique({
+            where: { id },
+            include: { request: true, company: true },
+          });
+
+          if (!freshOffer || freshOffer.status !== 'PENDING') {
+            throw new Error('OFFER_ALREADY_PROCESSED');
+          }
+
+          // Update the accepted offer
+          const updatedOffer = await tx.offer.update({
+            where: { id },
+            data: { status: 'ACCEPTED' },
+          });
+
+          // Update request status
+          await tx.serviceRequest.update({
+            where: { id: freshOffer.requestId },
+            data: { status: 'ACCEPTED' },
+          });
+
+          // Reject all other pending offers for this request
+          await tx.offer.updateMany({
+            where: {
+              requestId: freshOffer.requestId,
+              id: { not: id },
+              status: 'PENDING',
+            },
+            data: { status: 'REJECTED' },
+          });
+
+          // Auto-create project from the accepted offer
+          const project = await tx.project.create({
+            data: {
+              title: freshOffer.request.title,
+              description: freshOffer.request.description,
+              userId: freshOffer.request.userId,
+              companyId: freshOffer.companyId,
+              requestId: freshOffer.requestId,
+              budget: freshOffer.price,
+              currency: freshOffer.currency,
+              status: 'PENDING',
+            },
+          });
+
+          // Create notification for company owner
+          await tx.notification.create({
+            data: {
+              userId: freshOffer.company.userId,
+              type: 'PROJECT',
+              title: 'Offer Accepted - New Project',
+              message: `Your offer for "${freshOffer.request.title}" has been accepted! A new project has been created.`,
+              data: { projectId: project.id, offerId: updatedOffer.id },
+            },
+          });
+
+          return { offer: updatedOffer, project };
+        });
+
+        return NextResponse.json(
+          {
+            success: true,
+            message: 'Offer accepted and project created.',
+            data: { offer: result.offer, project: result.project },
+          },
+          { status: 200 }
+        );
+      }
+
+      // Handle rejection (simpler, no transaction needed)
       const updatedOffer = await prisma.offer.update({
         where: { id },
-        data: { status: body.status },
+        data: { status: 'REJECTED' },
       });
-
-      // If accepted, update request status and reject other offers
-      if (body.status === 'ACCEPTED') {
-        await prisma.serviceRequest.update({
-          where: { id: offer.requestId },
-          data: { status: 'ACCEPTED' },
-        });
-
-        await prisma.offer.updateMany({
-          where: {
-            requestId: offer.requestId,
-            id: { not: id },
-            status: 'PENDING',
-          },
-          data: { status: 'REJECTED' },
-        });
-      }
 
       return NextResponse.json(
         {
           success: true,
-          message: `Offer ${body.status.toLowerCase()}.`,
+          message: 'Offer rejected.',
           data: { offer: updatedOffer },
         },
         { status: 200 }
@@ -231,7 +300,17 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.message === 'OFFER_ALREADY_PROCESSED') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'offer.alreadyProcessed',
+          message: 'This offer has already been processed by another action.',
+        },
+        { status: 409 }
+      );
+    }
     console.error('Update offer error:', error);
     return NextResponse.json(
       {

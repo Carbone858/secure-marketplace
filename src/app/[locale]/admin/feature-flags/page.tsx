@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { Flag, Loader2, Plus } from 'lucide-react';
+import { Flag, Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
+import { PageSkeleton } from '@/components/ui/skeleton';
 
 export default function AdminFeatureFlagsPage() {
   const locale = useLocale();
@@ -25,7 +26,7 @@ export default function AdminFeatureFlagsPage() {
       const data = await res.json();
       setFlags(data.flags || []);
     } catch {
-      toast.error('Failed to load feature flags');
+      toast.error(t('featureFlags_mgmt.toasts.loadFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -42,10 +43,10 @@ export default function AdminFeatureFlagsPage() {
         body: JSON.stringify({ id: flag.id, value: newValue }),
       });
       if (!res.ok) throw new Error();
-      toast.success(`${flag.key} ${newValue ? 'enabled' : 'disabled'}`);
+      toast.success(`${flag.key} ${newValue ? t('featureFlags_mgmt.enabled') : t('featureFlags_mgmt.disabled')}`);
       fetchFlags();
     } catch {
-      toast.error('Failed to toggle flag');
+      toast.error(t('featureFlags_mgmt.toasts.toggleFailed'));
     }
   };
 
@@ -57,12 +58,12 @@ export default function AdminFeatureFlagsPage() {
         body: JSON.stringify(newFlag),
       });
       if (!res.ok) throw new Error();
-      toast.success('Flag created');
+      toast.success(t('featureFlags_mgmt.toasts.flagCreated'));
       setShowCreate(false);
       setNewFlag({ key: '', value: false, description: '', category: '' });
       fetchFlags();
     } catch {
-      toast.error('Failed to create flag');
+      toast.error(t('featureFlags_mgmt.toasts.createFailed'));
     }
   };
 
@@ -80,44 +81,42 @@ export default function AdminFeatureFlagsPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
             <Flag className="h-8 w-8" />
-            Feature Flags
+            {t('featureFlags_mgmt.title')}
           </h1>
-          <p className="text-muted-foreground mt-1">Control platform features and Phase 2 capabilities</p>
+          <p className="text-muted-foreground mt-1">{t('featureFlags_mgmt.subtitle')}</p>
         </div>
         <Button onClick={() => setShowCreate(!showCreate)}>
-          <Plus className="h-4 w-4 mr-2" /> New Flag
+          <Plus className="h-4 w-4 me-2" /> {t('featureFlags_mgmt.newFlag')}
         </Button>
       </div>
 
       {showCreate && (
         <Card>
-          <CardHeader><CardTitle>Create Feature Flag</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('featureFlags_mgmt.createFlag')}</CardTitle></CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input placeholder="Key (e.g. isFeatureEnabled)" value={newFlag.key} onChange={(e) => setNewFlag({ ...newFlag, key: e.target.value })} />
+              <Input placeholder={t('featureFlags_mgmt.keyPlaceholder')} value={newFlag.key} onChange={(e) => setNewFlag({ ...newFlag, key: e.target.value })} />
               <select
                 value={newFlag.value ? 'true' : 'false'}
                 onChange={(e) => setNewFlag({ ...newFlag, value: e.target.value === 'true' })}
                 className="border rounded-md px-3 py-2 text-sm bg-background"
               >
-                <option value="false">Disabled (false)</option>
-                <option value="true">Enabled (true)</option>
+                <option value="false">{t('featureFlags_mgmt.disabledFalse')}</option>
+                <option value="true">{t('featureFlags_mgmt.enabledTrue')}</option>
               </select>
-              <Input placeholder="Category" value={newFlag.category} onChange={(e) => setNewFlag({ ...newFlag, category: e.target.value })} />
-              <Input placeholder="Description" value={newFlag.description} onChange={(e) => setNewFlag({ ...newFlag, description: e.target.value })} />
+              <Input placeholder={t('featureFlags_mgmt.categoryPlaceholder')} value={newFlag.category} onChange={(e) => setNewFlag({ ...newFlag, category: e.target.value })} />
+              <Input placeholder={t('featureFlags_mgmt.descriptionPlaceholder')} value={newFlag.description} onChange={(e) => setNewFlag({ ...newFlag, description: e.target.value })} />
             </div>
             <div className="flex gap-2 mt-4">
-              <Button onClick={createFlag}>Create</Button>
-              <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
+              <Button onClick={createFlag}>{t('common.create')}</Button>
+              <Button variant="outline" onClick={() => setShowCreate(false)}>{t('common.cancel')}</Button>
             </div>
           </CardContent>
         </Card>
       )}
 
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
+        <PageSkeleton />
       ) : (
         Object.entries(grouped).map(([category, categoryFlags]) => (
           <Card key={category}>
@@ -131,7 +130,7 @@ export default function AdminFeatureFlagsPage() {
                     <div className="flex items-center gap-2">
                       <code className="text-sm font-mono bg-muted px-2 py-0.5 rounded">{flag.key}</code>
                       <Badge variant={flag.value ? 'default' : 'secondary'}>
-                        {flag.value ? 'ON' : 'OFF'}
+                        {flag.value ? t('featureFlags_mgmt.on') : t('featureFlags_mgmt.off')}
                       </Badge>
                     </div>
                     {flag.description && (
@@ -146,7 +145,7 @@ export default function AdminFeatureFlagsPage() {
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-background shadow-sm transition-transform ${
-                        flag.value ? 'translate-x-6' : 'translate-x-1'
+                        flag.value ? 'ltr:translate-x-6 rtl:-translate-x-6' : 'ltr:translate-x-1 rtl:-translate-x-1'
                       }`}
                     />
                   </button>

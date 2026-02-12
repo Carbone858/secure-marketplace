@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { CheckCircle, XCircle, Loader2, FileCheck, ExternalLink } from 'lucide-react';
+import { CheckCircle, XCircle, FileCheck, ExternalLink } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PageSkeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -58,15 +59,13 @@ export default function AdminVerificationsPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
+        <PageSkeleton />
       ) : companies.length === 0 ? (
         <Card>
           <CardContent className="p-12 text-center">
             <CheckCircle className="h-12 w-12 mx-auto text-success mb-4" />
             <h3 className="text-lg font-medium">All caught up!</h3>
-            <p className="text-muted-foreground mt-1">No pending verifications</p>
+            <p className="text-muted-foreground mt-1">{t('verifications_mgmt.noPending')}</p>
           </CardContent>
         </Card>
       ) : (

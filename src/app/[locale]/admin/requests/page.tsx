@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { FileText, Search, Loader2, Eye } from 'lucide-react';
+import { FileText, Search, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PageSkeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { Input } from '@/components/ui/input';
@@ -68,12 +69,12 @@ export default function AdminRequestsPage() {
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search requests..."
+                placeholder={t('requests_mgmt.searchPlaceholder')}
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                className="pl-9"
+                className="ps-9"
               />
             </div>
             <select
@@ -81,12 +82,12 @@ export default function AdminRequestsPage() {
               onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
               className="border rounded-md px-3 py-2 text-sm bg-background"
             >
-              <option value="">All Status</option>
-              <option value="OPEN">Open</option>
-              <option value="IN_PROGRESS">In Progress</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="CANCELLED">Cancelled</option>
-              <option value="CLOSED">Closed</option>
+              <option value="">{t('requests_mgmt.allStatus')}</option>
+              <option value="OPEN">{t('requests_mgmt.open')}</option>
+              <option value="IN_PROGRESS">{t('requests_mgmt.inProgress')}</option>
+              <option value="COMPLETED">{t('requests_mgmt.completed')}</option>
+              <option value="CANCELLED">{t('requests_mgmt.cancelled')}</option>
+              <option value="CLOSED">{t('requests_mgmt.closed')}</option>
             </select>
           </div>
         </CardContent>
@@ -95,23 +96,21 @@ export default function AdminRequestsPage() {
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
+            <PageSkeleton />
           ) : requests.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">No requests found</div>
+            <div className="text-center py-12 text-muted-foreground">{t('requests_mgmt.noRequests')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
-                    <th className="text-start p-3 font-medium">Title</th>
-                    <th className="text-start p-3 font-medium">User</th>
-                    <th className="text-start p-3 font-medium">Category</th>
-                    <th className="text-start p-3 font-medium">Status</th>
-                    <th className="text-start p-3 font-medium">Budget</th>
-                    <th className="text-start p-3 font-medium">Created</th>
-                    <th className="text-start p-3 font-medium">Actions</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.title')}</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.user')}</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.category')}</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.status')}</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.budget')}</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.created')}</th>
+                    <th className="text-start p-3 font-medium">{t('requests_mgmt.tableHeaders.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,8 +140,8 @@ export default function AdminRequestsPage() {
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">Page {page} of {totalPages}</p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>Previous</Button>
-            <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>Next</Button>
+            <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>{t('common.previous')}</Button>
+            <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>{t('common.next')}</Button>
           </div>
         </div>
       )}

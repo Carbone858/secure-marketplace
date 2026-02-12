@@ -5,6 +5,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl } from '@/lib/upload';
 
 // Allowed image types
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -73,8 +74,8 @@ export async function POST(request: NextRequest) {
     const randomName = crypto.randomBytes(16).toString('hex');
     const fileName = `${session.user.id}_${randomName}.${fileExtension}`;
 
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'avatars');
+    // Ensure uploads directory exists (OUTSIDE public/ for controlled access)
+    const uploadsDir = UPLOAD_PATHS.avatars;
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true });
     }
@@ -82,10 +83,23 @@ export async function POST(request: NextRequest) {
     // Save file
     const filePath = path.join(uploadsDir, fileName);
     const fileBuffer = Buffer.from(await file.arrayBuffer());
+
+    // Validate magic bytes match claimed MIME type
+    if (!validateFileMagicBytes(fileBuffer, file.type)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'file.contentMismatch',
+          message: 'File content does not match the declared file type.',
+        },
+        { status: 400 }
+      );
+    }
+
     await writeFile(filePath, fileBuffer);
 
-    // Generate public URL
-    const avatarUrl = `/uploads/avatars/${fileName}`;
+    // Generate URL served via /api/files/... (avatars are semi-public)
+    const avatarUrl = getFileServeUrl('avatars', fileName);
 
     // Update user avatar in database
     await prisma.user.update({
@@ -143,10 +157,11 @@ export async function DELETE(request: NextRequest) {
     });
 
     if (user?.avatar) {
-      // Delete file from disk (optional - can be done via cleanup job)
+      // Delete file from disk (safe path resolution)
       try {
-        const filePath = path.join(process.cwd(), 'public', user.avatar);
-        if (existsSync(filePath)) {
+        const avatarFileName = path.basename(user.avatar);
+        const filePath = resolveUploadPath('avatars', avatarFileName);
+        if (filePath && existsSync(filePath)) {
           const { unlink } = await import('fs/promises');
           await unlink(filePath);
         }

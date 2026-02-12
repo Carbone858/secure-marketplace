@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
   Loader2,
@@ -48,6 +48,7 @@ interface Message {
 export default function MessagesPage() {
   const router = useRouter();
   const locale = useLocale();
+  const t = useTranslations('dashboard_pages.messages');
   const { user, isLoading: authLoading } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +88,7 @@ export default function MessagesPage() {
       const data = await response.json();
       setConversations(data.conversations);
     } catch (err) {
-      toast.error('Failed to load conversations');
+      toast.error(t('toasts.loadFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +101,7 @@ export default function MessagesPage() {
       const data = await response.json();
       setMessages(data.messages);
     } catch (err) {
-      toast.error('Failed to load messages');
+      toast.error(t('toasts.messagesFailed'));
     }
   };
 
@@ -125,7 +126,7 @@ export default function MessagesPage() {
       setNewMessage('');
       fetchConversations();
     } catch (err) {
-      toast.error('Failed to send message');
+      toast.error(t('toasts.sendFailed'));
     } finally {
       setIsSending(false);
     }
@@ -153,7 +154,7 @@ export default function MessagesPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Messages</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('title')}</h1>
 
       <Card className="h-[calc(100vh-200px)]">
         <CardContent className="p-0 h-full">
@@ -166,12 +167,12 @@ export default function MessagesPage() {
             >
               <div className="p-4 border-b">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search conversations..."
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
+                    className="ps-10"
                   />
                 </div>
               </div>
@@ -180,7 +181,7 @@ export default function MessagesPage() {
                 {filteredConversations.length === 0 ? (
                   <div className="p-8 text-center">
                     <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground">No conversations yet</p>
+                    <p className="text-muted-foreground">{t('noConversations')}</p>
                   </div>
                 ) : (
                   <div className="divide-y">
@@ -188,7 +189,7 @@ export default function MessagesPage() {
                       <button
                         key={conversation.partner.id}
                         onClick={() => setSelectedConversation(conversation.partner.id)}
-                        className={`w-full p-4 flex items-center gap-3 hover:bg-muted transition-colors text-left ${
+                        className={`w-full p-4 flex items-center gap-3 hover:bg-muted transition-colors text-start ${
                           selectedConversation === conversation.partner.id
                             ? 'bg-muted'
                             : ''
@@ -213,7 +214,7 @@ export default function MessagesPage() {
                           </div>
                           <p className="text-sm text-muted-foreground truncate">
                             {conversation.lastMessage.senderId === user?.id
-                              ? 'You: '
+                              ? t('you')
                               : ''}
                             {conversation.lastMessage.content}
                           </p>
@@ -297,7 +298,7 @@ export default function MessagesPage() {
                   <div className="p-4 border-t">
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Type a message..."
+                        placeholder={t('typePlaceholder')}
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyDown={(e) => {
@@ -325,7 +326,7 @@ export default function MessagesPage() {
                   <div className="text-center">
                     <MessageSquare className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                     <p className="text-muted-foreground">
-                      Select a conversation to start messaging
+                      {t('selectConversation')}
                     </p>
                   </div>
                 </div>

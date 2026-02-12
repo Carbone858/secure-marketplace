@@ -109,9 +109,20 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Staff member ID required' }, { status: 400 });
     }
 
+    const updateStaffSchema = z.object({
+      roleId: z.string().optional(),
+      departmentId: z.string().optional(),
+      isActive: z.boolean().optional(),
+    });
+
+    const parsed = updateStaffSchema.safeParse(data);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Validation error', details: parsed.error.flatten() }, { status: 400 });
+    }
+
     const member = await prisma.staffMember.update({
       where: { id },
-      data,
+      data: parsed.data,
       include: {
         user: { select: { id: true, name: true, email: true } },
         role: true,

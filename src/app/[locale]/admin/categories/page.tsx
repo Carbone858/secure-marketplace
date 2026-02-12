@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { Tags, Plus, Pencil, Trash2, Loader2 } from 'lucide-react';
+import { Tags, Plus, Pencil, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
+import { PageSkeleton } from '@/components/ui/skeleton';
 
 export default function AdminCategoriesPage() {
   const locale = useLocale();
@@ -26,7 +27,7 @@ export default function AdminCategoriesPage() {
       const data = await res.json();
       setCategories(data.categories || []);
     } catch {
-      toast.error('Failed to load categories');
+      toast.error(t('categories_mgmt.toasts.loadFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -44,13 +45,13 @@ export default function AdminCategoriesPage() {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error();
-      toast.success(editId ? 'Category updated' : 'Category created');
+      toast.success(editId ? t('categories_mgmt.toasts.updated') : t('categories_mgmt.toasts.created'));
       setShowForm(false);
       setEditId(null);
       setForm({ nameEn: '', nameAr: '', slug: '', icon: '' });
       fetchCategories();
     } catch {
-      toast.error('Failed to save category');
+      toast.error(t('categories_mgmt.toasts.saveFailed'));
     }
   };
 
@@ -61,17 +62,17 @@ export default function AdminCategoriesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this category?')) return;
+    if (!confirm(t('categories_mgmt.confirmDelete'))) return;
     try {
       const res = await fetch(`/api/admin/categories/${id}`, { method: 'DELETE' });
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || 'Failed');
       }
-      toast.success('Category deleted');
+      toast.success(t('categories_mgmt.toasts.deleted'));
       fetchCategories();
     } catch (err: any) {
-      toast.error(err.message || 'Failed to delete');
+      toast.error(err.message || t('categories_mgmt.toasts.deleteFailed'));
     }
   };
 
@@ -81,30 +82,30 @@ export default function AdminCategoriesPage() {
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
             <Tags className="h-8 w-8" />
-            Categories
+            {t('categories_mgmt.title')}
           </h1>
-          <p className="text-muted-foreground mt-1">Manage service categories</p>
+          <p className="text-muted-foreground mt-1">{t('categories_mgmt.subtitle')}</p>
         </div>
         <Button onClick={() => { setShowForm(true); setEditId(null); setForm({ nameEn: '', nameAr: '', slug: '', icon: '' }); }}>
-          <Plus className="h-4 w-4 mr-2" /> Add Category
+          <Plus className="h-4 w-4 me-2" /> {t('categories_mgmt.addCategory')}
         </Button>
       </div>
 
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>{editId ? 'Edit Category' : 'New Category'}</CardTitle>
+            <CardTitle>{editId ? t('categories_mgmt.editCategory') : t('categories_mgmt.newCategory')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input placeholder="Name (English)" value={form.nameEn} onChange={(e) => setForm({ ...form, nameEn: e.target.value })} />
-              <Input placeholder="Name (Arabic)" value={form.nameAr} onChange={(e) => setForm({ ...form, nameAr: e.target.value })} />
-              <Input placeholder="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
-              <Input placeholder="Icon name" value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} />
+              <Input placeholder={t('categories_mgmt.nameEn')} value={form.nameEn} onChange={(e) => setForm({ ...form, nameEn: e.target.value })} />
+              <Input placeholder={t('categories_mgmt.nameAr')} value={form.nameAr} onChange={(e) => setForm({ ...form, nameAr: e.target.value })} />
+              <Input placeholder={t('categories_mgmt.slug')} value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
+              <Input placeholder={t('categories_mgmt.iconName')} value={form.icon} onChange={(e) => setForm({ ...form, icon: e.target.value })} />
             </div>
             <div className="flex gap-2 mt-4">
-              <Button onClick={handleSubmit}>{editId ? 'Update' : 'Create'}</Button>
-              <Button variant="outline" onClick={() => { setShowForm(false); setEditId(null); }}>Cancel</Button>
+              <Button onClick={handleSubmit}>{editId ? t('common.save') : t('common.create')}</Button>
+              <Button variant="outline" onClick={() => { setShowForm(false); setEditId(null); }}>{t('common.cancel')}</Button>
             </div>
           </CardContent>
         </Card>
@@ -113,21 +114,19 @@ export default function AdminCategoriesPage() {
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
+            <PageSkeleton />
           ) : categories.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">No categories found</div>
+            <div className="text-center py-12 text-muted-foreground">{t('categories_mgmt.noCategories')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
-                    <th className="text-start p-3 font-medium">Name (EN)</th>
-                    <th className="text-start p-3 font-medium">Name (AR)</th>
-                    <th className="text-start p-3 font-medium">Slug</th>
-                    <th className="text-start p-3 font-medium">Requests</th>
-                    <th className="text-start p-3 font-medium">Actions</th>
+                    <th className="text-start p-3 font-medium">{t('categories_mgmt.tableHeaders.nameEn')}</th>
+                    <th className="text-start p-3 font-medium">{t('categories_mgmt.tableHeaders.nameAr')}</th>
+                    <th className="text-start p-3 font-medium">{t('categories_mgmt.tableHeaders.slug')}</th>
+                    <th className="text-start p-3 font-medium">{t('categories_mgmt.tableHeaders.requests')}</th>
+                    <th className="text-start p-3 font-medium">{t('categories_mgmt.tableHeaders.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>

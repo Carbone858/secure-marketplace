@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { Building2, Search, Loader2, CheckCircle, XCircle, Star } from 'lucide-react';
+import { Building2, Search, CheckCircle, XCircle, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
+import { PageSkeleton } from '@/components/ui/skeleton';
 
 export default function AdminCompaniesPage() {
   const locale = useLocale();
@@ -73,19 +74,19 @@ export default function AdminCompaniesPage() {
           <Building2 className="h-8 w-8" />
           {t('sidebar.companies')}
         </h1>
-        <p className="text-muted-foreground mt-1">Manage registered companies ({total} total)</p>
+        <p className="text-muted-foreground mt-1">{t('companies_mgmt.subtitle')} ({total})</p>
       </div>
 
       <Card>
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search companies..."
+                placeholder={t('companies_mgmt.searchPlaceholder')}
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                className="pl-9"
+                className="ps-9"
               />
             </div>
             <select
@@ -93,10 +94,10 @@ export default function AdminCompaniesPage() {
               onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
               className="border rounded-md px-3 py-2 text-sm bg-background"
             >
-              <option value="">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="VERIFIED">Verified</option>
-              <option value="REJECTED">Rejected</option>
+              <option value="">{t('companies_mgmt.allStatus')}</option>
+              <option value="PENDING">{t('companies_mgmt.pending')}</option>
+              <option value="VERIFIED">{t('companies_mgmt.verified')}</option>
+              <option value="REJECTED">{t('companies_mgmt.rejected')}</option>
             </select>
           </div>
         </CardContent>
@@ -105,22 +106,20 @@ export default function AdminCompaniesPage() {
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
+            <div className="p-6"><PageSkeleton /></div>
           ) : companies.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">No companies found</div>
+            <div className="text-center py-12 text-muted-foreground">{t('companies_mgmt.noCompanies')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
-                    <th className="text-start p-3 font-medium">Company</th>
-                    <th className="text-start p-3 font-medium">Email</th>
-                    <th className="text-start p-3 font-medium">Status</th>
-                    <th className="text-start p-3 font-medium">Plan</th>
-                    <th className="text-start p-3 font-medium">Featured</th>
-                    <th className="text-start p-3 font-medium">Actions</th>
+                    <th className="text-start p-3 font-medium">{t('companies_mgmt.tableHeaders.company')}</th>
+                    <th className="text-start p-3 font-medium">{t('companies_mgmt.tableHeaders.email')}</th>
+                    <th className="text-start p-3 font-medium">{t('companies_mgmt.tableHeaders.status')}</th>
+                    <th className="text-start p-3 font-medium">{t('companies_mgmt.tableHeaders.plan')}</th>
+                    <th className="text-start p-3 font-medium">{t('companies_mgmt.tableHeaders.featured')}</th>
+                    <th className="text-start p-3 font-medium">{t('companies_mgmt.tableHeaders.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -182,10 +181,10 @@ export default function AdminCompaniesPage() {
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">Page {page} of {totalPages}</p>
+          <p className="text-sm text-muted-foreground">{t('common.page', { page, total: totalPages })}</p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>Previous</Button>
-            <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>Next</Button>
+            <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>{t('common.previous')}</Button>
+            <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>{t('common.next')}</Button>
           </div>
         </div>
       )}

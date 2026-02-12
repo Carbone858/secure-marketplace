@@ -29,3 +29,9 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Uploaded files (stored outside public/ for security)
+data/uploads/
+
+# Backup archives
+*.tar.gz

@@ -107,7 +107,7 @@ export function Navbar() {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuItem asChild>
                       <Link href={`/${locale}/dashboard`}>
-                        <User className="h-4 w-4 mr-2" />
+                        <User className="h-4 w-4 me-2" />
                         {t('nav.userMenu.dashboard')}
                       </Link>
                     </DropdownMenuItem>
@@ -115,7 +115,7 @@ export function Navbar() {
                     {user.role === 'COMPANY' && (
                       <DropdownMenuItem asChild>
                         <Link href={`/${locale}/company/dashboard`}>
-                          <Building2 className="h-4 w-4 mr-2" />
+                          <Building2 className="h-4 w-4 me-2" />
                           {t('nav.userMenu.companyDashboard')}
                         </Link>
                       </DropdownMenuItem>
@@ -124,7 +124,7 @@ export function Navbar() {
                     {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
                       <DropdownMenuItem asChild>
                         <Link href={`/${locale}/admin`}>
-                          <Briefcase className="h-4 w-4 mr-2" />
+                          <Briefcase className="h-4 w-4 me-2" />
                           {t('nav.userMenu.adminPanel')}
                         </Link>
                       </DropdownMenuItem>
@@ -133,7 +133,7 @@ export function Navbar() {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem onClick={logout}>
-                      <LogOut className="h-4 w-4 mr-2" />
+                      <LogOut className="h-4 w-4 me-2" />
                       {t('nav.userMenu.logout')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { isYellowPagesFeaturedActive } from '@/lib/feature-flags';
 
 // GET /api/companies/search - Search and filter companies
 export async function GET(request: NextRequest) {
@@ -100,12 +101,24 @@ export async function GET(request: NextRequest) {
         : null,
     }));
 
+    // Phase 2: If Yellow Pages featured is active, prioritize featured companies
+    const yellowPagesActive = await isYellowPagesFeaturedActive();
+
     // Filter by minimum rating if specified
     let filteredCompanies = companiesWithRating;
     if (minRating) {
       filteredCompanies = companiesWithRating.filter(
         (c) => c.averageRating >= parseFloat(minRating)
       );
+    }
+
+    // Phase 2: Sort featured companies to top when feature is active
+    if (yellowPagesActive) {
+      filteredCompanies.sort((a, b) => {
+        if (a.isFeatured && !b.isFeatured) return -1;
+        if (!a.isFeatured && b.isFeatured) return 1;
+        return 0;
+      });
     }
 
     return NextResponse.json({

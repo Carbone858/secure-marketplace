@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { DollarSign, Loader2 } from 'lucide-react';
+import { DollarSign } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PageSkeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { useLocale, useTranslations } from 'next-intl';
@@ -61,21 +62,19 @@ export default function AdminOffersPage() {
       <Card>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
+            <PageSkeleton />
           ) : offers.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">No offers found</div>
+            <div className="text-center py-12 text-muted-foreground">{t('offers_mgmt.noOffers')}</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
-                    <th className="text-start p-3 font-medium">Request</th>
-                    <th className="text-start p-3 font-medium">Company</th>
-                    <th className="text-start p-3 font-medium">Amount</th>
-                    <th className="text-start p-3 font-medium">Status</th>
-                    <th className="text-start p-3 font-medium">Created</th>
+                    <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.request')}</th>
+                    <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.company')}</th>
+                    <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.amount')}</th>
+                    <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.status')}</th>
+                    <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.created')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,8 +98,8 @@ export default function AdminOffersPage() {
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">Page {page} of {totalPages}</p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>Previous</Button>
-            <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>Next</Button>
+            <Button variant="outline" size="sm" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>{t('common.previous')}</Button>
+            <Button variant="outline" size="sm" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>{t('common.next')}</Button>
           </div>
         </div>
       )}

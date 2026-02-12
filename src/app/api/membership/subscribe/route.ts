@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
 import { z } from 'zod';
+import { isPaidPlanActive } from '@/lib/feature-flags';
 
 const subscribeSchema = z.object({
   planId: z.string(),
@@ -11,6 +12,15 @@ const subscribeSchema = z.object({
 // POST /api/membership/subscribe - Subscribe to a plan
 export async function POST(request: NextRequest) {
   try {
+    // Phase 2: Check if paid plans are active
+    const paidPlansEnabled = await isPaidPlanActive();
+    if (!paidPlansEnabled) {
+      return NextResponse.json(
+        { error: 'Membership plans are not currently available. All features are free during Phase 1.' },
+        { status: 403 }
+      );
+    }
+
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
 

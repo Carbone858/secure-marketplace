@@ -6,6 +6,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { companyDocumentSchema } from '@/lib/validations/company';
+import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl } from '@/lib/upload';
 
 interface RouteParams {
   params: { id: string };
@@ -200,8 +201,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const randomName = crypto.randomBytes(16).toString('hex');
     const fileName = `${company.id}_${type}_${randomName}.${fileExtension}`;
 
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'documents');
+    // Ensure uploads directory exists (OUTSIDE public/ for auth-protected access)
+    const uploadsDir = UPLOAD_PATHS.documents;
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true });
     }
@@ -209,10 +210,23 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Save file
     const filePath = path.join(uploadsDir, fileName);
     const fileBuffer = Buffer.from(await file.arrayBuffer());
+
+    // Validate magic bytes match claimed MIME type
+    if (!validateFileMagicBytes(fileBuffer, file.type)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'file.contentMismatch',
+          message: 'File content does not match the declared file type.',
+        },
+        { status: 400 }
+      );
+    }
+
     await writeFile(filePath, fileBuffer);
 
-    // Generate public URL
-    const fileUrl = `/uploads/documents/${fileName}`;
+    // Generate auth-protected URL (served via /api/files/...)
+    const fileUrl = getFileServeUrl('documents', fileName);
 
     // Create document record
     const document = await prisma.companyDocument.create({
@@ -340,10 +354,12 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Delete file from disk
+    // Delete file from disk (safe path resolution)
     try {
-      const filePath = path.join(process.cwd(), 'public', document.fileUrl);
-      if (existsSync(filePath)) {
+      // Extract the filename from the stored URL
+      const storedFileName = path.basename(document.fileUrl);
+      const filePath = resolveUploadPath('documents', storedFileName);
+      if (filePath && existsSync(filePath)) {
         const { unlink } = await import('fs/promises');
         await unlink(filePath);
       }
