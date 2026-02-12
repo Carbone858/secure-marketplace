@@ -24,8 +24,8 @@ interface Category {
   name: string;
   nameAr: string | null;
   icon: string | null;
-  _count: {
-    companies: number;
+  _count?: {
+    companies?: number;
   };
 }
 
@@ -206,7 +206,7 @@ export default function HomePage() {
                         : category.name}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      {t('categories.companyCount', { count: category._count.companies })}
+                      {t('categories.companyCount', { count: category._count?.companies ?? 0 })}
                     </p>
                   </CardContent>
                 </Card>

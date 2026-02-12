@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
           where: { isActive: true },
           orderBy: { sortOrder: 'asc' },
         },
+        _count: {
+          select: { requests: true },
+        },
       },
       orderBy: { sortOrder: 'asc' },
     });
@@ -25,6 +28,9 @@ export async function GET(request: NextRequest) {
       nameEn: cat.nameEn,
       nameAr: cat.nameAr,
       icon: cat.icon,
+      _count: {
+        companies: cat._count.requests,
+      },
       subcategories: cat.children.map((sub) => ({
         id: sub.id,
         name: locale === 'ar' ? sub.nameAr : sub.nameEn,
