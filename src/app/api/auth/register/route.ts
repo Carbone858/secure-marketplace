@@ -204,12 +204,16 @@ export async function POST(request: NextRequest) {
       await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
         reason: 'email_exists',
       });
-      // Return generic error to prevent email enumeration
+      // Return helpful but non-leaking error message
+      const isArabic = request.headers.get('accept-language')?.startsWith('ar');
+      const dupMessage = isArabic
+        ? 'تعذّر إكمال التسجيل. إذا كان لديك حساب بالفعل، يرجى تسجيل الدخول أو إعادة تعيين كلمة المرور.'
+        : 'Unable to complete registration. If you already have an account, please sign in or reset your password.';
       return NextResponse.json(
         {
           success: false,
           error: 'registration.failed',
-          message: 'Unable to complete registration. Please try again.',
+          message: dupMessage,
         },
         { status: 400 }
       );

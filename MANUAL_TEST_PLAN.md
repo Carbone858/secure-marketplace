@@ -51,10 +51,10 @@ npm run dev               # start on localhost:3000
   - Rules: min 12 chars, 1 upper, 1 lower, 1 digit, 1 special
 - [x ] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
 - [x ] **A6** — Mismatched confirm password → "passwords do not match" error
-- [ ] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`)
-- [ ] **A8** — Valid phone (`+963912345678`) → no error
-- [ ] **A9** — Uncheck terms → "must accept terms" error
-- [ ] **A10** — Complete valid registration → success message, user created
+- [ x] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`)
+- [ x] **A8** — Valid phone (`+963912345678`) → no error
+- [x ] **A9** — Uncheck terms → "must accept terms" error
+- [ x] **A10** — Complete valid registration → success message, user created
 - [ ] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
 - [ ] **A12** — Rate limit: 6+ registrations in 5 min → 429 response (prod: 5 limit, dev: 100)
 - [ ] **A13** — Show/hide password toggle (eye icon) works on both password fields
