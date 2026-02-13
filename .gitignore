@@ -35,3 +35,6 @@ data/uploads/
 
 # Backup archives
 *.tar.gz
+homepage_ar_response.txt
+homepage_ar_response_after_fix.txt
+homepage_response.txt
