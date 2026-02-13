@@ -88,14 +88,25 @@ export async function POST(request: NextRequest) {
 
     const { email, recaptchaToken } = validationResult.data;
 
-    // Verify reCAPTCHA
-    const recaptchaValid = await verifyRecaptcha(recaptchaToken);
-    if (!recaptchaValid) {
+    // Verify reCAPTCHA (skip in dev if token is empty)
+    if (recaptchaToken) {
+      const recaptchaValid = await verifyRecaptcha(recaptchaToken);
+      if (!recaptchaValid) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'recaptcha.invalid',
+            message: 'Security verification failed. Please try again.',
+          },
+          { status: 400 }
+        );
+      }
+    } else if (process.env.NODE_ENV === 'production') {
       return NextResponse.json(
         {
           success: false,
-          error: 'recaptcha.invalid',
-          message: 'Security verification failed. Please try again.',
+          error: 'recaptcha.required',
+          message: 'Security verification is required.',
         },
         { status: 400 }
       );

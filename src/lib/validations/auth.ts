@@ -165,7 +165,7 @@ export const resendVerificationSchema = z.object({
     .min(1, 'email.required')
     .regex(emailRegex, 'email.invalid')
     .transform((val) => val.toLowerCase().trim()),
-  recaptchaToken: z.string().min(1, 'recaptcha.required'),
+  recaptchaToken: z.string().optional().default(''),
 });
 
 export type ResendVerificationInput = z.infer<typeof resendVerificationSchema>;

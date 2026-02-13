@@ -37,6 +37,7 @@ export function LoginForm() {
   const [lockInfo, setLockInfo] = useState<{ remainingMinutes: number } | null>(null);
   const [needsVerification, setNeedsVerification] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState('');
+  const [resendStatus, setResendStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle');
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -143,6 +144,32 @@ export function LoginForm() {
     );
   }
 
+  // Handle resend verification email
+  const handleResendVerification = async () => {
+    setResendStatus('loading');
+    try {
+      const response = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept-Language': locale,
+        },
+        body: JSON.stringify({
+          email: unverifiedEmail,
+          recaptchaToken: '',
+        }),
+      });
+
+      if (response.ok) {
+        setResendStatus('sent');
+      } else {
+        setResendStatus('error');
+      }
+    } catch {
+      setResendStatus('error');
+    }
+  };
+
   // Show email verification needed message
   if (needsVerification) {
     return (
@@ -158,12 +185,41 @@ export function LoginForm() {
           <p className="text-warning mb-4">
             {t('verify.message', { email: unverifiedEmail })}
           </p>
-          <Link
-            href={`/${locale}/auth/verify-email/resend?email=${encodeURIComponent(unverifiedEmail)}`}
-            className="inline-block bg-warning text-white px-6 py-2 rounded-lg hover:bg-warning transition-colors"
-          >
-            {t('verify.resend')}
-          </Link>
+
+          {resendStatus === 'sent' ? (
+            <div className="flex items-center justify-center gap-2 text-green-600">
+              <CheckCircle className="w-5 h-5" />
+              <span>{isRTL ? 'تم إرسال رابط التحقق!' : 'Verification email sent!'}</span>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleResendVerification}
+              disabled={resendStatus === 'loading'}
+              className="inline-block bg-warning text-white px-6 py-2 rounded-lg hover:bg-warning/90 transition-colors disabled:opacity-50"
+            >
+              {resendStatus === 'loading' ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {isRTL ? 'جاري الإرسال...' : 'Sending...'}
+                </span>
+              ) : resendStatus === 'error' ? (
+                isRTL ? 'حدث خطأ، حاول مجدداً' : 'Error, try again'
+              ) : (
+                t('verify.resend')
+              )}
+            </button>
+          )}
+
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() => { setNeedsVerification(false); setResendStatus('idle'); }}
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              {isRTL ? '← العودة لتسجيل الدخول' : '← Back to login'}
+            </button>
+          </div>
         </div>
       </div>
     );

@@ -56,14 +56,14 @@ npm run dev               # start on localhost:3000
 - [x ] **A9** — Uncheck terms → "must accept terms" error
 - [ x] **A10** — Complete valid registration → success message, user created
 - [x ] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
-- [ ] **A12** — Rate limit: 6+ registrations in 5 min → 429 response (prod: 5 limit, dev: 100)
-- [ ] **A13** — Show/hide password toggle (eye icon) works on both password fields
+- [ x] **A12** — Rate limit: 6th registration in 5 min → 429 response (limit: 5, configurable via `RATE_LIMIT_REGISTER_MAX`)
+- [ x] **A13** — Show/hide password toggle (eye icon) works on both password fields
 
 ### A.2 Email Verification
 
 - [ ] **A14** — `/ar/auth/verify-email?token=VALID` → "Email verified", link to login (24h expiry)
 - [ ] **A15** — Invalid or expired token → error message
-- [ ] **A16** — Login with unverified email → 403, "Email not verified" + resend link
+- [ x] **A16** — Login with unverified email → 403, "Email not verified" + resend link
 - [ ] **A17** — Click resend → new verification email sent
 
 ### A.3 Login `/ar/auth/login`
