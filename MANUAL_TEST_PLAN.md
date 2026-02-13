@@ -44,13 +44,13 @@ npm run dev               # start on localhost:3000
 
 ### A.1 Registration `/ar/auth/register`
 
-- [ ] **A1** — Page loads with: Name, Email, Phone, Password, Confirm Password, Terms checkbox
-- [ ] **A2** — Submit empty form → validation errors on all required fields
-- [ ] **A3** — Invalid email (`notanemail`) → "invalid email format" error
-- [ ] **A4** — Weak password (`123`) → strength indicator shows "Weak", blocked on submit
+- [x ] **A1** — Page loads with: Name, Email, Phone, Password, Confirm Password, Terms checkbox
+- [x ] **A2** — Submit empty form → validation errors on all required fields
+- [x ] **A3** — Invalid email (`notanemail`) → "invalid email format" error
+- [ x] **A4** — Weak password (`123`) → strength indicator shows "Weak", blocked on submit
   - Rules: min 12 chars, 1 upper, 1 lower, 1 digit, 1 special
-- [ ] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
-- [ ] **A6** — Mismatched confirm password → "passwords do not match" error
+- [x ] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
+- [x ] **A6** — Mismatched confirm password → "passwords do not match" error
 - [ ] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`)
 - [ ] **A8** — Valid phone (`+963912345678`) → no error
 - [ ] **A9** — Uncheck terms → "must accept terms" error

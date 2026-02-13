@@ -18,8 +18,8 @@ const passwordRegex = {
   specialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
 };
 
-// Phone number validation (international format)
-const phoneRegex = /^\+[1-9]\d{1,14}$/;
+// Phone number validation (international format: +xxx or 00xxx)
+const phoneRegex = /^(\+|00)[1-9]\d{1,14}$/;
 
 // Email validation
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -116,9 +116,13 @@ export const registerSchema = z
       .string()
       .min(1, 'phone.required')
       .regex(phoneRegex, 'phone.invalid')
-      .trim(),
+      .transform((val) => {
+        // Normalize 00 prefix to + for consistent storage
+        const trimmed = val.trim();
+        return trimmed.startsWith('00') ? '+' + trimmed.slice(2) : trimmed;
+      }),
     termsAccepted: z.boolean().refine((val) => val === true, 'terms.required'),
-    recaptchaToken: z.string().min(1, 'recaptcha.required'),
+    recaptchaToken: z.string().optional().default(''),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'password.mismatch',

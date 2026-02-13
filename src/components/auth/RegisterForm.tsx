@@ -119,7 +119,7 @@ export function RegisterForm() {
     // Phone validation
     if (!formData.phone) {
       newErrors.phone = t('errors.phone.required');
-    } else if (!/^\+[1-9]\d{1,14}$/.test(formData.phone)) {
+    } else if (!/^(\+|00)[1-9]\d{1,14}$/.test(formData.phone)) {
       newErrors.phone = t('errors.phone.invalid');
     }
 
@@ -262,7 +262,7 @@ export function RegisterForm() {
           value={formData.name}
           onChange={handleChange}
           placeholder={t('fields.name.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
             errors.name ? 'border-destructive' : 'border-input'
           }`}
           disabled={isLoading}
@@ -282,7 +282,7 @@ export function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           placeholder={t('fields.email.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
             errors.email ? 'border-destructive' : 'border-input'
           }`}
           disabled={isLoading}
@@ -303,7 +303,7 @@ export function RegisterForm() {
           value={formData.phone}
           onChange={handleChange}
           placeholder={t('fields.phone.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
             errors.phone ? 'border-destructive' : 'border-input'
           }`}
           disabled={isLoading}
@@ -326,7 +326,7 @@ export function RegisterForm() {
             value={formData.password}
             onChange={handleChange}
             placeholder={t('fields.password.placeholder')}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+            className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
               errors.password ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}
@@ -360,7 +360,7 @@ export function RegisterForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder={t('fields.confirmPassword.placeholder')}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
+            className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
               errors.confirmPassword ? 'border-destructive' : 'border-input'
             }`}
             disabled={isLoading}

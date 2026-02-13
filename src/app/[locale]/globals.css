@@ -222,6 +222,19 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Ensure form controls inherit theme colors in dark mode */
+  input,
+  textarea,
+  select {
+    color: hsl(var(--foreground));
+    background-color: hsl(var(--background));
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+
   /* RTL / LTR direction */
   .rtl {
     direction: rtl;

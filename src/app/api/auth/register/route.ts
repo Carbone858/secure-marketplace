@@ -166,17 +166,29 @@ export async function POST(request: NextRequest) {
     const { email, password, name, phone, recaptchaToken } =
       validationResult.data;
 
-    // Verify reCAPTCHA
-    const recaptchaValid = await verifyRecaptcha(recaptchaToken);
-    if (!recaptchaValid) {
-      await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
-        reason: 'recaptcha_failed',
-      });
+    // Verify reCAPTCHA (skip in dev if token is empty)
+    if (recaptchaToken) {
+      const recaptchaValid = await verifyRecaptcha(recaptchaToken);
+      if (!recaptchaValid) {
+        await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
+          reason: 'recaptcha_failed',
+        });
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'recaptcha.invalid',
+            message: 'Security verification failed. Please try again.',
+          },
+          { status: 400 }
+        );
+      }
+    } else if (process.env.NODE_ENV === 'production') {
+      // In production, reCAPTCHA is mandatory
       return NextResponse.json(
         {
           success: false,
-          error: 'recaptcha.invalid',
-          message: 'Security verification failed. Please try again.',
+          error: 'recaptcha.required',
+          message: 'Security verification is required.',
         },
         { status: 400 }
       );

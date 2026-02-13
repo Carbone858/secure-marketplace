@@ -73,8 +73,8 @@
         },
         "phone": {
           "label": "Phone Number",
-          "placeholder": "+1234567890",
-          "hint": "Include country code (e.g., +1, +966)"
+          "placeholder": "+1234567890 or 001234567890",
+          "hint": "Include country code (e.g., +966 or 00966)"
         },
         "password": {
           "label": "Password",
@@ -135,7 +135,7 @@
         },
         "phone": {
           "required": "Phone number is required",
-          "invalid": "Please enter a valid phone number with country code"
+          "invalid": "Please enter a valid phone number with country code (+ or 00 prefix)"
         },
         "terms": {
           "required": "You must accept the Terms of Service"
