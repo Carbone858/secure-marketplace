@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db/client';
-import { RequestForm } from '@/components/requests/RequestForm';
+import { RequestFormSPA } from '@/components/requests/RequestFormSPA';
 
 interface NewRequestPageProps {
   params: { locale: string };
@@ -57,16 +57,13 @@ export default async function NewRequestPage({ params: { locale } }: NewRequestP
   const [categories, countries] = await Promise.all([getCategories(), getCountries()]);
 
   return (
-    <div className="min-h-screen bg-muted/50 py-12" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-muted/50 py-8 sm:py-12" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-3xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">{t('new.title')}</h1>
-          <p className="text-muted-foreground">{t('new.subtitle')}</p>
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">{t('new.title')}</h1>
         </div>
 
-        <div className="bg-card rounded-xl shadow-lg p-8">
-          <RequestForm categories={categories} countries={countries} />
-        </div>
+        <RequestFormSPA categories={categories} countries={countries} />
       </div>
     </div>
   );

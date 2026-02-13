@@ -84,7 +84,7 @@ export default function MyRequestsPage() {
       const response = await fetch('/api/requests?userOnly=true');
       if (!response.ok) throw new Error('Failed to fetch requests');
       const data = await response.json();
-      setRequests(data.requests);
+      setRequests(data.data?.requests ?? data.requests ?? []);
     } catch (err) {
       toast.error(td('toasts.loadFailed'));
     } finally {

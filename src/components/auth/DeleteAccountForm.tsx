@@ -187,7 +187,7 @@ export function DeleteAccountForm() {
           value={confirmation}
           onChange={(e) => setConfirmation(e.target.value)}
           placeholder="DELETE"
-          className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-destructive focus:border-destructive transition-colors uppercase"
+          className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-destructive focus:border-destructive transition-colors"
           disabled={isLoading}
         />
         <p className="text-sm text-muted-foreground">{t('fields.confirmation.hint')}</p>

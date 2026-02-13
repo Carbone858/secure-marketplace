@@ -54,7 +54,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       newErrors.name = t('errors.name.minLength');
     }
 
-    if (formData.phone && !/^\+[1-9]\d{1,14}$/.test(formData.phone)) {
+    if (formData.phone && !/^(\+|00)[1-9]\d{1,14}$/.test(formData.phone)) {
       newErrors.phone = t('errors.phone.invalid');
     }
 

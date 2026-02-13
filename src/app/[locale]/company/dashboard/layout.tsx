@@ -5,15 +5,15 @@ import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 
-interface DashboardLayoutProps {
+interface CompanyDashboardLayoutProps {
   children: ReactNode;
   params: { locale: string };
 }
 
-export default async function DashboardLayout({
+export default async function CompanyDashboardLayout({
   children,
   params: { locale },
-}: DashboardLayoutProps) {
+}: CompanyDashboardLayoutProps) {
   const session = await getSession();
 
   if (!session.isAuthenticated) {
@@ -32,7 +32,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* Dashboard Header */}
+      {/* Company Dashboard Header */}
       <header className="bg-card shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -47,34 +47,34 @@ export default async function DashboardLayout({
             {/* Navigation — hidden on mobile */}
             <nav className="hidden sm:flex items-center gap-4 md:gap-6">
               <Link
-                href={`/${locale}/dashboard`}
+                href={`/${locale}/company/dashboard`}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {t('userMenu.dashboard')}
+                {t('companyMenu.dashboard')}
               </Link>
               <Link
-                href={`/${locale}/dashboard/requests`}
+                href={`/${locale}/company/dashboard/browse`}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {t('userMenu.requests')}
+                {t('companyMenu.browse')}
               </Link>
               <Link
-                href={`/${locale}/dashboard/messages`}
+                href={`/${locale}/company/dashboard/offers`}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {t('userMenu.messages')}
+                {t('companyMenu.offers')}
               </Link>
               <Link
-                href={`/${locale}/dashboard/profile`}
+                href={`/${locale}/company/dashboard/projects`}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {t('userMenu.profile')}
+                {t('companyMenu.projects')}
               </Link>
               <Link
-                href={`/${locale}/dashboard/settings`}
+                href={`/${locale}/company/dashboard/profile`}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                {t('userMenu.settings')}
+                {t('companyMenu.profile')}
               </Link>
             </nav>
 
@@ -97,34 +97,34 @@ export default async function DashboardLayout({
           {/* Mobile navigation — visible on small screens */}
           <nav className="sm:hidden flex items-center gap-4 pb-3 overflow-x-auto">
             <Link
-              href={`/${locale}/dashboard`}
+              href={`/${locale}/company/dashboard`}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
             >
-              {t('userMenu.dashboard')}
+              {t('companyMenu.dashboard')}
             </Link>
             <Link
-              href={`/${locale}/dashboard/requests`}
+              href={`/${locale}/company/dashboard/browse`}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
             >
-              {t('userMenu.requests')}
+              {t('companyMenu.browse')}
             </Link>
             <Link
-              href={`/${locale}/dashboard/messages`}
+              href={`/${locale}/company/dashboard/offers`}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
             >
-              {t('userMenu.messages')}
+              {t('companyMenu.offers')}
             </Link>
             <Link
-              href={`/${locale}/dashboard/profile`}
+              href={`/${locale}/company/dashboard/projects`}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
             >
-              {t('userMenu.profile')}
+              {t('companyMenu.projects')}
             </Link>
             <Link
-              href={`/${locale}/dashboard/settings`}
+              href={`/${locale}/company/dashboard/profile`}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
             >
-              {t('userMenu.settings')}
+              {t('companyMenu.profile')}
             </Link>
           </nav>
         </div>

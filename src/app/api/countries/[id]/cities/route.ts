@@ -32,6 +32,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           cities: cities.map((city) => ({
             id: city.id,
             name: city.nameEn,
+            nameEn: city.nameEn,
+            nameAr: city.nameAr,
           })),
         },
       },

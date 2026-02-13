@@ -7,7 +7,7 @@ import { sanitizeInput } from '@/lib/validations/auth';
 // Profile update validation schema
 const updateProfileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long').optional(),
-  phone: z.string().regex(/^\+[1-9]\d{1,14}$/, 'Invalid phone number format').optional(),
+  phone: z.string().regex(/^(\+|00)[1-9]\d{1,14}$/, 'Invalid phone number format').transform((val) => val.startsWith('00') ? '+' + val.slice(2) : val).optional(),
 });
 
 /**

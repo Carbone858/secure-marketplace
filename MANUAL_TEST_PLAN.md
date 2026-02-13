@@ -28,7 +28,7 @@ npm run dev               # start on localhost:3000
 
 | Section | Tests | Done |
 |---------|-------|------|
-| A — User Flow | 75 | /75 |
+| A — User Flow | 102 | /102 |
 | B — Company Flow | 52 | /52 |
 | C — Project Management | 30 | /30 |
 | D — Company Directory | 22 | /22 |
@@ -36,7 +36,7 @@ npm run dev               # start on localhost:3000
 | F — Security | 43 | /43 |
 | G — i18n / RTL / Accessibility | 28 | /28 |
 | H — Regression | 25 | /25 |
-| **Total** | **340** | **/340** |
+| **Total** | **367** | **/367** |
 
 ---
 
@@ -92,61 +92,114 @@ npm run dev               # start on localhost:3000
 
 ### A.5 User Dashboard `/ar/dashboard`
 
-- [ ] **A36** — Dashboard shows: Active Requests, Offers, Messages stats
-- [ ] **A37** — 5 menu cards visible: Profile, Settings, Requests, Messages, Company
-- [ ] **A38** — Unauthenticated → redirect to `/ar/auth/login?callbackUrl=...`
+- [ x] **A36** — Dashboard shows: Active Requests, Offers, Messages stats
+- [x ] **A37** — 5 menu cards visible: Profile, Settings, Requests, Messages, Company
+- [x] **A38** — Unauthenticated → redirect to `/ar/auth/login?callbackUrl=...`
 
 ### A.6 Profile Management `/ar/dashboard/profile`
 
-- [ ] **A39** — Profile form + Password change form side by side
-- [ ] **A40** — Email field is read-only, shows verified/unverified badge
-- [ ] **A41** — Update name → success toast (min 2 chars)
-- [ ] **A42** — Invalid phone (`12345`) → E.164 error
-- [ ] **A43** — Upload avatar (JPEG/PNG/WebP) → displays via `POST /api/user/avatar`
-- [ ] **A44** — Delete avatar → removed via `DELETE /api/user/avatar`
-- [ ] **A45** — Change password (current + new + confirm) → success
+- [ x] **A39** — Profile form + Password change form side by side
+- [x ] **A40** — Email field is read-only, shows verified/unverified badge
+- [ x] **A41** — Update name → success toast (min 2 chars)
+- [ x] **A42** — Invalid phone (`12345`) → E.164 error
+- [x ] **A43** — Upload avatar (JPEG/PNG/WebP) → displays via `POST /api/user/avatar`
+- [x ] **A44** — Delete avatar → removed via `DELETE /api/user/avatar`
+- [ x] **A45** — Change password (current + new + confirm) → success
 
 ### A.7 Notification Settings `/ar/dashboard/settings`
 
-- [ ] **A46** — Page shows notification settings + delete account sections
-- [ ] **A47** — Toggle "Email — New Offers" off → saves via `PUT /api/user/notifications`
-- [ ] **A48** — Security Alerts marked "Recommended" with warning on toggle
-- [ ] **A49** — All 10 toggles save independently (5 email + 3 push + 2 SMS)
+- [x ] **A46** — Page shows notification settings + delete account sections
+- [x ] **A47** — Toggle "Email — New Offers" off → saves via `PUT /api/user/notifications`
+- [ x] **A48** — Security Alerts marked "Recommended" with warning on toggle
+- [ x] **A49** — All 10 toggles save independently (5 email + 3 push + 2 SMS)
 
 ### A.8 Delete Account
 
-- [ ] **A50** — Warning phase: 4 warning points + "Continue" button
-- [ ] **A51** — Continue → confirmation: password, reason (optional), type "DELETE"
-- [ ] **A52** — Cancel → returns to warning phase
-- [ ] **A53** — Wrong password → error
-- [ ] **A54** — Wrong text (`delete` lowercase) → error (case-sensitive: must be `DELETE`)
-- [ ] **A55** — Correct password + "DELETE" → success, redirect to home after 2s
+- [x ] **A50** — Warning phase: 4 warning points + "Continue" button
+- [x ] **A51** — Continue → confirmation: password, reason (optional), type "DELETE"
+- [x ] **A52** — Cancel → returns to warning phase
+- [x ] **A53** — Wrong password → error
+- [x ] **A54** — Wrong text (`delete` lowercase) → error (case-sensitive: must be `DELETE`)
+- [x ] **A55** — Correct password + "DELETE" → success, redirect to home after 2s
 
-### A.9 Service Requests
+### A.9 Service Requests — Progressive SPA Wizard
 
-- [ ] **A56** — `/ar/requests/new` → 5-step wizard: Details → Location → Budget → Images → Visibility
-- [ ] **A57** — Step 1 empty → errors: title (min 5), description (min 20), category required
-- [ ] **A58** — Step 1 valid → subcategory loads dynamically, Next enabled
-- [ ] **A59** — Step 2 — select country (Syria auto) → city dropdown loads from API
-- [ ] **A60** — Step 2 — "Allow Remote" checkbox works
-- [ ] **A61** — Step 3 — budget min > max → error
-- [ ] **A62** — Step 3 — valid budget + currency (USD/EUR/GBP/SAR/AED) + urgency HIGH → ok
-- [ ] **A63** — Step 4 — upload 1–10 images → thumbnails display
-- [ ] **A64** — Step 4 — add tags (Enter to add, X to remove, max 10)
-- [ ] **A65** — Step 5 — visibility options: PUBLIC / REGISTERED_ONLY / VERIFIED_COMPANIES
-- [ ] **A66** — Submit → success, redirect to `/ar/requests/{id}` with status PENDING
-- [ ] **A67** — `/ar/dashboard/requests` → list with status tabs, urgency badges, offer counts
-- [ ] **A68** — Click request → detail page with all fields, offers, messaging
-- [ ] **A69** — Edit request → pre-populated edit form
-- [ ] **A70** — Delete request → confirm dialog → removed
-- [ ] **A71** — Unauthenticated → redirect to login
+#### A.9.1 Page & Layout `/ar/requests/new`
+
+- [x ] **A56** — Page loads as single-page progressive form with collapsible panels: Details, Location, Budget, Images & Tags, Visibility
+- [x ] **A57** — Sticky progress bar at top shows 0% on empty form, updates as fields are filled
+- [x ] **A58** — Mini nav pills below progress bar allow jumping to any section
+- [ x] **A59** — Syria auto-selected as country, cities load automatically on page load
+
+#### A.9.2 Details Panel (required, open by default)
+
+- [x ] **A60** — Panel has title input, description textarea, category/subcategory selects, urgency buttons
+- [ x] **A61** — Empty submit → inline errors on title (min 5), description (min 20), category required; panel auto-scrolls to first error
+- [ x] **A62** — Fill title (< 5 chars) → shows character counter "3/5 min" below input
+- [ x] **A63** — Fill description (< 20 chars) → shows character counter below textarea
+- [x ] **A64** — Select category → subcategory select enables, loads subcategories from API
+- [x ] **A65** — Urgency selector: 4 color-coded buttons (Low/Medium/High/Urgent), Medium pre-selected
+
+#### A.9.3 Location Panel (required, open by default)
+
+- [ x] **A66** — Country dropdown (Syria pre-selected), City dropdown (populated from API)
+- [ x] **A67** — Change country → city dropdown clears and reloads for new country
+- [ x] **A68** — Address textarea available for optional detailed address
+- [ x] **A69** — "Allow remote / online service" checkbox toggles correctly
+
+#### A.9.4 Budget Panel (optional, collapsed by default)
+
+- [x ] **A70** — Click panel header → expands with min/max budget + currency + deadline fields
+- [ ] **A71** — Budget min > max → inline error "Invalid budget range"
+- [ ] **A72** — Valid budget + currency select (USD/EUR/GBP/SAR/AED) → no errors
+- [ ] **A73** — Deadline date picker works, accepts future date
+- [ ] **A74** — When collapsed, badge shows budget summary (e.g., "USD 100 – 500")
+
+#### A.9.5 Images & Tags Panel (optional, collapsed by default)
+
+- [ ] **A75** — Click panel header → expands with drag & drop upload zone + tags input
+- [ ] **A76** — Drag & drop images → upload zone highlights on drag-over, files upload on drop
+- [ ] **A77** — Click "Browse Files" → file picker opens, selected images upload
+- [ ] **A78** — Uploaded images show as thumbnail grid, hover shows X button to remove
+- [ ] **A79** — Max 10 images limit enforced
+- [ ] **A80** — Tags: type + Enter → tag pill added with # prefix; X removes tag; max 10 tags
+- [ ] **A81** — When collapsed, badge shows image count (e.g., "3 images")
+
+#### A.9.6 Visibility Panel (optional, collapsed by default)
+
+- [ ] **A82** — Click panel header → expands with 3 styled radio cards: PUBLIC / REGISTERED_ONLY / VERIFIED_COMPANIES
+- [ ] **A83** — PUBLIC pre-selected by default
+- [ ] **A84** — "Require company verification" checkbox works with description text
+- [ ] **A85** — When collapsed, badge shows visibility label if non-default
+
+#### A.9.7 Progress Bar & Navigation
+
+- [ ] **A86** — Progress bar reaches 100% when all 7 tracked fields filled (title, description, category, country, city, budget, visibility)
+- [ ] **A87** — Sections with validation errors show red border + AlertCircle icon in header
+- [ ] **A88** — Mini nav pills turn red for sections with errors, blue for open sections
+
+#### A.9.8 Review & Submit
+
+- [ ] **A89** — Click "Review" button in sticky bottom bar → review summary panel expands below visibility
+- [ ] **A90** — Review shows: title, description, category badge, urgency badge, location, budget, images thumbnails, tags, visibility
+- [ ] **A91** — Click "Hide Review" → review panel collapses
+- [ ] **A92** — Click "Create Request" → validates all fields; if errors, scrolls to first errored section
+- [ ] **A93** — Successful submit → success screen with checkmark, auto-redirect to `/ar/requests/{id}`
+
+#### A.9.9 Request Management `/ar/dashboard/requests`
+
+- [ ] **A94** — Request list with status tabs, urgency badges, offer counts
+- [ ] **A95** — Click request → detail page with all fields, offers, messaging
+- [ ] **A96** — Edit request → pre-populated edit form
+- [ ] **A97** — Delete request → confirm dialog → removed
+- [ ] **A98** — Unauthenticated → redirect to login
 
 ### A.10 Messaging `/ar/dashboard/messages`
 
-- [ ] **A72** — Conversation list (left) + message thread (right)
-- [ ] **A73** — Click conversation → messages load, ordered by date
-- [ ] **A74** — Send message → appears in thread, saved via API
-- [ ] **A75** — Empty message → blocked or validation error
+- [ ] **A99** — Conversation list (left) + message thread (right)
+- [ ] **A100** — Click conversation → messages load, ordered by date
+- [ ] **A101** — Send message → appears in thread, saved via API
+- [ ] **A102** — Empty message → blocked or validation error
 
 ---
 
@@ -680,5 +733,5 @@ npm run dev               # start on localhost:3000
 
 ---
 
-**Total: 340 test cases across 8 sections**  
+**Total: 367 test cases across 8 sections**  
 **Coverage: 41 page routes · 58 API endpoints · 36 data models · 8 feature flags · 2 locales · dark/light modes · mobile/desktop**

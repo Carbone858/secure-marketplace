@@ -7,6 +7,7 @@
       "searchPlaceholder": "What service do you need?",
       "searchButton": "Search",
       "postRequest": "Post a Request",
+      "startRequest": "Start Your Request",
       "registerCompany": "Register as Company"
     },
     "categories": {
@@ -498,6 +499,32 @@
         },
         "cancelButton": "Cancel"
       }
+    },
+    "completeRegistration": {
+      "title": "Set Your Password",
+      "subtitle": "Create a password to access your account and track your requests",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Create a strong password",
+      "confirmLabel": "Confirm Password",
+      "confirmPlaceholder": "Re-enter your password",
+      "submitButton": "Create Account",
+      "submitting": "Creating...",
+      "invalidToken": "Invalid or Expired Link",
+      "invalidTokenDesc": "This verification link is invalid or has expired. Please request a new one.",
+      "successTitle": "Account Created!",
+      "successDesc": "Your password has been set successfully. Redirecting to login...",
+      "strength": {
+        "weak": "Weak",
+        "fair": "Fair",
+        "strong": "Strong",
+        "veryStrong": "Very Strong"
+      },
+      "errors": {
+        "minLength": "Password must be at least 12 characters",
+        "mismatch": "Passwords do not match",
+        "tooWeak": "Password is too weak. Include uppercase, lowercase, numbers, and special characters.",
+        "general": "An error occurred. Please try again later."
+      }
     }
   },
   "dashboard": {
@@ -507,6 +534,7 @@
     },
     "welcome": "Welcome, {name}!",
     "subtitle": "Manage your account and activities from here",
+    "newRequest": "New Request",
     "stats": {
       "activeRequests": "Active Requests",
       "offers": "Offers Received",
@@ -648,6 +676,8 @@
         "description": "Create a new service request"
       },
       "title": "Create New Request",
+      "startTitle": "What Service Do You Need?",
+      "startSubtitle": "Describe your request and get quotes from verified companies — no account needed",
       "steps": {
         "category": {
           "title": "Category",
@@ -693,6 +723,17 @@
           },
           "tags": "Tags (Optional)",
           "tagsPlaceholder": "Add tags separated by commas"
+        },
+        "account": {
+          "title": "Your Info",
+          "description": "We need your contact details to send you quotes",
+          "name": "Full Name",
+          "namePlaceholder": "Enter your full name",
+          "email": "Email Address",
+          "emailPlaceholder": "your@email.com",
+          "phone": "Phone Number (Optional)",
+          "phonePlaceholder": "+1234567890",
+          "phoneHint": "Include country code (e.g., +966 or 00966)"
         }
       },
       "navigation": {
@@ -710,13 +751,40 @@
         "countryRequired": "Please select a country",
         "cityRequired": "Please select a city",
         "invalidBudget": "Invalid budget range",
+        "budgetMinExceedsMax": "Minimum budget cannot exceed maximum budget",
+        "deadlinePast": "Deadline must be a future date",
+        "nameRequired": "Full name is required",
+        "emailRequired": "Email address is required",
+        "userExists": "An account with this email already exists. Please log in instead.",
         "general": "An error occurred. Please try again later."
       },
       "success": {
         "title": "Request Created!",
         "message": "Your request has been created successfully.",
         "viewRequest": "View Request",
-        "createAnother": "Create Another"
+        "createAnother": "Create Another",
+        "guestTitle": "Request Submitted!",
+        "guestMessage": "Your service request has been saved. Please check your email to activate your account and track your request.",
+        "checkEmail": "Check Your Email",
+        "checkEmailDesc": "We sent a verification link to your email. Click the link to set your password and access your dashboard."
+      },
+      "spa": {
+        "progress": "Request Progress",
+        "media": "Images & Tags",
+        "address": "Address / Area",
+        "addressPlaceholder": "e.g., Mazzeh district, near the park",
+        "allowRemote": "Allow remote / online service",
+        "remote": "Remote OK",
+        "uploadImages": "Upload Images",
+        "dragDrop": "Drag & drop images here, or",
+        "browse": "Browse Files",
+        "images": "images",
+        "imagesHint": "Up to 10 images. JPG, PNG, WebP. Max 5 MB each.",
+        "requireVerification": "Require company verification",
+        "requireVerificationDesc": "Only verified companies can see and offer on this request",
+        "reviewTitle": "Review & Submit",
+        "showReview": "Review",
+        "hideReview": "Hide Review"
       }
     },
     "list": {
@@ -903,9 +971,18 @@
       "dashboard": "Dashboard",
       "profile": "Profile",
       "settings": "Settings",
+      "requests": "Requests",
+      "messages": "Messages",
       "companyDashboard": "Company Dashboard",
       "adminPanel": "Admin Panel",
       "logout": "Logout"
+    },
+    "companyMenu": {
+      "dashboard": "Dashboard",
+      "browse": "Browse Projects",
+      "offers": "My Offers",
+      "projects": "My Projects",
+      "profile": "Company Profile"
     },
     "auth": {
       "signIn": "Sign In",

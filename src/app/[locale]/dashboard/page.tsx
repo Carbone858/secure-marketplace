@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { User, Settings, FileText, MessageSquare, Briefcase, Star } from 'lucide-react';
+import { User, Settings, FileText, MessageSquare, Plus, Bell, Star } from 'lucide-react';
 import { prisma } from '@/lib/db/client';
 
 interface DashboardPageProps {
@@ -36,7 +36,7 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
   const [activeRequests, offersCount, messagesCount] = await Promise.all([
     prisma.serviceRequest.count({ where: { userId, status: { in: ['ACTIVE', 'IN_PROGRESS', 'MATCHING'] } } }),
     prisma.offer.count({ where: { request: { userId } } }),
-    prisma.message.count({ where: { OR: [{ senderId: userId }, { recipientId: userId }] } }),
+    prisma.message.count({ where: { OR: [{ senderId: userId }, { recipientId: userId }], isRead: false } }).catch(() => 0),
   ]);
 
   const menuItems = [
@@ -68,43 +68,60 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
       icon: MessageSquare,
       color: 'bg-warning',
     },
-    {
-      title: t('menu.company'),
-      description: t('menu.companyDesc'),
-      href: `/${locale}/dashboard/company`,
-      icon: Briefcase,
-      color: 'bg-destructive',
-    },
   ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">
-          {t('welcome', { name: session.user?.name || session.user?.email })}
-        </h1>
-        <p className="text-muted-foreground mt-2">{t('subtitle')}</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">
+            {t('welcome', { name: session.user?.name || session.user?.email })}
+          </h1>
+          <p className="text-muted-foreground mt-2">{t('subtitle')}</p>
+        </div>
+        <Link
+          href={`/${locale}/requests/new`}
+          className="inline-flex items-center gap-2 px-5 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors shadow-sm"
+        >
+          <Plus className="w-5 h-5" />
+          {t('newRequest')}
+        </Link>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-card rounded-xl shadow p-6">
-          <div className="text-3xl font-bold text-primary">{activeRequests}</div>
-          <div className="text-muted-foreground mt-1">{t('stats.activeRequests')}</div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-3xl font-bold text-primary">{activeRequests}</div>
+              <div className="text-muted-foreground mt-1">{t('stats.activeRequests')}</div>
+            </div>
+            <FileText className="w-8 h-8 text-primary/30" />
+          </div>
         </div>
         <div className="bg-card rounded-xl shadow p-6">
-          <div className="text-3xl font-bold text-success">{offersCount}</div>
-          <div className="text-muted-foreground mt-1">{t('stats.offers')}</div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-3xl font-bold text-success">{offersCount}</div>
+              <div className="text-muted-foreground mt-1">{t('stats.offers')}</div>
+            </div>
+            <Star className="w-8 h-8 text-success/30" />
+          </div>
         </div>
         <div className="bg-card rounded-xl shadow p-6">
-          <div className="text-3xl font-bold text-info">{messagesCount}</div>
-          <div className="text-muted-foreground mt-1">{t('stats.messages')}</div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-3xl font-bold text-info">{messagesCount}</div>
+              <div className="text-muted-foreground mt-1">{t('stats.messages')}</div>
+            </div>
+            <MessageSquare className="w-8 h-8 text-info/30" />
+          </div>
         </div>
       </div>
 
       {/* Menu Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {menuItems.map((item) => (
           <Link
             key={item.href}

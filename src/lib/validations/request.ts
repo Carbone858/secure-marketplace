@@ -17,7 +17,7 @@ export const urgencyLevelSchema = z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']);
 
 export const visibilityLevelSchema = z.enum(['PUBLIC', 'REGISTERED_ONLY', 'VERIFIED_COMPANIES']);
 
-export const createRequestSchema = z.object({
+const createRequestBaseSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title is too long'),
   description: z.string().min(20, 'Description must be at least 20 characters').max(5000, 'Description is too long'),
   categoryId: z.string().min(1, 'Please select a category'),
@@ -26,10 +26,19 @@ export const createRequestSchema = z.object({
   cityId: z.string().min(1, 'Please select a city'),
   areaId: z.string().optional(),
   address: z.string().max(500).optional(),
-  budgetMin: z.number().min(0).optional(),
-  budgetMax: z.number().min(0).optional(),
+  budgetMin: z.number().min(0, 'Budget must be 0 or greater').optional(),
+  budgetMax: z.number().min(0, 'Budget must be 0 or greater').optional(),
   currency: z.string().default('USD'),
-  deadline: z.string().optional(),
+  deadline: z.string().optional().refine(
+    (val) => {
+      if (!val) return true;
+      const d = new Date(val);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return d >= today;
+    },
+    { message: 'Deadline must be a future date' }
+  ),
   urgency: urgencyLevelSchema.default('MEDIUM'),
   visibility: visibilityLevelSchema.default('PUBLIC'),
   images: z.array(z.string()).max(10, 'Maximum 10 images allowed').default([]),
@@ -39,7 +48,20 @@ export const createRequestSchema = z.object({
   requireVerification: z.boolean().default(false),
 });
 
-export const updateRequestSchema = createRequestSchema.partial().extend({
+export const createRequestSchema = createRequestBaseSchema.refine(
+  (data) => {
+    if (data.budgetMin != null && data.budgetMax != null) {
+      return data.budgetMin <= data.budgetMax;
+    }
+    return true;
+  },
+  {
+    message: 'Minimum budget cannot exceed maximum budget',
+    path: ['budgetMin'],
+  }
+);
+
+export const updateRequestSchema = createRequestBaseSchema.partial().extend({
   status: requestStatusSchema.optional(),
 });
 

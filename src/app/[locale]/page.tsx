@@ -127,6 +127,16 @@ export default function HomePage() {
               {t('hero.subtitle')}
             </p>
 
+            {/* Primary CTA — Start Your Request */}
+            <div className="mb-6">
+              <Button size="lg" asChild className="h-16 px-10 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+                <Link href={`/${locale}/requests/start`}>
+                  {t('hero.startRequest')}
+                  <ArrowRight className="h-5 w-5 ms-2" />
+                </Link>
+              </Button>
+            </div>
+
             {/* Search Bar */}
             <form onSubmit={handleSearch} className="max-w-xl mx-auto">
               <div className="flex gap-2">
@@ -147,7 +157,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Button variant="outline" asChild>
-                <Link href={`/${locale}/requests/new`}>
+                <Link href={`/${locale}/requests/start`}>
                   {t('hero.postRequest')}
                   <ArrowRight className="h-4 w-4 ms-2" />
                 </Link>
@@ -327,7 +337,7 @@ export default function HomePage() {
               variant="secondary"
               asChild
             >
-              <Link href={`/${locale}/requests/new`}>
+              <Link href={`/${locale}/requests/start`}>
                 {t('cta.postRequest')}
               </Link>
             </Button>
