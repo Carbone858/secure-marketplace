@@ -68,27 +68,27 @@ npm run dev               # start on localhost:3000
 
 ### A.3 Login `/ar/auth/login`
 
-- [ ] **A18** — Page loads with: Email, Password, Remember Me checkbox
-- [ ] **A19** — Submit empty → validation errors
-- [ ] **A20** — Wrong credentials → "Invalid credentials" + remaining attempts shown
-- [ ] **A21** — Valid login (`user@test.com` / `Test123456!@`) → redirect to `/ar/dashboard`
-- [ ] **A22** — Remember Me checked → refresh token 30-day expiry (vs 7 days default)
-- [ ] **A23** — 5 wrong passwords → account locked 30 min (HTTP 423)
-- [ ] **A24** — Correct password while locked → still locked, shows remaining time
-- [ ] **A25** — Show/hide password toggle works
-- [ ] **A26** — "Forgot password?" link → `/ar/auth/forgot-password`
+- x[ ] **A18** — Page loads with: Email, Password, Remember Me checkbox
+- [x ] **A19** — Submit empty → validation errors
+- [x ] **A20** — Wrong credentials → "Invalid credentials" + remaining attempts shown
+- [x ] **A21** — Valid login (`user@test.com` / `Test123456!@`) → redirect to `/ar/dashboard`
+- [ x] **A22** — Remember Me checked → refresh token 30-day expiry (vs 7 days default)
+- [x ] **A23** — 5 wrong passwords → account locked 30 min (HTTP 423)
+- [x ] **A24** — Correct password while locked → still locked, shows remaining time
+- [x ] **A25** — Show/hide password toggle works
+- [ x] **A26** — "Forgot password?" link → `/ar/auth/forgot-password`
 - [ ] **A27** — "Create one" link → `/ar/auth/register`
 
 ### A.4 Forgot / Reset Password
 
 - [ ] **A28** — `/ar/auth/forgot-password` → form with email field
-- [ ] **A29** — Submit registered email → "Check Your Email" message (reCAPTCHA v3 in background)
-- [ ] **A30** — Submit unregistered email → same success message (no enumeration)
-- [ ] **A31** — `/ar/auth/reset-password?token=VALID` → new password + confirm + strength indicator
-- [ ] **A32** — Weak reset password (`abc`) → validation errors
-- [ ] **A33** — Valid reset (`NewStr0ng!Pass99`) → "Password Reset Successful!" + login link
-- [ ] **A34** — Mismatched reset passwords → error
-- [ ] **A35** — Expired/invalid token → error
+- [x] **A29** — Submit registered email → "Check Your Email" message (reCAPTCHA v3 in background)
+- [x] **A30** — Submit unregistered email → same success message (no enumeration)
+- [x] **A31** — `/ar/auth/reset-password?token=VALID` → new password + confirm + strength indicator
+- [ x] **A32** — Weak reset password (`abc`) → validation errors
+- [x ] **A33** — Valid reset (`NewStr0ng!Pass99`) → "Password Reset Successful!" + login link
+- [ x] **A34** — Mismatched reset passwords → error
+- [ x] **A35** — Expired/invalid token → error
 
 ### A.5 User Dashboard `/ar/dashboard`
 

@@ -118,7 +118,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-t mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {t('copyright', { year: new Date().getFullYear().toString() })}
+            {t('copyright', { year: String(new Date().getFullYear()) })}
           </p>
           <div className="flex items-center gap-4">
             {socialLinks.map((social) => (

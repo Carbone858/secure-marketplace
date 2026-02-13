@@ -109,8 +109,9 @@ export async function POST(request: NextRequest) {
 
     const { email, recaptchaToken } = validationResult.data;
 
-    // Verify reCAPTCHA
-    const recaptchaValid = await verifyRecaptcha(recaptchaToken);
+    // Verify reCAPTCHA (skip in dev if token is empty)
+    const skipRecaptcha = process.env.NODE_ENV !== 'production' && !recaptchaToken;
+    const recaptchaValid = skipRecaptcha || await verifyRecaptcha(recaptchaToken);
     if (!recaptchaValid) {
       await logSecurityEvent('PASSWORD_RESET_FAILED', ip, userAgent, undefined, {
         reason: 'recaptcha_failed',

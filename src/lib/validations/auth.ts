@@ -179,7 +179,7 @@ export const forgotPasswordSchema = z.object({
     .min(1, 'email.required')
     .regex(emailRegex, 'email.invalid')
     .transform((val) => val.toLowerCase().trim()),
-  recaptchaToken: z.string().min(1, 'recaptcha.required'),
+  recaptchaToken: z.string().optional().default(''),
 });
 
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
