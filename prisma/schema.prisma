@@ -336,8 +336,11 @@ model Category {
   nameAr      String
   slug        String      @unique
   icon        String?
+  iconName    String?     // Lucide icon name (e.g. "wrench", "building2")
+  imageUrl    String?     // Optional category image
   sortOrder   Int         @default(0)
   isActive    Boolean     @default(true)
+  isFeatured  Boolean     @default(false)
   parentId    String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt

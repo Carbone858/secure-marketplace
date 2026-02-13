@@ -28,15 +28,15 @@ npm run dev               # start on localhost:3000
 
 | Section | Tests | Done |
 |---------|-------|------|
-| A — User Flow | 102 | /102 |
-| B — Company Flow | 52 | /52 |
-| C — Project Management | 30 | /30 |
-| D — Company Directory | 22 | /22 |
-| E — Admin Panel | 65 | /65 |
-| F — Security | 43 | /43 |
-| G — i18n / RTL / Accessibility | 28 | /28 |
-| H — Regression | 25 | /25 |
-| **Total** | **367** | **/367** |
+| A — User Flow | 113 | 65/113 |
+| B — Company Flow | 52 | 0/52 |
+| C — Project Management | 30 | 0/30 |
+| D — Company Directory | 22 | 0/22 |
+| E — Admin Panel | 65 | 0/65 |
+| F — Security | 43 | 0/43 |
+| G — i18n / RTL / Accessibility | 28 | 0/28 |
+| H — Regression | 26 | 0/26 |
+| **Total** | **379** | **65/379** |
 
 ---
 
@@ -44,39 +44,39 @@ npm run dev               # start on localhost:3000
 
 ### A.1 Registration `/ar/auth/register`
 
-- [x ] **A1** — Page loads with: Name, Email, Phone, Password, Confirm Password, Terms checkbox
-- [x ] **A2** — Submit empty form → validation errors on all required fields
-- [x ] **A3** — Invalid email (`notanemail`) → "invalid email format" error
-- [ x] **A4** — Weak password (`123`) → strength indicator shows "Weak", blocked on submit
+- [x] **A1** — Page loads with: Name, Email, Phone, Password, Confirm Password, Terms checkbox
+- [x] **A2** — Submit empty form → validation errors on all required fields
+- [x] **A3** — Invalid email (`notanemail`) → "invalid email format" error
+- [x] **A4** — Weak password (`123`) → strength indicator shows "Weak", blocked on submit
   - Rules: min 12 chars, 1 upper, 1 lower, 1 digit, 1 special
-- [x ] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
-- [x ] **A6** — Mismatched confirm password → "passwords do not match" error
-- [ x] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`)
-- [ x] **A8** — Valid phone (`+963912345678`) → no error
-- [x ] **A9** — Uncheck terms → "must accept terms" error
-- [ x] **A10** — Complete valid registration → success message, user created
-- [x ] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
-- [ x] **A12** — Rate limit: 6th registration in 5 min → 429 response (limit: 5, configurable via `RATE_LIMIT_REGISTER_MAX`)
-- [ x] **A13** — Show/hide password toggle (eye icon) works on both password fields
+- [x] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
+- [x] **A6** — Mismatched confirm password → "passwords do not match" error
+- [x] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`)
+- [x] **A8** — Valid phone (`+963912345678`) → no error
+- [x] **A9** — Uncheck terms → "must accept terms" error
+- [x] **A10** — Complete valid registration → success message, user created
+- [x] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
+- [x] **A12** — Rate limit: 6th registration in 5 min → 429 response (limit: 5, configurable via `RATE_LIMIT_REGISTER_MAX`)
+- [x] **A13** — Show/hide password toggle (eye icon) works on both password fields
 
 ### A.2 Email Verification
 
 - [ ] **A14** — `/ar/auth/verify-email?token=VALID` → "Email verified", link to login (24h expiry)
 - [ ] **A15** — Invalid or expired token → error message
-- [ x] **A16** — Login with unverified email → 403, "Email not verified" + resend link
+- [x] **A16** — Login with unverified email → 403, "Email not verified" + resend link
 - [ ] **A17** — Click resend → new verification email sent
 
 ### A.3 Login `/ar/auth/login`
 
-- x[ ] **A18** — Page loads with: Email, Password, Remember Me checkbox
-- [x ] **A19** — Submit empty → validation errors
-- [x ] **A20** — Wrong credentials → "Invalid credentials" + remaining attempts shown
-- [x ] **A21** — Valid login (`user@test.com` / `Test123456!@`) → redirect to `/ar/dashboard`
-- [ x] **A22** — Remember Me checked → refresh token 30-day expiry (vs 7 days default)
-- [x ] **A23** — 5 wrong passwords → account locked 30 min (HTTP 423)
-- [x ] **A24** — Correct password while locked → still locked, shows remaining time
-- [x ] **A25** — Show/hide password toggle works
-- [ x] **A26** — "Forgot password?" link → `/ar/auth/forgot-password`
+- [x] **A18** — Page loads with: Email, Password, Remember Me checkbox
+- [x] **A19** — Submit empty → validation errors
+- [x] **A20** — Wrong credentials → "Invalid credentials" + remaining attempts shown
+- [x] **A21** — Valid login (`user@test.com` / `Test123456!@`) → redirect to `/ar/dashboard`
+- [x] **A22** — Remember Me checked → refresh token 30-day expiry (vs 7 days default)
+- [x] **A23** — 5 wrong passwords → account locked 30 min (HTTP 423)
+- [x] **A24** — Correct password while locked → still locked, shows remaining time
+- [x] **A25** — Show/hide password toggle works
+- [x] **A26** — "Forgot password?" link → `/ar/auth/forgot-password`
 - [ ] **A27** — "Create one" link → `/ar/auth/register`
 
 ### A.4 Forgot / Reset Password
@@ -85,79 +85,79 @@ npm run dev               # start on localhost:3000
 - [x] **A29** — Submit registered email → "Check Your Email" message (reCAPTCHA v3 in background)
 - [x] **A30** — Submit unregistered email → same success message (no enumeration)
 - [x] **A31** — `/ar/auth/reset-password?token=VALID` → new password + confirm + strength indicator
-- [ x] **A32** — Weak reset password (`abc`) → validation errors
-- [x ] **A33** — Valid reset (`NewStr0ng!Pass99`) → "Password Reset Successful!" + login link
-- [ x] **A34** — Mismatched reset passwords → error
-- [ x] **A35** — Expired/invalid token → error
+- [x] **A32** — Weak reset password (`abc`) → validation errors
+- [x] **A33** — Valid reset (`NewStr0ng!Pass99`) → "Password Reset Successful!" + login link
+- [x] **A34** — Mismatched reset passwords → error
+- [x] **A35** — Expired/invalid token → error
 
 ### A.5 User Dashboard `/ar/dashboard`
 
-- [ x] **A36** — Dashboard shows: Active Requests, Offers, Messages stats
-- [x ] **A37** — 5 menu cards visible: Profile, Settings, Requests, Messages, Company
+- [x] **A36** — Dashboard shows: Active Requests, Offers, Messages stats
+- [x] **A37** — 4 menu cards visible: Profile, Settings, Requests, Messages (+ "New Request" button)
 - [x] **A38** — Unauthenticated → redirect to `/ar/auth/login?callbackUrl=...`
 
 ### A.6 Profile Management `/ar/dashboard/profile`
 
-- [ x] **A39** — Profile form + Password change form side by side
-- [x ] **A40** — Email field is read-only, shows verified/unverified badge
-- [ x] **A41** — Update name → success toast (min 2 chars)
-- [ x] **A42** — Invalid phone (`12345`) → E.164 error
-- [x ] **A43** — Upload avatar (JPEG/PNG/WebP) → displays via `POST /api/user/avatar`
-- [x ] **A44** — Delete avatar → removed via `DELETE /api/user/avatar`
-- [ x] **A45** — Change password (current + new + confirm) → success
+- [x] **A39** — Profile form + Password change form side by side
+- [x] **A40** — Email field is read-only, shows verified/unverified badge
+- [x] **A41** — Update name → success toast (min 2 chars)
+- [x] **A42** — Invalid phone (`12345`) → E.164 error
+- [x] **A43** — Upload avatar (JPEG/PNG/WebP) → displays via `POST /api/user/avatar`
+- [x] **A44** — Delete avatar → removed via `DELETE /api/user/avatar`
+- [x] **A45** — Change password (current + new + confirm) → success
 
 ### A.7 Notification Settings `/ar/dashboard/settings`
 
-- [x ] **A46** — Page shows notification settings + delete account sections
-- [x ] **A47** — Toggle "Email — New Offers" off → saves via `PUT /api/user/notifications`
-- [ x] **A48** — Security Alerts marked "Recommended" with warning on toggle
-- [ x] **A49** — All 10 toggles save independently (5 email + 3 push + 2 SMS)
+- [x] **A46** — Page shows notification settings + delete account sections
+- [x] **A47** — Toggle "Email — New Offers" off → saves via `PUT /api/user/notifications`
+- [x] **A48** — Security Alerts marked "Recommended" with warning on toggle
+- [x] **A49** — All 10 toggles save independently (5 email + 3 push + 2 SMS)
 
 ### A.8 Delete Account
 
-- [x ] **A50** — Warning phase: 4 warning points + "Continue" button
-- [x ] **A51** — Continue → confirmation: password, reason (optional), type "DELETE"
-- [x ] **A52** — Cancel → returns to warning phase
-- [x ] **A53** — Wrong password → error
-- [x ] **A54** — Wrong text (`delete` lowercase) → error (case-sensitive: must be `DELETE`)
-- [x ] **A55** — Correct password + "DELETE" → success, redirect to home after 2s
+- [x] **A50** — Warning phase: 4 warning points + "Continue" button
+- [x] **A51** — Continue → confirmation: password, reason (optional), type "DELETE"
+- [x] **A52** — Cancel → returns to warning phase
+- [x] **A53** — Wrong password → error
+- [x] **A54** — Wrong text (`delete` lowercase) → error (case-sensitive: must be `DELETE`)
+- [x] **A55** — Correct password + "DELETE" → success, redirect to home after 2s
 
 ### A.9 Service Requests — Progressive SPA Wizard
 
 #### A.9.1 Page & Layout `/ar/requests/new`
 
-- [x ] **A56** — Page loads as single-page progressive form with collapsible panels: Details, Location, Budget, Images & Tags, Visibility
-- [x ] **A57** — Sticky progress bar at top shows 0% on empty form, updates as fields are filled
-- [x ] **A58** — Mini nav pills below progress bar allow jumping to any section
-- [ x] **A59** — Syria auto-selected as country, cities load automatically on page load
+- [x] **A56** — Page loads as single-page progressive form with collapsible panels: Details, Location, Budget, Images & Tags, Visibility
+- [x] **A57** — Sticky progress bar at top shows 0% on empty form, updates as fields are filled
+- [x] **A58** — Mini nav pills below progress bar allow jumping to any section
+- [x] **A59** — Syria auto-selected as country, cities load automatically on page load
 
 #### A.9.2 Details Panel (required, open by default)
 
-- [x ] **A60** — Panel has title input, description textarea, category/subcategory selects, urgency buttons
-- [ x] **A61** — Empty submit → inline errors on title (min 5), description (min 20), category required; panel auto-scrolls to first error
-- [ x] **A62** — Fill title (< 5 chars) → shows character counter "3/5 min" below input
-- [ x] **A63** — Fill description (< 20 chars) → shows character counter below textarea
-- [x ] **A64** — Select category → subcategory select enables, loads subcategories from API
-- [x ] **A65** — Urgency selector: 4 color-coded buttons (Low/Medium/High/Urgent), Medium pre-selected
+- [x] **A60** — Panel has title input, description textarea, category/subcategory selects, urgency buttons
+- [x] **A61** — Empty submit → inline errors on title (min 5), description (min 20), category required; panel auto-scrolls to first error
+- [x] **A62** — Fill title (< 5 chars) → shows character counter "3/5 min" below input
+- [x] **A63** — Fill description (< 20 chars) → shows character counter below textarea
+- [x] **A64** — Select category → subcategory select enables, loads subcategories from API
+- [x] **A65** — Urgency selector: 4 color-coded buttons (Low/Medium/High/Urgent), Medium pre-selected
 
 #### A.9.3 Location Panel (required, open by default)
 
-- [ x] **A66** — Country dropdown (Syria pre-selected), City dropdown (populated from API)
-- [ x] **A67** — Change country → city dropdown clears and reloads for new country
-- [ x] **A68** — Address textarea available for optional detailed address
-- [ x] **A69** — "Allow remote / online service" checkbox toggles correctly
+- [x] **A66** — Country dropdown (Syria pre-selected), City dropdown (populated from API)
+- [x] **A67** — Change country → city dropdown clears and reloads for new country
+- [x] **A68** — Address textarea available for optional detailed address
+- [x] **A69** — "Allow remote / online service" checkbox toggles correctly
 
 #### A.9.4 Budget Panel (optional, collapsed by default)
 
-- [x ] **A70** — Click panel header → expands with min/max budget + currency + deadline fields
-- [ ] **A71** — Budget min > max → inline error "Invalid budget range"
-- [ ] **A72** — Valid budget + currency select (USD/EUR/GBP/SAR/AED) → no errors
-- [ ] **A73** — Deadline date picker works, accepts future date
-- [ ] **A74** — When collapsed, badge shows budget summary (e.g., "USD 100 – 500")
+- [x] **A70** — Click panel header → expands with min/max budget + currency + deadline fields
+- [ x] **A71** — Budget min > max → inline error "Invalid budget range"
+- [ x] **A72** — Valid budget + currency select (USD/EUR/GBP/SAR/AED) → no errors
+- [x ] **A73** — Deadline date picker works, accepts future date
+- [x ] **A74** — When collapsed, badge shows budget summary (e.g., "USD 100 – 500")
 
 #### A.9.5 Images & Tags Panel (optional, collapsed by default)
 
-- [ ] **A75** — Click panel header → expands with drag & drop upload zone + tags input
+- [x ] **A75** — Click panel header → expands with drag & drop upload zone + tags input
 - [ ] **A76** — Drag & drop images → upload zone highlights on drag-over, files upload on drop
 - [ ] **A77** — Click "Browse Files" → file picker opens, selected images upload
 - [ ] **A78** — Uploaded images show as thumbnail grid, hover shows X button to remove
@@ -194,12 +194,29 @@ npm run dev               # start on localhost:3000
 - [ ] **A97** — Delete request → confirm dialog → removed
 - [ ] **A98** — Unauthenticated → redirect to login
 
-### A.10 Messaging `/ar/dashboard/messages`
+### A.10 Guest Request Flow `/ar/requests/start`
 
-- [ ] **A99** — Conversation list (left) + message thread (right)
-- [ ] **A100** — Click conversation → messages load, ordered by date
-- [ ] **A101** — Send message → appears in thread, saved via API
-- [ ] **A102** — Empty message → blocked or validation error
+- [ ] **A99** — Page loads without authentication (no login required)
+- [ ] **A100** — Same SPA wizard as `/requests/new` but with extra "Account" section
+- [ ] **A101** — Account section shows email + password + confirm password fields
+- [ ] **A102** — Fill form + provide email → calls `POST /api/auth/guest-request`
+- [ ] **A103** — Success → "Check your email" screen with checkmark
+- [ ] **A104** — Guest user + request created in DB in single transaction
+- [ ] **A105** — Verification email sent with completion link
+
+### A.11 Complete Registration `/ar/auth/complete-registration`
+
+- [ ] **A106** — `/ar/auth/complete-registration?token=VALID` → password setup form with strength indicator
+- [ ] **A107** — Set password (meets rules) → account activated, redirect to login
+- [ ] **A108** — Invalid/expired token → error message
+- [ ] **A109** — Weak password → validation errors + strength indicator shows weak
+
+### A.12 Messaging `/ar/dashboard/messages`
+
+- [ ] **A110** — Conversation list (left) + message thread (right)
+- [ ] **A111** — Click conversation → messages load, ordered by date
+- [ ] **A112** — Send message → appears in thread, saved via API
+- [ ] **A113** — Empty message → blocked or validation error
 
 ---
 
@@ -634,7 +651,8 @@ npm run dev               # start on localhost:3000
 - [ ] **H9** — Companies: `/ar/companies` → list loads
 - [ ] **H10** — Dashboard: `/ar/dashboard` → stats + cards render
 - [ ] **H11** — Admin: `/ar/admin` → dashboard stats load
-- [ ] **H12** — New request: `/ar/requests/new` → wizard renders
+- [ ] **H12** — New request: `/ar/requests/new` → wizard renders (requires auth)
+- [ ] **H12b** — Guest request: `/ar/requests/start` → wizard renders (no auth needed)
 
 ### H.3 API Endpoints
 
@@ -695,6 +713,8 @@ npm run dev               # start on localhost:3000
 | `/{locale}/auth/forgot-password` | Forgot password |
 | `/{locale}/auth/reset-password` | Reset password |
 | `/{locale}/auth/verify-email` | Email verification |
+| `/{locale}/auth/complete-registration` | Guest password setup |
+| `/{locale}/requests/start` | Guest request wizard (no auth) |
 | `/{locale}/companies` | Company directory |
 | `/{locale}/companies/{slug}` | Company detail |
 
@@ -709,7 +729,7 @@ npm run dev               # start on localhost:3000
 | `/{locale}/dashboard/messages` | Messaging | Any |
 | `/{locale}/dashboard/reviews` | My reviews | Any |
 | `/{locale}/dashboard/projects` | My projects | Any |
-| `/{locale}/requests/new` | Create request | Any |
+| `/{locale}/requests/new` | Create request (auth) | Any |
 | `/{locale}/company/dashboard` | Company dashboard | COMPANY |
 | `/{locale}/company/dashboard/*` | Company sub-pages | COMPANY |
 
@@ -730,8 +750,9 @@ npm run dev               # start on localhost:3000
 | `/{locale}/admin/feature-flags` | Feature flags |
 | `/{locale}/admin/messages` | Messages |
 | `/{locale}/admin/settings` | Settings & CMS |
+| `/{locale}/admin/cms` | CMS Pages & Sections |
 
 ---
 
-**Total: 367 test cases across 8 sections**  
-**Coverage: 41 page routes · 58 API endpoints · 36 data models · 8 feature flags · 2 locales · dark/light modes · mobile/desktop**
+**Total: 379 test cases across 8 sections**  
+**Coverage: 44 page routes · 60 API endpoints · 36 data models · 8 feature flags · 2 locales · dark/light modes · mobile/desktop**

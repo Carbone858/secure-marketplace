@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e0e7ff"/>
+      <stop offset="100%" stop-color="#c7d2fe"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fcd5b8"/>
+      <stop offset="100%" stop-color="#f5c6a0"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="640" height="480" rx="24" fill="url(#bg)"/>
+  <!-- Body -->
+  <ellipse cx="320" cy="420" rx="100" ry="60" fill="#3b82f6"/>
+  <!-- Neck -->
+  <rect x="300" y="240" width="40" height="40" rx="6" fill="url(#skin)"/>
+  <!-- Head -->
+  <circle cx="320" cy="210" r="60" fill="url(#skin)"/>
+  <!-- Hair -->
+  <path d="M260 200 Q260 140 320 140 Q380 140 380 200 Q380 170 320 165 Q260 170 260 200Z" fill="#374151"/>
+  <!-- Eyes -->
+  <circle cx="298" cy="210" r="5" fill="#374151"/>
+  <circle cx="342" cy="210" r="5" fill="#374151"/>
+  <!-- Smile -->
+  <path d="M305 228 Q320 242 335 228" fill="none" stroke="#374151" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Shirt collar -->
+  <path d="M280 280 L320 310 L360 280" fill="none" stroke="#2563eb" stroke-width="3"/>
+  <!-- Arms -->
+  <path d="M220 340 Q260 320 280 350" fill="none" stroke="#3b82f6" stroke-width="20" stroke-linecap="round"/>
+  <path d="M420 340 Q380 320 360 350" fill="none" stroke="#3b82f6" stroke-width="20" stroke-linecap="round"/>
+  <!-- Clipboard in hand -->
+  <rect x="190" y="310" width="50" height="65" rx="6" fill="white" stroke="#94a3b8" stroke-width="2"/>
+  <rect x="200" y="325" width="30" height="3" rx="1" fill="#94a3b8"/>
+  <rect x="200" y="333" width="25" height="3" rx="1" fill="#94a3b8"/>
+  <rect x="200" y="341" width="30" height="3" rx="1" fill="#94a3b8"/>
+  <rect x="200" y="349" width="20" height="3" rx="1" fill="#94a3b8"/>
+  <!-- Checkmark badge -->
+  <circle cx="420" cy="180" r="24" fill="#22c55e"/>
+  <path d="M410 180 L417 188 L432 172" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Stars -->
+  <g fill="#fbbf24" opacity="0.8">
+    <polygon points="160,140 165,155 180,155 168,163 172,178 160,170 148,178 152,163 140,155 155,155"/>
+    <polygon points="480,120 484,132 497,132 487,139 490,151 480,144 470,151 473,139 463,132 476,132"/>
+  </g>
+</svg>

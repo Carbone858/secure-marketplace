@@ -2,13 +2,18 @@
   "home": {
     "hero": {
       "title": "Get Quotes from Top Companies",
-      "subtitle": "Leading service marketplace in the Arab world",
+      "subtitle": "Describe what you need — receive competitive offers from verified service providers, free of charge.",
       "badge": "#1 Service Marketplace in the Arab World",
       "searchPlaceholder": "What service do you need?",
       "searchButton": "Search",
       "postRequest": "Post a Request",
       "startRequest": "Start Your Request",
-      "registerCompany": "Register as Company"
+      "registerCompany": "Register as Company",
+      "popularCategories": "Popular categories",
+      "trustPoint1": "Free — no hidden fees for customers",
+      "trustPoint2": "Get multiple quotes to compare",
+      "trustPoint3": "Verified & reviewed companies only",
+      "imageAlt": "Professional service provider ready to help"
     },
     "categories": {
       "title": "Browse by Category",

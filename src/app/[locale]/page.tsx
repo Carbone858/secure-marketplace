@@ -4,30 +4,19 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import {
-  Search,
   Building2,
   CheckCircle,
   Star,
   TrendingUp,
-  ArrowRight,
   Shield,
   Clock,
   Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-
-interface Category {
-  id: string;
-  name: string;
-  nameAr: string | null;
-  icon: string | null;
-  _count?: {
-    companies?: number;
-  };
-}
+import { HeroSection } from '@/components/home';
+import HowItWorksSection from '@/components/home/HowItWorksSection';
+import DynamicServicesBar from '@/components/home/DynamicServicesBar';
 
 interface Company {
   id: string;
@@ -41,26 +30,11 @@ interface Company {
 export default function HomePage() {
   const locale = useLocale();
   const t = useTranslations('home');
-  const [categories, setCategories] = useState<Category[]>([]);
   const [featuredCompanies, setFeaturedCompanies] = useState<Company[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetchCategories();
     fetchFeaturedCompanies();
   }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch('/api/categories?includeSubcategories=true');
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data.categories.slice(0, 8));
-      }
-    } catch (err) {
-      console.error('Failed to fetch categories');
-    }
-  };
 
   const fetchFeaturedCompanies = async () => {
     try {
@@ -71,13 +45,6 @@ export default function HomePage() {
       }
     } catch (err) {
       console.error('Failed to fetch featured companies');
-    }
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/${locale}/companies?q=${encodeURIComponent(searchQuery)}`;
     }
   };
 
@@ -113,129 +80,40 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/10 via-background to-primary/5 py-20 md:py-32">
+      {/* New Hero Section — offerta.se / mittanbud.no style */}
+      <HeroSection />
+
+
+      {/* How It Works Section */}
+      <HowItWorksSection />
+
+      {/* Dynamic Services Bar */}
+      <DynamicServicesBar />
+
+      {/* Statistics Section */}
+      <section className="py-16 bg-gradient-to-b from-primary/5 to-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="mb-4" variant="secondary">
-              {t('hero.badge')}
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              {t('hero.title')}
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              {t('hero.subtitle')}
-            </p>
-
-            {/* Primary CTA — Start Your Request */}
-            <div className="mb-6">
-              <Button size="lg" asChild className="h-16 px-10 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
-                <Link href={`/${locale}/requests/start`}>
-                  {t('hero.startRequest')}
-                  <ArrowRight className="h-5 w-5 ms-2" />
-                </Link>
-              </Button>
-            </div>
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="max-w-xl mx-auto">
-              <div className="flex gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input
-                    placeholder={t('hero.searchPlaceholder')}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="ps-12 h-14 text-lg"
-                  />
-                </div>
-                <Button type="submit" size="lg" className="h-14 px-8">
-                  {t('hero.searchButton')}
-                </Button>
-              </div>
-            </form>
-
-            <div className="flex flex-wrap justify-center gap-4 mt-8">
-              <Button variant="outline" asChild>
-                <Link href={`/${locale}/requests/start`}>
-                  {t('hero.postRequest')}
-                  <ArrowRight className="h-4 w-4 ms-2" />
-                </Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href={`/${locale}/company/register`}>
-                  {t('hero.registerCompany')}
-                  <ArrowRight className="h-4 w-4 ms-2" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-12 border-y bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+            {stats.map((stat, i) => (
+              <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-2xl shadow-sm p-8">
+                <span className="mb-2 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10">
+                  {/* Example icons for each stat */}
+                  {i === 0 && <Shield className="h-7 w-7 text-primary" />}
+                  {i === 1 && <Briefcase className="h-7 w-7 text-primary" />}
+                  {i === 2 && <Users className="h-7 w-7 text-primary" />}
+                  {i === 3 && <Star className="h-7 w-7 text-primary" />}
+                </span>
                 <p className="text-3xl md:text-4xl font-bold text-primary">
                   {stat.value}
                 </p>
-                <p className="text-muted-foreground mt-1">{stat.label}</p>
+                <p className="text-muted-foreground mt-1 text-center">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">{t('categories.title')}</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              {t('categories.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.map((category) => (
-              <Link
-                key={category.id}
-                href={`/${locale}/companies?categoryId=${category.id}`}
-              >
-                <Card className="hover:shadow-lg transition-shadow h-full">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 mx-auto mb-4 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <Building2 className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="font-semibold mb-1">
-                      {locale === 'ar' && category.nameAr
-                        ? category.nameAr
-                        : category.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {t('categories.companyCount', { count: category._count?.companies ?? 0 })}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Button variant="outline" asChild>
-              <Link href={`/${locale}/companies`}>
-                {t('categories.viewAll')}
-                <ArrowRight className="h-4 w-4 ms-2" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
+      {/* Why Choose Us Section */}
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -245,19 +123,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature) => (
-              <Card key={feature.title} className="h-full">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <feature.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
+              <div key={feature.title} className="flex flex-col items-center bg-card rounded-2xl shadow-sm p-8 h-full">
+                <span className="mb-4 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10">
+                  <feature.icon className="h-7 w-7 text-primary" />
+                </span>
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-base text-center">{feature.description}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -274,47 +148,46 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featuredCompanies.map((company) => (
                 <Link
                   key={company.id}
                   href={`/${locale}/companies/${company.slug}`}
+                  className="block"
                 >
-                  <Card className="hover:shadow-lg transition-shadow h-full">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center">
-                          {company.logo ? (
-                            <img
-                              src={company.logo}
-                              alt={company.name}
-                              className="w-full h-full object-cover rounded-lg"
-                            />
-                          ) : (
-                            <Building2 className="h-8 w-8 text-muted-foreground" />
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">{company.name}</h3>
-                          <div className="flex items-center gap-1 text-sm">
-                            <CheckCircle className="h-4 w-4 text-success" />
-                            <span className="text-muted-foreground">
-                              {t('featured.verified')}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Star className="h-4 w-4 text-warning fill-warning" />
-                        <span className="font-medium">
-                          {company.averageRating.toFixed(1)}
-                        </span>
-                        <span className="text-muted-foreground">
-                          {t('featured.reviewCount', { count: company.reviewCount })}
-                        </span>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div className="flex flex-col items-center bg-card rounded-2xl shadow-sm p-8 h-full hover:shadow-lg transition-shadow">
+                    <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4 overflow-hidden">
+                      {company.logo ? (
+                        <img
+                          src={company.logo}
+                          alt={company.name}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <Building2 className="h-10 w-10 text-muted-foreground" />
+                      )}
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1 text-center">{company.name}</h3>
+                    <div className="flex items-center gap-1 text-sm mb-2">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-muted-foreground">
+                        {t('featured.verified')}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Star className="h-4 w-4 text-warning fill-warning" />
+                      <span className="font-medium">
+                        {company.averageRating.toFixed(1)}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {t('featured.reviewCount', { count: company.reviewCount })}
+                      </span>
+                    </div>
+                    {/* Placeholder for services offered (future: add real data) */}
+                    <div className="text-xs text-muted-foreground text-center mt-1">
+                      {/* Example: "نجارة، دهان، سباكة" */}
+                    </div>
+                  </div>
                 </Link>
               ))}
             </div>
@@ -323,9 +196,9 @@ export default function HomePage() {
       )}
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-white">
+      <section className="py-20 bg-gradient-to-r from-primary/80 to-primary text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg">
             {t('cta.title')}
           </h2>
           <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
@@ -335,6 +208,7 @@ export default function HomePage() {
             <Button
               size="lg"
               variant="secondary"
+              className="font-bold shadow-md px-8 py-3 text-lg"
               asChild
             >
               <Link href={`/${locale}/requests/start`}>
@@ -344,7 +218,7 @@ export default function HomePage() {
             <Button
               size="lg"
               variant="outline"
-              className="border-primary-foreground hover:bg-primary-foreground hover:text-primary"
+              className="border-white text-white font-bold shadow-md px-8 py-3 text-lg hover:bg-white hover:text-primary"
               asChild
             >
               <Link href={`/${locale}/company/register`}>

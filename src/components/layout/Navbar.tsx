@@ -44,18 +44,19 @@ export function Navbar() {
 
   const isActive = (href: string) => pathname === href;
 
+  const isRTL = locale === 'ar';
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center gap-2">
+        <div className={`flex h-16 items-center justify-between ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+          {/* Brand/Logo: right for RTL, left for LTR */}
+          <Link href={`/${locale}`} className={`flex items-center gap-2 ${isRTL ? 'order-3' : 'order-1'}`}>
             <Building2 className="h-6 w-6" />
             <span className="text-xl font-bold">{t('nav.brand')}</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Desktop Navigation: center for both directions */}
+          <div className={`hidden md:flex items-center gap-6 ${isRTL ? 'order-2 justify-center flex-1' : 'order-2 justify-center flex-1'}`}>
             {navigation.map((item) => (
               <Link
                 key={item.href}
@@ -71,8 +72,8 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Right Side */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Right Side (LTR) / Left Side (RTL): theme, lang, login */}
+          <div className={`hidden md:flex items-center gap-4 ${isRTL ? 'order-1' : 'order-3'}`}>
             <ThemeToggle />
             <LanguageSwitcher />
 
