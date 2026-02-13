@@ -8,36 +8,8 @@ import {
 } from '@/lib/validations/auth';
 import { sendEmail } from '@/lib/email/service';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
+import { registerLimiter, getClientIp } from '@/lib/rate-limit';
 import crypto from 'crypto';
-
-// Rate limiting store (in production, use Redis)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-
-const RATE_LIMIT_MAX = process.env.NODE_ENV === 'production' ? 5 : 100;
-const RATE_LIMIT_WINDOW = 5 * 60 * 1000; // 5 minutes
-
-/**
- * Check rate limit for IP address
- */
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const record = rateLimitStore.get(ip);
-
-  if (!record || now > record.resetTime) {
-    rateLimitStore.set(ip, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return { allowed: true, remaining: RATE_LIMIT_MAX - 1 };
-  }
-
-  if (record.count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  record.count++;
-  return { allowed: true, remaining: RATE_LIMIT_MAX - record.count };
-}
 
 /**
  * Verify reCAPTCHA v3 token
@@ -103,12 +75,12 @@ async function logSecurityEvent(
  * Handle user registration
  */
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for') || 'unknown';
+  const ip = getClientIp(request);
   const userAgent = request.headers.get('user-agent');
 
   try {
-    // Check rate limit
-    const rateLimit = checkRateLimit(ip);
+    // Check rate limit (Redis-backed with in-memory fallback)
+    const rateLimit = await registerLimiter.check(ip);
     if (!rateLimit.allowed) {
       await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
         reason: 'rate_limit_exceeded',
@@ -118,12 +90,14 @@ export async function POST(request: NextRequest) {
           success: false,
           error: 'rateLimit.exceeded',
           message: 'Too many registration attempts. Please try again later.',
+          retryAfter: rateLimit.retryAfter,
         },
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': String(RATE_LIMIT_MAX),
+            'X-RateLimit-Limit': String(rateLimit.limit),
             'X-RateLimit-Remaining': '0',
+            'Retry-After': String(rateLimit.retryAfter || 60),
           },
         }
       );
@@ -295,7 +269,7 @@ export async function POST(request: NextRequest) {
       {
         status: 201,
         headers: {
-          'X-RateLimit-Limit': String(RATE_LIMIT_MAX),
+          'X-RateLimit-Limit': String(rateLimit.limit),
           'X-RateLimit-Remaining': String(rateLimit.remaining),
         },
       }

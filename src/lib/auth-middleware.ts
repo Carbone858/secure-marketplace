@@ -102,9 +102,9 @@ export function requireAdmin(user: AuthenticatedUser): NextResponse | null {
 /**
  * Apply API rate limiting. Returns 429 response if limit exceeded.
  */
-export function applyRateLimit(request: NextRequest, prefix = 'api'): NextResponse | null {
+export async function applyRateLimit(request: NextRequest, prefix = 'api'): Promise<NextResponse | null> {
   const ip = getClientIp(request);
-  const result = apiLimiter.check(`${prefix}:${ip}`);
+  const result = await apiLimiter.check(`${prefix}:${ip}`);
   if (!result.allowed) {
     return NextResponse.json(
       { error: 'Too many requests', retryAfter: result.retryAfter },

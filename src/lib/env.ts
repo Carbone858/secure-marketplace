@@ -16,6 +16,13 @@ const optionalEnvVars = [
   'SMTP_USER',
   'SMTP_PASS',
   'SMTP_FROM',
+  'REDIS_URL',
+  'RATE_LIMIT_REGISTER_MAX',
+  'RATE_LIMIT_REGISTER_WINDOW_SEC',
+  'RATE_LIMIT_LOGIN_MAX',
+  'RATE_LIMIT_LOGIN_WINDOW_SEC',
+  'RATE_LIMIT_API_MAX',
+  'RATE_LIMIT_API_WINDOW_SEC',
 ] as const;
 
 function validateEnv() {

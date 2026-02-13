@@ -55,7 +55,7 @@ npm run dev               # start on localhost:3000
 - [ x] **A8** — Valid phone (`+963912345678`) → no error
 - [x ] **A9** — Uncheck terms → "must accept terms" error
 - [ x] **A10** — Complete valid registration → success message, user created
-- [ ] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
+- [x ] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
 - [ ] **A12** — Rate limit: 6+ registrations in 5 min → 429 response (prod: 5 limit, dev: 100)
 - [ ] **A13** — Show/hide password toggle (eye icon) works on both password fields
 

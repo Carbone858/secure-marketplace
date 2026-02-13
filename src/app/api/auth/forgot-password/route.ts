@@ -4,36 +4,7 @@ import { forgotPasswordSchema, hashEmail } from '@/lib/validations/auth';
 import { generateSecureToken } from '@/lib/auth';
 import { sendEmail } from '@/lib/email/service';
 import { getPasswordResetEmailTemplate } from '@/lib/email/templates';
-
-// Rate limiting configuration
-const RATE_LIMIT_MAX = 3;
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
-
-// Rate limiting store (in production, use Redis)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-
-/**
- * Check rate limit for IP address
- */
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetTime: number } {
-  const now = Date.now();
-  const record = rateLimitStore.get(ip);
-
-  if (!record || now > record.resetTime) {
-    rateLimitStore.set(ip, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return { allowed: true, remaining: RATE_LIMIT_MAX - 1, resetTime: now + RATE_LIMIT_WINDOW };
-  }
-
-  if (record.count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0, resetTime: record.resetTime };
-  }
-
-  record.count++;
-  return { allowed: true, remaining: RATE_LIMIT_MAX - record.count, resetTime: record.resetTime };
-}
+import { strictLimiter, getClientIp } from '@/lib/rate-limit';
 
 /**
  * Verify reCAPTCHA v3 token
@@ -93,26 +64,26 @@ async function logSecurityEvent(
  * Handle password reset request
  */
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for') || 'unknown';
+  const ip = getClientIp(request);
   const userAgent = request.headers.get('user-agent');
 
   try {
-    // Check rate limit
-    const rateLimit = checkRateLimit(ip);
+    // Check rate limit (Redis-backed with in-memory fallback)
+    const rateLimit = await strictLimiter.check(ip);
     if (!rateLimit.allowed) {
-      const retryAfter = Math.ceil((rateLimit.resetTime - Date.now()) / 1000);
       return NextResponse.json(
         {
           success: false,
           error: 'rateLimit.exceeded',
           message: 'Too many password reset requests. Please try again later.',
+          retryAfter: rateLimit.retryAfter,
         },
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': String(RATE_LIMIT_MAX),
+            'X-RateLimit-Limit': String(rateLimit.limit),
             'X-RateLimit-Remaining': '0',
-            'Retry-After': String(retryAfter),
+            'Retry-After': String(rateLimit.retryAfter || 60),
           },
         }
       );
@@ -220,7 +191,7 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
         headers: {
-          'X-RateLimit-Limit': String(RATE_LIMIT_MAX),
+          'X-RateLimit-Limit': String(rateLimit.limit),
           'X-RateLimit-Remaining': String(rateLimit.remaining),
         },
       }

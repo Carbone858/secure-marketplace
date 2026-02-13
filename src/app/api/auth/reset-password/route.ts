@@ -2,36 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { resetPasswordSchema } from '@/lib/validations/auth';
 import { hashPassword } from '@/lib/auth';
-
-// Rate limiting configuration
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
-
-// Rate limiting store (in production, use Redis)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-
-/**
- * Check rate limit for IP address
- */
-function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetTime: number } {
-  const now = Date.now();
-  const record = rateLimitStore.get(ip);
-
-  if (!record || now > record.resetTime) {
-    rateLimitStore.set(ip, {
-      count: 1,
-      resetTime: now + RATE_LIMIT_WINDOW,
-    });
-    return { allowed: true, remaining: RATE_LIMIT_MAX - 1, resetTime: now + RATE_LIMIT_WINDOW };
-  }
-
-  if (record.count >= RATE_LIMIT_MAX) {
-    return { allowed: false, remaining: 0, resetTime: record.resetTime };
-  }
-
-  record.count++;
-  return { allowed: true, remaining: RATE_LIMIT_MAX - record.count, resetTime: record.resetTime };
-}
+import { authLimiter, getClientIp } from '@/lib/rate-limit';
 
 /**
  * Log security event
@@ -63,26 +34,26 @@ async function logSecurityEvent(
  * Handle password reset
  */
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get('x-forwarded-for') || 'unknown';
+  const ip = getClientIp(request);
   const userAgent = request.headers.get('user-agent');
 
   try {
-    // Check rate limit
-    const rateLimit = checkRateLimit(ip);
+    // Check rate limit (Redis-backed with in-memory fallback)
+    const rateLimit = await authLimiter.check(ip);
     if (!rateLimit.allowed) {
-      const retryAfter = Math.ceil((rateLimit.resetTime - Date.now()) / 1000);
       return NextResponse.json(
         {
           success: false,
           error: 'rateLimit.exceeded',
           message: 'Too many password reset attempts. Please try again later.',
+          retryAfter: rateLimit.retryAfter,
         },
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': String(RATE_LIMIT_MAX),
+            'X-RateLimit-Limit': String(rateLimit.limit),
             'X-RateLimit-Remaining': '0',
-            'Retry-After': String(retryAfter),
+            'Retry-After': String(rateLimit.retryAfter || 60),
           },
         }
       );
@@ -220,7 +191,7 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
         headers: {
-          'X-RateLimit-Limit': String(RATE_LIMIT_MAX),
+          'X-RateLimit-Limit': String(rateLimit.limit),
           'X-RateLimit-Remaining': String(rateLimit.remaining),
         },
       }
