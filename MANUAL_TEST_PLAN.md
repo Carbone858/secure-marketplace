@@ -15,11 +15,6 @@ npm run dev               # start on localhost:3000
 
 ### Test Accounts
 
-| Role | Email | Password |
-|------|-------|----------|
-| User | `user@test.com` | `Test123456!@` |
-| Company | `company@test.com` | `Test123456!@` |
-| Admin | `admin@test.com` | `Test123456!@` |
 | Super Admin | `super@test.com` | `Test123456!@` |
 
 ---
@@ -83,7 +78,6 @@ npm run dev               # start on localhost:3000
 
 - [ ] **A28** — `/ar/auth/forgot-password` → form with email field
 - [x] **A29** — Submit registered email → "Check Your Email" message (reCAPTCHA v3 in background)
-- [x] **A30** — Submit unregistered email → same success message (no enumeration)
 - [x] **A31** — `/ar/auth/reset-password?token=VALID` → new password + confirm + strength indicator
 - [x] **A32** — Weak reset password (`abc`) → validation errors
 - [x] **A33** — Valid reset (`NewStr0ng!Pass99`) → "Password Reset Successful!" + login link
@@ -157,7 +151,7 @@ npm run dev               # start on localhost:3000
 
 #### A.9.5 Images & Tags Panel (optional, collapsed by default)
 
-- [x ] **A75** — Click panel header → expands with drag & drop upload zone + tags input
+- [x/  ] **A75** — Click panel header → expands with drag & drop upload zone + tags input
 - [ ] **A76** — Drag & drop images → upload zone highlights on drag-over, files upload on drop
 - [ ] **A77** — Click "Browse Files" → file picker opens, selected images upload
 - [ ] **A78** — Uploaded images show as thumbnail grid, hover shows X button to remove

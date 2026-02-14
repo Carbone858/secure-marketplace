@@ -39,6 +39,8 @@ export default function HeroSection() {
     }
   };
 
+
+
   const trustPoints = [
     t('hero.trustPoint1'),
     t('hero.trustPoint2'),
@@ -47,9 +49,8 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/[0.06] via-background to-primary/[0.03]">
-      <div className="container mx-auto px-4 py-16 md:py-24 lg:py-28">
+      <div className="container mx-auto px-2 py-6 md:py-8 lg:py-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
           {/* ───── LEFT: Content ───── */}
           <div className="flex flex-col gap-6 max-w-xl">
             {/* Headline */}
@@ -104,6 +105,11 @@ export default function HeroSection() {
             hideOnMobile={true}
             position="right"
           />
+        </div>
+
+        {/* How It Works Section — now embedded below hero content, visible together */}
+        <div className="mt-10">
+          {require('./HowItWorksSection').default()}
         </div>
       </div>
 

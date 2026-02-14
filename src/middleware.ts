@@ -116,9 +116,18 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
+  // Only apply next-intl to non-API routes (reuse existing pathname)
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
   return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ['/((?!_next|_vercel|.*\\..*).*)', '/api/:path*']
+  matcher: [
+    // Match all routes except static files and Next.js internals
+    '/((?!_next|_vercel|.*\\..*).*)',
+    // Explicitly match all API routes
+    '/api/:path*',
+  ]
 };

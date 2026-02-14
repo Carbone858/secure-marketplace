@@ -5,11 +5,22 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...');
 
-  // Create sample companies
+  // Create a sample user
+  const user = await prisma.user.create({
+    data: {
+      email: 'companyowner@example.com',
+      emailHash: 'companyowner@example.com',
+      password: 'Test123456!@',
+      name: 'مالك الشركة',
+      role: 'COMPANY',
+    },
+  });
+
+  // Create sample companies linked to the user
   await prisma.company.createMany({
     data: [
       {
-        userId: '', // Will be replaced with actual user ID
+        userId: user.id,
         name: 'شركة البناء الذهبي',
         slug: 'golden-construction',
         description: 'شركة متخصصة في أعمال البناء',
@@ -17,7 +28,7 @@ async function main() {
         rating: 4.8,
       },
       {
-        userId: '', // Will be replaced with actual user ID
+        userId: user.id,
         name: 'الكهربائي المحترف',
         slug: 'pro-electrician',
         description: 'خدمات كهربائية شاملة',

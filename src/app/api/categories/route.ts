@@ -6,7 +6,11 @@ import { prisma } from '@/lib/prisma';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const locale = searchParams.get('locale') || 'en';
+    let locale = searchParams.get('locale');
+    // Fallback to 'en' if locale is missing or invalid
+    if (!locale || (locale !== 'ar' && locale !== 'en')) {
+      locale = 'en';
+    }
     const featured = searchParams.get('featured');
     const limit = searchParams.get('limit');
 
