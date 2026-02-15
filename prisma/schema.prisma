@@ -162,6 +162,14 @@ model Company {
   currentPlan         SubscriptionPlan           @default(FREE)
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
+
+  @@index([countryId])
+  @@index([cityId])
+  @@index([verificationStatus])
+  @@index([isActive])
+  @@index([isFeatured])
+  @@index([rating])
+  @@index([createdAt])
   
   // Relations
   user                User                       @relation("CompanyOwner", fields: [userId], references: [id], onDelete: Cascade)
