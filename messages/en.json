@@ -1563,5 +1563,75 @@
     "errors": {
       "loadFailed": "Failed to load companies"
     }
+  },
+  "about": {
+    "meta": {
+      "title": "About Us - Service Marketplace",
+      "description": "Learn about our mission to connect customers with trusted professionals."
+    },
+    "title": "About Us",
+    "subtitle": "Connecting Vision with Reality",
+    "mission": {
+      "title": "Our Mission",
+      "description": "To create a seamless, trustworthy environment where customers can find reliable service providers for any task, and where professionals can grow their business through merit."
+    },
+    "story": {
+      "title": "Our Story",
+      "description": "Founded in 2026, we saw a gap in the market for a truly secure and verified service marketplace. We believe in transparency and quality above all."
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact Us - Service Marketplace",
+      "description": "Get in touch with our support team."
+    },
+    "title": "Contact Us",
+    "subtitle": "We're here to help",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message."
+    },
+    "info": {
+      "email": "support@example.com",
+      "phone": "+1 (555) 123-4567",
+      "address": "123 Market St, Tech City"
+    }
+  },
+  "terms": {
+    "meta": {
+      "title": "Terms of Service - Service Marketplace",
+      "description": "Read our Terms of Service."
+    },
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: February 15, 2026",
+    "intro": "Please read these terms carefully before using our service."
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy Policy - Service Marketplace",
+      "description": "Read our Privacy Policy."
+    },
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: February 15, 2026",
+    "intro": "We value your privacy and are committed to protecting your personal data."
+  },
+  "faq": {
+    "meta": {
+      "title": "FAQ - Service Marketplace",
+      "description": "Frequently Asked Questions."
+    },
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about our platform.",
+    "categories": {
+      "general": "General",
+      "account": "Account",
+      "payments": "Payments"
+    }
   }
 }

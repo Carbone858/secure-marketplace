@@ -16,7 +16,7 @@ export function Footer() {
       { name: t('company.blog'), href: `/${locale}/blog` },
     ],
     support: [
-      { name: t('support.helpCenter'), href: `/${locale}/help` },
+      { name: t('support.helpCenter'), href: `/${locale}/faq` },
       { name: t('support.contactUs'), href: `/${locale}/contact` },
       { name: t('support.privacyPolicy'), href: `/${locale}/privacy` },
       { name: t('support.termsOfService'), href: `/${locale}/terms` },

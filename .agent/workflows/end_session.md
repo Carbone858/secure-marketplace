@@ -19,12 +19,18 @@ This workflow is triggered when the user says "we are finish for today save ever
 3. Git Add and Commit.
    Stage all changes and commit them with a timestamp.
    ```powershell
-   git add .
+   & "C:\Program Files\Git\cmd\git.exe" add .
    $date = Get-Date -Format "yyyy-MM-dd HH:mm"
-   git commit -m "End of session - Work saved on $date"
+   & "C:\Program Files\Git\cmd\git.exe" commit -m "End of session - Work saved on $date"
    ```
 
-4. Session Logging.
+4. Git Push.
+   Push changes to the remote repository.
+   ```powershell
+   & "C:\Program Files\Git\cmd\git.exe" push
+   ```
+
+5. Session Logging.
    Append the log entry to `SESSION_LOG.md`.
    ```powershell
    $logDate = Get-Date

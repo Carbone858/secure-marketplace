@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="4" dy="8" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <rect width="800" height="600" fill="url(#bgGradient)" rx="24"/>
+  
+  <!-- Abstract Shapes -->
+  <circle cx="400" cy="300" r="280" fill="#DBEAFE" opacity="0.6"/>
+  <circle cx="700" cy="100" r="120" fill="#EFF6FF" opacity="0.8"/>
+  <circle cx="100" cy="500" r="150" fill="#EFF6FF" opacity="0.8"/>
+
+  <!-- Central Composition: House & Professionals (Abstract) -->
+  <g transform="translate(200, 120)">
+    <!-- House Structure -->
+    <path d="M200 80 L350 200 H50 L200 80 Z" fill="#3B82F6" filter="url(#shadow)"/>
+    <rect x="70" y="200" width="260" height="200" fill="white" filter="url(#shadow)"/>
+    <rect x="160" y="280" width="80" height="120" fill="#DBEAFE"/>
+    <path d="M70 200 L50 200 L200 80 L350 200 L330 200" fill="none" stroke="#1E40AF" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Tools / Service Icons -->
+  
+  <!-- Paint Roller -->
+  <g transform="translate(550, 200) rotate(15)" filter="url(#shadow)">
+    <rect x="0" y="0" width="120" height="40" rx="10" fill="#F97316"/>
+    <path d="M120 20 L140 20 L140 100 L100 100 L100 180" stroke="#94A3B8" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <rect x="85" y="160" width="30" height="80" rx="8" fill="#1E293B"/>
+  </g>
+
+  <!-- Wrench -->
+  <g transform="translate(100, 250) rotate(-20)" filter="url(#shadow)">
+    <path d="M40 0 L100 0 L100 200 L40 200 Z" fill="#64748B"/>
+    <circle cx="70" cy="0" r="50" fill="#64748B"/>
+    <path d="M70 -20 L70 20 M50 0 L90 0" stroke="#334155" stroke-width="8"/>
+    <rect x="55" y="-15" width="30" height="30" fill="#334155"/>
+  </g>
+  
+  <!-- Electrical / Lightning -->
+  <g transform="translate(400, 100)" filter="url(#shadow)">
+    <circle cx="0" cy="0" r="40" fill="#FEF3C7"/>
+    <path d="M-10 -20 L20 -20 L-5 5 L15 5 L-15 30 L-5 5 L-25 5 Z" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+  </g>
+
+  <!-- Trust Badge -->
+  <g transform="translate(620, 450)" filter="url(#shadow)">
+    <circle cx="0" cy="0" r="50" fill="#10B981"/>
+    <path d="M-20 0 L-5 15 L25 -15" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+</svg>
