@@ -7,12 +7,28 @@ echo ""
 
 # Install dependencies
 echo "📦 Installing dependencies..."
-npm install
+npm install --legacy-peer-deps
 if [ $? -ne 0 ]; then
     echo "❌ npm install failed"
     exit 1
 fi
 echo "✅ Dependencies installed"
+echo ""
+
+# Ensure PostgreSQL is running
+echo "🗄️ Checking PostgreSQL status..."
+if ! pg_isready -h localhost -p 5432 > /dev/null 2>&1; then
+    echo "🔄 PostgreSQL is not running. Attempting to start with sudo..."
+    sudo service postgresql start
+    sleep 2
+    if ! pg_isready -h localhost -p 5432 > /dev/null 2>&1; then
+        echo "❌ Failed to start PostgreSQL. Please start it manually."
+        exit 1
+    fi
+    echo "✅ PostgreSQL started."
+else
+    echo "✅ PostgreSQL is already running."
+fi
 echo ""
 
 # Setup environment
