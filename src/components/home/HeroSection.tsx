@@ -49,10 +49,10 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/[0.06] via-background to-primary/[0.03]">
-      <div className="container mx-auto px-2 py-6 md:py-8 lg:py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="container mx-auto px-2 py-4 md:py-5 lg:py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* ───── LEFT: Content ───── */}
-          <div className="flex flex-col gap-6 max-w-xl">
+          <div className="flex flex-col gap-4 max-w-xl">
             {/* Headline */}
             <div className="flex flex-col gap-3">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground leading-[1.15]">
@@ -79,18 +79,23 @@ export default function HeroSection() {
             </ul>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+            <div className="flex flex-wrap items-center gap-4 pt-1">
               <Button
                 size="lg"
                 asChild
-                className="h-13 px-8 text-base font-semibold shadow-md hover:shadow-lg transition-all"
+                className="h-14 px-10 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/85 hover:from-primary/90 hover:to-primary rounded-xl hover:scale-[1.03] active:scale-[0.98]"
               >
                 <Link href={`/${locale}/requests/start`}>
                   {t('hero.startRequest')}
-                  <ArrowRight className="h-4.5 w-4.5 ms-2" />
+                  <ArrowRight className="h-5 w-5 ms-2" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild className="h-13 px-6 text-base">
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="h-14 px-10 text-lg font-bold rounded-xl border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+              >
                 <Link href={`/${locale}/company/register`}>
                   {t('hero.registerCompany')}
                 </Link>
@@ -108,7 +113,7 @@ export default function HeroSection() {
         </div>
 
         {/* How It Works Section — now embedded below hero content, visible together */}
-        <div className="mt-10">
+        <div className="mt-4">
           {require('./HowItWorksSection').default()}
         </div>
       </div>

@@ -104,11 +104,11 @@ model User {
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   isActive           Boolean   @default(true)
-  
+
   // Account lockout fields
   failedLoginAttempts Int       @default(0)
   lockedUntil         DateTime?
-  
+
   // Relations
   company               Company?               @relation("CompanyOwner")
   companiesVerified     Company[]              @relation("CompanyVerifier")
@@ -127,7 +127,7 @@ model User {
   staffMember           StaffMember?
   internalSent          InternalMessage[]        @relation("InternalSender")
   internalReceived      InternalMessage[]        @relation("InternalRecipient")
-  
+
   @@map("users")
 }
 
@@ -170,7 +170,7 @@ model Company {
   @@index([isFeatured])
   @@index([rating])
   @@index([createdAt])
-  
+
   // Relations
   user                User                       @relation("CompanyOwner", fields: [userId], references: [id], onDelete: Cascade)
   country             Country?                   @relation(fields: [countryId], references: [id])
@@ -187,7 +187,7 @@ model Company {
   payments            Payment[]
   matchingPreference  CompanyMatchingPreference?
   portfolio           CompanyPortfolioItem[]
-  
+
   @@map("companies")
 }
 
@@ -203,9 +203,9 @@ model CompanyDocument {
   adminNotes    String?
   uploadedAt    DateTime  @default(now())
   reviewedAt    DateTime?
-  
+
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  
+
   @@index([companyId])
   @@map("company_documents")
 }
@@ -221,9 +221,9 @@ model CompanyService {
   tags          String[]  @default([])
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  
+
   @@index([companyId])
   @@map("company_services")
 }
@@ -231,7 +231,7 @@ model CompanyService {
 model CompanyWorkingHours {
   id            String    @id @default(uuid())
   companyId     String    @unique
-  
+
   // Working hours for each day (format: "09:00-17:00" or null for closed)
   monday        String?
   tuesday       String?
@@ -240,26 +240,26 @@ model CompanyWorkingHours {
   friday        String?
   saturday      String?
   sunday        String?
-  
+
   timeZone      String    @default("UTC")
-  
+
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  
+
   @@map("company_working_hours")
 }
 
 model CompanySocialLinks {
   id            String    @id @default(uuid())
   companyId     String    @unique
-  
+
   facebook      String?
   twitter       String?
   instagram     String?
   linkedin      String?
   youtube       String?
-  
+
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  
+
   @@map("company_social_links")
 }
 
@@ -272,7 +272,7 @@ model Country {
   cities      City[]
   companies   Company[]
   requests    ServiceRequest[]
-  
+
   @@map("countries")
 }
 
@@ -283,12 +283,12 @@ model City {
   nameEn      String
   slug        String
   isActive    Boolean  @default(true)
-  
+
   country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
   companies   Company[]
   requests    ServiceRequest[]
   areas       Area[]
-  
+
   @@unique([countryId, slug])
   @@map("cities")
 }
@@ -602,7 +602,7 @@ model CMSSection {
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   @@map("cms_sections")
 }
 
@@ -612,7 +612,7 @@ model VerificationToken {
   token     String   @unique
   expires   DateTime
   createdAt DateTime @default(now())
-  
+
   @@unique([email, token])
   @@map("verification_tokens")
 }
@@ -639,9 +639,9 @@ model SecurityLog {
   userAgent String?
   metadata  Json?
   createdAt DateTime      @default(now())
-  
+
   user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
+
   @@index([userId])
   @@index([type])
   @@index([createdAt])
@@ -655,7 +655,7 @@ model PasswordResetToken {
   expires   DateTime
   createdAt DateTime @default(now())
   usedAt    DateTime?
-  
+
   @@unique([email, token])
   @@index([email])
   @@index([token])
@@ -671,9 +671,9 @@ model RefreshToken {
   revokedAt DateTime?
   ipAddress String?
   userAgent String?
-  
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId])
   @@index([token])
   @@map("refresh_tokens")
@@ -690,7 +690,7 @@ model FeatureFlag {
   category    String   @default("general")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   @@map("feature_flags")
 }
 
@@ -708,9 +708,9 @@ model CompanyMatchingPreference {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  
+
   company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  
+
   @@map("company_matching_preferences")
 }
 
@@ -727,9 +727,9 @@ model CompanyPortfolioItem {
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  
+
   @@index([companyId])
   @@map("company_portfolio_items")
 }
@@ -746,9 +746,9 @@ model StaffRole {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   staffMembers StaffMember[]
-  
+
   @@map("staff_roles")
 }
 
@@ -760,9 +760,9 @@ model Department {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   staffMembers StaffMember[]
-  
+
   @@map("departments")
 }
 
@@ -774,11 +774,11 @@ model StaffMember {
   isActive     Boolean     @default(true)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  
+
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   role         StaffRole?  @relation(fields: [roleId], references: [id])
   department   Department? @relation(fields: [departmentId], references: [id])
-  
+
   @@unique([userId])
   @@map("staff_members")
 }
@@ -796,10 +796,10 @@ model InternalMessage {
   isRead      Boolean  @default(false)
   priority    String   @default("NORMAL")
   createdAt   DateTime @default(now())
-  
+
   sender      User     @relation("InternalSender", fields: [senderId], references: [id], onDelete: Cascade)
   recipient   User?    @relation("InternalRecipient", fields: [recipientId], references: [id])
-  
+
   @@index([senderId])
   @@index([recipientId])
   @@map("internal_messages")
@@ -808,53 +808,53 @@ model InternalMessage {
 model NotificationSettings {
   id                    String   @id @default(uuid())
   userId                String   @unique
-  
+
   // Email notifications
   emailNewOffers        Boolean  @default(true)
   emailRequestUpdates   Boolean  @default(true)
   emailMessages         Boolean  @default(true)
   emailMarketing        Boolean  @default(false)
   emailSecurityAlerts   Boolean  @default(true)
-  
+
   // Push notifications
   pushNewOffers         Boolean  @default(true)
   pushRequestUpdates    Boolean  @default(true)
   pushMessages          Boolean  @default(true)
-  
+
   // SMS notifications
   smsSecurityAlerts     Boolean  @default(true)
   smsMarketing          Boolean  @default(false)
-  
+
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
-  
+
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("notification_settings")
 }
 
 model UserSettings {
   id                    String   @id @default(uuid())
   userId                String   @unique
-  
+
   // Privacy settings
   profileVisible        Boolean  @default(true)
   showEmail             Boolean  @default(false)
   showPhone             Boolean  @default(false)
   allowDirectMessages   Boolean  @default(true)
-  
+
   // Language & Region
   language              String   @default("en")
   timezone              String   @default("UTC")
-  
+
   // Account deletion
   deletionRequestedAt   DateTime?
   deletionReason        String?
-  
+
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
-  
+
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("user_settings")
 }

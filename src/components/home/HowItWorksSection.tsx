@@ -44,9 +44,9 @@ export default function HowItWorksSection() {
   const t = useTranslations("home");
 
   return (
-    <section className="py-6 bg-muted/30">
+    <section className="py-4 bg-muted/30">
       <div className="w-full px-4 md:px-8">
-        <h2 className="text-xl md:text-2xl font-bold text-center mb-8">
+        <h2 className="text-xl md:text-2xl font-bold text-center mb-4">
           {locale === "ar"
             ? "كيف يعمل الموقع؟"
             : "How does it work?"}

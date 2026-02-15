@@ -44,14 +44,14 @@ export default function DynamicServicesBar() {
   }, [index, services.length]);
 
   return (
-    <section className="w-full bg-primary/5 py-6">
+    <section className="w-full bg-primary/5 py-10 my-4">
       <div className="container mx-auto px-4 flex items-center justify-center">
-        <span className="text-lg font-medium text-muted-foreground me-2">
+        <span className="text-2xl md:text-3xl font-semibold text-muted-foreground me-3">
           {locale === "ar"
             ? "أفضل طريقة للعثور على"
             : "The best way to find a"}
         </span>
-        <span className="text-lg font-bold text-primary transition-all duration-500 min-w-[120px]">
+        <span className="text-2xl md:text-3xl font-bold text-primary transition-all duration-500 min-w-[140px]">
           {services[index]}
         </span>
       </div>

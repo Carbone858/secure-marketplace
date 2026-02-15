@@ -211,8 +211,11 @@ CREATE TABLE "categories" (
     "nameAr" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "icon" TEXT,
+    "iconName" TEXT,
+    "imageUrl" TEXT,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "isFeatured" BOOLEAN NOT NULL DEFAULT false,
     "parentId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -618,6 +621,27 @@ CREATE UNIQUE INDEX "companies_userId_key" ON "companies"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "companies_slug_key" ON "companies"("slug");
+
+-- CreateIndex
+CREATE INDEX "companies_countryId_idx" ON "companies"("countryId");
+
+-- CreateIndex
+CREATE INDEX "companies_cityId_idx" ON "companies"("cityId");
+
+-- CreateIndex
+CREATE INDEX "companies_verificationStatus_idx" ON "companies"("verificationStatus");
+
+-- CreateIndex
+CREATE INDEX "companies_isActive_idx" ON "companies"("isActive");
+
+-- CreateIndex
+CREATE INDEX "companies_isFeatured_idx" ON "companies"("isFeatured");
+
+-- CreateIndex
+CREATE INDEX "companies_rating_idx" ON "companies"("rating");
+
+-- CreateIndex
+CREATE INDEX "companies_createdAt_idx" ON "companies"("createdAt");
 
 -- CreateIndex
 CREATE INDEX "company_documents_companyId_idx" ON "company_documents"("companyId");

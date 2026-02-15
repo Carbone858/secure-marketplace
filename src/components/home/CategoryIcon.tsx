@@ -58,7 +58,7 @@ interface CategoryIconProps {
   size?: number;
 }
 
-// Map iconName to SVG filename (with spaces, matching actual files in /public/images/)
+// Map iconName to SVG filename (matching actual files in /public/images/)
 const svgIconMap: Record<string, string> = {
   'it': 'IT .svg',
   'plumbing': 'Plumping .svg',
@@ -77,8 +77,7 @@ export default function CategoryIcon({
 }: CategoryIconProps) {
   // Try SVG icon first for mapped categories
   if (iconName && svgIconMap[iconName]) {
-    // Add cache-busting query string to force reload
-    const svgPath = `/images/${svgIconMap[iconName]}?v=${Date.now()}`;
+    const svgPath = `/images/${svgIconMap[iconName]}`;
     return (
       <img
         src={svgPath}

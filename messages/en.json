@@ -63,6 +63,24 @@
     }
   },
   "auth": {
+    "password": {
+      "strength": {
+        "label": "Password Strength",
+        "empty": "Enter a password",
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      },
+      "requirements": {
+        "title": "Password must have:",
+        "minLength": "At least 12 characters",
+        "uppercase": "One uppercase letter (A-Z)",
+        "lowercase": "One lowercase letter (a-z)",
+        "number": "One number (0-9)",
+        "specialChar": "One special character (!@#$...)"
+      }
+    },
     "register": {
       "meta": {
         "title": "Register - Service Marketplace",

@@ -63,6 +63,24 @@
     }
   },
   "auth": {
+    "password": {
+      "strength": {
+        "label": "قوة كلمة المرور",
+        "empty": "أدخل كلمة مرور",
+        "weak": "ضعيفة",
+        "fair": "متوسطة",
+        "good": "جيدة",
+        "strong": "قوية"
+      },
+      "requirements": {
+        "title": "يجب أن تحتوي كلمة المرور على:",
+        "minLength": "12 حرفاً على الأقل",
+        "uppercase": "حرف كبير واحد (A-Z)",
+        "lowercase": "حرف صغير واحد (a-z)",
+        "number": "رقم واحد (0-9)",
+        "specialChar": "رمز خاص واحد (!@#$...)"
+      }
+    },
     "register": {
       "meta": {
         "title": "التسجيل - سوق الخدمات",

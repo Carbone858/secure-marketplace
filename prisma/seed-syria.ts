@@ -187,22 +187,22 @@ const syriaData = {
 
 // Common service categories for seeding
 const categories = [
-  { name: 'Construction & Building', nameEn: 'Construction & Building', nameAr: 'البناء والتشييد', slug: 'construction', icon: '🏗️', sortOrder: 1 },
-  { name: 'Interior Design', nameEn: 'Interior Design', nameAr: 'التصميم الداخلي', slug: 'interior-design', icon: '🎨', sortOrder: 2 },
-  { name: 'Plumbing', nameEn: 'Plumbing', nameAr: 'السباكة', slug: 'plumbing', icon: '🔧', sortOrder: 3 },
-  { name: 'Electrical', nameEn: 'Electrical', nameAr: 'الكهرباء', slug: 'electrical', icon: '⚡', sortOrder: 4 },
-  { name: 'HVAC', nameEn: 'HVAC', nameAr: 'التدفئة والتبريد', slug: 'hvac', icon: '❄️', sortOrder: 5 },
-  { name: 'Cleaning Services', nameEn: 'Cleaning Services', nameAr: 'خدمات التنظيف', slug: 'cleaning', icon: '🧹', sortOrder: 6 },
-  { name: 'Moving & Relocation', nameEn: 'Moving & Relocation', nameAr: 'النقل والترحيل', slug: 'moving', icon: '🚚', sortOrder: 7 },
-  { name: 'IT & Technology', nameEn: 'IT & Technology', nameAr: 'تكنولوجيا المعلومات', slug: 'it-technology', icon: '💻', sortOrder: 8 },
-  { name: 'Legal Services', nameEn: 'Legal Services', nameAr: 'الخدمات القانونية', slug: 'legal', icon: '⚖️', sortOrder: 9 },
-  { name: 'Accounting & Finance', nameEn: 'Accounting & Finance', nameAr: 'المحاسبة والمالية', slug: 'accounting', icon: '📊', sortOrder: 10 },
-  { name: 'Marketing & Advertising', nameEn: 'Marketing & Advertising', nameAr: 'التسويق والإعلان', slug: 'marketing', icon: '📣', sortOrder: 11 },
-  { name: 'Transportation', nameEn: 'Transportation', nameAr: 'النقل', slug: 'transportation', icon: '🚗', sortOrder: 12 },
-  { name: 'Healthcare', nameEn: 'Healthcare', nameAr: 'الرعاية الصحية', slug: 'healthcare', icon: '🏥', sortOrder: 13 },
-  { name: 'Education & Training', nameEn: 'Education & Training', nameAr: 'التعليم والتدريب', slug: 'education', icon: '📚', sortOrder: 14 },
-  { name: 'Events & Entertainment', nameEn: 'Events & Entertainment', nameAr: 'الفعاليات والترفيه', slug: 'events', icon: '🎉', sortOrder: 15 },
-  { name: 'Photography & Video', nameEn: 'Photography & Video', nameAr: 'التصوير والفيديو', slug: 'photography', icon: '📷', sortOrder: 16 },
+  { name: 'Construction & Building', nameEn: 'Construction & Building', nameAr: 'البناء والتشييد', slug: 'construction', icon: '🏗️', iconName: 'construction', sortOrder: 1, isFeatured: true },
+  { name: 'Interior Design', nameEn: 'Interior Design', nameAr: 'التصميم الداخلي', slug: 'interior-design', icon: '🎨', iconName: 'interior-design', sortOrder: 2, isFeatured: true },
+  { name: 'Plumbing', nameEn: 'Plumbing', nameAr: 'السباكة', slug: 'plumbing', icon: '🔧', iconName: 'plumbing', sortOrder: 3, isFeatured: true },
+  { name: 'Electrical', nameEn: 'Electrical', nameAr: 'الكهرباء', slug: 'electrical', icon: '⚡', iconName: 'electrical', sortOrder: 4, isFeatured: true },
+  { name: 'HVAC', nameEn: 'HVAC', nameAr: 'التدفئة والتبريد', slug: 'hvac', icon: '❄️', iconName: 'hvac', sortOrder: 5, isFeatured: true },
+  { name: 'Cleaning Services', nameEn: 'Cleaning Services', nameAr: 'خدمات التنظيف', slug: 'cleaning', icon: '🧹', iconName: 'cleaning', sortOrder: 6, isFeatured: true },
+  { name: 'Moving & Relocation', nameEn: 'Moving & Relocation', nameAr: 'النقل والترحيل', slug: 'moving', icon: '🚚', iconName: 'moving', sortOrder: 7, isFeatured: true },
+  { name: 'IT & Technology', nameEn: 'IT & Technology', nameAr: 'تكنولوجيا المعلومات', slug: 'it-technology', icon: '💻', iconName: 'it', sortOrder: 8, isFeatured: true },
+  { name: 'Legal Services', nameEn: 'Legal Services', nameAr: 'الخدمات القانونية', slug: 'legal', icon: '⚖️', iconName: 'gavel', sortOrder: 9, isFeatured: false },
+  { name: 'Accounting & Finance', nameEn: 'Accounting & Finance', nameAr: 'المحاسبة والمالية', slug: 'accounting', icon: '📊', iconName: 'calculator', sortOrder: 10, isFeatured: false },
+  { name: 'Marketing & Advertising', nameEn: 'Marketing & Advertising', nameAr: 'التسويق والإعلان', slug: 'marketing', icon: '📣', iconName: 'business', sortOrder: 11, isFeatured: false },
+  { name: 'Transportation', nameEn: 'Transportation', nameAr: 'النقل', slug: 'transportation', icon: '🚗', iconName: 'moving', sortOrder: 12, isFeatured: false },
+  { name: 'Healthcare', nameEn: 'Healthcare', nameAr: 'الرعاية الصحية', slug: 'healthcare', icon: '🏥', iconName: 'health', sortOrder: 13, isFeatured: false },
+  { name: 'Education & Training', nameEn: 'Education & Training', nameAr: 'التعليم والتدريب', slug: 'education', icon: '📚', iconName: 'school', sortOrder: 14, isFeatured: false },
+  { name: 'Events & Entertainment', nameEn: 'Events & Entertainment', nameAr: 'الفعاليات والترفيه', slug: 'events', icon: '🎉', iconName: 'award', sortOrder: 15, isFeatured: false },
+  { name: 'Photography & Video', nameEn: 'Photography & Video', nameAr: 'التصوير والفيديو', slug: 'photography', icon: '📷', iconName: 'camera', sortOrder: 16, isFeatured: false },
 ];
 
 // Membership plans
@@ -312,7 +312,9 @@ async function main() {
         nameEn: cat.nameEn,
         nameAr: cat.nameAr,
         icon: cat.icon,
+        iconName: cat.iconName,
         sortOrder: cat.sortOrder,
+        isFeatured: cat.isFeatured,
         isActive: true,
       },
       create: {
@@ -321,7 +323,9 @@ async function main() {
         nameAr: cat.nameAr,
         slug: cat.slug,
         icon: cat.icon,
+        iconName: cat.iconName,
         sortOrder: cat.sortOrder,
+        isFeatured: cat.isFeatured,
         isActive: true,
       },
     });

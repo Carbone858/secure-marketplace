@@ -53,13 +53,13 @@ export default function CategoryQuickSelect({
               className="group flex items-center gap-2.5 rounded-full border border-border/60 bg-card px-5 py-3 mx-auto 
                          transition-all duration-200 hover:border-primary/40 hover:bg-primary/5 hover:shadow-sm min-w-[170px] justify-center"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary 
+              <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary 
                               transition-colors group-hover:bg-primary/20">
                 <CategoryIcon
                   iconName={cat.iconName}
                   emoji={cat.icon}
-                  className="h-5 w-5"
-                  size={20}
+                  className="h-[50px] w-[50px]"
+                  size={50}
                 />
               </span>
               <span className="text-base font-medium leading-tight text-foreground/80 group-hover:text-foreground line-clamp-2">

@@ -39,7 +39,7 @@ export default function HomePage() {
 
   const fetchFeaturedCompanies = async () => {
     try {
-      const response = await fetch('/api/companies/search?verifiedOnly=true&limit=4');
+      const response = await fetch('/api/companies/search?limit=4&sortBy=rating');
       if (response.ok) {
         const data = await response.json();
         setFeaturedCompanies(data.companies);
@@ -80,43 +80,41 @@ export default function HomePage() {
   ];
 
   return (
-      <div className="min-h-screen">
-        {/* Hero Section */}
-        <HeroSection />
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <HeroSection />
 
 
-        {/* Dynamic Services Bar */}
-        <div className="mb-16">
-          <DynamicServicesBar />
-        </div>
+      {/* Dynamic Services Bar */}
+      <DynamicServicesBar />
 
-        {/* Statistics Section */}
-        <section className="py-24 bg-gradient-to-b from-primary/5 to-background mb-16">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-14">
-              {stats.map((stat, i) => (
-                <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-2xl shadow-sm p-8">
-                  <span className="mb-4 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10">
-                    {/* Example icons for each stat */}
-                    {i === 0 && <Shield className="h-7 w-7 text-primary" />}
-                    {i === 1 && <Briefcase className="h-7 w-7 text-primary" />}
-                    {i === 2 && <Users className="h-7 w-7 text-primary" />}
-                    {i === 3 && <Star className="h-7 w-7 text-primary" />}
-                  </span>
-                  <p className="text-3xl md:text-4xl font-bold text-primary">
-                    {stat.value}
-                  </p>
-                  <p className="text-muted-foreground mt-2 text-center">{stat.label}</p>
-                </div>
-              ))}
-            </div>
+      {/* Statistics Section */}
+      <section className="py-16 bg-gradient-to-b from-primary/5 to-background">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, i) => (
+              <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-2xl shadow-sm p-8">
+                <span className="mb-4 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10">
+                  {/* Example icons for each stat */}
+                  {i === 0 && <Shield className="h-7 w-7 text-primary" />}
+                  {i === 1 && <Briefcase className="h-7 w-7 text-primary" />}
+                  {i === 2 && <Users className="h-7 w-7 text-primary" />}
+                  {i === 3 && <Star className="h-7 w-7 text-primary" />}
+                </span>
+                <p className="text-3xl md:text-4xl font-bold text-primary">
+                  {stat.value}
+                </p>
+                <p className="text-muted-foreground mt-2 text-center">{stat.label}</p>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Why Choose Us Section */}
-        <section className="py-24 bg-muted/30">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
+      {/* Why Choose Us Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
             <h2 className="text-3xl font-bold mb-4">{t('whyChooseUs.title')}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               {t('whyChooseUs.subtitle')}
@@ -138,16 +136,16 @@ export default function HomePage() {
       </section>
 
       {/* Featured Companies Section */}
-      {featuredCompanies.length > 0 && (
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">{t('featured.title')}</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                {t('featured.subtitle')}
-              </p>
-            </div>
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold mb-4">{t('featured.title')}</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              {t('featured.subtitle')}
+            </p>
+          </div>
 
+          {featuredCompanies.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featuredCompanies.map((company) => (
                 <Link
@@ -191,12 +189,24 @@ export default function HomePage() {
                 </Link>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          ) : (
+            <div className="text-center py-12 bg-muted/20 rounded-2xl">
+              <Building2 className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg">
+                {locale === 'ar' ? 'الشركات المميزة قادمة قريباً' : 'Featured companies coming soon'}
+              </p>
+              <Button variant="outline" className="mt-4" asChild>
+                <Link href={`/${locale}/company/register`}>
+                  {locale === 'ar' ? 'سجل شركتك الآن' : 'Register your company'}
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary/80 to-primary text-white">
+      <section className="py-16 bg-gradient-to-r from-primary/80 to-primary text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg">
             {t('cta.title')}
