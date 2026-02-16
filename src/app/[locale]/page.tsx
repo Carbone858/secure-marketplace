@@ -18,6 +18,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { HeroSection } from '@/components/home';
 
 import DynamicServicesBar from '@/components/home/DynamicServicesBar';
+import UserProcess from '@/components/home/UserProcess';
+import CompanyProcess from '@/components/home/CompanyProcess';
 
 interface Company {
   id: string;
@@ -87,6 +89,9 @@ export default function HomePage() {
 
       {/* Dynamic Services Bar */}
       <DynamicServicesBar />
+
+      {/* User Process - How it Works */}
+      <UserProcess />
 
       {/* Featured Companies Section */}
       <section className="py-24 bg-gray-100 dark:bg-gray-900">
@@ -158,70 +163,48 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Statistics Section */}\
-
-      <section className="py-24 bg-background">
+      {/* Statistics Section */}
+      <section className="py-12 bg-background/50 border-y">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
             {stats.map((stat, i) => (
-              <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-2xl shadow-sm p-8">
-                <span className="mb-4 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10">
+              <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow p-6">
+                <span className="mb-3 flex items-center justify-center h-10 w-10 rounded-full bg-primary/10">
                   {/* Example icons for each stat */}
-                  {i === 0 && <Shield className="h-7 w-7 text-primary" />}
-                  {i === 1 && <Briefcase className="h-7 w-7 text-primary" />}
-                  {i === 2 && <Users className="h-7 w-7 text-primary" />}
-                  {i === 3 && <Star className="h-7 w-7 text-primary" />}
+                  {i === 0 && <Shield className="h-5 w-5 text-primary" />}
+                  {i === 1 && <Briefcase className="h-5 w-5 text-primary" />}
+                  {i === 2 && <Users className="h-5 w-5 text-primary" />}
+                  {i === 3 && <Star className="h-5 w-5 text-primary" />}
                 </span>
-                <p className="text-3xl md:text-4xl font-bold text-primary">
+                <p className="text-2xl md:text-3xl font-bold text-primary">
                   {stat.value}
                 </p>
-                <p className="text-muted-foreground mt-2 text-center">{stat.label}</p>
+                <p className="text-sm text-muted-foreground mt-1 text-center font-medium">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-24 bg-gray-100 dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-4">{t('whyChooseUs.title')}</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              {t('whyChooseUs.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature) => (
-              <div key={feature.title} className="flex flex-col items-center bg-card rounded-2xl shadow-sm p-8 h-full">
-                <span className="mb-4 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10">
-                  <feature.icon className="h-7 w-7 text-primary" />
-                </span>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground text-base text-center">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* How Companies Benefit Section (Laptop Mockup) */}
+      <CompanyProcess />
 
 
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-primary/80 to-primary text-white">
+      <section className="py-24 bg-primary/5 border-t">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">
             {t('cta.title')}
           </h2>
-          <p className="text-xl opacity-90 max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
             {t('cta.subtitle')}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button
               size="lg"
-              variant="secondary"
-              className="font-bold shadow-md px-8 py-3 text-lg"
+              variant="default"
+              className="font-bold shadow-lg shadow-primary/20 px-8 py-6 text-lg h-auto"
               asChild
             >
               <Link href={`/${locale}/requests/start`}>
@@ -231,7 +214,7 @@ export default function HomePage() {
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white font-bold shadow-md px-8 py-3 text-lg hover:bg-white hover:text-primary"
+              className="border-primary text-primary hover:bg-primary/5 font-bold px-8 py-6 text-lg h-auto"
               asChild
             >
               <Link href={`/${locale}/company/register`}>

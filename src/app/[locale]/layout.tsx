@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { MobileNav } from '@/components/layout/MobileNav';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,7 +38,7 @@ export default async function RootLayout({
   } catch (error) {
     messages = {};
   }
-  
+
   const isRTL = locale === 'ar';
 
   return (
@@ -48,6 +49,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers>
             <Navbar />
+            <MobileNav />
             <main className="flex-1">
               {children}
             </main>

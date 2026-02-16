@@ -30,6 +30,14 @@ export function DropdownMenu({
     onOpenChange?.(next);
   };
 
+  React.useEffect(() => {
+    if (currentOpen) {
+      const handleScroll = () => setOpen(false);
+      window.addEventListener('scroll', handleScroll, { capture: true });
+      return () => window.removeEventListener('scroll', handleScroll, { capture: true });
+    }
+  }); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <DropdownMenuContext.Provider value={{ open: currentOpen, setOpen }}>
       <div className="relative inline-block text-left">{children}</div>
@@ -93,8 +101,8 @@ export function DropdownMenuContent({
     align === 'end'
       ? 'right-0'
       : align === 'center'
-      ? 'left-1/2 -translate-x-1/2'
-      : 'left-0';
+        ? 'left-1/2 -translate-x-1/2'
+        : 'left-0';
 
   return (
     <div
@@ -131,7 +139,7 @@ export function DropdownMenuItem({
       },
       className: cn(
         'flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors ' +
-          'hover:bg-accent hover:text-accent-foreground',
+        'hover:bg-accent hover:text-accent-foreground',
         (children.props as { className?: string }).className,
         className
       ),
@@ -143,7 +151,7 @@ export function DropdownMenuItem({
       role="menuitem"
       className={cn(
         'flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors ' +
-          'hover:bg-accent hover:text-accent-foreground',
+        'hover:bg-accent hover:text-accent-foreground',
         className
       )}
       onClick={() => close()}
@@ -154,6 +162,22 @@ export function DropdownMenuItem({
   );
 }
 
-export function DropdownMenuSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function DropdownMenuSeparator({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={cn('my-1 h-px bg-muted', className)} {...props} />;
+}
+
+export function DropdownMenuLabel({
+  className,
+  inset,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & { inset?: boolean }) {
+  return (
+    <div
+      className={cn('px-2 py-1.5 text-sm font-semibold', inset && 'pl-8', className)}
+      {...props}
+    />
+  );
 }

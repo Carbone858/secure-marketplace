@@ -44,7 +44,7 @@ export default function DynamicServicesBar() {
   }, [index, services.length]);
 
   return (
-    <section className="w-full bg-background border-b py-12">
+    <section className="w-full bg-primary/5 border-y border-primary/10 py-14 shadow-sm relative z-10">
       <div className="container mx-auto px-4 flex items-center justify-center">
         <span className="text-2xl md:text-3xl font-semibold text-muted-foreground me-3">
           {locale === "ar"

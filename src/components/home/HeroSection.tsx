@@ -70,32 +70,33 @@ export default function HeroSection() {
             </div>
 
             {/* Trust points */}
-            <ul className="flex flex-col gap-2">
+            {/* Trust points - Compact Row */}
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
               {trustPoints.map((point, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                <li key={i} className="flex items-center gap-1.5">
                   <CheckCircle className="h-4 w-4 text-success shrink-0" />
                   <span>{point}</span>
                 </li>
               ))}
             </ul>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-1">
+            {/* CTA Buttons - Smaller */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <Button
                 size="lg"
                 asChild
-                className="h-14 px-10 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/85 hover:from-primary/90 hover:to-primary rounded-xl hover:scale-[1.03] active:scale-[0.98]"
+                className="h-11 px-6 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-primary/85 hover:from-primary/90 hover:to-primary rounded-xl hover:scale-[1.03] active:scale-[0.98]"
               >
                 <Link href={`/${locale}/requests/start`}>
                   {t('hero.startRequest')}
-                  <ArrowRight className="h-5 w-5 ms-2" />
+                  <ArrowRight className="h-4 w-4 ms-2" />
                 </Link>
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 asChild
-                className="h-14 px-10 text-lg font-bold rounded-xl border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+                className="h-11 px-6 text-base font-bold rounded-xl border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
               >
                 <Link href={`/${locale}/company/register`}>
                   {t('hero.registerCompany')}

@@ -1,79 +1,78 @@
-'use client';
+"use client"
 
-import { Moon, Sun, Monitor } from 'lucide-react';
-import { useTheme, type ThemeMode } from '@/components/providers/ThemeProvider';
-import { cn } from '@/lib/utils';
+import * as React from "react"
+import { Moon, Sun, Leaf, Check } from "lucide-react"
+import { useTheme } from "@/components/providers/ThemeProvider"
 
-/**
- * Theme toggle button — cycles through light → dark → system.
- * Can also be used as a simple light/dark toggle.
- */
-export function ThemeToggle({
-  showSystem = false,
-  className,
-}: {
-  /** Whether to include "system" as a third option */
-  showSystem?: boolean;
-  className?: string;
-}) {
-  const { mode, resolvedTheme, setMode, toggleTheme } = useTheme();
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-  if (!showSystem) {
-    return (
-      <button
-        type="button"
-        onClick={toggleTheme}
-        className={cn(
-          'inline-flex items-center justify-center rounded-md p-2',
-          'text-muted-foreground hover:text-foreground hover:bg-accent',
-          'transition-colors focus-ring',
-          className,
-        )}
-        aria-label={resolvedTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-      >
-        {resolvedTheme === 'light' ? (
-          <Moon className="h-5 w-5" />
-        ) : (
-          <Sun className="h-5 w-5" />
-        )}
-      </button>
-    );
+export function ThemeToggle() {
+  const { setMode, resolvedTheme, brandTheme, setBrandTheme } = useTheme()
+
+  const handleSelectTheme = (theme: 'light' | 'dark' | 'emerald') => {
+    if (theme === 'emerald') {
+      setMode('light')
+      setBrandTheme('emerald')
+    } else {
+      setMode(theme)
+      setBrandTheme(null) // Clear brand for default themes
+    }
   }
 
-  const modes: { value: ThemeMode; icon: typeof Sun; label: string }[] = [
-    { value: 'light', icon: Sun, label: 'Light' },
-    { value: 'dark', icon: Moon, label: 'Dark' },
-    { value: 'system', icon: Monitor, label: 'System' },
-  ];
+  // Determine active state for UI
+  const isEmerald = brandTheme?.name === 'emerald'
+  const isLight = resolvedTheme === 'light' && !brandTheme
+  const isDark = resolvedTheme === 'dark' && !brandTheme
 
   return (
-    <div
-      className={cn(
-        'inline-flex items-center rounded-lg bg-muted p-1',
-        className,
-      )}
-      role="radiogroup"
-      aria-label="Theme"
-    >
-      {modes.map(({ value, icon: Icon, label }) => (
-        <button
-          key={value}
-          type="button"
-          role="radio"
-          aria-checked={mode === value}
-          onClick={() => setMode(value)}
-          className={cn(
-            'inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm',
-            'transition-colors',
-            mode === value
-              ? 'bg-background text-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          <Icon className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />
-          <span className="sr-only sm:not-sr-only">{label}</span>
-        </button>
-      ))}
-    </div>
-  );
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative group">
+          {/* All icons absolute centered */}
+          <Sun
+            className={`h-[1.2rem] w-[1.2rem] transition-all absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:scale-0 text-orange-500 ${isEmerald ? 'opacity-0 scale-0 rotate-90' : 'scale-100 rotate-0'}`}
+          />
+          <Moon
+            className={`h-[1.2rem] w-[1.2rem] transition-all absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:scale-100 dark:rotate-0 scale-0 rotate-90 text-blue-400 ${isEmerald ? 'opacity-0 scale-0 rotate-90' : ''}`}
+          />
+          <Leaf
+            className={`h-[1.2rem] w-[1.2rem] transition-all absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-600 ${isEmerald ? 'scale-100 rotate-0 opacity-100' : 'scale-0 rotate-90 opacity-0'}`}
+          />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>Select Appearance</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem onClick={() => handleSelectTheme('light')} className="gap-2 cursor-pointer">
+          <Sun className="h-4 w-4 text-orange-500" />
+          <span>Light Luxury</span>
+          {isLight && <Check className="ml-auto h-4 w-4" />}
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={() => handleSelectTheme('dark')} className="gap-2 cursor-pointer">
+          <Moon className="h-4 w-4 text-blue-500" />
+          <span>Dark Luxury</span>
+          {isDark && <Check className="ml-auto h-4 w-4" />}
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem onClick={() => handleSelectTheme('emerald')} className="gap-2 cursor-pointer bg-emerald-50 dark:bg-emerald-950/20">
+          <Leaf className="h-4 w-4 text-emerald-600" />
+          <span>Emerald Professional</span>
+          {isEmerald && <Check className="ml-auto h-4 w-4 text-emerald-600" />}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
