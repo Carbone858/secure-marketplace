@@ -56,7 +56,7 @@ export default function UserProcess() {
     useEffect(() => {
         const timer = setInterval(() => {
             setActiveStep((prev) => (prev + 1) % steps.length);
-        }, 3000); // Faster speed (3s)
+        }, 6000); // Slower speed (6s) for realistic animations
         return () => clearInterval(timer);
     }, [activeStep]); // Reset timer when activeStep changes
 
@@ -194,10 +194,23 @@ export default function UserProcess() {
                                                     {locale === 'ar' ? 'ما الذي تريد إنجازه اليوم؟' : 'What do you want to get done today?'}
                                                 </p>
 
-                                                <button className="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 mb-6 hover:scale-105 transition-transform">
-                                                    <Plus className="h-5 w-5" />
-                                                    {locale === 'ar' ? 'إنشاء طلب جديد' : 'Create New Request'}
-                                                </button>
+                                                <div className="w-full relative">
+                                                    <motion.button
+                                                        className="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/20 flex items-center justify-center gap-2 mb-6 hover:scale-105 transition-transform"
+                                                        animate={{ scale: [1, 0.95, 1] }}
+                                                        transition={{ delay: 5.5, duration: 0.2 }}
+                                                    >
+                                                        <Plus className="h-5 w-5" />
+                                                        {locale === 'ar' ? 'إنشاء طلب جديد' : 'Create New Request'}
+                                                    </motion.button>
+                                                    {/* Tap Highlight */}
+                                                    <motion.div
+                                                        className="absolute top-1/2 left-1/2 w-12 h-12 bg-white/30 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                                                        initial={{ scale: 0, opacity: 0 }}
+                                                        animate={{ scale: [0, 2], opacity: [0.5, 0] }}
+                                                        transition={{ delay: 5.4, duration: 0.4 }}
+                                                    />
+                                                </div>
 
                                                 <div className="grid grid-cols-2 gap-4 w-full">
                                                     <div className="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border dark:border-gray-800 h-24 flex flex-col items-center justify-center gap-2">
@@ -212,7 +225,7 @@ export default function UserProcess() {
                                             </motion.div>
                                         )}
 
-                                        {/* Screen 2: Create Request Form */}
+                                        {/* Screen 2: Create Request Form (Realistic Typing) */}
                                         {activeStep === 1 && (
                                             <motion.div
                                                 key="screen2"
@@ -231,27 +244,72 @@ export default function UserProcess() {
                                                         <span>20%</span>
                                                     </div>
                                                     <div className="h-1.5 w-full bg-gray-200 dark:bg-gray-800 rounded-full mt-1">
-                                                        <div className="h-1.5 w-1/5 bg-primary rounded-full"></div>
+                                                        <motion.div
+                                                            className="h-1.5 bg-primary rounded-full"
+                                                            initial={{ width: "0%" }}
+                                                            animate={{ width: "20%" }}
+                                                            transition={{ delay: 0.5, duration: 0.5 }}
+                                                        />
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <div className="space-y-1">
+                                                    <div className="space-y-1 relative">
                                                         <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                                                             {locale === 'ar' ? 'عنوان الطلب' : 'Title'}
                                                         </label>
-                                                        <div className="h-10 bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-lg flex items-center px-3 text-sm text-gray-800 dark:text-gray-200">
-                                                            {locale === 'ar' ? 'صيانة عامة للمنزل' : 'General Home Maintenance'}
+                                                        <div className="h-10 bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-lg flex items-center px-3 text-sm text-gray-800 dark:text-gray-200 overflow-hidden relative">
+                                                            <motion.span
+                                                                initial={{ width: 0 }}
+                                                                animate={{ width: "100%" }}
+                                                                transition={{ delay: 1, duration: 1.5, ease: "linear" }}
+                                                                className="overflow-hidden whitespace-nowrap block"
+                                                            >
+                                                                {locale === 'ar' ? 'صيانة عامة للمنزل' : 'General Home Maintenance'}
+                                                            </motion.span>
+                                                            <motion.span
+                                                                initial={{ opacity: 0 }}
+                                                                animate={{ opacity: [0, 1, 0] }}
+                                                                transition={{ delay: 1, duration: 2, repeat: 2 }}
+                                                                className="absolute right-3 w-0.5 h-4 bg-primary top-3"
+                                                            />
                                                         </div>
+                                                        {/* Tap Highlight */}
+                                                        <motion.div
+                                                            className="absolute top-1/2 left-1/2 w-8 h-8 bg-primary/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                                                            initial={{ scale: 0, opacity: 0 }}
+                                                            animate={{ scale: [0, 1.5], opacity: [0.5, 0] }}
+                                                            transition={{ delay: 0.8, duration: 0.4 }}
+                                                        />
                                                     </div>
 
-                                                    <div className="space-y-1">
+                                                    <div className="space-y-1 relative">
                                                         <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                                                             {locale === 'ar' ? 'الوصف' : 'Description'}
                                                         </label>
-                                                        <div className="h-24 bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-lg p-3 text-sm text-gray-400">
-                                                            {locale === 'ar' ? 'أدخل تفاصيل الطلب هنا...' : 'Enter details here...'}
+                                                        <div className="h-24 bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-lg p-3 text-sm text-gray-400 leading-relaxed font-sans relative">
+                                                            <motion.span
+                                                                initial={{ opacity: 0 }}
+                                                                animate={{ opacity: 1 }}
+                                                                transition={{ delay: 3, duration: 1 }}
+                                                                className="text-gray-800 dark:text-gray-200"
+                                                            >
+                                                                {locale === 'ar' ? 'أحتاج إلى سباك وكهربائي لإصلاح...' : 'I need a plumber and electrician to fix...'}
+                                                            </motion.span>
+                                                            <motion.span
+                                                                initial={{ opacity: 0 }}
+                                                                animate={{ opacity: [0, 1, 0] }}
+                                                                transition={{ delay: 3, duration: 2, repeat: 2 }}
+                                                                className="inline-block w-0.5 h-3 bg-primary ml-0.5 align-middle"
+                                                            />
                                                         </div>
+                                                        {/* Tap Highlight */}
+                                                        <motion.div
+                                                            className="absolute top-1/2 left-10 w-8 h-8 bg-primary/20 rounded-full pointer-events-none"
+                                                            initial={{ scale: 0, opacity: 0 }}
+                                                            animate={{ scale: [0, 1.5], opacity: [0.5, 0] }}
+                                                            transition={{ delay: 2.8, duration: 0.4 }}
+                                                        />
                                                     </div>
 
                                                     <div className="grid grid-cols-2 gap-3">
@@ -275,10 +333,21 @@ export default function UserProcess() {
                                                     </div>
                                                 </div>
 
-                                                <div className="mt-auto pt-4">
-                                                    <button className="w-full bg-gray-900 dark:bg-white dark:text-black text-white py-3 rounded-lg font-bold">
+                                                <div className="mt-auto pt-4 relative">
+                                                    <motion.button
+                                                        className="w-full bg-gray-900 dark:bg-white dark:text-black text-white py-3 rounded-lg font-bold shadow-lg"
+                                                        animate={{ scale: [1, 0.95, 1] }}
+                                                        transition={{ delay: 5.5, duration: 0.2 }}
+                                                    >
                                                         {locale === 'ar' ? 'التالي' : 'Next'}
-                                                    </button>
+                                                    </motion.button>
+                                                    {/* Tap Highlight on Button */}
+                                                    <motion.div
+                                                        className="absolute top-1/2 left-1/2 w-12 h-12 bg-white/30 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                                                        initial={{ scale: 0, opacity: 0 }}
+                                                        animate={{ scale: [0, 2], opacity: [0.5, 0] }}
+                                                        transition={{ delay: 5.4, duration: 0.4 }}
+                                                    />
                                                 </div>
                                             </motion.div>
                                         )}

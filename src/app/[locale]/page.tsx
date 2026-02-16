@@ -90,6 +90,29 @@ export default function HomePage() {
       {/* Dynamic Services Bar */}
       <DynamicServicesBar />
 
+      {/* Statistics Section */}
+      <section className="py-12 bg-background/50 border-y">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+            {stats.map((stat, i) => (
+              <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow p-6">
+                <span className="mb-3 flex items-center justify-center h-10 w-10 rounded-full bg-primary/10">
+                  {/* Example icons for each stat */}
+                  {i === 0 && <Shield className="h-5 w-5 text-primary" />}
+                  {i === 1 && <Briefcase className="h-5 w-5 text-primary" />}
+                  {i === 2 && <Users className="h-5 w-5 text-primary" />}
+                  {i === 3 && <Star className="h-5 w-5 text-primary" />}
+                </span>
+                <p className="text-2xl md:text-3xl font-bold text-primary">
+                  {stat.value}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1 text-center font-medium">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* User Process - How it Works */}
       <UserProcess />
 
@@ -163,28 +186,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Statistics Section */}
-      <section className="py-12 bg-background/50 border-y">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            {stats.map((stat, i) => (
-              <div key={stat.label} className="flex flex-col items-center justify-center bg-card rounded-xl shadow-sm hover:shadow-md transition-shadow p-6">
-                <span className="mb-3 flex items-center justify-center h-10 w-10 rounded-full bg-primary/10">
-                  {/* Example icons for each stat */}
-                  {i === 0 && <Shield className="h-5 w-5 text-primary" />}
-                  {i === 1 && <Briefcase className="h-5 w-5 text-primary" />}
-                  {i === 2 && <Users className="h-5 w-5 text-primary" />}
-                  {i === 3 && <Star className="h-5 w-5 text-primary" />}
-                </span>
-                <p className="text-2xl md:text-3xl font-bold text-primary">
-                  {stat.value}
-                </p>
-                <p className="text-sm text-muted-foreground mt-1 text-center font-medium">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* How Companies Benefit Section (Laptop Mockup) */}
       <CompanyProcess />
