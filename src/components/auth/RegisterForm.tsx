@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Eye, EyeOff, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { PasswordStrength } from './PasswordStrength';
+import { SocialLogin } from './SocialLogin';
 import Link from 'next/link';
 
 interface RegisterFormData {
@@ -262,9 +263,8 @@ export function RegisterForm() {
           value={formData.name}
           onChange={handleChange}
           placeholder={t('fields.name.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-            errors.name ? 'border-destructive' : 'border-input'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.name ? 'border-destructive' : 'border-input'
+            }`}
           disabled={isLoading}
         />
         {errors.name && <p className="text-destructive text-sm">{errors.name}</p>}
@@ -282,9 +282,8 @@ export function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           placeholder={t('fields.email.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-            errors.email ? 'border-destructive' : 'border-input'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.email ? 'border-destructive' : 'border-input'
+            }`}
           disabled={isLoading}
           autoComplete="email"
         />
@@ -303,9 +302,8 @@ export function RegisterForm() {
           value={formData.phone}
           onChange={handleChange}
           placeholder={t('fields.phone.placeholder')}
-          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-            errors.phone ? 'border-destructive' : 'border-input'
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.phone ? 'border-destructive' : 'border-input'
+            }`}
           disabled={isLoading}
           autoComplete="tel"
         />
@@ -326,23 +324,22 @@ export function RegisterForm() {
             value={formData.password}
             onChange={handleChange}
             placeholder={t('fields.password.placeholder')}
-            className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.password ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full ps-4 pe-10 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.password ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
             autoComplete="new-password"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
+            className="absolute inset-y-0 end-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
         {errors.password && <p className="text-destructive text-sm">{errors.password}</p>}
-        
+
         {/* Password strength indicator */}
         <PasswordStrength password={formData.password} locale={locale} />
       </div>
@@ -360,16 +357,15 @@ export function RegisterForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder={t('fields.confirmPassword.placeholder')}
-            className={`w-full px-4 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.confirmPassword ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full ps-4 pe-10 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.confirmPassword ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
             autoComplete="new-password"
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
+            className="absolute inset-y-0 end-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -430,6 +426,9 @@ export function RegisterForm() {
           t('submit.button')
         )}
       </button>
+
+      {/* Social Login */}
+      <SocialLogin />
 
       {/* Login link */}
       <p className="text-center text-sm text-muted-foreground">

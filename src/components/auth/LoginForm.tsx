@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle, Lock, Mail } from 'lucide-react';
+import { SocialLogin } from './SocialLogin';
 import Link from 'next/link';
 
 interface LoginFormData {
@@ -245,7 +246,7 @@ export function LoginForm() {
           {t('fields.email.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
+          <Mail className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type="email"
             id="email"
@@ -253,9 +254,8 @@ export function LoginForm() {
             value={formData.email}
             onChange={handleChange}
             placeholder={t('fields.email.placeholder')}
-            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.email ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full ps-10 pe-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.email ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
             autoComplete="email"
           />
@@ -269,7 +269,7 @@ export function LoginForm() {
           {t('fields.password.label')} <span className="text-destructive">*</span>
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
+          <Lock className="absolute start-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/60" />
           <input
             type={showPassword ? 'text' : 'password'}
             id="password"
@@ -277,16 +277,15 @@ export function LoginForm() {
             value={formData.password}
             onChange={handleChange}
             placeholder={t('fields.password.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.password ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full ps-10 pe-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.password ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
             autoComplete="current-password"
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
+            className="absolute inset-y-0 end-0 px-3 flex items-center text-muted-foreground hover:text-foreground"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -331,6 +330,9 @@ export function LoginForm() {
           t('submit.button')
         )}
       </button>
+
+      {/* Social Login */}
+      <SocialLogin />
 
       {/* Register link */}
       <p className="text-center text-sm text-muted-foreground">

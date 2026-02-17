@@ -6,17 +6,17 @@ import { isYellowPagesFeaturedActive } from '@/lib/feature-flags';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     const query = searchParams.get('q') || '';
-    const countryId = searchParams.get('countryId');
-    const cityId = searchParams.get('cityId');
-    const categoryId = searchParams.get('categoryId');
-    const minRating = searchParams.get('minRating');
-    const verifiedOnly = searchParams.get('verifiedOnly') === 'true';
+    const countryId = searchParams.get('countryId') || searchParams.get('country');
+    const cityId = searchParams.get('cityId') || searchParams.get('city');
+    const categoryId = searchParams.get('categoryId') || searchParams.get('category');
+    const minRating = searchParams.get('minRating') || searchParams.get('rating');
+    const verifiedOnly = (searchParams.get('verifiedOnly') === 'true') || (searchParams.get('verified') === 'true');
     const sortBy = searchParams.get('sortBy') || 'relevance';
     const locale = searchParams.get('locale') || 'en';
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '12');
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+    const limit = Math.max(1, Math.min(100, parseInt(searchParams.get('limit') || '12')));
 
     const skip = (page - 1) * limit;
 
@@ -38,20 +38,31 @@ export async function GET(request: NextRequest) {
     }
 
     if (countryId) {
-      where.countryId = countryId;
+      if (countryId.length === 36) {
+        where.countryId = countryId;
+      } else {
+        where.country = { code: countryId.toUpperCase() };
+      }
     }
 
     if (cityId) {
-      where.cityId = cityId;
+      if (cityId.length === 36) {
+        where.cityId = cityId;
+      } else {
+        where.city = { slug: cityId.toLowerCase() };
+      }
     }
 
     if (categoryId) {
-      // Find companies associated with this category through their offers or projects
+      const categoryFilter = categoryId.length === 36
+        ? { id: categoryId }
+        : { slug: categoryId.toLowerCase() };
+
       if (!where.AND) where.AND = [];
       where.AND.push({
         OR: [
-          { offers: { some: { request: { categoryId } } } },
-          { projects: { some: { request: { categoryId } } } },
+          { offers: { some: { request: { category: categoryFilter } } } },
+          { projects: { some: { request: { category: categoryFilter } } } },
         ],
       });
     }
@@ -97,7 +108,7 @@ export async function GET(request: NextRequest) {
     // Calculate average rating for each company
     const companiesWithRating = companies.map((company) => ({
       ...company,
-      averageRating: Math.round(company.rating * 10) / 10,
+      averageRating: Math.round((company.rating || 0) * 10) / 10,
       reviewCount: company.reviewCount,
       completedProjectsCount: company.projects.length,
       country: company.country

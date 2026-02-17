@@ -60,9 +60,18 @@
       "subtitle": "Join thousands of customers and companies already using our platform",
       "postRequest": "Post a Request",
       "registerCompany": "Register as Company"
+    },
+    "meta": {
+      "title": "Service Marketplace | Find Top Pros & Manage Requests",
+      "description": "Connect with verified professionals for AC, plumbing, electrical, and more. Get quotes, compare prices, and hire the best."
     }
   },
   "auth": {
+    "social": {
+      "or": "Or continue with",
+      "google": "Google",
+      "facebook": "Facebook"
+    },
     "password": {
       "strength": {
         "label": "Password Strength",
@@ -1544,6 +1553,8 @@
       "allCountries": "All Countries",
       "category": "Category",
       "allCategories": "All Categories",
+      "city": "City",
+      "allCities": "All Cities",
       "verifiedOnly": "Verified companies only",
       "verifiedOnlyShort": "Verified Only",
       "clear": "Clear"

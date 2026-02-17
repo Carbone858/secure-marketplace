@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { signOut } from 'next-auth/react';
 
 export interface AuthUser {
   id: string;
@@ -62,12 +63,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      // Clear custom auth cookies
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
+      // Clear social auth session
+      await signOut({ redirect: false });
     } finally {
       setUser(null);
+      // Optional: Refresh page or redirect to ensure clean state
+      // window.location.href = '/'; 
     }
   };
 

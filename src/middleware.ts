@@ -34,24 +34,55 @@ const PROTECTED_API_PATTERNS = [
   /^\/api\/company\/dashboard/,
 ];
 
+import { getToken } from 'next-auth/jwt';
+
 async function verifyTokenFromCookie(request: NextRequest): Promise<{ userId: string; role: string } | null> {
-  const token = request.cookies.get('access_token')?.value;
-  if (!token) return null;
+  // 1. Try Custom Auth Token
+  let token = request.cookies.get('access_token')?.value;
 
-  const secret = process.env.JWT_SECRET;
-  if (!secret) return null;
+  if (!token) {
+    const authHeader = request.headers.get('authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      token = authHeader.slice(7);
+    }
+  }
 
+  if (token) {
+    const secret = process.env.JWT_SECRET;
+    if (secret) {
+      try {
+        const { payload } = await jwtVerify(
+          token,
+          new TextEncoder().encode(secret),
+          { audience: 'secure-marketplace', issuer: 'secure-marketplace-api' }
+        );
+        if (payload.type === 'access') {
+          return { userId: payload.userId as string, role: payload.role as string };
+        }
+      } catch {
+        // Continue to check NextAuth if custom token fails
+      }
+    }
+  }
+
+  // 2. Try NextAuth Token (Social Login)
   try {
-    const { payload } = await jwtVerify(
-      token,
-      new TextEncoder().encode(secret),
-      { audience: 'secure-marketplace', issuer: 'secure-marketplace-api' }
-    );
-    if (payload.type !== 'access') return null;
-    return { userId: payload.userId as string, role: payload.role as string };
+    const nextAuthToken = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
+    });
+
+    if (nextAuthToken?.id) {
+      return {
+        userId: nextAuthToken.id as string,
+        role: (nextAuthToken.role as string) || 'USER'
+      };
+    }
   } catch {
     return null;
   }
+
+  return null;
 }
 
 export default async function middleware(request: NextRequest) {
@@ -61,21 +92,16 @@ export default async function middleware(request: NextRequest) {
   if (pathname.startsWith('/api/')) {
     const isProtectedApi = PROTECTED_API_PATTERNS.some(p => p.test(pathname));
     if (isProtectedApi) {
-      // Check for auth token in cookie or Authorization header
-      let token = request.cookies.get('access_token')?.value;
-      if (!token) {
-        const authHeader = request.headers.get('authorization');
-        if (authHeader?.startsWith('Bearer ')) {
-          token = authHeader.slice(7);
-        }
-      }
-      if (!token) {
+      // Verify auth token (supporting Cookie, Bearer, and NextAuth)
+      const user = await verifyTokenFromCookie(request);
+
+      if (!user) {
         return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
       }
 
       // For admin API routes, verify role
       if (pathname.startsWith('/api/admin/')) {
-        const user = await verifyTokenFromCookie(request);
+        // user is already verified above
         if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
           return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
         }

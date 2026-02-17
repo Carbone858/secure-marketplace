@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth';
 import { prisma } from '@/lib/db/client';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/next-auth-options';
 
 export interface SessionUser {
   id: string;
@@ -25,6 +27,38 @@ export async function getSession(): Promise<Session> {
     const accessToken = cookieStore.get('access_token')?.value;
 
     if (!accessToken) {
+      // Try to get session from NextAuth (Social Login)
+      const nextAuthSession = await getServerSession(authOptions);
+
+      if (nextAuthSession?.user?.email) {
+        const user = await prisma.user.findUnique({
+          where: { email: nextAuthSession.user.email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            avatar: true,
+            emailVerified: true,
+            isActive: true,
+          },
+        });
+
+        if (user && user.isActive) {
+          return {
+            user: {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              role: user.role,
+              avatar: user.avatar,
+              emailVerified: user.emailVerified,
+            },
+            isAuthenticated: true,
+          };
+        }
+      }
+
       return { user: null, isAuthenticated: false };
     }
 
