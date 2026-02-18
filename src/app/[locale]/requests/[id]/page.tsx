@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db/client';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { MapPin, Briefcase, Clock, DollarSign, Calendar, User, Building2, CheckCircle, AlertCircle, Edit, Trash2 } from 'lucide-react';
+import { SendOfferButton } from '@/components/requests/SendOfferButton';
 
 interface RequestDetailPageProps {
   params: { locale: string; id: string };
@@ -140,19 +141,22 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
                 </div>
                 <h1 className="text-2xl font-bold text-foreground">{request.title}</h1>
               </div>
-              {isOwner && (
-                <div className="flex gap-2">
-                  <Link
-                    href={`/${locale}/requests/${id}/edit`}
-                    className="p-2 text-muted-foreground hover:bg-muted rounded-lg"
-                  >
-                    <Edit className="w-5 h-5" />
-                  </Link>
-                  <button className="p-2 text-destructive hover:bg-destructive/10 rounded-lg">
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                {!isOwner && <SendOfferButton requestId={id} variant="page" />}
+                {isOwner && (
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/${locale}/requests/${id}/edit`}
+                      className="p-2 text-muted-foreground hover:bg-muted rounded-lg"
+                    >
+                      <Edit className="w-5 h-5" />
+                    </Link>
+                    <button className="p-2 text-destructive hover:bg-destructive/10 rounded-lg">
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -189,8 +193,8 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
                         {request.budgetMin && request.budgetMax
                           ? `${request.budgetMin} - ${request.budgetMax} ${request.currency}`
                           : request.budgetMin
-                          ? `${t('detail.budgetFrom')} ${request.budgetMin} ${request.currency}`
-                          : `${t('detail.budgetUpTo')} ${request.budgetMax} ${request.currency}`}
+                            ? `${t('detail.budgetFrom')} ${request.budgetMin} ${request.currency}`
+                            : `${t('detail.budgetUpTo')} ${request.budgetMax} ${request.currency}`}
                       </span>
                     </div>
                   )}
@@ -244,11 +248,11 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
             )}
 
             {/* Tags */}
-            {request.tags.length > 0 && (
+            {request.tags.filter(tag => !tag.startsWith('lang:')).length > 0 && (
               <div className="mb-8">
                 <h2 className="text-lg font-semibold text-foreground mb-3">{t('detail.tags')}</h2>
                 <div className="flex flex-wrap gap-2">
-                  {request.tags.map((tag) => (
+                  {request.tags.filter(tag => !tag.startsWith('lang:')).map((tag) => (
                     <span key={tag} className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
                       {tag}
                     </span>
@@ -264,14 +268,7 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
               <h2 className="text-xl font-semibold text-foreground">
                 {t('detail.offers')} ({request._count.offers})
               </h2>
-              {canSubmitOffer && (
-                <Link
-                  href={`/${locale}/requests/${id}/offer`}
-                  className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                  {t('detail.submitOffer')}
-                </Link>
-              )}
+              {!isOwner && <SendOfferButton requestId={id} variant="page" />}
             </div>
 
             {request.offers.length === 0 ? (

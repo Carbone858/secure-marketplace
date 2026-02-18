@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { toast } from 'sonner';
@@ -22,15 +22,74 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { categories as serviceCategories, getSubcategories } from '@/lib/services-data';
+
+// Custom filter dropdown that doesn't close on internal scroll
+function FilterDropdown({ label, icon: Icon, children, className = '' }: {
+  label: string;
+  icon?: React.ElementType;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const handleScroll = (e: Event) => {
+      // Only close if scroll is on the page body, not inside the dropdown
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('scroll', handleScroll, true);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className={`relative ${className}`}>
+      <Button
+        variant="outline"
+        className="h-9 min-w-[120px] justify-between"
+        onClick={() => setOpen(o => !o)}
+        type="button"
+      >
+        <span className="flex items-center truncate">
+          {Icon && <Icon className="h-4 w-4 mr-2 text-muted-foreground flex-shrink-0" />}
+          <span className="truncate max-w-[150px]">{label}</span>
+        </span>
+        <ChevronDown className={`h-4 w-4 ml-2 opacity-50 flex-shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </Button>
+      {open && (
+        <div
+          className="absolute top-full mt-1 z-50 bg-popover border border-border rounded-md shadow-md min-w-[200px] max-h-[300px] overflow-y-auto py-1"
+          onMouseDown={e => e.stopPropagation()}
+        >
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FilterOption({ onClick, children, active = false }: { onClick: () => void; children: React.ReactNode; active?: boolean }) {
+  return (
+    <button
+      type="button"
+      className={`w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors ${active ? 'font-semibold text-primary' : ''
+        }`}
+      onMouseDown={e => { e.preventDefault(); onClick(); }}
+    >
+      {children}
+    </button>
+  );
+}
 
 interface Company {
   id: string;
@@ -113,7 +172,8 @@ export default function CompaniesPage() {
     try {
       const params = new URLSearchParams();
       params.set('page', currentPage.toString());
-      params.set('limit', '12');
+      params.set('limit', '24');
+      params.set('locale', locale);
       if (query) params.set('q', query);
       if (selectedCountry) params.set('country', selectedCountry);
       if (selectedCity) params.set('city', selectedCity);
@@ -121,6 +181,7 @@ export default function CompaniesPage() {
       if (selectedSubcategory) params.set('subcategory', selectedSubcategory);
       if (verifiedOnly) params.set('verified', 'true');
       if (sortBy) params.set('sortBy', sortBy);
+
 
       const response = await fetch(`/api/companies/search?${params.toString()}`);
       if (response.ok) {
@@ -253,107 +314,72 @@ export default function CompaniesPage() {
           {/* Filters Bar (Desktop) */}
           <div className="hidden lg:flex flex-wrap items-center gap-3 mt-4 animate-in fade-in slide-in-from-top-1">
             {/* Country */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-9 min-w-[120px] justify-between">
-                  <span className="flex items-center truncate">
-                    <MapPin className="h-4 w-4 mr-2 text-muted-foreground flex-shrink-0" />
-                    <span className="truncate max-w-[150px]">
-                      {selectedCountry ? countries.find(c => c.id === selectedCountry)?.name[isAr ? 'ar' : 'en'] : t('filters.country')}
-                    </span>
-                  </span>
-                  <ChevronDown className="h-4 w-4 ml-2 opacity-50 flex-shrink-0" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-[200px]">
-                <DropdownMenuItem className="font-semibold" onClick={() => { setSelectedCountry(''); setSelectedCity(''); }}>
-                  {t('filters.allCountries')}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {countries.map(c => (
-                  <DropdownMenuItem key={c.id} onClick={() => { setSelectedCountry(c.id); setSelectedCity(''); }}>
-                    {isAr ? c.name.ar : c.name.en}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              label={selectedCountry ? countries.find(c => c.id === selectedCountry)?.name[isAr ? 'ar' : 'en'] ?? t('filters.country') : t('filters.country')}
+              icon={MapPin}
+            >
+              <FilterOption onClick={() => { setSelectedCountry(''); setSelectedCity(''); }} active={!selectedCountry}>
+                {t('filters.allCountries')}
+              </FilterOption>
+              <div className="h-px bg-border my-1" />
+              {countries.map(c => (
+                <FilterOption key={c.id} onClick={() => { setSelectedCountry(c.id); setSelectedCity(''); }} active={selectedCountry === c.id}>
+                  {isAr ? c.name.ar : c.name.en}
+                </FilterOption>
+              ))}
+            </FilterDropdown>
 
             {/* City */}
             {selectedCountry && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="h-9 min-w-[120px] justify-between">
-                    <span className="flex items-center truncate">
-                      <MapPin className="h-4 w-4 mr-2 text-muted-foreground flex-shrink-0" />
-                      <span className="truncate max-w-[150px]">
-                        {selectedCity ? activeCities.find((c: any) => c.id === selectedCity)?.[isAr ? 'ar' : 'en'] : t('filters.city')}
-                      </span>
-                    </span>
-                    <ChevronDown className="h-4 w-4 ml-2 opacity-50 flex-shrink-0" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="max-h-[300px] overflow-y-auto w-[200px]">
-                  <DropdownMenuItem className="font-semibold" onClick={() => setSelectedCity('')}>{t('filters.allCities')}</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  {activeCities?.map((c: any) => (
-                    <DropdownMenuItem key={c.id} onClick={() => setSelectedCity(c.id)}>
-                      {isAr ? c.ar : c.en}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <FilterDropdown
+                label={selectedCity ? activeCities.find((c: any) => c.id === selectedCity)?.[isAr ? 'ar' : 'en'] ?? t('filters.city') : t('filters.city')}
+                icon={MapPin}
+              >
+                <FilterOption onClick={() => setSelectedCity('')} active={!selectedCity}>
+                  {t('filters.allCities')}
+                </FilterOption>
+                <div className="h-px bg-border my-1" />
+                {activeCities?.map((c: any) => (
+                  <FilterOption key={c.id} onClick={() => setSelectedCity(c.id)} active={selectedCity === c.id}>
+                    {isAr ? c.ar : c.en}
+                  </FilterOption>
+                ))}
+              </FilterDropdown>
             )}
 
             {/* Category */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-9 min-w-[120px] justify-between">
-                  <span className="flex items-center truncate">
-                    <Building2 className="h-4 w-4 mr-2 text-muted-foreground flex-shrink-0" />
-                    <span className="truncate max-w-[150px]">
-                      {selectedCategory ? serviceCategories.find(c => c.id === selectedCategory)?.label[isAr ? 'ar' : 'en'] : t('filters.category')}
-                    </span>
-                  </span>
-                  <ChevronDown className="h-4 w-4 ml-2 opacity-50 flex-shrink-0" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="max-h-[300px] overflow-y-auto w-[200px]">
-                <DropdownMenuItem className="font-semibold" onClick={() => { setSelectedCategory(''); setSelectedSubcategory(''); }}>{t('filters.allCategories')}</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {serviceCategories.map(c => (
-                  <DropdownMenuItem key={c.id} onClick={() => { setSelectedCategory(c.id); setSelectedSubcategory(''); }}>
-                    {isAr ? c.label.ar : c.label.en}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <FilterDropdown
+              label={selectedCategory ? serviceCategories.find(c => c.id === selectedCategory)?.label[isAr ? 'ar' : 'en'] ?? t('filters.category') : t('filters.category')}
+              icon={Building2}
+            >
+              <FilterOption onClick={() => { setSelectedCategory(''); setSelectedSubcategory(''); }} active={!selectedCategory}>
+                {t('filters.allCategories')}
+              </FilterOption>
+              <div className="h-px bg-border my-1" />
+              {serviceCategories.map(c => (
+                <FilterOption key={c.id} onClick={() => { setSelectedCategory(c.id); setSelectedSubcategory(''); }} active={selectedCategory === c.id}>
+                  {isAr ? c.label.ar : c.label.en}
+                </FilterOption>
+              ))}
+            </FilterDropdown>
 
-            {/* Subcategory - Only if Category Selected */}
+            {/* Subcategory */}
             {selectedCategory && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="h-9 min-w-[120px] justify-between">
-                    <span className="flex items-center truncate">
-                      <ListFilter className="h-4 w-4 mr-2 text-muted-foreground flex-shrink-0" />
-                      <span className="truncate max-w-[150px]">
-                        {selectedSubcategory
-                          ? activeSubcategories.find((s: any) => s.id === selectedSubcategory)?.title[isAr ? 'ar' : 'en']
-                          : (isAr ? "كل الخدمات" : "All Services")}
-                      </span>
-                    </span>
-                    <ChevronDown className="h-4 w-4 ml-2 opacity-50 flex-shrink-0" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="max-h-[300px] overflow-y-auto w-[250px]">
-                  <DropdownMenuItem className="font-semibold" onClick={() => setSelectedSubcategory('')}>{isAr ? "الكل" : "All Services"}</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  {activeSubcategories.map((s: any) => (
-                    <DropdownMenuItem key={s.id} onClick={() => setSelectedSubcategory(s.id)}>
-                      {isAr ? s.title.ar : s.title.en}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <FilterDropdown
+                label={selectedSubcategory ? activeSubcategories.find((s: any) => s.id === selectedSubcategory)?.title[isAr ? 'ar' : 'en'] ?? (isAr ? 'كل الخدمات' : 'All Services') : (isAr ? 'كل الخدمات' : 'All Services')}
+                icon={ListFilter}
+                className="w-[250px]"
+              >
+                <FilterOption onClick={() => setSelectedSubcategory('')} active={!selectedSubcategory}>
+                  {isAr ? 'الكل' : 'All Services'}
+                </FilterOption>
+                <div className="h-px bg-border my-1" />
+                {activeSubcategories.map((s: any) => (
+                  <FilterOption key={s.id} onClick={() => setSelectedSubcategory(s.id)} active={selectedSubcategory === s.id}>
+                    {isAr ? s.title.ar : s.title.en}
+                  </FilterOption>
+                ))}
+              </FilterDropdown>
             )}
 
             <Button
@@ -439,6 +465,52 @@ export default function CompaniesPage() {
             <h3 className="text-lg font-bold mb-2">{t('noResults')}</h3>
             <p className="text-gray-500 mb-6 max-w-md mx-auto">{t('noResultsDesc')}</p>
             <Button variant="outline" onClick={clearFilters}>{t('filters.clear')}</Button>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-10">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+            >
+              {isAr ? '→ السابق' : '← Prev'}
+            </Button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
+              .reduce<(number | '...')[]>((acc, p, idx, arr) => {
+                if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push('...');
+                acc.push(p);
+                return acc;
+              }, [])
+              .map((p, i) =>
+                p === '...' ? (
+                  <span key={`ellipsis-${i}`} className="px-2 text-muted-foreground">…</span>
+                ) : (
+                  <Button
+                    key={p}
+                    variant={currentPage === p ? 'default' : 'outline'}
+                    size="sm"
+                    className="w-9 h-9"
+                    onClick={() => setCurrentPage(p as number)}
+                  >
+                    {p}
+                  </Button>
+                )
+              )}
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+            >
+              {isAr ? 'التالي ←' : 'Next →'}
+            </Button>
           </div>
         )}
       </div>

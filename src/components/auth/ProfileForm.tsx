@@ -39,6 +39,14 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Filter phone input
+    if (name === 'phone') {
+      if (!/^[0-9+\-\(\)\s]*$/.test(value)) {
+        return;
+      }
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
     if (errors[name as keyof typeof errors]) {
@@ -54,7 +62,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
       newErrors.name = t('errors.name.minLength');
     }
 
-    if (formData.phone && !/^(\+|00)[1-9]\d{1,14}$/.test(formData.phone)) {
+    if (formData.phone && !/^[+]?[0-9\s)(-]{8,20}$/.test(formData.phone)) {
       newErrors.phone = t('errors.phone.invalid');
     }
 
@@ -174,11 +182,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
       {/* Message */}
       {message && (
         <div
-          className={`p-4 rounded-lg flex items-start gap-3 ${
-            message.type === 'success'
+          className={`p-4 rounded-lg flex items-start gap-3 ${message.type === 'success'
               ? 'bg-success/10 border border-success/30'
               : 'bg-destructive/10 border border-destructive/30'
-          }`}
+            }`}
         >
           {message.type === 'success' ? (
             <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
@@ -283,9 +290,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
             value={formData.name}
             onChange={handleChange}
             placeholder={t('fields.name.placeholder')}
-            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.name ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.name ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
           />
         </div>
@@ -306,9 +312,8 @@ export function ProfileForm({ user }: ProfileFormProps) {
             value={formData.phone}
             onChange={handleChange}
             placeholder={t('fields.phone.placeholder')}
-            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.phone ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.phone ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
           />
         </div>

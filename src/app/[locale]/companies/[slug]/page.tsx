@@ -104,7 +104,9 @@ export default function CompanyDetailPage() {
       const response = await fetch(`/api/companies/${params.slug}`);
       if (!response.ok) throw new Error('Failed to fetch company');
       const data = await response.json();
-      setCompany(data.company);
+      // API returns { success, data: { company } } or { company }
+      const company = data?.data?.company ?? data?.company ?? null;
+      setCompany(company);
     } catch (err) {
       toast.error('Failed to load company');
     } finally {
@@ -328,8 +330,8 @@ export default function CompanyDetailPage() {
                         {service.priceFrom && service.priceTo
                           ? `${service.priceFrom} - ${service.priceTo}`
                           : service.priceFrom
-                          ? `From ${service.priceFrom}`
-                          : `Up to ${service.priceTo}`}
+                            ? `From ${service.priceFrom}`
+                            : `Up to ${service.priceTo}`}
                       </div>
                     )}
                   </CardContent>
@@ -358,11 +360,10 @@ export default function CompanyDetailPage() {
                             className="p-1"
                           >
                             <Star
-                              className={`h-6 w-6 ${
-                                star <= reviewRating
+                              className={`h-6 w-6 ${star <= reviewRating
                                   ? 'fill-warning text-warning'
                                   : 'text-muted-foreground/30'
-                              }`}
+                                }`}
                             />
                           </button>
                         ))}
@@ -424,11 +425,10 @@ export default function CompanyDetailPage() {
                                 {[...Array(5)].map((_, i) => (
                                   <Star
                                     key={i}
-                                    className={`h-4 w-4 ${
-                                      i < review.rating
+                                    className={`h-4 w-4 ${i < review.rating
                                         ? 'fill-warning text-warning'
                                         : 'text-muted-foreground/30'
-                                    }`}
+                                      }`}
                                   />
                                 ))}
                               </div>

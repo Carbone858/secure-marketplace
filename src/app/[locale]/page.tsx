@@ -81,7 +81,7 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
               className="border-primary text-primary hover:bg-primary/5 font-bold px-8 py-6 text-lg h-auto"
               asChild
             >
-              <Link href={`/${locale}/company/register`}>
+              <Link href={`/${locale}/company/join`}>
                 {t('cta.registerCompany')}
               </Link>
             </Button>

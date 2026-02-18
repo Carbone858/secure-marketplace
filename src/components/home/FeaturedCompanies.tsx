@@ -93,7 +93,7 @@ export default function FeaturedCompanies() {
                             {locale === 'ar' ? 'الشركات المميزة قادمة قريباً' : 'Featured companies coming soon'}
                         </p>
                         <Button variant="outline" className="mt-4" asChild>
-                            <Link href={`/${locale}/company/register`}>
+                            <Link href={`/${locale}/company/join`}>
                                 {locale === 'ar' ? 'سجل شركتك الآن' : 'Register your company'}
                             </Link>
                         </Button>

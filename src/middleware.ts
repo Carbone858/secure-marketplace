@@ -34,6 +34,11 @@ const PROTECTED_API_PATTERNS = [
   /^\/api\/company\/dashboard/,
 ];
 
+// API routes that are always public (bypass auth even if they match above)
+const PUBLIC_API_WHITELIST = [
+  /^\/api\/admin\/seed-companies/,
+];
+
 import { getToken } from 'next-auth/jwt';
 
 async function verifyTokenFromCookie(request: NextRequest): Promise<{ userId: string; role: string } | null> {
@@ -90,7 +95,8 @@ export default async function middleware(request: NextRequest) {
 
   // Handle API routes protection
   if (pathname.startsWith('/api/')) {
-    const isProtectedApi = PROTECTED_API_PATTERNS.some(p => p.test(pathname));
+    const isWhitelisted = PUBLIC_API_WHITELIST.some(p => p.test(pathname));
+    const isProtectedApi = !isWhitelisted && PROTECTED_API_PATTERNS.some(p => p.test(pathname));
     if (isProtectedApi) {
       // Verify auth token (supporting Cookie, Bearer, and NextAuth)
       const user = await verifyTokenFromCookie(request);
@@ -132,6 +138,51 @@ export default async function middleware(request: NextRequest) {
     const locale = pathname.split('/')[1] || 'ar';
 
     if (!user) {
+      // Try to silently refresh using the refresh_token cookie
+      const refreshToken = request.cookies.get('refresh_token')?.value;
+      if (refreshToken) {
+        try {
+          const secret = process.env.JWT_SECRET;
+          if (secret) {
+            const { payload } = await jwtVerify(
+              refreshToken,
+              new TextEncoder().encode(secret),
+              { audience: 'secure-marketplace', issuer: 'secure-marketplace-api' }
+            );
+            if (payload.type === 'refresh' && payload.userId) {
+              // Issue a new access token inline
+              const { SignJWT } = await import('jose');
+              const newAccessToken = await new SignJWT({
+                userId: payload.userId,
+                email: payload.email,
+                role: payload.role,
+                type: 'access',
+              })
+                .setProtectedHeader({ alg: 'HS256' })
+                .setIssuedAt()
+                .setExpirationTime('2h')
+                .setAudience('secure-marketplace')
+                .setIssuer('secure-marketplace-api')
+                .sign(new TextEncoder().encode(secret));
+
+              // Let the request through and set the new cookie on the response
+              const intlResponse = intlMiddleware(request);
+              const response = intlResponse || NextResponse.next();
+              response.cookies.set('access_token', newAccessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 2 * 60 * 60, // 2 hours
+                path: '/',
+              });
+              return response;
+            }
+          }
+        } catch {
+          // Refresh token invalid — fall through to redirect
+        }
+      }
+
       const loginUrl = new URL(`/${locale}/auth/login`, request.url);
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);

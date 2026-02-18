@@ -78,6 +78,11 @@ const menuItems = [
     icon: Shield,
   },
   {
+    titleKey: 'sidebar.cms',
+    href: '/admin/cms',
+    icon: FileText,
+  },
+  {
     titleKey: 'sidebar.featureFlags',
     href: '/admin/feature-flags',
     icon: Flag,

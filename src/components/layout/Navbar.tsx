@@ -142,10 +142,14 @@ export function Navbar() {
               </>
             ) : (
               <div className="flex items-center gap-2">
+                <Button variant="ghost" asChild className="hidden lg:flex font-medium text-muted-foreground hover:text-foreground">
+                  <Link href={`/${locale}/company/join`}>{isRTL ? 'انضم كشريك' : 'Join as Partner'}</Link>
+                </Button>
+                <div className="w-px h-6 bg-border hidden lg:block mx-1"></div>
                 <Button variant="ghost" asChild className="font-medium">
                   <Link href={`/${locale}/auth/login`}>{t('nav.auth.signIn')}</Link>
                 </Button>
-                <Button asChild className="rounded-full px-6 font-semibold shadow-md hover:shadow-lg transition-all">
+                <Button asChild className="rounded-full px-6 font-semibold shadow-md hover:shadow-lg transition-all hidden sm:flex">
                   <Link href={`/${locale}/auth/register`}>{t('nav.auth.getStarted')}</Link>
                 </Button>
               </div>

@@ -21,7 +21,10 @@ import {
   MdOutlineAccountBalance,
   MdOutlineEmojiEvents,
   MdOutlineFolder,
+  MdOutlineLanguage,
+  MdBuild,
 } from 'react-icons/md';
+import { Hammer, Sparkles, Truck, Cpu, Globe, Fan, Zap, Droplets, Building2 } from 'lucide-react';
 
 /**
  * Maps iconName strings from the database to actual Lucide icon components.
@@ -48,6 +51,17 @@ const iconRegistry: Record<string, any> = {
   'bank': MdOutlineAccountBalance,
   'award': MdOutlineEmojiEvents,
   'folder': MdOutlineFolder,
+  // Aliases for Lucide names in DB
+  'sparkles': Sparkles,
+  'truck': Truck,
+  'fan': Fan,
+  'hammer': Hammer,
+  'cpu': Cpu,
+  'globe': Globe,
+  'zap': Zap,
+  'droplets': Droplets,
+  'building2': Building2,
+  'briefcase': MdOutlineBusinessCenter,
 };
 
 interface CategoryIconProps {
@@ -67,6 +81,13 @@ const svgIconMap: Record<string, string> = {
   'construction': 'Construction & Building.svg',
   'interior-design': 'interior .svg',
   'electrical': 'Electrical.svg',
+  // Aliases for Lucide names in DB
+  'sparkles': 'Cleaning .svg',
+  'truck': 'moving .svg',
+  'cpu': 'IT .svg',
+  'zap': 'Electrical.svg',
+  'droplets': 'Plumping .svg',
+  'building2': 'Construction & Building.svg',
 };
 
 export default function CategoryIcon({

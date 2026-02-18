@@ -69,13 +69,8 @@ export async function POST(request: NextRequest) {
       await logSecurityEvent('LOGOUT', ip, userAgent, userId);
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Logout successful.',
-      },
-      { status: 200 }
-    );
+    // Redirect to home page after logout
+    return NextResponse.redirect(new URL('/', request.url), { status: 303 });
   } catch (error) {
     console.error('Logout error:', error);
 
@@ -85,13 +80,8 @@ export async function POST(request: NextRequest) {
     cookieStore.set(clearCookies.accessToken);
     cookieStore.set(clearCookies.refreshToken);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Logout successful.',
-      },
-      { status: 200 }
-    );
+    // Redirect to home even on error
+    return NextResponse.redirect(new URL('/', request.url), { status: 303 });
   }
 }
 

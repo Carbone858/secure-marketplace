@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { getSession } from '@/lib/auth-session/session';
-import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db/client';
 import { RequestFormSPA } from '@/components/requests/RequestFormSPA';
 
@@ -13,7 +12,6 @@ export async function generateMetadata({
   params: { locale },
 }: NewRequestPageProps): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'requests' });
-
   return {
     title: t('new.meta.title'),
     description: t('new.meta.description'),
@@ -23,37 +21,24 @@ export async function generateMetadata({
 async function getCategories() {
   return prisma.category.findMany({
     where: { isActive: true, parentId: null },
-    select: {
-      id: true,
-      nameEn: true,
-      nameAr: true,
-      icon: true,
-    },
+    select: { id: true, nameEn: true, nameAr: true, icon: true },
     orderBy: { sortOrder: 'asc' },
   });
 }
 
 async function getCountries() {
   return prisma.country.findMany({
-    select: {
-      id: true,
-      nameEn: true,
-      nameAr: true,
-      code: true,
-    },
+    select: { id: true, nameEn: true, nameAr: true, code: true },
     orderBy: { nameEn: 'asc' },
   });
 }
 
 export default async function NewRequestPage({ params: { locale } }: NewRequestPageProps) {
-  const session = await getSession();
-
-  if (!session.isAuthenticated) {
-    redirect(`/${locale}/auth/login?redirect=requests/new`);
-  }
-
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'requests' });
+  const session = await getSession();
+  const mode = session.isAuthenticated ? 'authenticated' : 'guest';
+
   const [categories, countries] = await Promise.all([getCategories(), getCountries()]);
 
   return (
@@ -63,7 +48,7 @@ export default async function NewRequestPage({ params: { locale } }: NewRequestP
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">{t('new.title')}</h1>
         </div>
 
-        <RequestFormSPA categories={categories} countries={countries} />
+        <RequestFormSPA categories={categories} countries={countries} mode={mode} />
       </div>
     </div>
   );

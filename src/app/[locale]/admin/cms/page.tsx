@@ -225,7 +225,26 @@ export default function AdminCMSPage() {
           <h2 className="text-lg font-medium">{editingSection ? 'Edit Section' : 'Create Section'}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input placeholder="Name" value={sectionForm.name} onChange={e => setSectionForm(p => ({ ...p, name: e.target.value }))} className="w-full px-3 py-2 border rounded-lg bg-background" required />
-            <input placeholder="Identifier (e.g., hero_banner)" value={sectionForm.identifier} onChange={e => setSectionForm(p => ({ ...p, identifier: e.target.value }))} className="w-full px-3 py-2 border rounded-lg bg-background" required disabled={!!editingSection} />
+            <div>
+              <input
+                placeholder="Identifier (e.g., hero_banner)"
+                value={sectionForm.identifier}
+                onChange={e => {
+                  // Auto-format: lowercase, replace spaces/special chars with underscores
+                  const formatted = e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '_').replace(/__+/g, '_');
+                  setSectionForm(p => ({ ...p, identifier: formatted }));
+                }}
+                className={`w-full px-3 py-2 border rounded-lg bg-background ${sectionForm.identifier && !/^[a-z0-9_-]+$/.test(sectionForm.identifier)
+                    ? 'border-destructive'
+                    : ''
+                  }`}
+                required
+                disabled={!!editingSection}
+              />
+              {sectionForm.identifier && !/^[a-z0-9_-]+$/.test(sectionForm.identifier) && (
+                <p className="text-xs text-destructive mt-1">Only lowercase letters, numbers, underscores, hyphens</p>
+              )}
+            </div>
             <input placeholder="Page (e.g., home)" value={sectionForm.page} onChange={e => setSectionForm(p => ({ ...p, page: e.target.value }))} className="w-full px-3 py-2 border rounded-lg bg-background" />
           </div>
           <textarea placeholder='Content JSON (e.g., {"heading": "Welcome", "headingAr": "مرحبا"})' value={sectionForm.content} onChange={e => setSectionForm(p => ({ ...p, content: e.target.value }))} className="w-full px-3 py-2 border rounded-lg bg-background min-h-[160px] font-mono text-sm" required />

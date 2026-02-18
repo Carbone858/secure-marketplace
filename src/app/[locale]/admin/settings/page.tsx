@@ -2,59 +2,112 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { Settings, Save, Globe, Mail, Shield, Bell } from 'lucide-react';
+import { Settings, Globe, Shield, Bell, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PageSkeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
+
+interface FeatureFlag {
+  id: string;
+  key: string;
+  value: boolean;
+  description: string | null;
+  category: string | null;
+}
+
+// Map flag keys to their categories
+const FLAG_KEYS = {
+  maintenance: 'isMaintenanceMode',
+  reviewModeration: 'enableReviewModeration',
+  emailVerification: 'requireEmailVerification',
+  adminNotifications: 'enableAdminNotifications',
+  emailReports: 'enableEmailReports',
+};
 
 export default function AdminSettingsPage() {
-  const locale = useLocale();
   const t = useTranslations('admin');
-  const [flags, setFlags] = useState<any[]>([]);
+  const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [togglingKey, setTogglingKey] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const res = await fetch('/api/admin/feature-flags?category=system');
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setFlags(data.flags || []);
-      } catch {
-        // Settings load from feature flags
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchSettings();
-  }, []);
-
-  const toggleMaintenance = async () => {
-    const maintenanceFlag = flags.find(f => f.key === 'isMaintenanceMode');
-    if (!maintenanceFlag) return;
-    
+  const fetchFlags = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/feature-flags', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: maintenanceFlag.id,
-          value: !maintenanceFlag.value,
-        }),
-      });
+      const res = await fetch('/api/admin/feature-flags');
       if (!res.ok) throw new Error();
-      toast.success(t('settings_mgmt.toasts.maintenanceUpdated'));
-      // Refresh
-      const data = await (await fetch('/api/admin/feature-flags?category=system')).json();
+      const data = await res.json();
       setFlags(data.flags || []);
     } catch {
-      toast.error(t('settings_mgmt.toasts.updateFailed'));
+      toast.error('Failed to load settings');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchFlags(); }, [fetchFlags]);
+
+  const getFlag = (key: string): FeatureFlag | undefined =>
+    flags.find(f => f.key === key);
+
+  const toggleFlag = async (key: string) => {
+    const flag = getFlag(key);
+    const newValue = flag ? !flag.value : true;
+    setTogglingKey(key);
+
+    try {
+      let res: Response;
+      if (flag) {
+        // Update existing flag
+        res = await fetch('/api/admin/feature-flags', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: flag.id, value: newValue }),
+        });
+      } else {
+        // Create flag if it doesn't exist yet
+        res = await fetch('/api/admin/feature-flags', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key, value: newValue, category: 'system' }),
+        });
+      }
+      if (!res.ok) throw new Error();
+      toast.success('Setting updated');
+      await fetchFlags();
+    } catch {
+      toast.error('Failed to update setting');
+    } finally {
+      setTogglingKey(null);
     }
   };
 
-  const isMaintenanceOn = flags.find(f => f.key === 'isMaintenanceMode')?.value === true;
+  const ToggleButton = ({ flagKey, label, description }: { flagKey: string; label: string; description: string }) => {
+    const flag = getFlag(flagKey);
+    const isOn = flag?.value === true;
+    const isToggling = togglingKey === flagKey;
+
+    return (
+      <div className="flex items-center justify-between py-3">
+        <div>
+          <p className="font-medium">{label}</p>
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
+        <Button
+          variant={isOn ? 'default' : 'outline'}
+          onClick={() => toggleFlag(flagKey)}
+          disabled={isToggling}
+          className="min-w-[100px]"
+        >
+          {isToggling ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            isOn ? t('common.enabled') : t('common.disabled')
+          )}
+        </Button>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -103,7 +156,7 @@ export default function AdminSettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Security Settings */}
+          {/* Security & Maintenance */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -111,42 +164,30 @@ export default function AdminSettingsPage() {
                 {t('settings_mgmt.securityMaintenance')}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between py-3 border-b">
-                <div>
-                  <p className="font-medium">{t('settings_mgmt.maintenanceMode')}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {isMaintenanceOn 
-                      ? t('settings_mgmt.maintenanceModeOn')
-                      : t('settings_mgmt.maintenanceModeOff')
-                    }
-                  </p>
-                </div>
-                <Button
-                  variant={isMaintenanceOn ? 'destructive' : 'outline'}
-                  onClick={toggleMaintenance}
-                >
-                  {isMaintenanceOn ? t('settings_mgmt.disableMaintenance') : t('settings_mgmt.enableMaintenance')}
-                </Button>
-              </div>
-              <div className="flex items-center justify-between py-3 border-b">
-                <div>
-                  <p className="font-medium">{t('settings_mgmt.reviewModeration')}</p>
-                  <p className="text-sm text-muted-foreground">{t('settings_mgmt.reviewModerationDesc')}</p>
-                </div>
-                <Button variant="outline" disabled>{t('common.enabled')}</Button>
-              </div>
-              <div className="flex items-center justify-between py-3">
-                <div>
-                  <p className="font-medium">{t('settings_mgmt.emailVerification')}</p>
-                  <p className="text-sm text-muted-foreground">{t('settings_mgmt.emailVerificationDesc')}</p>
-                </div>
-                <Button variant="outline" disabled>{t('common.required')}</Button>
-              </div>
+            <CardContent className="divide-y">
+              <ToggleButton
+                flagKey={FLAG_KEYS.maintenance}
+                label={t('settings_mgmt.maintenanceMode')}
+                description={
+                  getFlag(FLAG_KEYS.maintenance)?.value
+                    ? t('settings_mgmt.maintenanceModeOn')
+                    : t('settings_mgmt.maintenanceModeOff')
+                }
+              />
+              <ToggleButton
+                flagKey={FLAG_KEYS.reviewModeration}
+                label={t('settings_mgmt.reviewModeration')}
+                description={t('settings_mgmt.reviewModerationDesc')}
+              />
+              <ToggleButton
+                flagKey={FLAG_KEYS.emailVerification}
+                label={t('settings_mgmt.emailVerification')}
+                description={t('settings_mgmt.emailVerificationDesc')}
+              />
             </CardContent>
           </Card>
 
-          {/* Notification Settings */}
+          {/* Notifications */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -154,21 +195,17 @@ export default function AdminSettingsPage() {
                 {t('settings_mgmt.notifications')}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between py-3 border-b">
-                <div>
-                  <p className="font-medium">{t('settings_mgmt.adminNotifications')}</p>
-                  <p className="text-sm text-muted-foreground">{t('settings_mgmt.adminNotificationsDesc')}</p>
-                </div>
-                <Button variant="outline" disabled>{t('common.enabled')}</Button>
-              </div>
-              <div className="flex items-center justify-between py-3">
-                <div>
-                  <p className="font-medium">{t('settings_mgmt.emailReports')}</p>
-                  <p className="text-sm text-muted-foreground">{t('settings_mgmt.emailReportsDesc')}</p>
-                </div>
-                <Button variant="outline" disabled>{t('common.disabled')}</Button>
-              </div>
+            <CardContent className="divide-y">
+              <ToggleButton
+                flagKey={FLAG_KEYS.adminNotifications}
+                label={t('settings_mgmt.adminNotifications')}
+                description={t('settings_mgmt.adminNotificationsDesc')}
+              />
+              <ToggleButton
+                flagKey={FLAG_KEYS.emailReports}
+                label={t('settings_mgmt.emailReports')}
+                description={t('settings_mgmt.emailReportsDesc')}
+              />
             </CardContent>
           </Card>
         </div>

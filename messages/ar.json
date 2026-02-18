@@ -586,6 +586,29 @@
     }
   },
   "company": {
+    "join": {
+      "title": "سجل كشركة / محترف",
+      "subtitle": "انضم إلى آلاف مزودي الخدمات الذين ينمون أعمالهم معنا.",
+      "steps": {
+        "company": "تفاصيل الشركة",
+        "account": "حساب المدير"
+      },
+      "form": {
+        "companyName": "اسم الشركة",
+        "phone": "هاتف العمل",
+        "country": "البلد",
+        "city": "المدينة",
+        "address": "العنوان",
+        "adminName": "اسمك",
+        "email": "البريد الإلكتروني",
+        "personalPhone": "الهاتف الشخصي",
+        "password": "كلمة المرور",
+        "confirmPassword": "تأكيد كلمة المرور",
+        "terms": "أوافق على شروط الخدمة وسياسة الخصوصية"
+      },
+      "submit": "إنشاء حساب",
+      "login": "لديك حساب بالفعل؟ تسجيل الدخول"
+    },
     "registration": {
       "meta": {
         "title": "تسجيل شركة - سوق الخدمات",
@@ -821,6 +844,15 @@
     },
     "list": {
       "title": "طلبات الخدمة",
+      "subtitle": "{count} طلب متاح",
+      "newRequest": "نشر طلب",
+      "searchPlaceholder": "البحث في الطلبات...",
+      "allCategories": "جميع الفئات",
+      "allCountries": "جميع الدول",
+      "filter": "تصفية",
+      "noRequests": "لم يتم العثور على طلبات",
+      "noRequestsDesc": "حاول تعديل عوامل التصفية أو تحقق لاحقاً",
+      "offers": "عروض",
       "filters": {
         "category": "الفئة",
         "country": "الدولة",
@@ -841,15 +873,26 @@
       "clearFilters": "مسح عوامل التصفية",
       "createRequest": "إنشاء طلب"
     },
+    "urgency": {
+      "low": "منخفض",
+      "medium": "متوسط",
+      "high": "عالي",
+      "urgent": "عاجل"
+    },
     "detail": {
       "meta": {
         "title": "{title} - سوق الخدمات",
         "description": "عرض تفاصيل طلب الخدمة"
       },
-      "postedBy": "نشره {name}",
+      "backToList": "العودة إلى الطلبات",
+      "details": "التفاصيل",
+      "postedBy": "نشر بواسطة",
+      "memberSince": "عضو منذ",
       "postedOn": "نشر في {date}",
       "location": "الموقع",
       "budget": "الميزانية",
+      "budgetFrom": "من",
+      "budgetUpTo": "حتى",
       "budgetNegotiable": "قابلة للتفاوض",
       "deadline": "الموعد النهائي",
       "noDeadline": "لم يتم تحديد موعد نهائي",
@@ -857,7 +900,17 @@
       "category": "الفئة",
       "tags": "الوسوم",
       "description": "الوصف",
-      "offers": {
+      "images": "الصور",
+      "remoteAllowed": "الخدمة عن بعد متاحة",
+      "offers": "العروض",
+      "noOffers": "لا توجد عروض بعد",
+      "submitOffer": "تقديم عرض",
+      "reviews": "تقييم",
+      "verified": "موثق",
+      "accept": "قبول",
+      "reject": "رفض",
+      "estimatedDays": "{days} أيام",
+      "offersList": {
         "title": "العروض",
         "count": "{count} عروض",
         "noOffers": "لا توجد عروض بعد",
@@ -1089,6 +1142,7 @@
       "categories": "التصنيفات",
       "reviews": "التقييمات",
       "staff": "الموظفون",
+      "cms": "إدارة المحتوى",
       "featureFlags": "إعدادات الميزات",
       "messages": "الرسائل",
       "settings": "الإعدادات"
@@ -1606,7 +1660,34 @@
       "send": "إرسال الرسالة",
       "sending": "جاري الإرسال...",
       "success": "تم إرسال الرسالة بنجاح!",
-      "error": "فشل إرسال الرسالة."
+      "error": "فشل إرسال الرسالة.",
+      "validation": {
+        "nameRequired": "الاسم مطلوب",
+        "nameLength": "يجب أن يكون الاسم حرفين على الأقل",
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+        "subjectRequired": "الموضوع مطلوب",
+        "messageRequired": "الرسالة مطلوبة",
+        "messageLength": "يجب أن تكون الرسالة 10 أحرف على الأقل"
+      },
+      "phone": "الهاتف",
+      "office": "المكتب",
+      "placeholders": {
+        "name": "فلان الفلاني",
+        "email": "name@example.com",
+        "subject": "لدي استفسار حول...",
+        "message": "أخبرنا كيف يمكننا مساعدتك..."
+      }
+    },
+    "cards": {
+      "emailDesc": "فريقنا الودود هنا لمساعدتك.",
+      "phoneDesc": "من الإثنين إلى الجمعة، 8 ص - 5 م.",
+      "officeDesc": "تفضل بزيارتنا في مقرنا الرئيسي."
+    },
+    "sections": {
+      "sendMessage": "أرسل لنا رسالة",
+      "fillForm": "املأ النموذج أدناه وسنرد عليك في أقرب وقت ممكن.",
+      "getInTouch": "تواصل معنا"
     },
     "info": {
       "email": "support@example.com",

@@ -83,7 +83,7 @@ export default async function DashboardLayout({
               <span className="hidden sm:inline text-sm text-muted-foreground max-w-[120px] truncate">
                 {session.user?.name || session.user?.email}
               </span>
-              <form action={`/${locale}/api/auth/logout`} method="POST">
+              <form action="/api/auth/logout" method="POST">
                 <button
                   type="submit"
                   className="text-sm text-destructive hover:text-destructive transition-colors"

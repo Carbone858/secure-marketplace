@@ -1,19 +1,20 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
-import { Users, Shield, Building, Plus, Trash2 } from 'lucide-react';
+import { Users, Shield, Building, Plus, Trash2, Edit2, Search, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { PageSkeleton } from '@/components/ui/skeleton';
 
 type Tab = 'staff' | 'roles' | 'departments';
 
+interface UserOption { id: string; name: string | null; email: string; }
+
 export default function AdminStaffPage() {
-  const locale = useLocale();
   const t = useTranslations('admin');
   const [activeTab, setActiveTab] = useState<Tab>('staff');
   const [staff, setStaff] = useState<any[]>([]);
@@ -21,13 +22,24 @@ export default function AdminStaffPage() {
   const [departments, setDepartments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // User search state
+  const [userSearch, setUserSearch] = useState('');
+  const [userResults, setUserResults] = useState<UserOption[]>([]);
+  const [selectedUser, setSelectedUser] = useState<UserOption | null>(null);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
   // Forms
   const [showRoleForm, setShowRoleForm] = useState(false);
   const [roleForm, setRoleForm] = useState({ name: '', nameAr: '', description: '' });
   const [showDeptForm, setShowDeptForm] = useState(false);
   const [deptForm, setDeptForm] = useState({ name: '', nameAr: '', description: '' });
   const [showStaffForm, setShowStaffForm] = useState(false);
-  const [staffForm, setStaffForm] = useState({ userId: '', roleId: '', departmentId: '' });
+  const [staffForm, setStaffForm] = useState({ roleId: '', departmentId: '' });
+
+  // Edit staff
+  const [editingStaff, setEditingStaff] = useState<any | null>(null);
+  const [editForm, setEditForm] = useState({ roleId: '', departmentId: '' });
 
   const fetchAll = useCallback(async () => {
     setIsLoading(true);
@@ -45,11 +57,41 @@ export default function AdminStaffPage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
+  // User search with debounce
+  useEffect(() => {
+    if (!userSearch || userSearch.length < 2) { setUserResults([]); return; }
+    const timer = setTimeout(async () => {
+      setSearchLoading(true);
+      try {
+        const res = await fetch(`/api/admin/users?search=${encodeURIComponent(userSearch)}&limit=8`);
+        if (res.ok) {
+          const data = await res.json();
+          setUserResults(data.users || []);
+        }
+      } catch { /* ignore */ } finally {
+        setSearchLoading(false);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [userSearch]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setUserResults([]);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   const createRole = async () => {
+    if (!roleForm.name) { toast.error('Role name is required'); return; }
     try {
       const res = await fetch('/api/admin/roles', {
         method: 'POST',
@@ -65,6 +107,7 @@ export default function AdminStaffPage() {
   };
 
   const createDept = async () => {
+    if (!deptForm.name) { toast.error('Department name is required'); return; }
     try {
       const res = await fetch('/api/admin/departments', {
         method: 'POST',
@@ -80,11 +123,13 @@ export default function AdminStaffPage() {
   };
 
   const assignStaff = async () => {
+    if (!selectedUser) { toast.error('Please select a user'); return; }
+    if (!staffForm.roleId) { toast.error('Please select a role'); return; }
     try {
       const res = await fetch('/api/admin/staff', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(staffForm),
+        body: JSON.stringify({ userId: selectedUser.id, ...staffForm }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -92,9 +137,26 @@ export default function AdminStaffPage() {
       }
       toast.success(t('staff_mgmt.toasts.staffAssigned'));
       setShowStaffForm(false);
-      setStaffForm({ userId: '', roleId: '', departmentId: '' });
+      setSelectedUser(null);
+      setUserSearch('');
+      setStaffForm({ roleId: '', departmentId: '' });
       fetchAll();
     } catch (err: any) { toast.error(err.message || t('staff_mgmt.toasts.staffAssignFailed')); }
+  };
+
+  const updateStaff = async () => {
+    if (!editingStaff) return;
+    try {
+      const res = await fetch('/api/admin/staff', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editingStaff.id, ...editForm }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success('Staff member updated');
+      setEditingStaff(null);
+      fetchAll();
+    } catch { toast.error('Failed to update staff member'); }
   };
 
   const deleteRole = async (id: string) => {
@@ -133,9 +195,7 @@ export default function AdminStaffPage() {
     { key: 'departments' as Tab, label: t('staff_mgmt.tabs.departments'), icon: Building },
   ];
 
-  if (isLoading) {
-    return <PageSkeleton />;
-  }
+  if (isLoading) return <PageSkeleton />;
 
   return (
     <div className="space-y-6">
@@ -165,36 +225,138 @@ export default function AdminStaffPage() {
         ))}
       </div>
 
-      {/* Staff Members Tab */}
+      {/* ── Staff Members Tab ── */}
       {activeTab === 'staff' && (
         <>
           <div className="flex justify-end">
-            <Button onClick={() => setShowStaffForm(!showStaffForm)}>
+            <Button onClick={() => { setShowStaffForm(!showStaffForm); setSelectedUser(null); setUserSearch(''); }}>
               <Plus className="h-4 w-4 me-2" /> {t('staff_mgmt.assignStaff')}
             </Button>
           </div>
+
           {showStaffForm && (
             <Card>
               <CardHeader><CardTitle>{t('staff_mgmt.assignStaffMember')}</CardTitle></CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Input placeholder={t('staff_mgmt.userIdPlaceholder')} value={staffForm.userId} onChange={(e) => setStaffForm({ ...staffForm, userId: e.target.value })} />
-                  <select value={staffForm.roleId} onChange={(e) => setStaffForm({ ...staffForm, roleId: e.target.value })} className="border rounded-md px-3 py-2 text-sm bg-background">
-                    <option value="">{t('staff_mgmt.selectRole')}</option>
-                    {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
-                  </select>
-                  <select value={staffForm.departmentId} onChange={(e) => setStaffForm({ ...staffForm, departmentId: e.target.value })} className="border rounded-md px-3 py-2 text-sm bg-background">
-                    <option value="">{t('staff_mgmt.selectDepartment')}</option>
-                    {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                  </select>
+              <CardContent className="space-y-4">
+                {/* Warning if no roles exist */}
+                {roles.length === 0 && (
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200">
+                    <span className="text-lg">⚠️</span>
+                    <div className="flex-1 text-sm">
+                      <p className="font-medium">No roles available</p>
+                      <p className="text-amber-700 dark:text-amber-300 mt-0.5">You need to create at least one role before assigning staff.</p>
+                    </div>
+                    <Button size="sm" variant="outline" className="shrink-0 border-amber-400 text-amber-800 dark:text-amber-200" onClick={() => { setShowStaffForm(false); setActiveTab('roles'); setShowRoleForm(true); }}>
+                      Create Role
+                    </Button>
+                  </div>
+                )}
+                {/* User search */}
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Search User</label>
+                  <div className="relative" ref={searchRef}>
+                    <div className="relative">
+                      <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      {selectedUser ? (
+                        <div className="flex items-center gap-2 border rounded-md px-3 py-2 bg-muted/50">
+                          <span className="flex-1 text-sm">
+                            <span className="font-medium">{selectedUser.name || 'No name'}</span>
+                            <span className="text-muted-foreground ms-2">{selectedUser.email}</span>
+                          </span>
+                          <button onClick={() => { setSelectedUser(null); setUserSearch(''); }} className="text-muted-foreground hover:text-foreground">
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <Input
+                          placeholder="Search by name or email..."
+                          value={userSearch}
+                          onChange={(e) => setUserSearch(e.target.value)}
+                          className="ps-9"
+                        />
+                      )}
+                    </div>
+                    {/* Dropdown results */}
+                    {!selectedUser && userResults.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg max-h-48 overflow-y-auto">
+                        {userResults.map((u) => (
+                          <button
+                            key={u.id}
+                            className="w-full text-start px-3 py-2 hover:bg-muted text-sm flex flex-col"
+                            onClick={() => { setSelectedUser(u); setUserSearch(''); setUserResults([]); }}
+                          >
+                            <span className="font-medium">{u.name || 'No name'}</span>
+                            <span className="text-muted-foreground text-xs">{u.email}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {!selectedUser && searchLoading && (
+                      <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg px-3 py-2 text-sm text-muted-foreground">
+                        Searching...
+                      </div>
+                    )}
+                    {!selectedUser && userSearch.length >= 2 && !searchLoading && userResults.length === 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-card border rounded-md shadow-lg px-3 py-2 text-sm text-muted-foreground">
+                        No users found
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex gap-2 mt-4">
-                  <Button onClick={assignStaff}>{t('staff_mgmt.assign')}</Button>
-                  <Button variant="outline" onClick={() => setShowStaffForm(false)}>{t('common.cancel')}</Button>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">{t('staff_mgmt.selectRole')} *</label>
+                    <select value={staffForm.roleId} onChange={(e) => setStaffForm({ ...staffForm, roleId: e.target.value })} className="w-full border rounded-md px-3 py-2 text-sm bg-background">
+                      <option value="">{t('staff_mgmt.selectRole')}</option>
+                      {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">{t('staff_mgmt.selectDepartment')}</label>
+                    <select value={staffForm.departmentId} onChange={(e) => setStaffForm({ ...staffForm, departmentId: e.target.value })} className="w-full border rounded-md px-3 py-2 text-sm bg-background">
+                      <option value="">{t('staff_mgmt.selectDepartment')}</option>
+                      {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={assignStaff} disabled={!selectedUser || !staffForm.roleId}>{t('staff_mgmt.assign')}</Button>
+                  <Button variant="outline" onClick={() => { setShowStaffForm(false); setSelectedUser(null); setUserSearch(''); }}>{t('common.cancel')}</Button>
                 </div>
               </CardContent>
             </Card>
           )}
+
+          {/* Edit Staff Modal */}
+          {editingStaff && (
+            <Card className="border-primary/50">
+              <CardHeader><CardTitle>Edit Staff Member: {editingStaff.user?.name}</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">Role</label>
+                    <select value={editForm.roleId} onChange={(e) => setEditForm({ ...editForm, roleId: e.target.value })} className="w-full border rounded-md px-3 py-2 text-sm bg-background">
+                      <option value="">Select role</option>
+                      {roles.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">Department</label>
+                    <select value={editForm.departmentId} onChange={(e) => setEditForm({ ...editForm, departmentId: e.target.value })} className="w-full border rounded-md px-3 py-2 text-sm bg-background">
+                      <option value="">No department</option>
+                      {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button onClick={updateStaff}>Save Changes</Button>
+                  <Button variant="outline" onClick={() => setEditingStaff(null)}>Cancel</Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardContent className="p-0">
               {staff.length === 0 ? (
@@ -217,7 +379,10 @@ export default function AdminStaffPage() {
                         <td className="p-3 text-muted-foreground">{s.user?.email}</td>
                         <td className="p-3"><Badge>{s.role?.name}</Badge></td>
                         <td className="p-3 text-muted-foreground">{s.department?.name || '—'}</td>
-                        <td className="p-3">
+                        <td className="p-3 flex gap-1">
+                          <Button variant="ghost" size="sm" onClick={() => { setEditingStaff(s); setEditForm({ roleId: s.role?.id || '', departmentId: s.department?.id || '' }); }}>
+                            <Edit2 className="h-4 w-4" />
+                          </Button>
                           <Button variant="ghost" size="sm" className="text-destructive" onClick={() => removeStaff(s.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -232,7 +397,7 @@ export default function AdminStaffPage() {
         </>
       )}
 
-      {/* Roles Tab */}
+      {/* ── Roles Tab ── */}
       {activeTab === 'roles' && (
         <>
           <div className="flex justify-end">
@@ -257,13 +422,14 @@ export default function AdminStaffPage() {
             </Card>
           )}
           <div className="grid gap-4">
+            {roles.length === 0 && <p className="text-center text-muted-foreground py-8">No roles yet. Create one above.</p>}
             {roles.map((role) => (
               <Card key={role.id}>
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold">{role.name} {role.nameAr && `(${role.nameAr})`}</h3>
                     {role.description && <p className="text-sm text-muted-foreground">{role.description}</p>}
-                    <Badge variant="secondary" className="mt-1">{role._count?.members || 0} {t('staff_mgmt.members')}</Badge>
+                    <Badge variant="secondary" className="mt-1">{role._count?.staffMembers || 0} {t('staff_mgmt.members')}</Badge>
                   </div>
                   <Button variant="ghost" size="sm" className="text-destructive" onClick={() => deleteRole(role.id)}>
                     <Trash2 className="h-4 w-4" />
@@ -275,7 +441,7 @@ export default function AdminStaffPage() {
         </>
       )}
 
-      {/* Departments Tab */}
+      {/* ── Departments Tab ── */}
       {activeTab === 'departments' && (
         <>
           <div className="flex justify-end">
@@ -300,6 +466,7 @@ export default function AdminStaffPage() {
             </Card>
           )}
           <div className="grid gap-4">
+            {departments.length === 0 && <p className="text-center text-muted-foreground py-8">No departments yet. Create one above.</p>}
             {departments.map((dept) => (
               <Card key={dept.id}>
                 <CardContent className="p-4 flex items-center justify-between">
@@ -307,8 +474,7 @@ export default function AdminStaffPage() {
                     <h3 className="font-semibold">{dept.name} {dept.nameAr && `(${dept.nameAr})`}</h3>
                     {dept.description && <p className="text-sm text-muted-foreground">{dept.description}</p>}
                     <div className="flex gap-2 mt-1">
-                      <Badge variant="secondary">{dept._count?.members || 0} {t('staff_mgmt.members')}</Badge>
-                      <Badge variant="outline">{dept._count?.messages || 0} {t('staff_mgmt.messages')}</Badge>
+                      <Badge variant="secondary">{dept._count?.staffMembers || 0} {t('staff_mgmt.members')}</Badge>
                     </div>
                   </div>
                   <Button variant="ghost" size="sm" className="text-destructive" onClick={() => deleteDept(dept.id)}>

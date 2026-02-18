@@ -98,7 +98,7 @@ export default function HeroSection() {
                 asChild
                 className="h-11 px-6 text-base font-bold rounded-xl border-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
               >
-                <Link href={`/${locale}/company/register`}>
+                <Link href={`/${locale}/company/join`}>
                   {t('hero.registerCompany')}
                 </Link>
               </Button>

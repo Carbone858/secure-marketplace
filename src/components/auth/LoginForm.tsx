@@ -99,9 +99,20 @@ export function LoginForm() {
         return;
       }
 
-      // Login successful - redirect to dashboard
-      router.push(`/${locale}/dashboard`);
-      router.refresh();
+      // Login successful - redirect based on role
+      const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl');
+      if (callbackUrl) {
+        window.location.href = callbackUrl;
+      } else {
+        const role = data.data?.user?.role;
+        if (role === 'COMPANY') {
+          window.location.href = `/${locale}/company/dashboard`;
+        } else if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+          window.location.href = `/${locale}/admin`;
+        } else {
+          window.location.href = `/${locale}/dashboard`;
+        }
+      }
     } catch (error) {
       console.error('Login error:', error);
       setErrors({ general: t('errors.general') });

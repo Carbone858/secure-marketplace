@@ -2,14 +2,23 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { Users, Search, Shield, Building2, User } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Users, Search, ChevronDown } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
 import { PageSkeleton } from '@/components/ui/skeleton';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+
+const ROLES = ['USER', 'COMPANY', 'ADMIN', 'SUPER_ADMIN'] as const;
 
 export default function AdminUsersPage() {
   const locale = useLocale();
@@ -21,6 +30,7 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const fetchUsers = useCallback(async () => {
     setIsLoading(true);
@@ -42,6 +52,28 @@ export default function AdminUsersPage() {
   }, [page, search, roleFilter]);
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
+
+  const updateUser = async (id: string, data: { role?: string; isActive?: boolean }) => {
+    setUpdatingId(id);
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, ...data }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed');
+      }
+      toast.success('User updated successfully');
+      // Optimistic update
+      setUsers(prev => prev.map(u => u.id === id ? { ...u, ...data } : u));
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update user');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const getRoleBadge = (role: string) => {
     const variants: Record<string, string> = {
@@ -106,6 +138,7 @@ export default function AdminUsersPage() {
                     <th className="text-start p-3 font-medium">{t('users.tableHeaders.role')}</th>
                     <th className="text-start p-3 font-medium">{t('users.tableHeaders.status')}</th>
                     <th className="text-start p-3 font-medium">{t('users.tableHeaders.joined')}</th>
+                    <th className="text-start p-3 font-medium">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -115,14 +148,49 @@ export default function AdminUsersPage() {
                       <td className="p-3 text-muted-foreground">{user.email}</td>
                       <td className="p-3">{getRoleBadge(user.role)}</td>
                       <td className="p-3">
-                        {user.isVerified ? (
-                          <StatusBadge variant="verified">{t('common.verified')}</StatusBadge>
+                        {user.isActive !== false ? (
+                          <StatusBadge variant="verified">Active</StatusBadge>
                         ) : (
-                          <Badge variant="secondary">{t('common.unverified')}</Badge>
+                          <Badge variant="destructive">Banned</Badge>
                         )}
                       </td>
                       <td className="p-3 text-muted-foreground">
                         {new Date(user.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="p-3">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" disabled={updatingId === user.id} className="gap-1">
+                              Actions <ChevronDown className="h-3 w-3" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">Change Role</div>
+                            {ROLES.map(role => (
+                              <DropdownMenuItem
+                                key={role}
+                                onClick={() => updateUser(user.id, { role })}
+                                className={user.role === role ? 'bg-muted font-medium' : ''}
+                              >
+                                {role}
+                                {user.role === role && <span className="ms-auto text-xs">✓</span>}
+                              </DropdownMenuItem>
+                            ))}
+                            <DropdownMenuSeparator />
+                            {user.isActive !== false ? (
+                              <DropdownMenuItem
+                                onClick={() => updateUser(user.id, { isActive: false })}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                Ban User
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem onClick={() => updateUser(user.id, { isActive: true })}>
+                                Unban User
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </td>
                     </tr>
                   ))}

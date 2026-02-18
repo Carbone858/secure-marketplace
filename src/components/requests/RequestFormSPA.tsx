@@ -84,13 +84,12 @@ function Panel({
   return (
     <div
       ref={sectionRef}
-      className={`rounded-xl border transition-all duration-200 ${
-        hasError
-          ? 'border-destructive/50 bg-destructive/5'
-          : isOpen
-            ? 'border-primary/30 bg-card shadow-sm'
-            : 'border-border bg-card hover:border-primary/20'
-      }`}
+      className={`rounded-xl border transition-all duration-200 ${hasError
+        ? 'border-destructive/50 bg-destructive/5'
+        : isOpen
+          ? 'border-primary/30 bg-card shadow-sm'
+          : 'border-border bg-card hover:border-primary/20'
+        }`}
     >
       <button
         type="button"
@@ -269,6 +268,14 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
   /* ── guest contact change ───────────────────────── */
   const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Filter phone input
+    if (name === 'phone') {
+      if (!/^[0-9+\-\(\)\s]*$/.test(value)) {
+        return;
+      }
+    }
+
     setContactData((prev) => ({ ...prev, [name]: value }));
     const fieldKey = `contact${name.charAt(0).toUpperCase() + name.slice(1)}`;
     if (fieldErrors[fieldKey]) {
@@ -294,6 +301,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
       setSubcategories([]);
     }
   };
+
+
 
   /* ── country change (load cities) ───────────────── */
   const handleCountryChange = async (countryId: string) => {
@@ -410,6 +419,9 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
       }
       if (!contactData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactData.email)) {
         errs.contactEmail = t('errors.emailRequired');
+      }
+      if (contactData.phone && !/^[+]?[0-9\s)(-]{8,20}$/.test(contactData.phone)) {
+        errs.contactPhone = t('errors.invalidPhone');
       }
     }
 
@@ -638,13 +650,12 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                   setCollapsed((prev) => ({ ...prev, [s.id]: false }));
                   setTimeout(() => sectionRefs.current[s.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                  hasErr
-                    ? 'bg-destructive/10 text-destructive'
-                    : !collapsed[s.id]
-                      ? 'bg-primary/10 text-primary'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${hasErr
+                  ? 'bg-destructive/10 text-destructive'
+                  : !collapsed[s.id]
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  }`}
               >
                 {s.icon}
                 {sectionLabel(s.id)}
@@ -683,9 +694,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors text-base ${
-              fieldErrors.title ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors text-base ${fieldErrors.title ? 'border-destructive' : 'border-input'
+              }`}
             placeholder={t('steps.details.titlePlaceholder')}
           />
           {renderFieldError(fieldErrors, 'title')}
@@ -703,9 +713,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none transition-colors text-base ${
-              fieldErrors.description ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none transition-colors text-base ${fieldErrors.description ? 'border-destructive' : 'border-input'
+              }`}
             placeholder={t('steps.details.descriptionPlaceholder')}
           />
           {renderFieldError(fieldErrors, 'description')}
@@ -722,9 +731,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
             <select
               value={formData.categoryId}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                fieldErrors.categoryId ? 'border-destructive' : 'border-input'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.categoryId ? 'border-destructive' : 'border-input'
+                }`}
             >
               <option value="">{t('steps.category.selectCategory')}</option>
               {categories.map((cat) => (
@@ -773,11 +781,10 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                   key={level}
                   type="button"
                   onClick={() => setFormData((p) => ({ ...p, urgency: level }))}
-                  className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${
-                    formData.urgency === level
-                      ? `${colors[level]} ring-2 ring-offset-1 ring-current`
-                      : 'border-border text-muted-foreground hover:border-primary/30'
-                  }`}
+                  className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${formData.urgency === level
+                    ? `${colors[level]} ring-2 ring-offset-1 ring-current`
+                    : 'border-border text-muted-foreground hover:border-primary/30'
+                    }`}
                 >
                   {t(`steps.details.urgencyOptions.${level}`)}
                 </button>
@@ -813,9 +820,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
             <select
               value={formData.countryId}
               onChange={(e) => handleCountryChange(e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                fieldErrors.countryId ? 'border-destructive' : 'border-input'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.countryId ? 'border-destructive' : 'border-input'
+                }`}
             >
               <option value="">{t('steps.location.selectCountry')}</option>
               {countries.map((c) => (
@@ -835,9 +841,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
               value={formData.cityId}
               onChange={handleChange}
               disabled={!formData.countryId}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted text-base ${
-                fieldErrors.cityId ? 'border-destructive' : 'border-input'
-              }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted text-base ${fieldErrors.cityId ? 'border-destructive' : 'border-input'
+                }`}
             >
               <option value="">{t('steps.location.selectCity')}</option>
               {cities.map((city) => (
@@ -898,9 +903,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                 name="budgetMin"
                 value={formData.budgetMin}
                 onChange={handleChange}
-                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                  fieldErrors.budgetMin ? 'border-destructive' : 'border-input'
-                }`}
+                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.budgetMin ? 'border-destructive' : 'border-input'
+                  }`}
                 placeholder="0"
                 min="0"
               />
@@ -916,9 +920,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                 name="budgetMax"
                 value={formData.budgetMax}
                 onChange={handleChange}
-                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                  fieldErrors.budgetMax ? 'border-destructive' : 'border-input'
-                }`}
+                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.budgetMax ? 'border-destructive' : 'border-input'
+                  }`}
                 placeholder="0"
                 min="0"
               />
@@ -950,9 +953,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
               name="deadline"
               value={formData.deadline}
               onChange={handleChange}
-              className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                fieldErrors.deadline ? 'border-destructive' : 'border-input'
-              }`}
+              className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.deadline ? 'border-destructive' : 'border-input'
+                }`}
             />
           </div>
           {renderFieldError(fieldErrors, 'deadline')}
@@ -978,11 +980,10 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
-            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${
-              dragOver
-                ? 'border-primary bg-primary/5 scale-[1.01]'
-                : 'border-input hover:border-primary/40 hover:bg-muted/30'
-            }`}
+            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver
+              ? 'border-primary bg-primary/5 scale-[1.01]'
+              : 'border-input hover:border-primary/40 hover:bg-muted/30'
+              }`}
           >
             {uploadingImage ? (
               <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
@@ -1067,11 +1068,10 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
           {(['PUBLIC', 'REGISTERED_ONLY', 'VERIFIED_COMPANIES'] as const).map((vis) => (
             <label
               key={vis}
-              className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all ${
-                formData.visibility === vis
-                  ? 'border-primary/40 bg-primary/5 ring-1 ring-primary/20'
-                  : 'border-border hover:border-primary/20 hover:bg-muted/30'
-              }`}
+              className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.visibility === vis
+                ? 'border-primary/40 bg-primary/5 ring-1 ring-primary/20'
+                : 'border-border hover:border-primary/20 hover:bg-muted/30'
+                }`}
             >
               <input
                 type="radio"
@@ -1124,9 +1124,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                 name="name"
                 value={contactData.name}
                 onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                  fieldErrors.contactName ? 'border-destructive' : 'border-input'
-                }`}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactName ? 'border-destructive' : 'border-input'
+                  }`}
                 placeholder={t('steps.account.namePlaceholder')}
               />
               {renderFieldError(fieldErrors, 'contactName')}
@@ -1138,9 +1137,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                 name="email"
                 value={contactData.email}
                 onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${
-                  fieldErrors.contactEmail ? 'border-destructive' : 'border-input'
-                }`}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactEmail ? 'border-destructive' : 'border-input'
+                  }`}
                 placeholder={t('steps.account.emailPlaceholder')}
               />
               {renderFieldError(fieldErrors, 'contactEmail')}
@@ -1152,9 +1150,11 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
                 name="phone"
                 value={contactData.phone}
                 onChange={handleContactChange}
-                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base"
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactPhone ? 'border-destructive' : 'border-input'
+                  }`}
                 placeholder={t('steps.account.phonePlaceholder')}
               />
+              {renderFieldError(fieldErrors, 'contactPhone')}
               <p className="text-xs text-muted-foreground mt-1">{t('steps.account.phoneHint')}</p>
             </div>
           </div>

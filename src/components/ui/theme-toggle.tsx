@@ -16,14 +16,24 @@ import {
 
 export function ThemeToggle() {
   const { setMode, resolvedTheme, brandTheme, setBrandTheme } = useTheme()
+  const [open, setOpen] = React.useState(false)
+
+  // Close on scroll
+  React.useEffect(() => {
+    if (!open) return;
+    const handleScroll = () => setOpen(false);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [open]);
 
   const handleSelectTheme = (theme: 'light' | 'dark' | 'emerald') => {
+    setOpen(false)
     if (theme === 'emerald') {
       setMode('light')
       setBrandTheme('emerald')
     } else {
       setMode(theme)
-      setBrandTheme(null) // Clear brand for default themes
+      setBrandTheme(null)
     }
   }
 
@@ -33,10 +43,9 @@ export function ThemeToggle() {
   const isDark = resolvedTheme === 'dark' && !brandTheme
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative group">
-          {/* All icons absolute centered */}
           <Sun
             className={`h-[1.2rem] w-[1.2rem] transition-all absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:scale-0 text-orange-500 ${isEmerald ? 'opacity-0 scale-0 rotate-90' : 'scale-100 rotate-0'}`}
           />

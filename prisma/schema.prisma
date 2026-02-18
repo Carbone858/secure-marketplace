@@ -152,6 +152,8 @@ model Company {
   countryId           String?
   cityId              String?
   address             String?
+  operationAreas      String[]                   @default([])
+  skills              String[]                   @default([])
   verificationStatus  CompanyVerificationStatus  @default(PENDING)
   verifiedAt          DateTime?
   verifiedBy          String?

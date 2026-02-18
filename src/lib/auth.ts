@@ -92,7 +92,7 @@ export function generateSecureToken(length: number = 64): string {
  */
 export function getAuthCookies(accessToken: string, refreshToken: string) {
   const isProduction = process.env.NODE_ENV === 'production';
-  
+
   return {
     accessToken: {
       name: 'access_token',
@@ -100,7 +100,7 @@ export function getAuthCookies(accessToken: string, refreshToken: string) {
       httpOnly: true,
       secure: isProduction,
       sameSite: 'strict' as const,
-      maxAge: 15 * 60, // 15 minutes
+      maxAge: 2 * 60 * 60, // 2 hours
       path: '/',
     },
     refreshToken: {

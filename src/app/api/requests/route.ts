@@ -15,8 +15,9 @@ export async function GET(request: NextRequest) {
 
     // Parse filter params
     const filters: Record<string, unknown> = {};
-    
+
     const categoryId = searchParams.get('categoryId');
+    const categoryIds = searchParams.get('categoryIds'); // Support multiple categories
     const countryId = searchParams.get('countryId');
     const cityId = searchParams.get('cityId');
     const status = searchParams.get('status');
@@ -28,11 +29,24 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
     const skip = (page - 1) * limit;
+    const locale = searchParams.get('locale');
+    console.log('[API DEBUG] Received Locale:', locale, 'Params:', searchParams.toString());
 
     // Build where clause
     const where: Record<string, unknown> = {
       isActive: true,
     };
+
+    // Language filter based on locale (Strict separation)
+    if (locale === 'ar') {
+      where.tags = { has: 'lang:ar' };
+      console.log('[API DEBUG] Applied AR filter');
+    } else if (locale === 'en') {
+      where.tags = { has: 'lang:en' };
+      console.log('[API DEBUG] Applied EN filter');
+    } else {
+      console.log('[API DEBUG] No language filter applied (Locale mismatch or missing)');
+    }
 
     // Status filter
     if (status) {
@@ -43,7 +57,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Category filter
-    if (categoryId) {
+    if (categoryIds) {
+      const ids = categoryIds.split(',').filter(Boolean);
+      if (ids.length > 0) {
+        where.categoryId = { in: ids };
+      }
+    } else if (categoryId) {
       where.categoryId = categoryId;
     }
 

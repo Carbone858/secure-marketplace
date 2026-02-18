@@ -120,7 +120,7 @@ export function RegisterForm() {
     // Phone validation
     if (!formData.phone) {
       newErrors.phone = t('errors.phone.required');
-    } else if (!/^(\+|00)[1-9]\d{1,14}$/.test(formData.phone)) {
+    } else if (!/^[+]?[0-9\s)(-]{8,20}$/.test(formData.phone)) {
       newErrors.phone = t('errors.phone.invalid');
     }
 
@@ -204,6 +204,14 @@ export function RegisterForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
+
+    // Filter phone input to allow only valid characters
+    if (name === 'phone') {
+      if (!/^[0-9+\-\(\)\s]*$/.test(value)) {
+        return;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
@@ -357,7 +365,7 @@ export function RegisterForm() {
             value={formData.confirmPassword}
             onChange={handleChange}
             placeholder={t('fields.confirmPassword.placeholder')}
-            className={`w-full ps-4 pe-10 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.confirmPassword ? 'border-destructive' : 'border-input'
+            className={`w-full ps-4 pe-10 py-3 border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.confirmPassword || (formData.confirmPassword && formData.password !== formData.confirmPassword) ? 'border-destructive' : 'border-input'
               }`}
             disabled={isLoading}
             autoComplete="new-password"
@@ -371,8 +379,8 @@ export function RegisterForm() {
             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
-        {errors.confirmPassword && (
-          <p className="text-destructive text-sm">{errors.confirmPassword}</p>
+        {(errors.confirmPassword || (formData.confirmPassword && formData.password !== formData.confirmPassword)) && (
+          <p className="text-destructive text-sm">{errors.confirmPassword || t('errors.confirmPassword.mismatch')}</p>
         )}
       </div>
 

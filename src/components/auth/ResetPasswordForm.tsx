@@ -161,9 +161,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder={t('fields.password.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.password ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.password ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
             autoComplete="new-password"
           />
@@ -177,7 +176,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           </button>
         </div>
         {errors.password && <p className="text-destructive text-sm">{errors.password}</p>}
-        
+
         {/* Password strength indicator */}
         <PasswordStrength password={password} locale={locale} />
       </div>
@@ -195,9 +194,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder={t('fields.confirmPassword.placeholder')}
-            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${
-              errors.confirmPassword ? 'border-destructive' : 'border-input'
-            }`}
+            className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors ${errors.confirmPassword || (confirmPassword && password !== confirmPassword) ? 'border-destructive' : 'border-input'
+              }`}
             disabled={isLoading}
             autoComplete="new-password"
           />
@@ -210,8 +208,8 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
-        {errors.confirmPassword && (
-          <p className="text-destructive text-sm">{errors.confirmPassword}</p>
+        {(errors.confirmPassword || (confirmPassword && password !== confirmPassword)) && (
+          <p className="text-destructive text-sm">{errors.confirmPassword || t('errors.confirmPassword.mismatch')}</p>
         )}
       </div>
 

@@ -586,6 +586,29 @@
     }
   },
   "company": {
+    "join": {
+      "title": "Register as Company / Professional",
+      "subtitle": "Join thousands of service providers growing their business with us.",
+      "steps": {
+        "company": "Company Details",
+        "account": "Admin Account"
+      },
+      "form": {
+        "companyName": "Company Name",
+        "phone": "Business Phone",
+        "country": "Country",
+        "city": "City",
+        "address": "Address",
+        "adminName": "Your Name",
+        "email": "Email Address",
+        "personalPhone": "Personal Phone",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "terms": "I agree to the Terms of Service and Privacy Policy"
+      },
+      "submit": "Create Account",
+      "login": "Already have an account? Sign in"
+    },
     "registration": {
       "meta": {
         "title": "Register Company - Service Marketplace",
@@ -821,6 +844,15 @@
     },
     "list": {
       "title": "Service Requests",
+      "subtitle": "{count} requests available",
+      "newRequest": "Post a Request",
+      "searchPlaceholder": "Search requests...",
+      "allCategories": "All Categories",
+      "allCountries": "All Countries",
+      "filter": "Filter",
+      "noRequests": "No requests found",
+      "noRequestsDesc": "Try adjusting your filters or check back later",
+      "offers": "Offers",
       "filters": {
         "category": "Category",
         "country": "Country",
@@ -841,15 +873,26 @@
       "clearFilters": "Clear Filters",
       "createRequest": "Create Request"
     },
+    "urgency": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
     "detail": {
       "meta": {
         "title": "{title} - Service Marketplace",
         "description": "View service request details"
       },
-      "postedBy": "Posted by {name}",
+      "backToList": "Back to Requests",
+      "details": "Details",
+      "postedBy": "Posted By",
+      "memberSince": "Member since",
       "postedOn": "Posted on {date}",
       "location": "Location",
       "budget": "Budget",
+      "budgetFrom": "From",
+      "budgetUpTo": "Up to",
       "budgetNegotiable": "Negotiable",
       "deadline": "Deadline",
       "noDeadline": "No deadline specified",
@@ -857,7 +900,17 @@
       "category": "Category",
       "tags": "Tags",
       "description": "Description",
-      "offers": {
+      "images": "Images",
+      "remoteAllowed": "Remote service allowed",
+      "offers": "Offers",
+      "noOffers": "No offers yet",
+      "submitOffer": "Submit an Offer",
+      "reviews": "reviews",
+      "verified": "Verified",
+      "accept": "Accept",
+      "reject": "Reject",
+      "estimatedDays": "{days} days",
+      "offersList": {
         "title": "Offers",
         "count": "{count} offers",
         "noOffers": "No offers yet",
@@ -1089,6 +1142,7 @@
       "categories": "Categories",
       "reviews": "Reviews",
       "staff": "Staff",
+      "cms": "Content (CMS)",
       "featureFlags": "Feature Flags",
       "messages": "Messages",
       "settings": "Settings"
@@ -1606,7 +1660,34 @@
       "send": "Send Message",
       "sending": "Sending...",
       "success": "Message sent successfully!",
-      "error": "Failed to send message."
+      "error": "Failed to send message.",
+      "validation": {
+        "nameRequired": "Name is required",
+        "nameLength": "Name must be at least 2 characters",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "subjectRequired": "Subject is required",
+        "messageRequired": "Message is required",
+        "messageLength": "Message must be at least 10 characters"
+      },
+      "phone": "Phone",
+      "office": "Office",
+      "placeholders": {
+        "name": "Jane Doe",
+        "email": "jane@example.com",
+        "subject": "I have a question about...",
+        "message": "Tell us how we can help you..."
+      }
+    },
+    "cards": {
+      "emailDesc": "Our friendly team is here to help.",
+      "phoneDesc": "Mon-Fri from 8am to 5pm.",
+      "officeDesc": "Come say hello at our office HQ."
+    },
+    "sections": {
+      "sendMessage": "Send us a message",
+      "fillForm": "Fill out the form below and we'll get back to you as soon as possible.",
+      "getInTouch": "Get in touch"
     },
     "info": {
       "email": "support@example.com",
