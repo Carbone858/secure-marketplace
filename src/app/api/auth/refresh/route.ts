@@ -2,13 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { verifyToken, generateAccessToken, generateRefreshToken, getAuthCookies } from '@/lib/auth';
 import { cookies } from 'next/headers';
+import { refreshLimiter, getClientIp } from '@/lib/rate-limit';
 
 /**
  * POST /api/auth/refresh
  * Refresh access token using refresh token
  */
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
   try {
+    // 1. Rate Limiting
+    const rateLimit = await refreshLimiter.check(ip);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'rateLimit.exceeded', message: 'Too many refresh attempts.' },
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter || 60) } }
+      );
+    }
+
     const cookieStore = cookies();
     const refreshTokenCookie = cookieStore.get('refresh_token')?.value;
 
@@ -93,7 +104,6 @@ export async function POST(request: NextRequest) {
     });
 
     // Store new refresh token
-    const ip = request.headers.get('x-forwarded-for') || 'unknown';
     const userAgent = request.headers.get('user-agent');
 
     await prisma.refreshToken.create({

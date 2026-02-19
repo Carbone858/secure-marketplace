@@ -1,24 +1,24 @@
 {
   "home": {
     "hero": {
-      "title": "Get Quotes from Top Companies",
+      "title": "Get Quotes from Top Service Providers",
       "subtitle": "Describe what you need — receive competitive offers from verified service providers, free of charge.",
       "badge": "#1 Service Marketplace in the Arab World",
       "searchPlaceholder": "What service do you need?",
       "searchButton": "Search",
       "postRequest": "Post a Request",
-      "startRequest": "Start Your Request",
-      "registerCompany": "Register as Company",
+      "startRequest": "Post a Project",
+      "registerCompany": "Provide Services",
       "popularCategories": "Popular categories",
       "trustPoint1": "Free — no hidden fees for customers",
       "trustPoint2": "Get multiple quotes to compare",
-      "trustPoint3": "Verified & reviewed companies only",
+      "trustPoint3": "Verified & reviewed service providers only",
       "imageAlt": "Professional service provider ready to help"
     },
     "categories": {
       "title": "Browse by Category",
       "subtitle": "Find the right service for your needs from our wide range of categories",
-      "companyCount": "{count} companies",
+      "companyCount": "{count} service providers",
       "viewAll": "View All Categories"
     },
     "whyChooseUs": {
@@ -27,12 +27,12 @@
     },
     "features": {
       "verified": {
-        "title": "Verified Companies",
-        "description": "All companies are verified and reviewed for quality assurance."
+        "title": "Verified Service Providers",
+        "description": "All service providers are verified and reviewed for quality assurance."
       },
       "quickResponse": {
         "title": "Quick Response",
-        "description": "Get quotes from multiple companies within hours, not days."
+        "description": "Get quotes from multiple service providers within hours, not days."
       },
       "trustedNetwork": {
         "title": "Trusted Network",
@@ -40,26 +40,26 @@
       },
       "growBusiness": {
         "title": "Grow Your Business",
-        "description": "Companies can expand their reach and find new customers."
+        "description": "Service providers can expand their reach and find new customers."
       }
     },
     "stats": {
-      "verifiedCompanies": "Verified Companies",
+      "verifiedCompanies": "Verified Service Providers",
       "serviceRequests": "Service Requests",
       "happyCustomers": "Happy Customers",
       "averageRating": "Average Rating"
     },
     "featured": {
-      "title": "Featured Companies",
-      "subtitle": "Top-rated and verified companies ready to serve you",
+      "title": "Featured Service Providers",
+      "subtitle": "Top-rated and verified service providers ready to serve you",
       "verified": "Verified",
       "reviewCount": "({count} reviews)"
     },
     "cta": {
       "title": "Ready to Get Started?",
-      "subtitle": "Join thousands of customers and companies already using our platform",
+      "subtitle": "Join thousands of customers and service providers already using our platform",
       "postRequest": "Post a Request",
-      "registerCompany": "Register as Company"
+      "registerCompany": "Provide Services"
     },
     "meta": {
       "title": "Service Marketplace | Find Top Pros & Manage Requests",
@@ -93,7 +93,7 @@
     "register": {
       "meta": {
         "title": "Register - Service Marketplace",
-        "description": "Create your account on Service Marketplace and get quotes from top companies"
+        "description": "Create your account on Service Marketplace and get quotes from top service providers"
       },
       "fields": {
         "name": {
@@ -581,20 +581,20 @@
       "requestsDesc": "View and manage your service requests",
       "messages": "Messages",
       "messagesDesc": "View your conversations",
-      "company": "Company Profile",
-      "companyDesc": "Manage your company information"
+      "company": "Service Provider Profile",
+      "companyDesc": "Manage your service provider profile"
     }
   },
   "company": {
     "join": {
-      "title": "Register as Company / Professional",
+      "title": "Register as a Service Provider",
       "subtitle": "Join thousands of service providers growing their business with us.",
       "steps": {
         "company": "Company Details",
         "account": "Admin Account"
       },
       "form": {
-        "companyName": "Company Name",
+        "companyName": "Service Provider Name",
         "phone": "Business Phone",
         "country": "Country",
         "city": "City",
@@ -611,19 +611,19 @@
     },
     "registration": {
       "meta": {
-        "title": "Register Company - Service Marketplace",
-        "description": "Register your company on Service Marketplace"
+        "title": "Register as a Service Provider - Service Marketplace",
+        "description": "Register your service provider profile on Service Marketplace"
       },
       "steps": {
         "basic": {
           "title": "Basic Info",
-          "name": "Company Name",
-          "namePlaceholder": "Enter your company name",
+          "name": "Service Provider Name",
+          "namePlaceholder": "Enter your service provider name",
           "description": "Description",
-          "descriptionPlaceholder": "Tell us about your company...",
-          "email": "Company Email",
-          "emailPlaceholder": "company@example.com",
-          "phone": "Company Phone",
+          "descriptionPlaceholder": "Tell us about your services and areas of expertise...",
+          "email": "Business Email",
+          "emailPlaceholder": "info@example.com",
+          "phone": "Business Phone",
           "phonePlaceholder": "+1234567890",
           "website": "Website",
           "websitePlaceholder": "https://yourcompany.com"
@@ -732,7 +732,7 @@
       },
       "title": "Create New Request",
       "startTitle": "What Service Do You Need?",
-      "startSubtitle": "Describe your request and get quotes from verified companies — no account needed",
+      "startSubtitle": "Describe your request and get quotes from verified service providers.",
       "steps": {
         "category": {
           "title": "Category",

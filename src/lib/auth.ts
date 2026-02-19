@@ -119,12 +119,13 @@ export function getAuthCookies(accessToken: string, refreshToken: string) {
  * Clear authentication cookies
  */
 export function getClearAuthCookies() {
+  const isProduction = process.env.NODE_ENV === 'production';
   return {
     accessToken: {
       name: 'access_token',
       value: '',
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'strict' as const,
       maxAge: 0,
       path: '/',
@@ -133,7 +134,7 @@ export function getClearAuthCookies() {
       name: 'refresh_token',
       value: '',
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'strict' as const,
       maxAge: 0,
       path: '/',

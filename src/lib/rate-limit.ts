@@ -18,6 +18,9 @@
  *   RATE_LIMIT_API_WINDOW_SEC       — Window in seconds (default: 60)
  */
 
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/db/client';
+import { SecurityLogType } from '@prisma/client';
 import { getRedisClient } from './redis';
 
 // ──────────────────────────────────────────────
@@ -43,6 +46,12 @@ export interface RateLimitResult {
   limit: number;
   retryAfter?: number;
   resetAt?: number;
+}
+
+export interface RateLimiter {
+  check(identifier: string): Promise<RateLimitResult>;
+  checkSync(identifier: string): RateLimitResult;
+  reset(identifier: string): Promise<void>;
 }
 
 // ──────────────────────────────────────────────
@@ -209,7 +218,7 @@ async function redisReset(
 // Public API: createRateLimiter
 // ──────────────────────────────────────────────
 
-export function createRateLimiter(options: RateLimiterOptions) {
+export function createRateLimiter(options: RateLimiterOptions): RateLimiter {
   return {
     /**
      * Check if the identifier (typically an IP) is within rate limits.
@@ -281,6 +290,13 @@ export const authLimiter = createRateLimiter({
   keyPrefix: 'auth',
 });
 
+/** Refresh token: 5 requests per 15 minutes */
+export const refreshLimiter = createRateLimiter({
+  interval: 15 * 60 * 1000,
+  maxRequests: 5,
+  keyPrefix: 'refresh',
+});
+
 /** Strict rate limit: 5 requests per minute (sensitive operations) */
 export const strictLimiter = createRateLimiter({
   interval: 60_000,
@@ -303,17 +319,49 @@ export function getClientIp(request: Request): string {
   return '127.0.0.1';
 }
 
+/** 
+ * Get a rate limit key that combines IP and UserId if available.
+ * Helps prevent both IP-based brute force and user-based credential stuffing.
+ */
+export function getIdentifyKey(request: Request, userId?: string): string {
+  const ip = getClientIp(request);
+  return userId ? `${ip}:${userId}` : ip;
+}
+
+
 /** Apply rate limiting and return 429 Response if exceeded */
 export async function checkRateLimit(
   request: Request,
-  limiter = apiLimiter,
-  keyPrefix = ''
-): Promise<{ allowed: true; remaining: number; limit: number } | Response> {
+  limiter: RateLimiter,
+  options: {
+    userId?: string;
+    type?: SecurityLogType;
+  } = {}
+): Promise<Response | { allowed: true; remaining: number; limit: number }> {
   const ip = getClientIp(request);
-  const key = keyPrefix ? `${keyPrefix}:${ip}` : ip;
+  const key = options.userId ? `${ip}:${options.userId}` : ip;
   const result = await limiter.check(key);
 
   if (!result.allowed) {
+    // Log security event for rate limit trigger
+    try {
+      await prisma.securityLog.create({
+        data: {
+          type: options.type || SecurityLogType.SUSPICIOUS_ACTIVITY,
+          userId: options.userId || null,
+          ip: ip,
+          userAgent: request.headers.get('user-agent')?.slice(0, 255) || null,
+          metadata: {
+            path: new URL(request.url).pathname,
+            limit: result.limit,
+            reset: result.resetAt,
+          } as any
+        }
+      });
+    } catch (logError) {
+      console.error('Failed to log security event:', logError);
+    }
+
     return new Response(
       JSON.stringify({
         success: false,
@@ -328,10 +376,39 @@ export async function checkRateLimit(
           'Retry-After': String(result.retryAfter || 60),
           'X-RateLimit-Limit': String(result.limit),
           'X-RateLimit-Remaining': '0',
+          'X-Frame-Options': 'DENY',
         },
       }
     );
   }
 
   return { allowed: true, remaining: result.remaining, limit: result.limit };
+}
+
+/**
+ * Log a generic security event to the database
+ */
+export async function logSecurityEvent(data: {
+  type: SecurityLogType;
+  request: Request;
+  userId?: string;
+  details?: any;
+}) {
+  try {
+    const ip = getClientIp(data.request);
+    await prisma.securityLog.create({
+      data: {
+        type: data.type,
+        userId: data.userId || null,
+        ip: ip,
+        userAgent: data.request.headers.get('user-agent')?.slice(0, 255) || null,
+        metadata: {
+          path: new URL(data.request.url).pathname,
+          ...data.details,
+        } as any
+      }
+    });
+  } catch (error) {
+    console.error('Security Logging Error:', error);
+  }
 }

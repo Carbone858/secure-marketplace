@@ -8,7 +8,8 @@ import {
 } from '@/lib/validations/auth';
 import { sendEmail } from '@/lib/email/service';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
-import { registerLimiter, getClientIp } from '@/lib/rate-limit';
+import { registerLimiter, getClientIp, checkRateLimit } from '@/lib/rate-limit';
+import { SecurityLogType } from '@prisma/client';
 import crypto from 'crypto';
 
 /**
@@ -80,27 +81,14 @@ export async function POST(request: NextRequest) {
 
   try {
     // Check rate limit (Redis-backed with in-memory fallback)
-    const rateLimit = await registerLimiter.check(ip);
-    if (!rateLimit.allowed) {
+    const rateLimit = await checkRateLimit(request, registerLimiter, {
+      type: SecurityLogType.REGISTER_FAILED
+    });
+    if (rateLimit instanceof Response) {
       await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
         reason: 'rate_limit_exceeded',
       });
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'rateLimit.exceeded',
-          message: 'Too many registration attempts. Please try again later.',
-          retryAfter: rateLimit.retryAfter,
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': String(rateLimit.limit),
-            'X-RateLimit-Remaining': '0',
-            'Retry-After': String(rateLimit.retryAfter || 60),
-          },
-        }
-      );
+      return rateLimit;
     }
 
     // Parse and validate request body

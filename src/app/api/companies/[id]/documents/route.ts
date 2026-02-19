@@ -6,7 +6,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { companyDocumentSchema } from '@/lib/validations/company';
-import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl } from '@/lib/upload';
+import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE } from '@/lib/upload';
 
 interface RouteParams {
   params: { id: string };
@@ -19,7 +19,6 @@ const ALLOWED_TYPES = [
   'image/png',
   'image/webp',
 ];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 /**
  * GET /api/companies/[id]/documents
@@ -190,16 +189,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         {
           success: false,
           error: 'file.tooLarge',
-          message: 'File is too large. Maximum size is 10MB.',
+          message: `File is too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`,
         },
         { status: 400 }
       );
     }
 
-    // Generate safe filename
-    const fileExtension = file.type === 'application/pdf' ? 'pdf' : file.type.split('/')[1];
-    const randomName = crypto.randomBytes(16).toString('hex');
-    const fileName = `${company.id}_${type}_${randomName}.${fileExtension}`;
+    // Generate safe filename using UUID
+    const fileName = generateSafeFileName(file.name);
 
     // Ensure uploads directory exists (OUTSIDE public/ for auth-protected access)
     const uploadsDir = UPLOAD_PATHS.documents;

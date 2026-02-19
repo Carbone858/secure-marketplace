@@ -35,11 +35,12 @@ const PROTECTED_API_PATTERNS = [
 ];
 
 // API routes that are always public (bypass auth even if they match above)
-const PUBLIC_API_WHITELIST = [
-  /^\/api\/admin\/seed-companies/,
+const PUBLIC_API_WHITELIST: RegExp[] = [
+  // Add any truly public stateless API endpoints here if needed
 ];
 
 import { getToken } from 'next-auth/jwt';
+import { getClientIp } from '@/lib/rate-limit';
 
 async function verifyTokenFromCookie(request: NextRequest): Promise<{ userId: string; role: string } | null> {
   // 1. Try Custom Auth Token
@@ -105,11 +106,11 @@ export default async function middleware(request: NextRequest) {
         return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
       }
 
-      // For admin API routes, verify role
+      // For admin API routes, verify role strictly
       if (pathname.startsWith('/api/admin/')) {
-        // user is already verified above
-        if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
-          return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+        if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
+          console.warn(`[Security] Unauthorized admin API access attempt by user ${user.userId} from ${getClientIp(request)}`);
+          return NextResponse.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
         }
       }
     }

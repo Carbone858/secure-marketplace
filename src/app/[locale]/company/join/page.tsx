@@ -15,7 +15,7 @@ export async function generateMetadata({
     const t = await getTranslations({ locale, namespace: 'company.registration' });
 
     return {
-        title: locale === 'ar' ? 'انضم كشريك - سوق الخدمات' : 'Join as Partner - Service Marketplace',
+        title: locale === 'ar' ? 'تسجيل كمقدم خدمة - سوق الخدمات' : 'Register as a Service Provider - Service Marketplace',
         description: t('meta.description'),
     };
 }

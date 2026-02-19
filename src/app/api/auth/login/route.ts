@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { verifyPassword, generateAccessToken, generateRefreshToken, getAuthCookies } from '@/lib/auth';
 import { loginSchema, hashEmail } from '@/lib/validations/auth';
-import { loginLimiter, getClientIp } from '@/lib/rate-limit';
+import { loginLimiter, getClientIp, getIdentifyKey, checkRateLimit } from '@/lib/rate-limit';
+import { SecurityLogType } from '@prisma/client';
 import { cookies } from 'next/headers';
 
 const ACCOUNT_LOCKOUT_ATTEMPTS = 5;
@@ -43,25 +44,10 @@ export async function POST(request: NextRequest) {
 
   try {
     // Check rate limit (Redis-backed with in-memory fallback)
-    const rateLimit = await loginLimiter.check(ip);
-    if (!rateLimit.allowed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'rateLimit.exceeded',
-          message: 'Too many login attempts. Please try again later.',
-          retryAfter: rateLimit.retryAfter,
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': String(rateLimit.limit),
-            'X-RateLimit-Remaining': '0',
-            'Retry-After': String(rateLimit.retryAfter || 60),
-          },
-        }
-      );
-    }
+    const rateLimit = await checkRateLimit(request, loginLimiter, {
+      type: SecurityLogType.LOGIN_FAILED
+    });
+    if (rateLimit instanceof Response) return rateLimit;
 
     // Parse and validate request body
     const body = await request.json();

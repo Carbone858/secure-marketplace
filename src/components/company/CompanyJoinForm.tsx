@@ -365,7 +365,7 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
         let stepError = '';
 
         if (step === 1) {
-            if (!formData.companyName) { valid = false; stepError = isRTL ? 'اسم الشركة مطلوب' : 'Company Name is required'; }
+            if (!formData.companyName) { valid = false; stepError = isRTL ? 'اسم مقدم الخدمة مطلوب' : 'Service Provider name is required'; }
             else if (!formData.businessType) { valid = false; stepError = isRTL ? 'مجال العمل مطلوب' : 'Business Type is required'; }
             else if (formData.description.length < 25) { valid = false; stepError = isRTL ? 'الوصف قصير جداً (25 حرف كحد أدنى)' : 'Description too short (min 25 chars)'; }
         } else if (step === 2) {
@@ -491,7 +491,7 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
 
                         {/* --- Section 1: Basic Info --- */}
                         <SectionHeader
-                            step={1} title={isRTL ? "هوية الشركة" : "Company Identity"} description={isRTL ? "معلومات أساسية عن نشاطك التجاري" : "Basic information about your business"}
+                            step={1} title={isRTL ? "هوية مقدم الخدمة" : "Service Provider Identity"} description={isRTL ? "معلومات أساسية عن نشاطك" : "Basic information about your services"}
                             isActive={activeStep === 1} isCompleted={completedSteps.includes(1)}
                             onEdit={() => setActiveStep(1)}
                         />
@@ -504,16 +504,24 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                     <div className="grid md:grid-cols-[1fr,auto] gap-6">
                                         <div className="space-y-4">
                                             <div>
-                                                <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'اسم الشركة *' : 'Company Name <span className="text-destructive">*</span>'}</label>
+                                                <label className="text-sm font-medium mb-1.5 block">
+                                                    {isRTL ? 'اسم مقدم الخدمة *' : (
+                                                        <>Service Provider name <span className="text-destructive">*</span></>
+                                                    )}
+                                                </label>
                                                 <input
                                                     value={formData.companyName} onChange={e => setFormData({ ...formData, companyName: e.target.value })}
                                                     className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20"
-                                                    placeholder={isRTL ? "مثال: شركة الإعمار المتقدمة" : "e.g. Acme Construction"} autoFocus
+                                                    placeholder={isRTL ? "مثال: ورشة الإعمار أو اسمك التجاري" : "e.g. Acme Services or your trade name"} autoFocus
                                                 />
                                                 <p className="text-xs text-muted-foreground mt-1">{isRTL ? 'الاسم الظاهر في ملفك العام.' : 'The public name displayed on your profile.'}</p>
                                             </div>
                                             <div>
-                                                <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'مجال العمل *' : 'Business Category <span className="text-destructive">*</span>'}</label>
+                                                <label className="text-sm font-medium mb-1.5 block">
+                                                    {isRTL ? 'مجال العمل *' : (
+                                                        <>Business Category <span className="text-destructive">*</span></>
+                                                    )}
+                                                </label>
                                                 <select
                                                     value={formData.businessType} onChange={e => setFormData({ ...formData, businessType: e.target.value })}
                                                     className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20"
@@ -529,11 +537,15 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'وصف مختصر *' : 'Short Description <span className="text-destructive">*</span>'}</label>
+                                        <label className="text-sm font-medium mb-1.5 block">
+                                            {isRTL ? 'وصف مختصر *' : (
+                                                <>Short Description <span className="text-destructive">*</span></>
+                                            )}
+                                        </label>
                                         <textarea
                                             value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}
                                             className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20 min-h-[100px]"
-                                            placeholder={isRTL ? "ماذا تقدم شركتك؟" : "What does your company do?"}
+                                            placeholder={isRTL ? "ماذا تقدم من خدمات؟" : "What services do you provide?"}
                                         />
                                         <div className="flex justify-between mt-1 text-xs">
                                             <span className={formData.description.length < 25 ? 'text-destructive' : 'text-success'}>{isRTL ? '25 حرف كحد أدنى' : 'Min 25 characters'}</span>
@@ -563,7 +575,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                 >
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'البلد *' : 'Country <span className="text-destructive">*</span>'}</label>
+                                            <label className="text-sm font-medium mb-1.5 block">
+                                                {isRTL ? 'البلد *' : (
+                                                    <>Country <span className="text-destructive">*</span></>
+                                                )}
+                                            </label>
                                             <select
                                                 value={formData.countryId} onChange={e => handleCountryChange(e.target.value)}
                                                 className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20"
@@ -573,7 +589,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'المدينة *' : 'Main City <span className="text-destructive">*</span>'}</label>
+                                            <label className="text-sm font-medium mb-1.5 block">
+                                                {isRTL ? 'المدينة *' : (
+                                                    <>Main City <span className="text-destructive">*</span></>
+                                                )}
+                                            </label>
                                             <select
                                                 value={formData.cityId} onChange={e => setFormData({ ...formData, cityId: e.target.value })}
                                                 className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
@@ -684,7 +704,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                 >
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'اسم المسؤول *' : 'Admin Name <span className="text-destructive">*</span>'}</label>
+                                            <label className="text-sm font-medium mb-1.5 block">
+                                                {isRTL ? 'اسم المسؤول *' : (
+                                                    <>Admin Name <span className="text-destructive">*</span></>
+                                                )}
+                                            </label>
                                             <input
                                                 value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
                                                 className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20"
@@ -692,7 +716,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                             />
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'رقم الهاتف *' : 'Phone Number <span className="text-destructive">*</span>'}</label>
+                                            <label className="text-sm font-medium mb-1.5 block">
+                                                {isRTL ? 'رقم الهاتف *' : (
+                                                    <>Phone Number <span className="text-destructive">*</span></>
+                                                )}
+                                            </label>
                                             <input
                                                 type="tel"
                                                 value={formData.phone}
@@ -713,7 +741,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'البريد الإلكتروني *' : 'Email Address <span className="text-destructive">*</span>'}</label>
+                                        <label className="text-sm font-medium mb-1.5 block">
+                                            {isRTL ? 'البريد الإلكتروني *' : (
+                                                <>Email Address <span className="text-destructive">*</span></>
+                                            )}
+                                        </label>
                                         <div className="relative">
                                             <input
                                                 type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -727,7 +759,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                     </div>
                                     <div className="grid md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'كلمة المرور *' : 'Password <span className="text-destructive">*</span>'}</label>
+                                            <label className="text-sm font-medium mb-1.5 block">
+                                                {isRTL ? 'كلمة المرور *' : (
+                                                    <>Password <span className="text-destructive">*</span></>
+                                                )}
+                                            </label>
                                             <div className="relative">
                                                 <input
                                                     type={showPassword ? 'text' : 'password'}
@@ -742,7 +778,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                             <PasswordStrengthMeter password={formData.password} />
                                         </div>
                                         <div>
-                                            <label className="text-sm font-medium mb-1.5 block">{isRTL ? 'تأكيد كلمة المرور *' : 'Confirm Password <span className="text-destructive">*</span>'}</label>
+                                            <label className="text-sm font-medium mb-1.5 block">
+                                                {isRTL ? 'تأكيد كلمة المرور *' : (
+                                                    <>Confirm Password <span className="text-destructive">*</span></>
+                                                )}
+                                            </label>
                                             <div className="relative">
                                                 <input
                                                     type={showConfirmPassword ? 'text' : 'password'}
@@ -781,7 +821,7 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                             disabled={isLoading}
                                             className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/30 flex items-center justify-center gap-2"
                                         >
-                                            {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (isRTL ? 'إنشاء حساب الشركة' : 'Create Company Account')}
+                                            {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : (isRTL ? 'إنشاء حساب مقدم الخدمة' : 'Create Service Provider Account')}
                                         </button>
                                     </div>
                                 </motion.div>

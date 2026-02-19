@@ -4,8 +4,8 @@ import { z } from 'zod';
 export const companyBasicInfoSchema = z.object({
   name: z
     .string()
-    .min(2, 'Company name must be at least 2 characters')
-    .max(100, 'Company name is too long')
+    .min(2, 'Service provider name must be at least 2 characters')
+    .max(100, 'Service provider name is too long')
     .trim(),
   description: z
     .string()

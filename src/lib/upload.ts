@@ -1,4 +1,5 @@
 import path from 'path';
+import crypto from 'crypto';
 
 /**
  * Upload utility - centralized upload path and security helpers
@@ -12,6 +13,9 @@ export const UPLOAD_PATHS = {
   documents: path.join(UPLOAD_BASE, 'documents'),
   avatars: path.join(UPLOAD_BASE, 'avatars'),
 } as const;
+
+// Max file size: 5MB
+export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 // Magic bytes for file type validation
 const FILE_SIGNATURES: Record<string, number[][]> = {
@@ -31,6 +35,18 @@ export function validateFileMagicBytes(buffer: Buffer, claimedType: string): boo
   return signatures.some((signature) =>
     signature.every((byte, index) => buffer[index] === byte)
   );
+}
+
+/**
+ * Generate a safe, random filename using UUID to prevent naming collisions
+ * and hide original file information.
+ */
+export function generateSafeFileName(originalName: string): string {
+  const extension = path.extname(originalName).toLowerCase();
+  const uuid = crypto.randomUUID();
+  // Only allow alphanumeric extensions for safety
+  const safeExt = /^\.[a-z0-9]+$/.test(extension) ? extension : '';
+  return `${uuid}${safeExt}`;
 }
 
 /**
@@ -54,4 +70,15 @@ export function resolveUploadPath(category: 'documents' | 'avatars', fileName: s
  */
 export function getFileServeUrl(category: 'documents' | 'avatars', fileName: string): string {
   return `/api/files/${category}/${encodeURIComponent(fileName)}`;
+}
+
+/**
+ * Simple "sanitizer" for image buffers to help strip basic metadata 
+ * or at least identify suspicious content.
+ * Real EXIF stripping usually requires libraries like 'sharp' or 'exiftool'.
+ */
+export function sanitizeImageBuffer(buffer: Buffer): Buffer {
+  // For now, this is a placeholder for metadata stripping.
+  // In a real prod environment with 'sharp', we would use .keepMetadata(false)
+  return buffer;
 }

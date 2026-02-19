@@ -8,13 +8,13 @@ const nextConfig = {
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
-  
+
   // Image optimization settings
   images: {
     domains: ['localhost'],
     formats: ['image/webp', 'image/avif'],
   },
-  
+
   // Security headers
   async headers() {
     return [
@@ -31,7 +31,7 @@ const nextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',
@@ -39,7 +39,7 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            value: 'strict-origin-when-cross-origin',
           },
           {
             key: 'Permissions-Policy',
@@ -49,12 +49,13 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "style-src 'self' 'unsafe-inline'",
+              "script-src 'self' 'unsafe-inline' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https:",
-              "font-src 'self' data:",
-              "connect-src 'self' https:",
-              "frame-ancestors 'self'",
+              "font-src 'self' data: https://fonts.gstatic.com",
+              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
+              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/",
+              "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'"
             ].join('; '),

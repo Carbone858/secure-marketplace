@@ -5,11 +5,10 @@ import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl } from '@/lib/upload';
+import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE, sanitizeImageBuffer } from '@/lib/upload';
 
 // Allowed image types
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 /**
  * POST /api/user/avatar
@@ -63,16 +62,14 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'file.tooLarge',
-          message: 'File is too large. Maximum size is 5MB.',
+          message: `File is too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`,
         },
         { status: 400 }
       );
     }
 
-    // Generate safe filename
-    const fileExtension = file.type.split('/')[1];
-    const randomName = crypto.randomBytes(16).toString('hex');
-    const fileName = `${session.user.id}_${randomName}.${fileExtension}`;
+    // Generate safe filename using UUID
+    const fileName = generateSafeFileName(file.name);
 
     // Ensure uploads directory exists (OUTSIDE public/ for controlled access)
     const uploadsDir = UPLOAD_PATHS.avatars;
@@ -82,7 +79,24 @@ export async function POST(request: NextRequest) {
 
     // Save file
     const filePath = path.join(uploadsDir, fileName);
-    const fileBuffer = Buffer.from(await file.arrayBuffer());
+    let fileBuffer = Buffer.from(await file.arrayBuffer() as any);
+
+    // Validate magic bytes match claimed MIME type
+    if (!validateFileMagicBytes(fileBuffer, file.type)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'file.contentMismatch',
+          message: 'File content does not match the declared file type.',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Sanitize image (metadata stripping)
+    fileBuffer = sanitizeImageBuffer(fileBuffer);
+
+    await writeFile(filePath, fileBuffer);
 
     // Validate magic bytes match claimed MIME type
     if (!validateFileMagicBytes(fileBuffer, file.type)) {
