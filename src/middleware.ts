@@ -40,7 +40,7 @@ const PUBLIC_API_WHITELIST: RegExp[] = [
 ];
 
 import { getToken } from 'next-auth/jwt';
-import { getClientIp } from '@/lib/rate-limit';
+import { getClientIp } from '@/lib/ip';
 
 async function verifyTokenFromCookie(request: NextRequest): Promise<{ userId: string; role: string } | null> {
   // 1. Try Custom Auth Token

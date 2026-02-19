@@ -1,45 +1,36 @@
 import { PrismaClient } from '@prisma/client';
+import { execSync } from 'child_process';
+import path from 'path';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding database...');
+  console.log('🚀 MASTER SEED STARTING...');
 
-  // Create a sample user
-  const user = await prisma.user.create({
-    data: {
-      email: 'companyowner@example.com',
-      emailHash: 'companyowner@example.com',
-      password: 'Test123456!@',
-      name: 'مالك الشركة',
-      role: 'COMPANY',
-    },
-  });
+  const scripts = [
+    'seed-syria.ts',
+    'clean-and-seed-categories.ts',
+    'seed-staff-roles.ts',
+    'create-test-users.ts'
+  ];
 
-  // Create sample companies linked to the user
-  await prisma.company.createMany({
-    data: [
-      {
-        userId: user.id,
-        name: 'شركة البناء الذهبي',
-        slug: 'golden-construction',
-        description: 'شركة متخصصة في أعمال البناء',
-        address: 'دمشق - المزة',
-        rating: 4.8,
-      },
-      {
-        userId: user.id,
-        name: 'الكهربائي المحترف',
-        slug: 'pro-electrician',
-        description: 'خدمات كهربائية شاملة',
-        address: 'حلب - الفرقان',
-        rating: 4.5,
-      },
-    ],
-    skipDuplicates: true,
-  });
+  for (const script of scripts) {
+    console.log(`\n-----------------------------------------------------------`);
+    console.log(`📦 Running ${script}...`);
+    try {
+      // Use npx tsx to execute the modular scripts
+      const scriptPath = path.join(process.cwd(), 'prisma', script);
+      execSync(`npx tsx "${scriptPath}"`, { stdio: 'inherit' });
+      console.log(`✅ ${script} completed successfully.`);
+    } catch (error: any) {
+      console.error(`❌ Error running ${script}:`, error.message);
+      // We continue to other scripts even if one fails
+    }
+  }
 
-  console.log('✅ Database seeded');
+  console.log('\n-----------------------------------------------------------');
+  console.log('✨ ALL SEED SCRIPTS COMPLETED!');
+  console.log('🔑 You can now use the credentials in MANUAL_TEST_PLAN.md');
 }
 
 main()

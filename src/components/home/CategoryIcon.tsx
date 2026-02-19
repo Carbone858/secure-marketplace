@@ -61,6 +61,7 @@ const iconRegistry: Record<string, any> = {
   'zap': Zap,
   'droplets': Droplets,
   'building2': Building2,
+  'building': Building2,
   'briefcase': MdOutlineBusinessCenter,
 };
 
@@ -79,9 +80,9 @@ const svgIconMap: Record<string, string> = {
   'moving': 'moving .svg',
   'cleaning': 'Cleaning .svg',
   'construction': 'Construction & Building.svg',
+  'building': 'Construction & Building.svg',
   'interior-design': 'interior .svg',
   'electrical': 'Electrical.svg',
-  // Aliases for Lucide names in DB
   'sparkles': 'Cleaning .svg',
   'truck': 'moving .svg',
   'cpu': 'IT .svg',
@@ -98,7 +99,10 @@ export default function CategoryIcon({
 }: CategoryIconProps) {
   // Try SVG icon first for mapped categories
   if (iconName && svgIconMap[iconName]) {
-    const svgPath = `/images/${svgIconMap[iconName]}`;
+    const fileName = svgIconMap[iconName];
+    // Encode space characters for valid URLs
+    const encodedFileName = encodeURIComponent(fileName);
+    const svgPath = `/images/${encodedFileName}`;
     return (
       <img
         src={svgPath}

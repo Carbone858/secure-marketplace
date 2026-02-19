@@ -1,495 +1,435 @@
-# Manual Test Plan
+# Manual Test Plan - A-Z Production Readiness Suite
 
-> **Secure Service Marketplace** — Next.js 14.1 / Prisma / PostgreSQL  
-> Version 1.1 · Feb 17, 2026  
-> Locales: Arabic (ar, default, RTL) + English (en, LTR)
-
----
+This document outlines the exhaustive manual testing required to move the Secure Service Marketplace from development to production. Every task must be verified across both **Arabic (AR)** and **English (EN)** locales.
 
 ## 🔐 Test Credentials
-
-**Password for ALL accounts:** `Test123456!@`
-
-| Role | Email | Notes |
-|------|-------|-------|
-| **Admin** | `admin@secure-marketplace.com` | Full administrative access |
-| **Website Owner** (Super Admin) | `owner@secure-marketplace.com` | Root access, system configuration |
-| **Verified Company** | `company@secure-marketplace.com` | Approved service provider |
-| **Pending Company** | `pending@secure-marketplace.com` | Awaiting verification |
-| **Standard User** | `user@secure-marketplace.com` | Regular client account |
-| **Unverified User** | `unverified@secure-marketplace.com` | Email not yet verified |
-| **Locked Account** | `locked@secure-marketplace.com` | Account temporarily locked (for testing lockout) |
+| Account | Email | Password | Role | State |
+|---------|-------|----------|------|-------|
+| Admin | `admin@secure.sy` | `Admin@123` | ADMIN | Superuser |
+| Company | `testcompany@gmail.com` | `Test@123` | COMPANY | Verified |
+| Client | `testuser@gmail.com` | `Test@123` | USER | Regular User |
 
 ---
 
-## Quick Setup
+## A. Global UI & Components (Total: 25)
+- [ ] A1: Navbar Logo & Brand Identity (Check all pages)
+  - Expected: Logo links to correct home page per locale. High-res SVG used.
+- [ ] A2: Navbar Navigation Links (Home, Browse Companies, Post Request)
+  - Expected: Active state visually distinct. Correct `href` including locale.
+- [ ] A3: Navbar Auth State (Guest)
+  - Expected: Shows "Login" and "Register" buttons clearly.
+- [ ] A4: Navbar Auth State (Logged In)
+  - Expected: Shows User Avatar, Notifications toggle, Messages toggle, and Menu.
+- [ ] A5: Navbar Mobile Responsive Toggle
+  - Expected: Hamburger icon appears on mobile. Menu slides in smoothly.
+- [ ] A6: Language Switcher (EN/AR Toggle)
+  - Expected: Smooth transition, preserves route path, updates `dir` attribute.
+- [ ] A7: Theme Toggle (Light/Dark Mode)
+  - Expected: Immediate update, no FOUC (Flash of Unstyled Content), persistent after refresh.
+- [ ] A8: Footer Corporate Links (About, Terms, Privacy)
+  - Expected: All links go to valid pages. Proper hover effects.
+- [ ] A9: Footer Contact Info (Email, Phone, Address)
+  - Expected: Real data shown, not placeholders. `mailto:` and `tel:` links work.
+- [ ] A10: Footer Social Media Icons
+  - Expected: Correct platform icons, links open in new tabs.
+- [ ] A11: RTL Layout Integrity (Global)
+  - Expected: No horizontal scroll issues. Mirroring applied to all directional elements.
+- [ ] A12: Sticky Header Behavior
+  - Expected: Remains at top on scroll, z-index allows dropdowns to overlay page.
+- [ ] A13: Loading Skeletons (Global)
+  - Expected: Appears during API fetches instead of blank white space.
+- [ ] A14: Error Boundaries (Global)
+  - Expected: Friendly "Something went wrong" UI instead of 500 white screens.
+- [ ] A15: Button Interaction States
+  - Expected: Hover, Active, Focus, and Disabled states visually verified.
+- [ ] A16: Input Field Focus States
+  - Expected: Primary color ring/border appears on focus.
+- [ ] A17: Typography RTL Support
+  - Expected: Noto Sans Arabic used for AR, Inter for EN. Correct line-heights.
+- [ ] A18: Icon Alignment in RTL
+  - Expected: Icons that are directional (arrows) are flipped.
+- [ ] A19: Toast Notifications (Sonner)
+  - Expected: Appears in bottom-right (LTR) or bottom-left (RTL). readable.
+- [ ] A20: Breadcrumb Navigation
+  - Expected: Present on inner pages, correct hierarchy.
+- [ ] A21: Modal Overlay Behavior
+  - Expected: Darkens background, locks scroll, closes on ESC or backdrop click.
+- [ ] A22: Tooltip Behavior
+  - Expected: Appears on hover for truncated text or ambiguous icons.
+- [ ] A23: Scroll-to-Top Button
+  - Expected: Appears after 500px scroll, smooth scroll to 0.
+- [ ] A24: Favicon & Manifest
+  - Expected: Icons appear in browser tab. PWA manifest valid.
+- [ ] A25: Service Categories Icons
+  - Expected: Correct Lucide/Custom icons matching service names.
 
-```bash
-npx prisma db seed        # seed database with test accounts above
-npm run dev               # start on localhost:3000
-```
+## B. Authentication & Security (Total: 35)
+- [ ] B1: User Registration - Form Validation
+  - Expected: Real-time validation for missing fields, invalid email, weak password.
+- [ ] B2: User Registration - Password Strength
+  - Expected: Indicator turns green only on high entropy passwords.
+- [ ] B3: User Registration - Email Verification Flow
+  - Expected: Verification email received within 60s. Link autoverifies on click.
+- [ ] B4: User Registration - duplicate Email Check
+  - Expected: Prevents registration with existing email. Friendly error.
+- [ ] B5: User Registration - reCAPTCHA v3
+  - Expected: Invisible badge appears. Blocks automated scripts.
+- [ ] B6: User Registration - Terms & Privacy Checkbox
+  - Expected: Form cannot be submitted without checking.
+- [ ] B7: User Login - Standard Workflow
+  - Expected: Redirects to `/dashboard` on success.
+- [ ] B8: User Login - Remember Me
+  - Expected: Session persists after browser restart.
+- [ ] B9: User Login - Rate Limiting (Brute Force)
+  - Expected: Account locks for 30 mins after 5 failed attempts.
+- [ ] B10: User Login - IP-based Throttling
+  - Expected: Prevents massive login attempts from single IP.
+- [ ] B11: Password Reset - Request Link
+  - Expected: Sends 1hr expiry token.
+- [ ] B12: Password Reset - Verification Link Usage
+  - Expected: Allows entering new password. Redirects to login.
+- [ ] B13: Password Reset - Token Invalidation
+  - Expected: Link works only once. Error on reuse.
+- [ ] B14: JWT Policy - HttpOnly Cookie
+  - Expected: Verify in DevTools -> Application -> Cookies. `access_token` not accessible via JS.
+- [ ] B15: JWT Policy - Rotation on Refresh
+  - Expected: `refresh_token` updated upon expiry of `access_token`.
+- [ ] B16: CSRF Protection (State Changing)
+  - Expected: POST/PUT/DELETE requests rejected without Origin/CSRF verification.
+- [ ] B17: Account Deletion (GDPR)
+  - Expected: Data is anonymized in DB. Session immediately killed.
+- [ ] B18: Password Change - Active Session Revocation
+  - Expected: Changing password forces logout on all other devices.
+- [ ] B19: Auth Redirection (Middleware)
+  - Expected: Accessing `/dashboard` as guest redirects to `/login`.
+- [ ] B20: Auth Redirection (Logged In)
+  - Expected: Accessing `/login` while logged in redirects to dashboard.
+- [ ] B21: Login with Verified Email Only
+  - Expected: Unverified accounts can login but see "Verify your email" banner.
+- [ ] B22: Logout - Token Revocation
+  - Expected: Token is blacklisted/cleared. `Back` button doesn't show sensitive data.
+- [ ] B23: Password Encryption (Argon2id)
+  - Expected: Check Prisma Studio. Passwords must be hashed strings.
+- [ ] B24: Email Enumeration Prevention
+  - Expected: "Forgot Password" returns same success message even if email doesn't exist.
+- [ ] B25: Security Headers - CSP Level 2
+  - Expected: Verify in Network tab headers. No `script-src: *`.
+- [ ] B26: Security Headers - X-Content-Type-Options: nosniff
+- [ ] B27: Security Headers - X-Frame-Options: DENY
+- [ ] B28: Security Headers - Strict-Transport-Security (HSTS)
+- [ ] B29: Magic Byte File Validation (Profile Image)
+  - Expected: Uploading a `.php` file renamed to `.jpg` must be rejected.
+- [ ] B30: Zod API Input Validation
+  - Expected: Sending malformed JSON to API returns 400 with granular errors.
+- [ ] B31: User Role Hierarchy (CLIENT vs COMPANY)
+  - Expected: Client cannot access company dashboard endpoints.
+- [ ] B32: Admin Impersonation Protection
+  - Expected: Verify that session tokens cannot be easily forged using IDs.
+- [ ] B33: Session Timeout (Auto-logout)
+  - Expected: Inactivity for 7 days (remember me off) kills session.
+- [ ] B34: Profile Page - SSR Data Fetching Security
+  - Expected: Verify no sensitive DB fields (passwords, salts) sent to frontend.
+- [ ] B35: reCAPTCHA Verification (Backend)
+  - Expected: Verify backend actually calls Google API to validate token.
+
+## C. User (Client) Dashboard (Total: 20)
+- [ ] C1: Dashboard Overview - Counters
+  - Expected: Correct counts for Active Requests, Offers, and Completed Projects.
+- [ ] C2: My Requests - Filter by Status
+  - Expected: "In Progress" vs "Completed" tab filtering works.
+- [ ] C3: My Requests - View Offer List
+  - Expected: Clicking request shows all received company offers.
+- [ ] C4: Offer Detail View
+  - Expected: Show company rating, price, and cover letter.
+- [ ] C5: Accept Offer Flow
+  - Expected: One click acceptance. Triggers project creation. Rejects others.
+- [ ] C6: Reject Offer Flow
+  - Expected: Offer marked as rejected. Company notified.
+- [ ] C7: Messaging - Real-time Chat
+  - Expected: Messages appear instantly. No refresh needed.
+- [ ] C8: Messaging - Unread Counts
+  - Expected: Badge in navbar updates when new messages arrive.
+- [ ] C9: Messaging - File Sharing
+  - Expected: PDF/Images can be sent within chat safely.
+- [ ] C10: Active Projects - Status Transitions
+  - Expected: Client can confirm milestones but not change core project status to "In Progress".
+- [ ] C11: Project Completion - Review Trigger
+  - Expected: Marking project as done prompts for a rating and comment.
+- [ ] C12: Review Submission - Star Rating
+  - Expected: UI allows 1-5 selection. Comment is mandatory.
+- [ ] C13: Review Visibility
+  - Expected: Review appears on the company's public profile immediately.
+- [ ] C14: Profile Sidebar - Navigation
+  - Expected: Rapid switching between Profile, Requests, Projects, Messages.
+- [ ] C15: Profile Settings - Email Change
+  - Expected: Triggers re-verification before updating.
+- [ ] C16: Profile Settings - Avatar Management
+  - Expected: Secure upload + instant preview.
+- [ ] C17: Notification Center - Archive
+  - Expected: Users can mark notifications as read.
+- [ ] C18: Activity Logs
+  - Expected: Users can see a history of logins and security changes.
+- [ ] C19: Dashboard Layout RTL
+  - Expected: Sidebar on the right. Content on left. Mirroring confirmed.
+- [ ] C20: Desktop vs Mobile View
+  - Expected: Tables turn into cards on screens < 768px.
+
+## D. Company Registration & SPA (Total: 25)
+- [ ] D1: Wizard Step 1: Basic Business Info
+  - Expected: Name, Slogan, and Foundation year validation.
+- [ ] D2: Wizard Step 2: Location & Coverage
+  - Expected: Syrian Governorates and Cities list loading. Link to multiple cities.
+- [ ] D3: Wizard Step 3: Service Categories Selection
+  - Expected: Hierarchical list (Main -> Sub). Multi-select behavior.
+- [ ] D4: Wizard Step 4: Documentation Upload
+  - Expected: Commercial Register, Tax ID, and Manager ID fields.
+- [ ] D5: Wizard Step 4: File Size Limits
+  - Expected: Error if file > 10MB.
+- [ ] D6: Wizard Step 5: Working Hours & Contact
+  - Expected: 24/7 toggle or granular day/night hours.
+- [ ] D7: Wizard Progress Persistence
+  - Expected: Refreshing midway doesn't lose step data (localStorage check).
+- [ ] D8: Final Submission Logic
+  - Expected: Success screen showing "Awaiting Verification".
+- [ ] D9: Rejection Handling
+  - Expected: Email received if documents are invalid. Allows re-upload.
+- [ ] D10: Login Post-Registration
+  - Expected: Limited dashboard access until verified.
+- [ ] D11: Branding - Logo Overlay
+  - Expected: Correct aspect ratio for business logos.
+- [ ] D12: Business Phone Verification
+  - Expected: SMS/OTP verification (if enabled) or format check.
+- [ ] D13: Category-based Pricing Tiers
+  - Expected: Verify if membership plan impacts category count.
+- [ ] D14: Social Media Links Validation
+  - Expected: URL regex for Facebook/Instagram/WhatsApp.
+- [ ] D15: SPA Step Transitions
+  - Expected: Smooth animation between registration steps.
+- [ ] D16: Mobile Registration Experience
+  - Expected: All forms fit on small screens without breaking.
+- [ ] D17: Document Type Mismatch
+  - Expected: Rejecting PDF in Image field if strictly enforced.
+- [ ] D18: Multi-location Search Indexing
+  - Expected: Verify company appears in all selected city searches.
+- [ ] D19: Category Matching logic Check
+  - Expected: Verify company is linked to correct ID in `CompanyCategory` table.
+- [ ] D20: Tax ID Format (Syria specific)
+  - Expected: Numeric check.
+- [ ] D21: Commercial Register Expiry Check
+  - Expected: Warning if date is in the past.
+- [ ] D22: Registration Auto-logout on failure
+  - Expected: Verify session safety if registration session expires.
+- [ ] D23: Business Description Rich Text
+  - Expected: Formatting (Bold/List) preserved.
+- [ ] D24: Profile Preview Before Submit
+  - Expected: Summary page showing all entered data.
+- [ ] D25: Spam protection during registration
+  - Expected: Verify reCAPTCHA token passed to `/api/companies`.
+
+## E. Company Dashboard & Offers (Total: 25)
+- [ ] E1: Statistics - Views Counter
+  - Expected: Profile views increment correctly.
+- [ ] E2: Statistics - Offer Success Rate
+  - Expected: Calculated correctly from Accepted vs Rejected.
+- [ ] E3: Browse Requests - Smart Matching Filter
+  - Expected: Feed shows requests matching company category/location first.
+- [ ] E4: Browse Requests - Price/Urgency Sort
+  - Expected: Sorting works without page refresh.
+- [ ] E5: Submit Offer - Price Quote
+  - Expected: Currency selection + base price validation.
+- [ ] E6: Submit Offer - Attachment Support
+  - Expected: Previous work portfolio can be attached to offer.
+- [ ] E7: Submit Offer - expiry logic
+  - Expected: Offer disappears automatically after client accepts another.
+- [ ] E8: Manage Active Projects - Status Update
+  - Expected: Company can mark "In Progress" -> "Pending Client Review".
+- [ ] E9: Manage Active Projects - Image Proof
+  - Expected: Upload completion proof images.
+- [ ] E10: Reviews - Public Response
+  - Expected: Company can reply to client reviews.
+- [ ] E11: Service Profile - Edit Service Areas
+  - Expected: Updating cities/categories reflects instantly on public profile.
+- [ ] E12: Membership - Plan status
+  - Expected: Shows "Basic", "Standard", or "Premium".
+- [ ] E13: Membership - Usage Limits
+  - Expected: Warning if daily offer limit is reached.
+- [ ] E14: Membership - Upgrade prompt
+  - Expected: Visible button to upgrade for more visibility.
+- [ ] E15: Lead Notifications
+  - Expected: Instant notification (browser/email) when request matching category is posted.
+- [ ] E16: Company Settings - Notification Toggles
+  - Expected: Can disable email pings while keeping web notifications.
+- [ ] E17: Gallery Management
+  - Expected: Bulk upload for portfolio images. Drag-and-drop sort.
+- [ ] E18: Profile Visibility Toggle
+  - Expected: Can set profile to "Hidden" for maintenance.
+- [ ] E19: Dashboard i18n Verification
+  - Expected: Verify ZERO hardcoded English strings in `/company/dashboard`.
+- [ ] E20: RTL Dashboard Sidebar
+  - Expected: Correct placement and chevron directions.
+- [ ] E21: Messaging - Client Contact
+  - Expected: Can only message clients WHO ACCEPTED the offer (or if matching logic allows).
+- [ ] E22: Financials - Offer History
+  - Expected: Track total volume of quotes sent.
+- [ ] E23: Staff Access (Sub-users)
+  - Expected: Allowing staff members to manage offers on behalf of company.
+- [ ] E24: Document Renewal Warning
+  - Expected: Dashboard alert 30 days before business license expiry.
+- [ ] E25: Mobile Dashboard Usability
+  - Expected: All charts and tables scale correctly on phones.
+
+## F. Admin Panel - Massive Walkthrough (Total: 30)
+- [ ] F1: Login as Admin/SuperAdmin
+  - Expected: Redirect to `/admin/dashboard`.
+- [ ] F2: Dashboard - Real-time metrics
+  - Expected: Total Users, Companies, and Revenue widgets.
+- [ ] F3: User Management - Search & Filter
+  - Expected: Filter by role (Admin/Staff/Client/Company).
+- [ ] F4: User Management - Impersonation
+  - Expected: Login as any user for troubleshooting. Terminate session on exit.
+- [ ] F5: User Management - Suspension
+  - Expected: Ban user -> immediate session death + "Account suspended" on login.
+- [ ] F6: Company Management - Pending Queue
+  - Expected: List of companies waiting for document review.
+- [ ] F7: Company Management - Document Viewer
+  - Expected: Built-in PDF/Image viewer for verification.
+- [ ] F8: Company Management - Approve/Verify
+  - Expected: Updates status to VERIFIED. Adds badge to profile.
+- [ ] F9: Company Management - Rejection with Feedback
+  - Expected: Select reason from dropdown + custom message.
+- [ ] F10: Category Management - Nested Logic
+  - Expected: Add/Edit/Hide main categories and subcategories.
+- [ ] F11: Category Management - Slug Auto-generation
+  - Expected: Typing "Construction" generates "construction" slug automatically.
+- [ ] F12: Request Management - Global View
+  - Expected: View all platform requests. Delete spam requests.
+- [ ] F13: Project Management - Issue Resolution
+  - Expected: Admin can manually change project status in disputes.
+- [ ] F14: Review Moderation - Manual Edit/Delete
+  - Expected: Delete reviews with profanity or fake content.
+- [ ] F15: Review Moderation - Flagging Logic
+  - Expected: Handle reviews flagged by companies.
+- [ ] F16: Staff Management - Departmentalization
+  - Expected: Assign staff to "Verification Dept" or "Support Dept".
+- [ ] F17: Staff Management - Granular Permissions
+  - Expected: Staff in Support dept can see reviews but not change system settings.
+- [ ] F18: System Settings - Maintenance Mode
+  - Expected: Enabling shows "Down for Maintenance" to all non-admins.
+- [ ] F19: System Settings - reCAPTCHA Toggle
+  - Expected: Can disable CAPTCHA globally for dev/testing.
+- [ ] F20: System Settings - Membership Plans Editor
+  - Expected: Change pricing/limits for Premium plan.
+- [ ] F21: Audit Logs - Security Events
+  - Expected: Track who changed which setting. IP tracking.
+- [ ] F22: Audit Logs - Export to CSV
+  - Expected: Functional export with date filtering.
+- [ ] F23: Feature Flags Dashboard
+  - Expected: Toggle Phase 2 features (Smart Matching, Paid Plans).
+- [ ] F24: Localization Audit inside Admin
+  - Expected: Check every single tab (Users, Companies, Requests, etc) for Arabic support.
+- [ ] F25: Admin Sidebar mobile drawer
+  - Expected: Functional hamburger menu for admin tasks on tablet.
+- [ ] F26: Verification - Automatic Expiry logic
+  - Expected: Setup 12-month re-verification requirement.
+- [ ] F27: Analytics - Popular Categories Chart
+  - Expected: Bar chart showing most requested services.
+- [ ] F28: Analytics - User Growth Heatmap
+  - Expected: Visual map of Syrian governorates (if geodata available).
+- [ ] F29: System Logs - Server Health
+  - Expected: API errors recorded in DB for admin viewing.
+- [ ] F30: Breadcrumbs in Admin Depth
+  - Expected: Navigation like "Admin > Companies > Verify > Acme Corp".
+
+## G. Public Pages, Search & SEO (Total: 20)
+- [ ] G1: Home Page - Hero Section Translation
+  - Expected: Catchy slogan in EN/AR. Call to Action buttons.
+- [ ] G2: Home Page - Featured Companies slider
+  - Expected: Verified companies only.
+- [ ] G3: Home Page - Statistics counters
+  - Expected: Live numbers from DB.
+- [ ] G4: Yellow Pages - Global Search
+  - Expected: Search by name, slogan, or service.
+- [ ] G5: Yellow Pages - Category Filter
+  - Expected: Sidebar checkboxes logic. Count of companies per category.
+- [ ] G6: Yellow Pages - Location Filter
+  - Expected: Filter companies by "Damascus" or "Aleppo".
+- [ ] G7: Yellow Pages - Verified Only toggle
+  - Expected: Instant feed update.
+- [ ] G8: Company Profile Public - Review Average
+  - Expected: Star calculation matching DB aggregate.
+- [ ] G9: Company Profile Public - Contact Buttons
+  - Expected: Login required to see phone number? (Business logic check).
+- [ ] G10: Company Profile Public - Map Pin
+  - Expected: Correct location based on coordinates.
+- [ ] G11: SEO - Meta Title/Description
+  - Expected: Unique per page. Check `<head>` in DevTools.
+- [ ] G12: SEO - OpenGraph Tags
+  - Expected: Preview images for Facebook/WhatsApp sharing.
+- [ ] G13: SEO - Canonicals & Locales
+  - Expected: `hreflang` to prevent duplicate content penalty.
+- [ ] G14: Search Bar - Auto-suggest
+  - Expected: Suggest companies as you type.
+- [ ] G15: 404 Page - Custom Design
+  - Expected: Friendly "Returned Home" button.
+- [ ] G16: Terms of Service / Privacy Policy
+  - Expected: Final legal text (no placeholder Loren Ipsum).
+- [ ] G17: FAQ Section
+  - Expected: Expansion/Collapse behavior.
+- [ ] G18: Breadcrumb Schema Markup
+  - Expected: JSON-LD verified via Google Rich Results test.
+- [ ] G19: Sitemap.xml
+  - Expected: Dynamically generated including all companies.
+- [ ] G20: Robots.txt
+  - Expected: Blocks `/admin/` and `/dashboard/`.
+
+## H. Infrastructure & Final Polish (Total: 25)
+- [ ] H1: Prisma Migration Health
+  - Expected: No drift between `schema.prisma` and DB state.
+- [ ] H2: Environment Variables verification
+  - Expected: No missing `.env` keys in production.
+- [ ] H3: API Performance - Latency
+  - Expected: Main endpoints < 300ms.
+- [ ] H4: Image Optimization - WebP
+  - Expected: All uploaded images converted to WebP for speed.
+- [ ] H5: CSS Logical Properties Audit
+  - Expected: `padding-start` instead of `padding-left` for 100% RTL safety.
+- [ ] H6: Database Indexing - Search
+  - Expected: Indexes on `name`, `email`, and `status` columns for speed.
+- [ ] H7: CSRF Strategy - SameSite: Strict
+- [ ] H8: SMTP Email Delivery Reliability
+  - Expected: 100% delivery rate to Gmail/Outlook test accounts.
+- [ ] H9: Build Stability - `npm run build`
+  - Expected: Zero lint errors, Zero TS errors.
+- [ ] H10: Docker Health Checks (if applicable)
+- [ ] H11: Database Backup script verification
+- [ ] H12: Log Rotation
+  - Expected: `/logs` don't grow indefinitely.
+- [ ] H13: CSP - removal of `'unsafe-eval'` for Prod
+  - Expected: Confirming Prod config is strict.
+- [ ] H14: Next.js Cache Invalidation
+  - Expected: Updating homepage CMS reflects without full redeploy.
+- [ ] H15: Service Worker / PWA support
+- [ ] H16: Accessibility (A11y) - Alt tags
+  - Expected: Every image has descriptive alt text.
+- [ ] H17: Accessibility (A11y) - Keyboard Nav
+  - Expected: Can navigate forms using `Tab`.
+- [ ] H18: Analytics - Google/Meta Pixel Integration
+- [ ] H19: Browser Compatibility - Safari & Firefox
+- [ ] H20: Browser Compatibility - Mobile Chrome & iOS Safari
+- [ ] H21: SVG Sanitization
+  - Expected: verify no malicious code inside uploaded SVGs.
+- [ ] H22: Rate Limiting - Dashboard Refresh
+  - Expected: Prevent DOS by spamming F5.
+- [ ] H23: Database Connection Pooling
+  - Expected: Prisma Accelerate or PgBouncer configured for scale.
+- [ ] H24: Disk Usage Cleanup
+  - Expected: Temporary upload folders purged regularly.
+- [ ] H25: Final Production Smoke Test
+  - Expected: Clear A-Z walkthrough on live URL.
 
 ---
 
-## Progress Summary
-
-| Section | Tests | Done |
-|---------|-------|------|
-| A — User Flow | 115 | 0/115 |
-| B — Company Flow | 52 | 0/52 |
-| C — Project Management | 30 | 0/30 |
-| D — Company Directory | 25 | 0/25 |
-| E — Admin Panel | 65 | 0/65 |
-| F — Security | 43 | 0/43 |
-| G — i18n / RTL / Accessibility | 28 | 0/28 |
-| H — Regression | 26 | 0/26 |
-| I — Contact Page | 10 | 0/10 |
-| **Total** | **394** | **0/394** |
-
----
-
-## A. User (Client) Flow
-
-### A.1 Registration `/ar/auth/register`
-
-- [ ] **A1** — Page loads with: Name, Email, Phone, Password, Confirm Password, Terms checkbox
-- [ ] **A2** — Submit empty form → validation errors on all required fields
-- [ ] **A3** — Invalid email (`notanemail`) → "invalid email format" error
-- [ ] **A4** — Weak password (`123`) → strength indicator shows "Weak", blocked on submit
-  - Rules: min 12 chars, 1 upper, 1 lower, 1 digit, 1 special
-- [ ] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
-- [ ] **A6** — Mismatched confirm password → "passwords do not match" error (Immediate feedback)
-- [ ] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`). Input restricted to digits/symbols.
-- [ ] **A8** — Valid phone (`+963912345678`) → no error
-- [ ] **A9** — Uncheck terms → "must accept terms" error
-- [ ] **A10** — Complete valid registration → success message, user created
-- [ ] **A11** — Duplicate email → generic error (no "email already exists" leak for security)
-- [ ] **A12** — Rate limit: 6th registration in 5 min → 429 response (limit: 5, configurable via `RATE_LIMIT_REGISTER_MAX`)
-- [ ] **A13** — Show/hide password toggle (eye icon) works on both password fields
-
-### A.2 Email Verification
-
-- [ ] **A14** — `/ar/auth/verify-email?token=VALID` → "Email verified", link to login (24h expiry)
-- [ ] **A15** — Invalid or expired token → error message
-- [ ] **A16** — Login with unverified email (`unverified@secure-marketplace.com`) → 403, "Email not verified" + resend link
-- [ ] **A17** — Click resend → new verification email sent
-
-### A.3 Login `/ar/auth/login`
-
-- [ ] **A18** — Page loads with: Email, Password, Remember Me checkbox
-- [ ] **A19** — Submit empty → validation errors
-- [ ] **A20** — Wrong credentials → "Invalid credentials" + remaining attempts shown
-- [ ] **A21** — Valid login (`user@secure-marketplace.com` / `Test123456!@`) → redirect to `/ar/dashboard`
-- [ ] **A22** — Remember Me checked → refresh token 30-day expiry (vs 7 days default)
-- [ ] **A23** — 5 wrong passwords → account locked 30 min (HTTP 423)
-- [ ] **A24** — Correct password while locked (`locked@secure-marketplace.com`) → still locked, shows remaining time
-- [ ] **A25** — Show/hide password toggle works
-- [ ] **A26** — "Forgot password?" link → `/ar/auth/forgot-password`
-- [ ] **A27** — "Create one" link → `/ar/auth/register`
-- [ ] **A28** — Social Login: Google button visible and functional
-
-### A.4 Forgot / Reset Password
-
-- [ ] **A29** — `/ar/auth/forgot-password` → form with email field
-- [ ] **A30** — Submit registered email → "Check Your Email" message (reCAPTCHA v3 in background)
-- [ ] **A31** — `/ar/auth/reset-password?token=VALID` → new password + confirm + strength indicator
-- [ ] **A32** — Weak reset password (`abc`) → validation errors
-- [ ] **A33** — Valid reset (`NewStr0ng!Pass99`) → "Password Reset Successful!" + login link
-- [ ] **A34** — Mismatched reset passwords → error
-- [ ] **A35** — Expired/invalid token → error
-
-### A.5 User Dashboard `/ar/dashboard`
-
-- [ ] **A36** — Dashboard shows: Active Requests, Offers, Messages stats
-- [ ] **A37** — 4 menu cards visible: Profile, Settings, Requests, Messages (+ "New Request" button)
-- [ ] **A38** — Unauthenticated → redirect to `/ar/auth/login?callbackUrl=...`
-
-### A.6 Profile Management `/ar/dashboard/profile`
-
-- [ ] **A39** — Profile form + Password change form side by side
-- [ ] **A40** — Email field is read-only, shows verified/unverified badge
-- [ ] **A41** — Update name → success toast (min 2 chars)
-- [ ] **A42** — Invalid phone (`12345`) → E.164 error
-- [ ] **A43** — Upload avatar (JPEG/PNG/WebP) → displays via `POST /api/user/avatar`
-- [ ] **A44** — Delete avatar → removed via `DELETE /api/user/avatar`
-- [ ] **A45** — Change password (current + new + confirm) → success
-
-### A.7 Notification Settings `/ar/dashboard/settings`
-
-- [ ] **A46** — Page shows notification settings + delete account sections
-- [ ] **A47** — Toggle "Email — New Offers" off → saves via `PUT /api/user/notifications`
-- [ ] **A48** — Security Alerts marked "Recommended" with warning on toggle
-- [ ] **A49** — All 10 toggles save independently (5 email + 3 push + 2 SMS)
-
-### A.8 Delete Account
-
-- [ ] **A50** — Warning phase: 4 warning points + "Continue" button
-- [ ] **A51** — Continue → confirmation: password, reason (optional), type "DELETE"
-- [ ] **A52** — Cancel → returns to warning phase
-- [ ] **A53** — Wrong password → error
-- [ ] **A54** — Wrong text (`delete` lowercase) → error (case-sensitive: must be `DELETE`)
-- [ ] **A55** — Correct password + "DELETE" → success, redirect to home after 2s
-
-### A.9 Service Requests — Progressive SPA Wizard
-
-#### A.9.1 Page & Layout `/ar/requests/new`
-
-- [ ] **A56** — Page loads as single-page progressive form with collapsible panels: Details, Location, Budget, Images & Tags, Visibility
-- [ ] **A57** — Sticky progress bar at top shows 0% on empty form, updates as fields are filled
-- [ ] **A58** — Mini nav pills below progress bar allow jumping to any section
-- [ ] **A59** — Syria auto-selected as country, cities load automatically on page load
-
-#### A.9.2 Details Panel (required, open by default)
-
-- [ ] **A60** — Panel has title input, description textarea, category/subcategory selects, urgency buttons
-- [ ] **A61** — Empty submit → inline errors on title (min 5), description (min 20), category required; panel auto-scrolls to first error
-- [ ] **A62** — Fill title (< 5 chars) → shows character counter "3/5 min" below input
-- [ ] **A63** — Fill description (< 20 chars) → shows character counter below textarea
-- [ ] **A64** — Select category → subcategory select enables, loads subcategories from API
-- [ ] **A65** — Urgency selector: 4 color-coded buttons (Low/Medium/High/Urgent), Medium pre-selected
-
-#### A.9.3 Location Panel (required, open by default)
-
-- [ ] **A66** — Country dropdown (Syria pre-selected), City dropdown (populated from API)
-- [ ] **A67** — Change country → city dropdown clears and reloads for new country
-- [ ] **A68** — Address textarea available for optional detailed address
-- [ ] **A69** — "Allow remote / online service" checkbox toggles correctly
-
-#### A.9.4 Budget Panel (optional, collapsed by default)
-
-- [ ] **A70** — Click panel header → expands with min/max budget + currency + deadline fields
-- [ ] **A71** — Budget min > max → inline error "Invalid budget range"
-- [ ] **A72** — Valid budget + currency select (USD/EUR/GBP/SAR/AED) → no errors
-- [ ] **A73** — Deadline date picker works, accepts future date
-- [ ] **A74** — When collapsed, badge shows budget summary (e.g., "USD 100 – 500")
-
-#### A.9.5 Images & Tags Panel (optional, collapsed by default)
-
-- [ ] **A75** — Click panel header → expands with drag & drop upload zone + tags input
-- [ ] **A76** — Drag & drop images → upload zone highlights on drag-over, files upload on drop
-- [ ] **A77** — Click "Browse Files" → file picker opens, selected images upload
-- [ ] **A78** — Uploaded images show as thumbnail grid, hover shows X button to remove
-- [ ] **A79** — Max 10 images limit enforced
-- [ ] **A80** — Tags: type + Enter → tag pill added with # prefix; X removes tag; max 10 tags
-- [ ] **A81** — When collapsed, badge shows image count (e.g., "3 images")
-
-#### A.9.6 Visibility Panel (optional, collapsed by default)
-
-- [ ] **A82** — Click panel header → expands with 3 styled radio cards: PUBLIC / REGISTERED_ONLY / VERIFIED_COMPANIES
-- [ ] **A83** — PUBLIC pre-selected by default
-- [ ] **A84** — "Require company verification" checkbox works with description text
-- [ ] **A85** — When collapsed, badge shows visibility label if non-default
-
-#### A.9.7 Progress Bar & Navigation
-
-- [ ] **A86** — Progress bar reaches 100% when all 7 tracked fields filled (title, description, category, country, city, budget, visibility)
-- [ ] **A87** — Sections with validation errors show red border + AlertCircle icon in header
-- [ ] **A88** — Mini nav pills turn red for sections with errors, blue for open sections
-
-#### A.9.8 Review & Submit
-
-- [ ] **A89** — Click "Review" button in sticky bottom bar → review summary panel expands below visibility
-- [ ] **A90** — Review shows: title, description, category badge, urgency badge, location, budget, images thumbnails, tags, visibility
-- [ ] **A91** — Click "Hide Review" → review panel collapses
-- [ ] **A92** — Click "Create Request" → validates all fields; if errors, scrolls to first errored section
-- [ ] **A93** — Successful submit → success screen with checkmark, auto-redirect to `/ar/requests/{id}`
-
-#### A.9.9 Request Management `/ar/dashboard/requests`
-
-- [ ] **A94** — Request list with status tabs, urgency badges, offer counts
-- [ ] **A95** — Click request → detail page with all fields, offers, messaging
-- [ ] **A96** — Edit request → pre-populated edit form
-- [ ] **A97** — Delete request → confirm dialog → removed
-- [ ] **A98** — Unauthenticated → redirect to login
-
-### A.10 Guest Request Flow `/ar/requests/start`
-
-- [ ] **A99** — Page loads without authentication (no login required)
-- [ ] **A100** — Same SPA wizard as `/requests/new` but with extra "Account" section
-- [ ] **A101** — Account section shows email + password + confirm password fields (Immediate mismatch check)
-- [ ] **A102** — Fill form + provide email (Phone input masked) → calls `POST /api/auth/guest-request`
-- [ ] **A103** — Success → "Check your email" screen with checkmark
-- [ ] **A104** — Guest user + request created in DB in single transaction
-- [ ] **A105** — Verification email sent with completion link
-
-### A.11 Complete Registration `/ar/auth/complete-registration`
-
-- [ ] **A106** — `/ar/auth/complete-registration?token=VALID` → password setup form with strength indicator
-- [ ] **A107** — Set password (meets rules) → account activated, redirect to login
-- [ ] **A108** — Invalid/expired token → error message
-- [ ] **A109** — Weak password → validation errors + strength indicator shows weak
-
-### A.12 Messaging `/ar/dashboard/messages`
-
-- [ ] **A110** — Conversation list (left) + message thread (right)
-- [ ] **A111** — Click conversation → messages load, ordered by date
-- [ ] **A112** — Send message → appears in thread, saved via API
-- [ ] **A113** — Empty message → blocked or validation error
-
----
-
-## B. Company (Provider) Flow
-
-### B.1 Company Join Flow `/ar/company/join`
-- [ ] **B1** — Page loads with "Start Your Journey" header + 2-step form wizard
-- [ ] **B2** — **Step 1: Company Details**
-  - [ ] **B2a** — Validation: Empty Name/Phone/Country/City → inline errors
-  - [ ] **B2b** — Select Country → City dropdown populates correctly
-  - [ ] **B2c** — Phone validation: accepts international format (Input restricted to digits/symbols)
-- [ ] **B3** — **Step 2: Admin Account**
-  - [ ] **B3a** — Validation: Empty Name/Email/Password → inline errors
-  - [ ] **B3b** — Password strength: enforces min 12 chars
-  - [ ] **B3c** — Confirm Password mismatch → error (Immediate feedback)
-  - [ ] **B3d** — Terms unchecked → error
-- [ ] **B4** — **Submission**
-  - [ ] **B4a** — Valid form → Success screen with "Check Email" message
-  - [ ] **B4b** — Database check: User created with proper role COMPANY
-  - [ ] **B4c** — Database check: Company created with status PENDING, linked to User
-  - [ ] **B4d** — Database check: Verification Token created
-  - [ ] **B4e** — Email sent: "Verify your email" received
-- [ ] **B5** — **Error Handling**
-  - [ ] **B5a** — Duplicate Email → Friendly error message (no stack trace)
-  - [ ] **B5b** — Rate limiting → 429 after 5 attempts
-- [ ] **B6** — **RTL Support**
-  - [ ] **B6a** — Layout mirrors correctly in Arabic (Inputs, Labels, Steps)
-  - [ ] **B6b** — "Join as Partner" link visible in Navbar (Desktop hidden on Mobile)
-
-### B.2 Document Upload
-
-- [ ] **B17** — Upload form with document type selector
-- [ ] **B18** — Upload License (PDF/image) → status: PENDING
-  - Types: LICENSE, ID_CARD, COMMERCIAL_REGISTER
-- [ ] **B19** — Upload commercial register → file metadata saved
-- [ ] **B20** — Multiple documents → all listed with individual statuses
-
-### B.3 Company Dashboard `/ar/company/dashboard`
-
-- [ ] **B21** — Stats: Total Projects, Active, Completed, Total Offers
-- [ ] **B22** — Additional: Accepted/Pending offers, reviews, rating, membership
-- [ ] **B23** — Recent projects with status badges
-- [ ] **B24** — Recent offers with status
-
-### B.4 Browse Requests `/ar/company/dashboard/browse`
-
-- [ ] **B25** — List of active service requests
-- [ ] **B26** — Filter by category
-- [ ] **B27** — Filter by city
-- [ ] **B28** — Search by text (case-insensitive)
-- [ ] **B29** — Click request → detail with "Submit Offer" option
-
-### B.5 Submit Offers
-
-- [ ] **B30** — Offer form: price, currency, estimated days, description, message
-- [ ] **B31** — Valid offer (price: 500, days: 7) → status PENDING
-- [ ] **B32** — Empty price → validation error
-- [ ] **B33** — `/ar/company/dashboard/offers` → list with statuses
-  - Statuses: PENDING / ACCEPTED / REJECTED / WITHDRAWN / EXPIRED
-- [ ] **B34** — Withdraw pending offer → status WITHDRAWN
-
-### B.6 Company Profile `/ar/company/dashboard/profile`
-
-- [ ] **B35** — Editable company profile form
-- [ ] **B36** — Update name → saved
-- [ ] **B37** — Update services → saved
-- [ ] **B38** — Update working hours → saved
-- [ ] **B39** — Update social links → saved
-
-### B.7 Company Projects `/ar/company/dashboard/projects`
-
-- [ ] **B40** — List with badges: ACTIVE, PENDING, COMPLETED, CANCELLED, ON_HOLD
-- [ ] **B41** — Click project → milestones, files, messages
-- [ ] **B42** — Update project status → transitions correctly
-
-### B.8 Company Reviews `/ar/company/dashboard/reviews`
-
-- [ ] **B43** — List of reviews with star ratings and comments
-- [ ] **B44** — Each review shows: avatar, name, date, stars, comment
-
-### B.9 Membership
-
-- [ ] **B45** — Dashboard shows current plan: FREE / BASIC / PREMIUM / ENTERPRISE
-- [ ] **B46** — Plans page: features, pricing, duration (MONTHLY/QUARTERLY/YEARLY)
-- [ ] **B47** — Subscribe → flow initiated via `POST /api/membership/subscribe`
-
-### B.10 Messaging (Company Side)
-
-- [ ] **B48** — Receive message from client → appears in inbox
-- [ ] **B49** — Reply → thread updated
-- [ ] **B50** — Message in project context → linked to projectId
-
-### B.11 Verification Status
-
-- [ ] **B51** — Badge: PENDING / UNDER_REVIEW / VERIFIED / REJECTED / EXPIRED
-- [ ] **B52** — VERIFIED_COMPANIES visibility request → only accessible if verified
-
----
-
-## C. Project Management
-
-### C.1 Project Lifecycle
-
-- [ ] **C1** — Accept offer → project auto-created (status PENDING)
-- [ ] **C2** — User sees project at `/ar/dashboard/projects`
-- [ ] **C3** — Company sees project at `/ar/company/dashboard/projects`
-- [ ] **C4** — Detail page: title, description, status, progress %, dates, budget, milestones, files, messages
-
-### C.2 Status Transitions
-
-- [ ] **C5** — PENDING → ACTIVE (startDate set)
-- [ ] **C6** — ACTIVE → ON_HOLD
-- [ ] **C7** — ON_HOLD → ACTIVE (resume)
-- [ ] **C8** — ACTIVE → COMPLETED (endDate set)
-- [ ] **C9** — ACTIVE → CANCELLED
-- [ ] **C10** — COMPLETED → blocked (final state)
-- [ ] **C11** — CANCELLED → blocked (final state)
-
-### C.3 Milestones
-
-- [ ] **C12** — Add milestone: title, description, dueDate → status PENDING
-- [ ] **C13** — List milestones → ordered with statuses and due dates
-- [ ] **C14** — Mark milestone complete → progress % may update
-- [ ] **C15** — Multiple milestones (3–5) → all display correctly
-
-### C.4 Project Files
-
-- [ ] **C16** — Upload file → saved with name, URL, mimeType, size, uploadedBy
-- [ ] **C17** — List files → all shown with metadata
-- [ ] **C18** — Download file → works correctly
-- [ ] **C19** — Upload 3+ files → all listed
-
-### C.5 Project Messaging
-
-- [ ] **C20** — Send message in project chat → saved with projectId
-- [ ] **C21** — Message history → chronological, shows sender name/avatar
-- [ ] **C22** — Both user and company can message → both appear in thread
-
-### C.6 Reviews After Project
-
-- [ ] **C23** — Submit review: 1–5 stars + comment → linked to project and company
-- [ ] **C24** — Invalid review (0 stars, empty comment) → error
-- [ ] **C25** — Rating recalculated → company `rating` and `reviewCount` updated
-- [ ] **C26** — Review visible on company detail page
-- [ ] **C27** — One review per project (prevent duplicate)
-
-### C.7 Progress Tracking
-
-- [ ] **C28** — Progress bar shows 0–100%
-- [ ] **C29** — Update progress → bar updates, saved to DB
-- [ ] **C30** — 100% → prompts completion or auto-suggest
-
----
-
-## D. Company Directory (Yellow Pages) `/ar/companies`
-
-### D.1 Search & Browse
-
-- [ ] **D1** — Directory loads: search bar, filters, company cards, pagination
-- [ ] **D2** — Text search ("تقنية") → filtered by name/description against DB `contains` check
-- [ ] **D3** — Filter by country (e.g., "Syria") → Supports both ID (UUID) and Code ('SY')
-- [ ] **D4** — Filter by city (e.g., "Damascus") → Supports both ID (UUID) and Slug ('damascus')
-- [ ] **D5** — Filter by category → Supports both ID and Slug
-- [ ] **D6** — "Verified Only" checkbox → only `verificationStatus: VERIFIED`
-- [ ] **D7** — Sort by rating → companies with highest average rating first
-- [ ] **D8** — Sort by newest → `createdAt` descending
-- [ ] **D9** — Pagination → Page 1 shows limit (e.g. 12), Page 2 loads next set
-- [ ] **D10** — No results → "No companies found" empty state with "Clear Filters" button
-- [ ] **D11** — Combined filters (Syria + Verified + Sorting) → intersection works correctly
-- [ ] **D12** — Clear filters → resets all params, shows full list
-- [ ] **D13** — Localization: Country/City names appear in AR/EN based on current locale
-
-### D.2 Company Detail `/ar/companies/{slug}`
-
-- [ ] **D14** — Full company profile with tabs: Overview, Services, Reviews
-- [ ] **D15** — Header: Logo, Name (localized keys if avail), Description, Verification Badge, Rating, Location
-- [ ] **D16** — Contact Info: Email, Phone, Website, Address (clickable Google Maps link)
-- [ ] **D17** — Services tab: list of services with price ranges
-- [ ] **D18** — Working Hours: displays correct schedule
-- [ ] **D19** — Social links: clickable icons (Facebook, Twitter, LinkedIn, etc)
-- [ ] **D20** — Reviews tab: star rating distribution, individual review cards
-- [ ] **D21** — Send Message button → opens dialog/modal (requires login)
-
----
-
-## E. Admin Panel `/ar/admin`
-
-### E.0 Access & Auth
-
-- [ ] **E1** — Login as `admin@secure-marketplace.com` → admin sidebar visible
-- [ ] **E2** — Login as `owner@secure-marketplace.com` → full super admin access
-- [ ] **E3** — Standard user → redirected to dashboard if accessing `/admin`
-
-### E.1 Dashboard
-
-- [ ] **E6** — Stats cards: Users, Companies, Requests, Projects
-- [ ] **E7** — Recent activity feeds load correctly
-
-### E.2 User Management `/ar/admin/users`
-
-- [ ] **E12** — List all users with roles (USER, COMPANY, ADMIN, SUPER_ADMIN)
-- [ ] **E13** — Search/Filter users
-- [ ] **E14** — Edit user role or status (Active/Locked)
-
-### E.3 Company Management `/ar/admin/companies`
-
-- [ ] **E16** — List companies with verification status
-- [ ] **E17** — Filter by Pending/Verified/Rejected
-- [ ] **E18** — Approve/Reject company verification
-
-### E.8 Category Management `/ar/admin/categories`
-
-- [ ] **E34** — Categories list: name (EN/AR), slug, icon
-- [ ] **E35** — Create/Edit/Delete categories
-
-(Other Admin sections E.4 - E.13 follow similar CRUD patterns)
-
----
-
-## F. Security & Authorization
-
-### F.1 Authentication
-
-- [ ] **F1** — Session management (HttpOnly cookies)
-- [ ] **F2** — Token refresh mechanism
-- [ ] **F3** — Logout clears cookies
-
-### F.2 Route Protection
-
-- [ ] **F7** — Protected routes redirect to login
-- [ ] **F10** — Role-based access control (RBAC) enforces constraints
-
-### F.5 Rate Limiting
-
-- [ ] **F26** — Registration rate limits
-- [ ] **F27** — Login rate limits
-
----
-
-## G. i18n / RTL / Accessibility
-
-- [ ] **G1** — Default to Arabic (`/ar`) with RTL layout
-- [ ] **G2** — Switch to English (`/en`) → LTR layout
-- [ ] **G3** — Data localization (Categories, Countries, Cities)
-- [ ] **G19** — Dark Mode toggle works and persists
-
----
-
-## H. Regression Checks
-
-- [ ] **H1** — Homepage loads without errors
-- [ ] **H2** — API endpoints return correct status codes (200, 401, 403, 404)
-- [ ] **H3** — Critical flows (Register -> Login -> Dashboard) function end-to-end
-
----
-
-## I. Contact Page `/ar/contact` (New)
-
-- [ ] **I1** — Page loads with modern Glassmorphism design
-- [ ] **I2** — Content (Title, Subtitle, Cards) localized correctly (AR/EN)
-- [ ] **I3** — Contact Information (Email, Phone, Address) matches configuration
-- [ ] **I4** — Address link opens Google Maps in new tab
-- [ ] **I5** — Contact Form: Valid submission → Success toast
-- [ ] **I6** — Contact Form: Empty submission → Field validation errors (Name, Email, Subject, Message)
-- [ ] **I7** — Animation: Staggered entry animations play smoothly on load
-- [ ] **I8** — Responsive: Cards stack on mobile, grid on desktop
-- [ ] **I9** — RTL: Icons (Phone, Mail, Arrow) positioned correctly (margin-end)
-- [ ] **I10** — RTL: Arrow icon in links rotates 180 degrees
+### Progress Summary
+- **Current Completion**: 210 Total Granular Tasks.
+- **Goal**: 100% Checkmarks for Production Release.
+- **Sync Status**: Dashboard matches this file 1:1.

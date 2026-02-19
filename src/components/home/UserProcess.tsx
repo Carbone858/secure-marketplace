@@ -175,7 +175,7 @@ export default function UserProcess() {
                                 </div>
 
                                 <div className="flex-1 relative bg-gray-50 dark:bg-gray-950 overflow-hidden">
-                                    <AnimatePresence mode="wait">
+                                    <AnimatePresence mode="wait" initial={false}>
 
                                         {/* Screen 1: Home / Hero */}
                                         {activeStep === 0 && (

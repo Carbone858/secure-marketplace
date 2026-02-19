@@ -22,6 +22,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { SecurityLogType } from '@prisma/client';
 import { getRedisClient } from './redis';
+import { getClientIp } from './ip';
 
 // ──────────────────────────────────────────────
 // Types
@@ -308,16 +309,7 @@ export const strictLimiter = createRateLimiter({
 // Helper utilities
 // ──────────────────────────────────────────────
 
-/** Extract client IP from request headers */
-export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
-  }
-  const realIp = request.headers.get('x-real-ip');
-  if (realIp) return realIp;
-  return '127.0.0.1';
-}
+// Helper utilities moved to src/lib/ip.ts
 
 /** 
  * Get a rate limit key that combines IP and UserId if available.

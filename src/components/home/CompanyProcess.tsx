@@ -374,7 +374,7 @@ export default function CompanyProcess() {
 
                                             {/* MAIN VIEWPORT */}
                                             <div className="flex-1 bg-gray-50 dark:bg-[#0a0a0a] relative overflow-y-auto no-scrollbar">
-                                                <AnimatePresence mode="wait">
+                                                <AnimatePresence mode="wait" initial={false}>
 
                                                     {/* Step 1: Detailed Registration Form (Animated Scroll) */}
                                                     {activeStep === 0 && (
