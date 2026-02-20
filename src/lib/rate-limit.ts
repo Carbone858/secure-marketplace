@@ -23,6 +23,7 @@ import { prisma } from '@/lib/db/client';
 import { SecurityLogType } from '@prisma/client';
 import { getRedisClient } from './redis';
 import { getClientIp } from './ip';
+export { getClientIp };
 
 // ──────────────────────────────────────────────
 // Types

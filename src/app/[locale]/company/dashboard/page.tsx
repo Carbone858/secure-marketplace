@@ -43,6 +43,8 @@ interface DashboardData {
   };
 }
 
+import { DashboardSkeleton } from '@/components/ui/skeleton';
+
 export default function CompanyDashboardPage() {
   const router = useRouter();
   const locale = useLocale();
@@ -70,8 +72,8 @@ export default function CompanyDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="container mx-auto px-4 py-8">
+        <DashboardSkeleton />
       </div>
     );
   }

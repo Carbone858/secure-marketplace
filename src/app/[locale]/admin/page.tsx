@@ -32,6 +32,8 @@ interface DashboardStats {
   companiesByStatus: any[];
 }
 
+import { DashboardSkeleton } from '@/components/ui/skeleton';
+
 export default function AdminDashboardPage() {
   const router = useRouter();
   const locale = useLocale();
@@ -58,8 +60,8 @@ export default function AdminDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="p-6">
+        <DashboardSkeleton />
       </div>
     );
   }
@@ -208,8 +210,8 @@ export default function AdminDashboardPage() {
                       req.status === 'ACTIVE'
                         ? 'bg-success/10 text-success'
                         : req.status === 'PENDING'
-                        ? 'bg-warning/10 text-warning'
-                        : 'bg-muted text-muted-foreground'
+                          ? 'bg-warning/10 text-warning'
+                          : 'bg-muted text-muted-foreground'
                     }
                   >
                     {req.status}

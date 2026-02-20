@@ -7,6 +7,7 @@ import { getMessages } from 'next-intl/server';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { DynamicBreadcrumbs } from '@/components/ui/DynamicBreadcrumbs';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -51,6 +52,9 @@ export default async function RootLayout({
             <Navbar />
             <MobileNav />
             <main className="flex-1">
+              <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
+                <DynamicBreadcrumbs />
+              </div>
               {children}
             </main>
             <Footer />

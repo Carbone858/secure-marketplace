@@ -248,7 +248,10 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('CRITICAL LOGIN ERROR:', error);
+    if (error instanceof Error) {
+      console.error('STACK:', error.stack);
+    }
 
     await logSecurityEvent('LOGIN_FAILED', ip, userAgent, undefined, {
       reason: 'server_error',

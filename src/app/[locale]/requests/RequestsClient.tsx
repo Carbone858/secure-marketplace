@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Search, MapPin, Briefcase, Clock, DollarSign, Plus, Loader2, ChevronDown, X } from 'lucide-react';
 import { SendOfferButton } from '@/components/requests/SendOfferButton';
+import { RequestCardSkeleton } from '@/components/ui/skeleton';
 
 interface Category { id: string; nameEn: string; nameAr: string; }
 interface Country { id: string; nameEn: string; nameAr: string; }
@@ -265,8 +266,10 @@ export default function RequestsClient({ categories, countries, allCities, defau
 
                 {/* Results */}
                 {isLoading ? (
-                    <div className="flex items-center justify-center py-20">
-                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                    <div className="space-y-4">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <RequestCardSkeleton key={i} />
+                        ))}
                     </div>
                 ) : requests.length === 0 ? (
                     <div className="text-center py-12 bg-card rounded-xl">

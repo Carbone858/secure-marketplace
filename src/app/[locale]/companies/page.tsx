@@ -17,6 +17,7 @@ import {
   ListFilter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Skeleton, CompanyCardSkeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -404,9 +405,10 @@ export default function CompaniesPage() {
       {/* Results Grid */}
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground">{t('loading')}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <CompanyCardSkeleton key={i} />
+            ))}
           </div>
         ) : companies.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

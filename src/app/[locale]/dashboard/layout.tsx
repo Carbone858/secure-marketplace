@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { DynamicBreadcrumbs } from '@/components/ui/DynamicBreadcrumbs';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -133,6 +134,9 @@ export default async function DashboardLayout({
       {/* Main Content */}
       <main className="py-4 sm:py-6 lg:py-8">
         <NextIntlClientProvider messages={messages} locale={locale}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+            <DynamicBreadcrumbs />
+          </div>
           {children}
         </NextIntlClientProvider>
       </main>

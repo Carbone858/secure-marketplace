@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { type ReactNode } from 'react';
+import { DynamicBreadcrumbs } from '@/components/ui/DynamicBreadcrumbs';
 
 /* ──────────────────────────────────────────────────────
    PageContainer
@@ -249,6 +250,7 @@ export function DashboardShell({
       {!isEnd && sidebarEl}
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto w-full max-w-7xl p-4 md:p-6 lg:p-8">
+          <DynamicBreadcrumbs className="mb-6" />
           {children}
         </div>
       </div>

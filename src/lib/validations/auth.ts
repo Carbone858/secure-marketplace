@@ -233,11 +233,21 @@ export function sanitizeInput(input: string): string {
 
 /**
  * Hash email for secure lookups
+ * Compatible with both Node.js and Browser environments
  */
 export async function hashEmail(email: string): Promise<string> {
+  const normalizedEmail = email.toLowerCase().trim();
+
+  // Server-side (Node.js)
+  if (typeof window === 'undefined') {
+    const { createHash } = await import('crypto');
+    return createHash('sha256').update(normalizedEmail).digest('hex');
+  }
+
+  // Client-side (Browser)
   const encoder = new TextEncoder();
-  const data = encoder.encode(email.toLowerCase().trim());
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const data = encoder.encode(normalizedEmail);
+  const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }

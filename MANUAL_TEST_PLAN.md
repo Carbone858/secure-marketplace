@@ -3,46 +3,52 @@
 This document outlines the exhaustive manual testing required to move the Secure Service Marketplace from development to production. Every task must be verified across both **Arabic (AR)** and **English (EN)** locales.
 
 ## 🔐 Test Credentials
-| Account | Email | Password | Role | State |
-|---------|-------|----------|------|-------|
-| Admin | `admin@secure.sy` | `Admin@123` | ADMIN | Superuser |
-| Company | `testcompany@gmail.com` | `Test@123` | COMPANY | Verified |
-| Client | `testuser@gmail.com` | `Test@123` | USER | Regular User |
+
+**Password for ALL accounts:** `Test123456!@`
+
+| Account Type | Email | Description |
+|---|---|---|
+| **Super Admin** | `owner@secure-marketplace.com` | Full system configuration |
+| **Standard Admin** | `admin@secure-marketplace.com` | Approved admin sidebar access |
+| **Verified Company** | `company@secure-marketplace.com` | Verified provider dashboard |
+| **Pending Company** | `pending@secure-marketplace.com` | Business verification view |
+| **Verified User** | `user@secure-marketplace.com` | Standard client dashboard |
+| **Standard User** | `standard@secure-marketplace.com` | Regular client dashboard |
 
 ---
 
 ## A. Global UI & Components (Total: 25)
-- [ ] A1: Navbar Logo & Brand Identity (Check all pages)
+- [x] A1: Navbar Logo & Brand Identity (Check all pages)
   - Expected: Logo links to correct home page per locale. High-res SVG used.
-- [ ] A2: Navbar Navigation Links (Home, Browse Companies, Post Request)
+- [x] A2: Navbar Navigation Links (Home, Browse Companies, Post Request)
   - Expected: Active state visually distinct. Correct `href` including locale.
-- [ ] A3: Navbar Auth State (Guest)
+- [x] A3: Navbar Auth State (Guest)
   - Expected: Shows "Login" and "Register" buttons clearly.
-- [ ] A4: Navbar Auth State (Logged In)
+- [x] A4: Navbar Auth State (Logged In)
   - Expected: Shows User Avatar, Notifications toggle, Messages toggle, and Menu.
-- [ ] A5: Navbar Mobile Responsive Toggle
+- [x] A5: Navbar Mobile Responsive Toggle
   - Expected: Hamburger icon appears on mobile. Menu slides in smoothly.
-- [ ] A6: Language Switcher (EN/AR Toggle)
+- [x] A6: Language Switcher (EN/AR Toggle)
   - Expected: Smooth transition, preserves route path, updates `dir` attribute.
-- [ ] A7: Theme Toggle (Light/Dark Mode)
+- [x] A7: Theme Toggle (Light/Dark Mode)
   - Expected: Immediate update, no FOUC (Flash of Unstyled Content), persistent after refresh.
-- [ ] A8: Footer Corporate Links (About, Terms, Privacy)
+- [x] A8: Footer Corporate Links (About, Terms, Privacy)
   - Expected: All links go to valid pages. Proper hover effects.
-- [ ] A9: Footer Contact Info (Email, Phone, Address)
+- [x] A9: Footer Contact Info (Email, Phone, Address)
   - Expected: Real data shown, not placeholders. `mailto:` and `tel:` links work.
-- [ ] A10: Footer Social Media Icons
+- [x] A10: Footer Social Media Icons
   - Expected: Correct platform icons, links open in new tabs.
 - [ ] A11: RTL Layout Integrity (Global)
   - Expected: No horizontal scroll issues. Mirroring applied to all directional elements.
-- [ ] A12: Sticky Header Behavior
+- [x] A12: Sticky Header Behavior
   - Expected: Remains at top on scroll, z-index allows dropdowns to overlay page.
-- [ ] A13: Loading Skeletons (Global)
+- [x] A13: Loading Skeletons (Global)
   - Expected: Appears during API fetches instead of blank white space.
 - [ ] A14: Error Boundaries (Global)
   - Expected: Friendly "Something went wrong" UI instead of 500 white screens.
-- [ ] A15: Button Interaction States
+- [x] A15: Button Interaction States
   - Expected: Hover, Active, Focus, and Disabled states visually verified.
-- [ ] A16: Input Field Focus States
+- [x] A16: Input Field Focus States
   - Expected: Primary color ring/border appears on focus.
 - [ ] A17: Typography RTL Support
   - Expected: Noto Sans Arabic used for AR, Inter for EN. Correct line-heights.

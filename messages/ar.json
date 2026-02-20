@@ -1724,6 +1724,24 @@
       "general": "عام",
       "account": "الحساب",
       "payments": "المدفوعات"
+    },
+    "breadcrumbs": {
+      "home": "الرئيسية",
+      "dashboard": "لوحة التحكم",
+      "admin": "الإدارة",
+      "companies": "الشركات",
+      "requests": "الطلبات",
+      "messages": "الرسائل",
+      "projects": "المشاريع",
+      "reviews": "المراجعات",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "new": "جديد",
+      "edit": "تعديل",
+      "verification": "التحقق",
+      "company": "الشركة",
+      "offer": "عرض",
+      "details": "التفاصيل"
     }
   }
 }
