@@ -732,11 +732,11 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                                                     }
                                                 }}
                                                 className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:ring-2 focus:ring-primary/20"
-                                                placeholder={isRTL ? "+963912345678" : "+963..."}
+                                                placeholder={isRTL ? "\u200E+963912345678" : "+963..."}
                                                 dir="ltr"
                                             />
                                             <p className="text-xs text-muted-foreground mt-1" dir={isRTL ? 'rtl' : 'ltr'}>
-                                                {isRTL ? '+1234567890 أو 001234567890 (مع رمز الدولة)' : '+1234567890 or 001234567890 (include country code)'}
+                                                {isRTL ? "\u200E+1234567890 أو \u200E001234567890 (مع رمز الدولة)" : "+1234567890 or 001234567890 (include country code)"}
                                             </p>
                                         </div>
                                     </div>

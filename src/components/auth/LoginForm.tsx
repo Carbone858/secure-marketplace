@@ -146,7 +146,7 @@ export function LoginForm() {
             {t('locked.title')}
           </h2>
           <p className="text-destructive mb-4">
-            {t('locked.message', { minutes: lockInfo.remainingMinutes })}
+            {t('locked.message', { minutes: lockInfo.remainingMinutes || 30 })}
           </p>
           <p className="text-sm text-destructive">
             {t('locked.help')}

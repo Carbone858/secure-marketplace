@@ -106,8 +106,8 @@
         },
         "phone": {
           "label": "رقم الهاتف",
-          "placeholder": "+1234567890 أو 001234567890",
-          "hint": "تضمين رمز الدولة (مثال: +966 أو 00966)"
+          "placeholder": "\u200E+1234567890 أو \u200E001234567890",
+          "hint": "تضمين رمز الدولة (مثال: \u200E+966 أو \u200E00966)"
         },
         "password": {
           "label": "كلمة المرور",
@@ -375,8 +375,8 @@
         },
         "phone": {
           "label": "رقم الهاتف",
-          "placeholder": "+1234567890",
-          "hint": "تضمين رمز الدولة (مثال: +966)"
+          "placeholder": "\u200E+1234567890",
+          "hint": "تضمين رمز الدولة (مثال: \u200E+966)"
         }
       },
       "emailVerified": "تم تأكيد البريد الإلكتروني",
@@ -624,7 +624,7 @@
           "email": "البريد الإلكتروني للعمل",
           "emailPlaceholder": "info@example.com",
           "phone": "رقم هاتف العمل",
-          "phonePlaceholder": "+1234567890",
+          "phonePlaceholder": "\u200E+1234567890",
           "website": "الموقع الإلكتروني",
           "websitePlaceholder": "https://yourcompany.com"
         },
@@ -787,8 +787,8 @@
           "email": "البريد الإلكتروني",
           "emailPlaceholder": "بريدك@مثال.com",
           "phone": "رقم الهاتف (اختياري)",
-          "phonePlaceholder": "+1234567890",
-          "phoneHint": "أدخل رمز الدولة (مثال: +966 أو 00966)"
+          "phonePlaceholder": "\u200E+1234567890",
+          "phoneHint": "أدخل رمز الدولة (مثال: \u200E+966 أو \u200E00966)"
         }
       },
       "navigation": {

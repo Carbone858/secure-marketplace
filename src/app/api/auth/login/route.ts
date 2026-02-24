@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
             success: false,
             error: 'account.locked',
             message: 'Account has been temporarily locked due to too many failed login attempts. Please try again in 30 minutes.',
-            data: { lockedDuration: 30 },
+            data: { remainingMinutes: 30 },
           },
           { status: 423 }
         );
