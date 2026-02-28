@@ -19,14 +19,20 @@ export async function POST(request: NextRequest) {
         let content = fs.readFileSync(filePath, 'utf-8');
 
         const newState = completed ? 'x' : ' ';
-        // Flexible pattern: matches "- [ ] ID:", "- [ ] **ID**:", or "- [ ] ID - "
-        const pattern = new RegExp(`- \\[([ xX])\\] (\\*\\*)?${taskId}(?:[:\\-]|\\*\\*|\\s)`, 'i');
+        // Flexible pattern:
+        // 1. Matches "- [ ] ID:"
+        // 2. Matches "- [ ] **ID**:"
+        // 3. Matches "| [ ] | ID |"
+        const pattern = new RegExp(`(\\|\\s*\\[)[ xX](\\]\\s*\\|\\s*${taskId}\\s*\\|)|(-\\s*\\[)[ xX](\\]\\s*(?:\\*\\*)?${taskId}(?:[:\\-]|\\*\\*|\\s))`, 'i');
 
-        const updatedContent = content.replace(pattern, (match, oldState, boldMarker) => {
-            // Reconstruct the line while preserving the task ID and description part
-            // Match the whole line to be safe
-            const lineMatch = match;
-            return lineMatch.replace(`[${oldState}]`, `[${newState}]`);
+        const updatedContent = content.replace(pattern, (match, tablePrefix, tableSuffix, listPrefix, listSuffix) => {
+            if (tablePrefix && tableSuffix) {
+                return `${tablePrefix}${newState}${tableSuffix}`;
+            }
+            if (listPrefix && listSuffix) {
+                return `${listPrefix}${newState}${listSuffix}`;
+            }
+            return match;
         });
 
         fs.writeFileSync(filePath, updatedContent);

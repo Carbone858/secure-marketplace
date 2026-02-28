@@ -44,11 +44,11 @@ export default async function NewRequestPage({ params: { locale } }: NewRequestP
   return (
     <div className="min-h-screen bg-muted/50 py-8 sm:py-12" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-3xl mx-auto px-4">
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">{t('new.title')}</h1>
-        </div>
-
-        <RequestFormSPA categories={categories} countries={countries} mode={mode} />
+        <RequestFormSPA categories={categories} countries={countries} mode={mode}>
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">{t('new.title')}</h1>
+          </div>
+        </RequestFormSPA>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
   // Fetch real stats for the user
   const userId = session.user!.id;
   const [activeRequests, offersCount, messagesCount] = await Promise.all([
-    prisma.serviceRequest.count({ where: { userId, status: { in: ['ACTIVE', 'IN_PROGRESS', 'MATCHING'] } } }),
+    prisma.serviceRequest.count({ where: { userId, status: { in: ['PENDING', 'ACTIVE', 'IN_PROGRESS', 'MATCHING'] } } }),
     prisma.offer.count({ where: { request: { userId } } }),
     prisma.message.count({ where: { OR: [{ senderId: userId }, { recipientId: userId }], isRead: false } }).catch(() => 0),
   ]);

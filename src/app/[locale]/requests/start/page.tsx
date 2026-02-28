@@ -50,12 +50,16 @@ export default async function StartRequestPage({ params: { locale } }: StartRequ
     <NextIntlClientProvider messages={messages} locale={locale}>
       <div className="min-h-screen bg-muted/50 py-8 sm:py-12" dir={isRTL ? 'rtl' : 'ltr'}>
         <div className="max-w-3xl mx-auto px-4">
-          <div className="mb-6 text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{t('new.startTitle')}</h1>
-            <p className="text-muted-foreground">{t('new.startSubtitle')}</p>
-          </div>
-
-          <RequestFormSPA categories={categories} countries={countries} mode="guest" />
+          <RequestFormSPA
+            categories={categories}
+            countries={countries}
+            mode="guest"
+          >
+            <div className="mb-6 text-center">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">{t('new.startTitle')}</h1>
+              <p className="text-muted-foreground">{t('new.startSubtitle')}</p>
+            </div>
+          </RequestFormSPA>
         </div>
       </div>
     </NextIntlClientProvider>

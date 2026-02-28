@@ -39,7 +39,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     const [category, fileName] = pathSegments;
 
-    if (category !== 'documents' && category !== 'avatars') {
+    if (category !== 'documents' && category !== 'avatars' && category !== 'projects') {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
     }
 

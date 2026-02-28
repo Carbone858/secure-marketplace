@@ -820,6 +820,9 @@
         "createAnother": "Create Another",
         "guestTitle": "Request Submitted!",
         "guestMessage": "Your service request has been saved. Please check your email to activate your account and track your request.",
+        "existingUserTitle": "Request Created!",
+        "existingUserMessage": "Your request was saved successfully, but the email provided belongs to an existing account. Please log in to track your request.",
+        "loginNow": "Login Now",
         "checkEmail": "Check Your Email",
         "checkEmailDesc": "We sent a verification link to your email. Click the link to set your password and access your dashboard."
       },
@@ -835,11 +838,29 @@
         "browse": "Browse Files",
         "images": "images",
         "imagesHint": "Up to 10 images. JPG, PNG, WebP. Max 5 MB each.",
+        "invalidFileType": "Invalid file type. Only JPG, PNG, and WebP are allowed.",
+        "fileTooLarge": "File too large. Maximum size is 5MB.",
         "requireVerification": "Require company verification",
         "requireVerificationDesc": "Only verified companies can see and offer on this request",
         "reviewTitle": "Review & Submit",
         "showReview": "Review",
         "hideReview": "Hide Review"
+      },
+      "myRequests": {
+        "title": "My Requests",
+        "createNew": "Create New",
+        "noRequests": "No Requests Found",
+        "noRequestsDesc": "You haven't created any service requests yet. Start by describing what you need.",
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "tabs": {
+          "all": "All",
+          "active": "Active",
+          "completed": "Completed",
+          "cancelled": "Cancelled"
+        }
       }
     },
     "list": {

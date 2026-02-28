@@ -103,8 +103,8 @@ export default function ManualTestDashboard() {
                 <div className="container mx-auto px-4 py-6 max-w-6xl">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                         <div>
-                            <h1 className="text-3xl font-bold flex items-center gap-3 tracking-tight">
-                                <LayoutDashboard className="h-8 w-8 text-primary uppercase" />
+                            <h1 className="text-2xl font-bold flex items-center gap-3 tracking-tight">
+                                <LayoutDashboard className="h-6 w-6 text-primary uppercase" />
                                 Interactive Test Runner
                             </h1>
                             <p className="text-muted-foreground mt-1 font-medium">Matching: MANUAL_TEST_PLAN.md</p>
@@ -168,11 +168,11 @@ export default function ManualTestDashboard() {
                         return (
                             <section key={module.id} className="animate-in fade-in slide-in-from-bottom-6 duration-700">
                                 <div className="flex flex-col md:flex-row md:items-end gap-2 mb-10 border-b pb-6">
-                                    <div className="h-14 w-14 rounded-2xl bg-primary text-white flex items-center justify-center text-2xl font-black shadow-xl shadow-primary/20 mr-2">
+                                    <div className="h-10 w-10 rounded-xl bg-primary text-white flex items-center justify-center text-xl font-bold shadow-xl shadow-primary/20 mr-2">
                                         {module.id.split(' ').pop()}
                                     </div>
                                     <div className="flex-1">
-                                        <h2 className="text-3xl font-black tracking-tight">{module.name}</h2>
+                                        <h2 className="text-xl font-bold tracking-tight">{module.name}</h2>
                                         <div className="flex items-center gap-3 mt-1">
                                             <div className="flex -space-x-1">
                                                 {module.tasks.map((t, i) => (
@@ -193,43 +193,43 @@ export default function ManualTestDashboard() {
                                     {filteredTasks.map((task) => (
                                         <div
                                             key={task.id}
-                                            className={`group relative flex flex-col p-8 rounded-[2.5rem] border-2 transition-all duration-300 ${task.completed
-                                                ? 'bg-primary/[0.03] border-primary/20 shadow-inner'
-                                                : 'bg-white dark:bg-zinc-900 border-border hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5'
+                                            className={`group relative flex flex-col p-4 rounded-2xl border transition-all duration-300 ${task.completed
+                                                ? 'bg-primary/[0.03] border-primary/20 shadow-sm'
+                                                : 'bg-white dark:bg-zinc-900 border-border hover:border-primary/40 hover:shadow-md'
                                                 }`}
                                         >
-                                            <div className="flex gap-8">
+                                            <div className="flex gap-4">
                                                 <button
                                                     onClick={() => toggleTask(task.id, task.completed)}
-                                                    className={`mt-1 shrink-0 h-10 w-10 rounded-2xl border-2 flex items-center justify-center transition-all duration-500 transform active:scale-75 ${task.completed
-                                                        ? 'bg-primary border-primary text-white shadow-lg shadow-primary/30'
-                                                        : 'border-muted-foreground/20 hover:border-primary group-hover:scale-110'
+                                                    className={`mt-0.5 shrink-0 h-8 w-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${task.completed
+                                                        ? 'bg-primary border-primary text-white shadow-sm'
+                                                        : 'border-muted-foreground/30 hover:border-primary'
                                                         }`}
                                                 >
-                                                    {task.completed ? <CheckCircle2 className="h-6 w-6" /> : <Circle className="h-6 w-6 text-muted-foreground/30" />}
+                                                    {task.completed ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5 text-muted-foreground/30" />}
                                                 </button>
 
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-3 mb-3">
-                                                        <span className={`text-[11px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full ${task.completed ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
+                                                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${task.completed ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
                                                             }`}>
                                                             {task.id}
                                                         </span>
                                                     </div>
 
-                                                    <h3 className={`text-xl leading-snug mb-4 ${task.completed ? 'text-primary/90 font-black' : 'text-foreground font-bold'
+                                                    <h3 className={`text-base leading-snug mb-2 ${task.completed ? 'text-primary/90 font-semibold' : 'text-foreground font-semibold'
                                                         }`}>
                                                         {task.text}
                                                     </h3>
 
                                                     {task.hints && task.hints.length > 0 && (
-                                                        <div className={`mt-6 space-y-4 p-6 rounded-3xl ${task.completed ? 'bg-primary/5' : 'bg-muted/30'}`}>
+                                                        <div className={`mt-3 space-y-2 p-3 rounded-xl ${task.completed ? 'bg-primary/5' : 'bg-muted/30'}`}>
                                                             {task.hints.map((hint, idx) => (
-                                                                <div key={idx} className="flex gap-4 items-start">
-                                                                    <div className={`mt-1.5 h-2 w-2 rounded-full shrink-0 ${task.completed ? 'bg-primary/40' : 'bg-primary/20'}`} />
-                                                                    <p className={`text-sm leading-relaxed ${task.completed ? 'text-primary/70 font-medium' : 'text-muted-foreground font-medium'}`}>
+                                                                <div key={idx} className="flex gap-2 items-start">
+                                                                    <div className={`mt-1.5 h-1.5 w-1.5 rounded-full shrink-0 ${task.completed ? 'bg-primary/40' : 'bg-primary/20'}`} />
+                                                                    <p className={`text-xs leading-relaxed ${task.completed ? 'text-primary/70 font-medium' : 'text-muted-foreground font-medium'}`}>
                                                                         {hint.includes('Expected')
-                                                                            ? <span className="not-italic font-black text-[10px] uppercase bg-primary/10 px-2 py-0.5 rounded text-primary mr-2 italic-none">Expected Outcome</span>
+                                                                            ? <span className="not-italic font-bold text-[9px] uppercase bg-primary/10 px-1.5 py-0.5 rounded text-primary mr-1.5">Expected Outcome</span>
                                                                             : null
                                                                         }
                                                                         {hint.replace(/Expected:?\s*/i, '').replace(/Test Scenario:?\s*/i, '')}

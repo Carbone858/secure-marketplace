@@ -7,8 +7,10 @@ import {
   Loader2, Plus, X, Upload, AlertCircle, CheckCircle,
   MapPin, DollarSign, Calendar, Eye, Shield, ChevronDown,
   ChevronUp, FileText, Image, Tag, Globe, Sparkles,
-  GripVertical, Send,
+  GripVertical, Send, ArrowRight, ArrowLeft
 } from 'lucide-react';
+import Link from 'next/link';
+import { toast } from 'sonner';
 
 /* ── types ─────────────────────────────────────────── */
 interface Category {
@@ -36,6 +38,7 @@ interface RequestFormSPAProps {
   categories: Category[];
   countries: Country[];
   mode?: 'authenticated' | 'guest';
+  children?: React.ReactNode;
 }
 
 /* ── section ids (for progress & anchor scrolling) ── */
@@ -84,7 +87,7 @@ function Panel({
   return (
     <div
       ref={sectionRef}
-      className={`rounded-xl border transition-all duration-200 ${hasError
+      className={`scroll-mt-32 rounded-xl border transition-all duration-200 ${hasError
         ? 'border-destructive/50 bg-destructive/5'
         : isOpen
           ? 'border-primary/30 bg-card shadow-sm'
@@ -128,7 +131,7 @@ function renderFieldError(fieldErrors: Record<string, string>, name: string) {
 }
 
 /* ── component ─────────────────────────────────────── */
-export function RequestFormSPA({ categories, countries, mode = 'authenticated' }: RequestFormSPAProps) {
+export function RequestFormSPA({ categories, countries, mode = 'authenticated', children }: RequestFormSPAProps) {
   const router = useRouter();
   const locale = useLocale();
   const isRTL = locale === 'ar';
@@ -141,6 +144,7 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
+  const [isExistingUserSuccess, setIsExistingUserSuccess] = useState(false);
   const [showReview, setShowReview] = useState(false);
 
   const [cities, setCities] = useState<City[]>([]);
@@ -339,30 +343,56 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
 
   /* ── image upload (file input + drag & drop) ────── */
   const processFiles = async (files: FileList | File[]) => {
+    console.log('processFiles started with files:', files);
     setUploadingImage(true);
     for (const file of Array.from(files)) {
+      console.log(`Processing file: ${file.name} | type: ${file.type} | size: ${file.size}`);
       if (images.length >= 10) break;
+
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        console.warn(`File ${file.name} rejected. Type ${file.type} not in allowed:`, allowedTypes);
+        toast.error(t('spa.invalidFileType'));
+        continue;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        console.warn(`File ${file.name} rejected. Size ${file.size} > 5MB`);
+        toast.error(t('spa.fileTooLarge'));
+        continue;
+      }
+
+      console.log(`File ${file.name} passed validation. Uploading...`);
       const fd = new FormData();
       fd.append('file', file);
       try {
         const res = await fetch('/api/upload', { method: 'POST', body: fd });
         const data = await res.json();
-        if (data.success) setImages((prev) => [...prev, data.data.url]);
-      } catch {
-        console.error('Upload error');
+        if (data.success) {
+          console.log(`Upload successful for ${file.name}:`, data.data.url);
+          setImages((prev) => [...prev, data.data.url]);
+        } else {
+          console.error(`Upload failed for ${file.name}:`, data);
+        }
+      } catch (err) {
+        console.error('Upload fetch error:', err);
       }
     }
     setUploadingImage(false);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) processFiles(e.target.files);
+    console.log('handleImageUpload triggered. files length:', e.target.files?.length);
+    if (e.target.files) {
+      processFiles(e.target.files);
+    }
+    e.target.value = '';
   };
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
       setDragOver(false);
+      console.log('handleDrop triggered. files length:', e.dataTransfer.files?.length);
       if (e.dataTransfer.files.length) processFiles(e.dataTransfer.files);
     },
     [images.length] // eslint-disable-line react-hooks/exhaustive-deps
@@ -465,15 +495,15 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
         });
         const data = await res.json();
         if (!res.ok) {
-          if (data.error === 'user.exists') {
-            setError(t('errors.userExists'));
-          } else {
-            setError(data.message || t('errors.general'));
-          }
+          setError(data.message || t('errors.general'));
           return;
         }
+        if (data.data?.isExistingUser) {
+          setIsExistingUserSuccess(true);
+        }
         setSuccess(true);
-        // Guest mode: don't redirect, show check-email message
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Guest mode: don't redirect, show check-email message or login button
       } else {
         // Authenticated flow
         const res = await fetch('/api/requests', {
@@ -487,6 +517,7 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
           return;
         }
         setSuccess(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => router.push(`/${locale}/requests/${data.data.request.id}`), 1500);
       }
     } catch {
@@ -504,12 +535,23 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
           <CheckCircle className="w-10 h-10 text-success" />
         </div>
         <h2 className="text-2xl font-bold text-foreground mb-2">
-          {isGuest ? t('success.guestTitle') : t('success.title')}
+          {isExistingUserSuccess ? t('success.existingUserTitle') : isGuest ? t('success.guestTitle') : t('success.title')}
         </h2>
         <p className="text-muted-foreground mb-6">
-          {isGuest ? t('success.guestMessage') : t('success.message')}
+          {isExistingUserSuccess ? t('success.existingUserMessage') : isGuest ? t('success.guestMessage') : t('success.message')}
         </p>
-        {isGuest && (
+
+        {isExistingUserSuccess && (
+          <div className="flex justify-center mt-6">
+            <Link href={`/${locale}/auth/login`} className="flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors">
+              {t('success.loginNow')}
+              <ArrowRight className="w-5 h-5 rtl:hidden" />
+              <ArrowLeft className="w-5 h-5 hidden rtl:block" />
+            </Link>
+          </div>
+        )}
+
+        {isGuest && !isExistingUserSuccess && (
           <div className="max-w-md mx-auto bg-primary/5 border border-primary/20 rounded-xl p-5">
             <div className="flex items-center gap-3 mb-2">
               <Send className="w-5 h-5 text-primary" />
@@ -625,580 +667,593 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated' }
 
   /* ── main render ────────────────────────────────── */
   return (
-    <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* ── Progress Bar ─────────────────────────── */}
-      <div className="sticky top-0 z-10 bg-card/95 backdrop-blur rounded-xl border border-border p-4 shadow-sm">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-foreground">{t('spa.progress')}</span>
-          <span className="text-sm font-bold text-primary">{progress}%</span>
-        </div>
-        <div className="h-2.5 bg-muted rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        {/* mini nav pills */}
-        <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
-          {sectionMeta.map((s) => {
-            const hasErr = getSectionHasError(s.id);
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => {
-                  setCollapsed((prev) => ({ ...prev, [s.id]: false }));
-                  setTimeout(() => sectionRefs.current[s.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-                }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${hasErr
-                  ? 'bg-destructive/10 text-destructive'
-                  : !collapsed[s.id]
-                    ? 'bg-primary/10 text-primary'
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                  }`}
-              >
-                {s.icon}
-                {sectionLabel(s.id)}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── Global Error ─────────────────────────── */}
-      {error && (
-        <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-xl flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
-          <p className="text-destructive text-sm">{error}</p>
-        </div>
-      )}
-
-      {/* ── Section 1: Details (required) ─────────── */}
-      <Panel
-        id="details"
-        icon={<FileText className="w-5 h-5" />}
-        required
-        isOpen={!collapsed.details}
-        hasError={getSectionHasError('details')}
-        sectionLabel={sectionLabel('details')}
-        onToggle={() => toggle('details')}
-        sectionRef={(el) => { sectionRefs.current.details = el; }}
-      >
-        {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            {t('steps.details.requestTitle')} <span className="text-destructive">*</span>
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors text-base ${fieldErrors.title ? 'border-destructive' : 'border-input'
-              }`}
-            placeholder={t('steps.details.titlePlaceholder')}
-          />
-          {renderFieldError(fieldErrors, 'title')}
-          {formData.title.length > 0 && formData.title.length < 5 && !fieldErrors.title && (
-            <p className="mt-1 text-xs text-muted-foreground">{formData.title.length}/5 min</p>
-          )}
-        </div>
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            {t('steps.details.description')} <span className="text-destructive">*</span>
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows={4}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none transition-colors text-base ${fieldErrors.description ? 'border-destructive' : 'border-input'
-              }`}
-            placeholder={t('steps.details.descriptionPlaceholder')}
-          />
-          {renderFieldError(fieldErrors, 'description')}
-          {formData.description.length > 0 && formData.description.length < 20 && !fieldErrors.description && (
-            <p className="mt-1 text-xs text-muted-foreground">{formData.description.length}/20 min</p>
-          )}
-        </div>
-        {/* Category + Subcategory */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              {t('steps.category.selectCategory')} <span className="text-destructive">*</span>
-            </label>
-            <select
-              value={formData.categoryId}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.categoryId ? 'border-destructive' : 'border-input'
-                }`}
-            >
-              <option value="">{t('steps.category.selectCategory')}</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {isRTL ? cat.nameAr : cat.nameEn}
-                </option>
-              ))}
-            </select>
-            {renderFieldError(fieldErrors, 'categoryId')}
+    <>
+      {!success && children}
+      <div className="space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
+        {/* ── Progress Bar ─────────────────────────── */}
+        <div className="sticky top-0 z-10 bg-card/95 backdrop-blur rounded-xl border border-border p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-foreground">{t('spa.progress')}</span>
+            <span className="text-sm font-bold text-primary">{progress}%</span>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              {t('steps.category.selectSubcategory')}
-            </label>
-            <select
-              name="subcategoryId"
-              value={formData.subcategoryId}
-              onChange={handleChange}
-              disabled={!formData.categoryId}
-              className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted text-base"
-            >
-              <option value="">{t('steps.category.selectSubcategory')}</option>
-              {subcategories.map((sub) => (
-                <option key={sub.id} value={sub.id}>
-                  {isRTL ? sub.nameAr : sub.nameEn}
-                </option>
-              ))}
-            </select>
+          <div className="h-2.5 bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
           </div>
-        </div>
-        {/* Urgency */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">
-            {t('steps.details.urgency')}
-          </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {(['LOW', 'MEDIUM', 'HIGH', 'URGENT'] as const).map((level) => {
-              const colors: Record<string, string> = {
-                LOW: 'border-success/40 bg-success/5 text-success',
-                MEDIUM: 'border-warning/40 bg-warning/5 text-warning',
-                HIGH: 'border-warning/60 bg-warning/10 text-warning',
-                URGENT: 'border-destructive/40 bg-destructive/5 text-destructive',
-              };
+          {/* mini nav pills */}
+          <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
+            {sectionMeta.map((s) => {
+              const hasErr = getSectionHasError(s.id);
               return (
                 <button
-                  key={level}
+                  key={s.id}
                   type="button"
-                  onClick={() => setFormData((p) => ({ ...p, urgency: level }))}
-                  className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${formData.urgency === level
-                    ? `${colors[level]} ring-2 ring-offset-1 ring-current`
-                    : 'border-border text-muted-foreground hover:border-primary/30'
+                  onClick={() => {
+                    setCollapsed((prev) => ({ ...prev, [s.id]: false }));
+                    setTimeout(() => sectionRefs.current[s.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${hasErr
+                    ? 'bg-destructive/10 text-destructive'
+                    : !collapsed[s.id]
+                      ? 'bg-primary/10 text-primary'
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
                     }`}
                 >
-                  {t(`steps.details.urgencyOptions.${level}`)}
+                  {s.icon}
+                  {sectionLabel(s.id)}
                 </button>
               );
             })}
           </div>
         </div>
-      </Panel>
 
-      {/* ── Section 2: Location (required) ────────── */}
-      <Panel
-        id="location"
-        icon={<MapPin className="w-5 h-5" />}
-        required
-        isOpen={!collapsed.location}
-        hasError={getSectionHasError('location')}
-        sectionLabel={sectionLabel('location')}
-        onToggle={() => toggle('location')}
-        sectionRef={(el) => { sectionRefs.current.location = el; }}
-        badge={
-          formData.cityId && cities.find((c) => c.id === formData.cityId)
-            ? isRTL
-              ? cities.find((c) => c.id === formData.cityId)?.nameAr
-              : cities.find((c) => c.id === formData.cityId)?.nameEn
-            : undefined
-        }
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* ── Global Error ─────────────────────────── */}
+        {error && (
+          <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-xl flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+            <p className="text-destructive text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* ── Section 1: Details (required) ─────────── */}
+        <Panel
+          id="details"
+          icon={<FileText className="w-5 h-5" />}
+          required
+          isOpen={!collapsed.details}
+          hasError={getSectionHasError('details')}
+          sectionLabel={sectionLabel('details')}
+          onToggle={() => toggle('details')}
+          sectionRef={(el) => { sectionRefs.current.details = el; }}
+        >
+          {/* Title */}
           <div>
             <label className="block text-sm font-medium text-foreground mb-1.5">
-              {t('steps.location.country')} <span className="text-destructive">*</span>
+              {t('steps.details.requestTitle')} <span className="text-destructive">*</span>
             </label>
-            <select
-              value={formData.countryId}
-              onChange={(e) => handleCountryChange(e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.countryId ? 'border-destructive' : 'border-input'
-                }`}
-            >
-              <option value="">{t('steps.location.selectCountry')}</option>
-              {countries.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {isRTL ? c.nameAr : c.nameEn}
-                </option>
-              ))}
-            </select>
-            {renderFieldError(fieldErrors, 'countryId')}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              {t('steps.location.city')} <span className="text-destructive">*</span>
-            </label>
-            <select
-              name="cityId"
-              value={formData.cityId}
-              onChange={handleChange}
-              disabled={!formData.countryId}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted text-base ${fieldErrors.cityId ? 'border-destructive' : 'border-input'
-                }`}
-            >
-              <option value="">{t('steps.location.selectCity')}</option>
-              {cities.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {isRTL ? city.nameAr : city.nameEn}
-                </option>
-              ))}
-            </select>
-            {renderFieldError(fieldErrors, 'cityId')}
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">{t('spa.address')}</label>
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            rows={2}
-            className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none text-base"
-            placeholder={t('spa.addressPlaceholder')}
-          />
-        </div>
-        <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-muted/50 transition-colors">
-          <input
-            type="checkbox"
-            name="allowRemote"
-            checked={formData.allowRemote}
-            onChange={handleChange}
-            className="w-5 h-5 text-primary rounded focus:ring-ring"
-          />
-          <span className="text-foreground font-medium">{t('spa.allowRemote')}</span>
-        </label>
-      </Panel>
-
-      {/* ── Section 3: Budget (optional, collapsible) ── */}
-      <Panel
-        id="budget"
-        icon={<DollarSign className="w-5 h-5" />}
-        required={false}
-        isOpen={!collapsed.budget}
-        hasError={getSectionHasError('budget')}
-        sectionLabel={sectionLabel('budget')}
-        onToggle={() => toggle('budget')}
-        sectionRef={(el) => { sectionRefs.current.budget = el; }}
-        badge={
-          formData.budgetMin || formData.budgetMax
-            ? `${formData.currency} ${formData.budgetMin || '0'} – ${formData.budgetMax || '∞'}`
-            : undefined
-        }
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.minBudget')}</label>
-            <div className="relative">
-              <DollarSign className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50`} />
-              <input
-                type="number"
-                name="budgetMin"
-                value={formData.budgetMin}
-                onChange={handleChange}
-                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.budgetMin ? 'border-destructive' : 'border-input'
-                  }`}
-                placeholder="0"
-                min="0"
-              />
-            </div>
-            {renderFieldError(fieldErrors, 'budgetMin')}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.maxBudget')}</label>
-            <div className="relative">
-              <DollarSign className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50`} />
-              <input
-                type="number"
-                name="budgetMax"
-                value={formData.budgetMax}
-                onChange={handleChange}
-                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.budgetMax ? 'border-destructive' : 'border-input'
-                  }`}
-                placeholder="0"
-                min="0"
-              />
-            </div>
-            {renderFieldError(fieldErrors, 'budgetMax')}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.currency')}</label>
-            <select
-              name="currency"
-              value={formData.currency}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base"
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-              <option value="SAR">SAR (﷼)</option>
-              <option value="AED">AED (د.إ)</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.deadline')}</label>
-          <div className="relative">
-            <Calendar className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50`} />
-            <input
-              type="date"
-              name="deadline"
-              value={formData.deadline}
-              onChange={handleChange}
-              className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.deadline ? 'border-destructive' : 'border-input'
-                }`}
-            />
-          </div>
-          {renderFieldError(fieldErrors, 'deadline')}
-        </div>
-      </Panel>
-
-      {/* ── Section 4: Media (optional, collapsible) ── */}
-      <Panel
-        id="media"
-        icon={<Image className="w-5 h-5" />}
-        required={false}
-        isOpen={!collapsed.media}
-        hasError={getSectionHasError('media')}
-        sectionLabel={sectionLabel('media')}
-        onToggle={() => toggle('media')}
-        sectionRef={(el) => { sectionRefs.current.media = el; }}
-        badge={images.length > 0 ? `${images.length} ${t('spa.images')}` : undefined}
-      >
-        {/* Image upload with drag & drop */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">{t('spa.uploadImages')}</label>
-          <div
-            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={handleDrop}
-            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver
-              ? 'border-primary bg-primary/5 scale-[1.01]'
-              : 'border-input hover:border-primary/40 hover:bg-muted/30'
-              }`}
-          >
-            {uploadingImage ? (
-              <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
-            ) : (
-              <>
-                <Upload className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-1">{t('spa.dragDrop')}</p>
-                <label className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium cursor-pointer hover:bg-primary/20 transition-colors">
-                  {t('spa.browse')}
-                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" />
-                </label>
-              </>
-            )}
-          </div>
-          {images.length > 0 && (
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-4">
-              {images.map((img, i) => (
-                <div key={i} className="relative group aspect-square">
-                  <img src={img} alt="" className="w-full h-full object-cover rounded-lg" />
-                  <button
-                    type="button"
-                    onClick={() => setImages((prev) => prev.filter((_, idx) => idx !== i))}
-                    className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-          <p className="text-xs text-muted-foreground mt-2">{t('spa.imagesHint')}</p>
-        </div>
-        {/* Tags */}
-        <div>
-          <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.visibility.tags')}</label>
-          <div className="flex gap-2">
             <input
               type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
-              className="flex-1 px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base"
-              placeholder={t('steps.visibility.tagsPlaceholder')}
-            />
-            <button
-              type="button"
-              onClick={addTag}
-              disabled={!tagInput.trim() || tags.length >= 10}
-              className="px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
-          </div>
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {tags.map((tag) => (
-                <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                  #{tag}
-                  <button type="button" onClick={() => setTags((p) => p.filter((t) => t !== tag))} className="hover:text-destructive">
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </Panel>
-
-      {/* ── Section 5: Visibility (optional, collapsible) ── */}
-      <Panel
-        id="visibility"
-        icon={<Eye className="w-5 h-5" />}
-        required={false}
-        isOpen={!collapsed.visibility}
-        hasError={getSectionHasError('visibility')}
-        sectionLabel={sectionLabel('visibility')}
-        onToggle={() => toggle('visibility')}
-        sectionRef={(el) => { sectionRefs.current.visibility = el; }}
-        badge={formData.visibility !== 'PUBLIC' ? t(`steps.visibility.options.${formData.visibility}`) : undefined}
-      >
-        <div className="space-y-3">
-          {(['PUBLIC', 'REGISTERED_ONLY', 'VERIFIED_COMPANIES'] as const).map((vis) => (
-            <label
-              key={vis}
-              className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.visibility === vis
-                ? 'border-primary/40 bg-primary/5 ring-1 ring-primary/20'
-                : 'border-border hover:border-primary/20 hover:bg-muted/30'
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring transition-colors text-base ${fieldErrors.title ? 'border-destructive' : 'border-input'
                 }`}
-            >
-              <input
-                type="radio"
-                name="visibility"
-                value={vis}
-                checked={formData.visibility === vis}
-                onChange={handleChange}
-                className="mt-0.5"
-              />
-              <div>
-                <span className="font-medium text-foreground">{t(`steps.visibility.options.${vis}`)}</span>
-              </div>
-            </label>
-          ))}
-        </div>
-        <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-muted/50 transition-colors mt-2">
-          <input
-            type="checkbox"
-            name="requireVerification"
-            checked={formData.requireVerification}
-            onChange={handleChange}
-            className="w-5 h-5 text-primary rounded focus:ring-ring"
-          />
-          <div>
-            <span className="font-medium text-foreground">{t('spa.requireVerification')}</span>
-            <p className="text-xs text-muted-foreground">{t('spa.requireVerificationDesc')}</p>
+              placeholder={t('steps.details.titlePlaceholder')}
+            />
+            {renderFieldError(fieldErrors, 'title')}
+            {formData.title.length > 0 && formData.title.length < 5 && !fieldErrors.title && (
+              <p className="mt-1 text-xs text-muted-foreground">{formData.title.length}/5 min</p>
+            )}
           </div>
-        </label>
-      </Panel>
-
-      {/* ── Section 6: Account (guest mode only) ──── */}
-      {isGuest && (
-        <Panel
-          id="account"
-          icon={<Shield className="w-5 h-5" />}
-          required={true}
-          isOpen={!collapsed.account}
-          hasError={getSectionHasError('account')}
-          sectionLabel={sectionLabel('account')}
-          onToggle={() => toggle('account')}
-          sectionRef={(el) => { sectionRefs.current.account = el; }}
-          badge={contactData.email ? contactData.email : undefined}
-        >
-          <p className="text-sm text-muted-foreground mb-4">{t('steps.account.description')}</p>
-          <div className="space-y-4">
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              {t('steps.details.description')} <span className="text-destructive">*</span>
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows={4}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none transition-colors text-base ${fieldErrors.description ? 'border-destructive' : 'border-input'
+                }`}
+              placeholder={t('steps.details.descriptionPlaceholder')}
+            />
+            {renderFieldError(fieldErrors, 'description')}
+            {formData.description.length > 0 && formData.description.length < 20 && !fieldErrors.description && (
+              <p className="mt-1 text-xs text-muted-foreground">{formData.description.length}/20 min</p>
+            )}
+          </div>
+          {/* Category + Subcategory */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.account.name')}</label>
-              <input
-                type="text"
-                name="name"
-                value={contactData.name}
-                onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactName ? 'border-destructive' : 'border-input'
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                {t('steps.category.selectCategory')} <span className="text-destructive">*</span>
+              </label>
+              <select
+                value={formData.categoryId}
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.categoryId ? 'border-destructive' : 'border-input'
                   }`}
-                placeholder={t('steps.account.namePlaceholder')}
-              />
-              {renderFieldError(fieldErrors, 'contactName')}
+              >
+                <option value="">{t('steps.category.selectCategory')}</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {isRTL ? cat.nameAr : cat.nameEn}
+                  </option>
+                ))}
+              </select>
+              {renderFieldError(fieldErrors, 'categoryId')}
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.account.email')}</label>
-              <input
-                type="email"
-                name="email"
-                value={contactData.email}
-                onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactEmail ? 'border-destructive' : 'border-input'
-                  }`}
-                placeholder={t('steps.account.emailPlaceholder')}
-              />
-              {renderFieldError(fieldErrors, 'contactEmail')}
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                {t('steps.category.selectSubcategory')}
+              </label>
+              <select
+                name="subcategoryId"
+                value={formData.subcategoryId}
+                onChange={handleChange}
+                disabled={!formData.categoryId}
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted text-base"
+              >
+                <option value="">{t('steps.category.selectSubcategory')}</option>
+                {subcategories.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {isRTL ? sub.nameAr : sub.nameEn}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.account.phone')}</label>
-              <input
-                type="tel"
-                name="phone"
-                value={contactData.phone}
-                onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactPhone ? 'border-destructive' : 'border-input'
-                  }`}
-                placeholder={t('steps.account.phonePlaceholder')}
-              />
-              {renderFieldError(fieldErrors, 'contactPhone')}
-              <p className="text-xs text-muted-foreground mt-1">{t('steps.account.phoneHint')}</p>
+          </div>
+          {/* Urgency */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">
+              {t('steps.details.urgency')}
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {(['LOW', 'MEDIUM', 'HIGH', 'URGENT'] as const).map((level) => {
+                const colors: Record<string, string> = {
+                  LOW: 'border-success/40 bg-success/5 text-success',
+                  MEDIUM: 'border-warning/40 bg-warning/5 text-warning',
+                  HIGH: 'border-warning/60 bg-warning/10 text-warning',
+                  URGENT: 'border-destructive/40 bg-destructive/5 text-destructive',
+                };
+                return (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => setFormData((p) => ({ ...p, urgency: level }))}
+                    className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${formData.urgency === level
+                      ? `${colors[level]} ring-2 ring-offset-1 ring-current`
+                      : 'border-border text-muted-foreground hover:border-primary/30'
+                      }`}
+                  >
+                    {t(`steps.details.urgencyOptions.${level}`)}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </Panel>
-      )}
 
-      {/* ── Review Summary ───────────────────────── */}
-      {showReview && (
-        <div className="rounded-xl border border-primary/30 bg-card p-5 shadow-sm">
-          <ReviewSummary />
+        {/* ── Section 2: Location (required) ────────── */}
+        <Panel
+          id="location"
+          icon={<MapPin className="w-5 h-5" />}
+          required
+          isOpen={!collapsed.location}
+          hasError={getSectionHasError('location')}
+          sectionLabel={sectionLabel('location')}
+          onToggle={() => toggle('location')}
+          sectionRef={(el) => { sectionRefs.current.location = el; }}
+          badge={
+            formData.cityId && cities.find((c) => c.id === formData.cityId)
+              ? isRTL
+                ? cities.find((c) => c.id === formData.cityId)?.nameAr
+                : cities.find((c) => c.id === formData.cityId)?.nameEn
+              : undefined
+          }
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                {t('steps.location.country')} <span className="text-destructive">*</span>
+              </label>
+              <select
+                value={formData.countryId}
+                onChange={(e) => handleCountryChange(e.target.value)}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.countryId ? 'border-destructive' : 'border-input'
+                  }`}
+              >
+                <option value="">{t('steps.location.selectCountry')}</option>
+                {countries.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {isRTL ? c.nameAr : c.nameEn}
+                  </option>
+                ))}
+              </select>
+              {renderFieldError(fieldErrors, 'countryId')}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                {t('steps.location.city')} <span className="text-destructive">*</span>
+              </label>
+              <select
+                name="cityId"
+                value={formData.cityId}
+                onChange={handleChange}
+                disabled={!formData.countryId}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring disabled:bg-muted text-base ${fieldErrors.cityId ? 'border-destructive' : 'border-input'
+                  }`}
+              >
+                <option value="">{t('steps.location.selectCity')}</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {isRTL ? city.nameAr : city.nameEn}
+                  </option>
+                ))}
+              </select>
+              {renderFieldError(fieldErrors, 'cityId')}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t('spa.address')}</label>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              rows={2}
+              className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring resize-none text-base"
+              placeholder={t('spa.addressPlaceholder')}
+            />
+          </div>
+          <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-muted/50 transition-colors">
+            <input
+              type="checkbox"
+              name="allowRemote"
+              checked={formData.allowRemote}
+              onChange={handleChange}
+              className="w-5 h-5 text-primary rounded focus:ring-ring"
+            />
+            <span className="text-foreground font-medium">{t('spa.allowRemote')}</span>
+          </label>
+        </Panel>
+
+        {/* ── Section 3: Budget (optional, collapsible) ── */}
+        <Panel
+          id="budget"
+          icon={<DollarSign className="w-5 h-5" />}
+          required={false}
+          isOpen={!collapsed.budget}
+          hasError={getSectionHasError('budget')}
+          sectionLabel={sectionLabel('budget')}
+          onToggle={() => toggle('budget')}
+          sectionRef={(el) => { sectionRefs.current.budget = el; }}
+          badge={
+            formData.budgetMin || formData.budgetMax
+              ? `${formData.currency} ${formData.budgetMin || '0'} – ${formData.budgetMax || '∞'}`
+              : undefined
+          }
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.minBudget')}</label>
+              <div className="relative">
+                <DollarSign className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50`} />
+                <input
+                  type="number"
+                  name="budgetMin"
+                  value={formData.budgetMin}
+                  onChange={handleChange}
+                  className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.budgetMin ? 'border-destructive' : 'border-input'
+                    }`}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              {renderFieldError(fieldErrors, 'budgetMin')}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.maxBudget')}</label>
+              <div className="relative">
+                <DollarSign className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50`} />
+                <input
+                  type="number"
+                  name="budgetMax"
+                  value={formData.budgetMax}
+                  onChange={handleChange}
+                  className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.budgetMax ? 'border-destructive' : 'border-input'
+                    }`}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              {renderFieldError(fieldErrors, 'budgetMax')}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.currency')}</label>
+              <select
+                name="currency"
+                value={formData.currency}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base"
+              >
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="SAR">SAR (﷼)</option>
+                <option value="AED">AED (د.إ)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.budget.deadline')}</label>
+            <div className="relative">
+              <Calendar className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50`} />
+              <input
+                type="date"
+                name="deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.deadline ? 'border-destructive' : 'border-input'
+                  }`}
+              />
+            </div>
+            {renderFieldError(fieldErrors, 'deadline')}
+          </div>
+        </Panel>
+
+        {/* ── Section 4: Media (optional, collapsible) ── */}
+        <Panel
+          id="media"
+          icon={<Image className="w-5 h-5" />}
+          required={false}
+          isOpen={!collapsed.media}
+          hasError={getSectionHasError('media')}
+          sectionLabel={sectionLabel('media')}
+          onToggle={() => toggle('media')}
+          sectionRef={(el) => { sectionRefs.current.media = el; }}
+          badge={images.length > 0 ? `${images.length} ${t('spa.images')}` : undefined}
+        >
+          {/* Image upload with drag & drop */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t('spa.uploadImages')}</label>
+            <div
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={handleDrop}
+              className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragOver
+                ? 'border-primary bg-primary/5 scale-[1.01]'
+                : 'border-input hover:border-primary/40 hover:bg-muted/30'
+                }`}
+            >
+              {uploadingImage ? (
+                <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+              ) : (
+                <>
+                  <Upload className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground mb-1">{t('spa.dragDrop')}</p>
+                  <div className="relative inline-block overflow-hidden">
+                    <button type="button" className="px-4 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors pointer-events-none">
+                      {t('spa.browse')}
+                    </button>
+                    <input
+                      type="file"
+                      multiple
+                      onChange={handleImageUpload}
+                      onClick={() => console.log('File input directly clicked')}
+                      title="Upload Files"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+            {images.length > 0 && (
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-4">
+                {images.map((img, i) => (
+                  <div key={i} className="relative group aspect-square">
+                    <img src={img} alt="" className="w-full h-full object-cover rounded-lg" />
+                    <button
+                      type="button"
+                      onClick={() => setImages((prev) => prev.filter((_, idx) => idx !== i))}
+                      className="absolute -top-1.5 -right-1.5 w-6 h-6 bg-destructive text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground mt-2">{t('spa.imagesHint')}</p>
+          </div>
+          {/* Tags */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.visibility.tags')}</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
+                className="flex-1 px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base"
+                placeholder={t('steps.visibility.tagsPlaceholder')}
+              />
+              <button
+                type="button"
+                onClick={addTag}
+                disabled={!tagInput.trim() || tags.length >= 10}
+                className="px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+              </button>
+            </div>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {tags.map((tag) => (
+                  <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                    #{tag}
+                    <button type="button" onClick={() => setTags((p) => p.filter((t) => t !== tag))} className="hover:text-destructive">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </Panel>
+
+        {/* ── Section 5: Visibility (optional, collapsible) ── */}
+        <Panel
+          id="visibility"
+          icon={<Eye className="w-5 h-5" />}
+          required={false}
+          isOpen={!collapsed.visibility}
+          hasError={getSectionHasError('visibility')}
+          sectionLabel={sectionLabel('visibility')}
+          onToggle={() => toggle('visibility')}
+          sectionRef={(el) => { sectionRefs.current.visibility = el; }}
+          badge={formData.visibility !== 'PUBLIC' ? t(`steps.visibility.options.${formData.visibility}`) : undefined}
+        >
+          <div className="space-y-3">
+            {(['PUBLIC', 'REGISTERED_ONLY', 'VERIFIED_COMPANIES'] as const).map((vis) => (
+              <label
+                key={vis}
+                className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.visibility === vis
+                  ? 'border-primary/40 bg-primary/5 ring-1 ring-primary/20'
+                  : 'border-border hover:border-primary/20 hover:bg-muted/30'
+                  }`}
+              >
+                <input
+                  type="radio"
+                  name="visibility"
+                  value={vis}
+                  checked={formData.visibility === vis}
+                  onChange={handleChange}
+                  className="mt-0.5"
+                />
+                <div>
+                  <span className="font-medium text-foreground">{t(`steps.visibility.options.${vis}`)}</span>
+                </div>
+              </label>
+            ))}
+          </div>
+          <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-muted/50 transition-colors mt-2">
+            <input
+              type="checkbox"
+              name="requireVerification"
+              checked={formData.requireVerification}
+              onChange={handleChange}
+              className="w-5 h-5 text-primary rounded focus:ring-ring"
+            />
+            <div>
+              <span className="font-medium text-foreground">{t('spa.requireVerification')}</span>
+              <p className="text-xs text-muted-foreground">{t('spa.requireVerificationDesc')}</p>
+            </div>
+          </label>
+        </Panel>
+
+        {/* ── Section 6: Account (guest mode only) ──── */}
+        {isGuest && (
+          <Panel
+            id="account"
+            icon={<Shield className="w-5 h-5" />}
+            required={true}
+            isOpen={!collapsed.account}
+            hasError={getSectionHasError('account')}
+            sectionLabel={sectionLabel('account')}
+            onToggle={() => toggle('account')}
+            sectionRef={(el) => { sectionRefs.current.account = el; }}
+            badge={contactData.email ? contactData.email : undefined}
+          >
+            <p className="text-sm text-muted-foreground mb-4">{t('steps.account.description')}</p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.account.name')}</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={contactData.name}
+                  onChange={handleContactChange}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactName ? 'border-destructive' : 'border-input'
+                    }`}
+                  placeholder={t('steps.account.namePlaceholder')}
+                />
+                {renderFieldError(fieldErrors, 'contactName')}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.account.email')}</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={contactData.email}
+                  onChange={handleContactChange}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.contactEmail ? 'border-destructive' : 'border-input'
+                    }`}
+                  placeholder={t('steps.account.emailPlaceholder')}
+                />
+                {renderFieldError(fieldErrors, 'contactEmail')}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">{t('steps.account.phone')}</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={contactData.phone}
+                  onChange={handleContactChange}
+                  dir="ltr"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base text-left ${fieldErrors.contactPhone ? 'border-destructive' : 'border-input'
+                    }`}
+                  placeholder={t('steps.account.phonePlaceholder')}
+                />
+                {renderFieldError(fieldErrors, 'contactPhone')}
+                <p className="text-xs text-muted-foreground mt-1">{t('steps.account.phoneHint')}</p>
+              </div>
+            </div>
+          </Panel>
+        )}
+
+        {/* ── Review Summary ───────────────────────── */}
+        {showReview && (
+          <div className="rounded-xl border border-primary/30 bg-card p-5 shadow-sm">
+            <ReviewSummary />
+          </div>
+        )}
+
+        {/* ── Submit Bar ───────────────────────────── */}
+        <div className="sticky bottom-0 z-10 bg-card/95 backdrop-blur rounded-xl border border-border p-4 shadow-lg flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => setShowReview(!showReview)}
+            className="px-4 py-2.5 border border-input rounded-lg text-sm font-medium text-foreground hover:bg-muted/50 transition-colors flex items-center gap-2"
+          >
+            <Eye className="w-4 h-4" />
+            {showReview ? t('spa.hideReview') : t('spa.showReview')}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (validate()) handleSubmit();
+            }}
+            disabled={isLoading}
+            className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center gap-2 shadow-sm"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                {t('navigation.submitting')}
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" />
+                {t('navigation.submit')}
+              </>
+            )}
+          </button>
         </div>
-      )}
-
-      {/* ── Submit Bar ───────────────────────────── */}
-      <div className="sticky bottom-0 z-10 bg-card/95 backdrop-blur rounded-xl border border-border p-4 shadow-lg flex items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => setShowReview(!showReview)}
-          className="px-4 py-2.5 border border-input rounded-lg text-sm font-medium text-foreground hover:bg-muted/50 transition-colors flex items-center gap-2"
-        >
-          <Eye className="w-4 h-4" />
-          {showReview ? t('spa.hideReview') : t('spa.showReview')}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (validate()) handleSubmit();
-          }}
-          disabled={isLoading}
-          className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center gap-2 shadow-sm"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              {t('navigation.submitting')}
-            </>
-          ) : (
-            <>
-              <Send className="w-4 h-4" />
-              {t('navigation.submit')}
-            </>
-          )}
-        </button>
       </div>
-    </div>
+    </>
   );
 }

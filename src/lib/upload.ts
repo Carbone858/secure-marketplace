@@ -12,6 +12,7 @@ export const UPLOAD_BASE = path.join(process.cwd(), 'data', 'uploads');
 export const UPLOAD_PATHS = {
   documents: path.join(UPLOAD_BASE, 'documents'),
   avatars: path.join(UPLOAD_BASE, 'avatars'),
+  projects: path.join(UPLOAD_BASE, 'projects'),
 } as const;
 
 // Max file size: 5MB
@@ -53,7 +54,7 @@ export function generateSafeFileName(originalName: string): string {
  * Resolve a safe file path within the upload directory.
  * Prevents path traversal attacks.
  */
-export function resolveUploadPath(category: 'documents' | 'avatars', fileName: string): string | null {
+export function resolveUploadPath(category: 'documents' | 'avatars' | 'projects', fileName: string): string | null {
   const basePath = UPLOAD_PATHS[category];
   const resolved = path.resolve(basePath, path.basename(fileName));
 
@@ -68,7 +69,7 @@ export function resolveUploadPath(category: 'documents' | 'avatars', fileName: s
 /**
  * Get the API URL for serving an uploaded file (auth-protected)
  */
-export function getFileServeUrl(category: 'documents' | 'avatars', fileName: string): string {
+export function getFileServeUrl(category: 'documents' | 'avatars' | 'projects', fileName: string): string {
   return `/api/files/${category}/${encodeURIComponent(fileName)}`;
 }
 

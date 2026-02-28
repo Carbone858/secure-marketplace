@@ -29,11 +29,16 @@ const emeraldTheme: BrandTheme = {
   }
 };
 
+import { Toaster } from 'sonner';
+
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider defaultBrandThemes={[emeraldTheme]}>
       <LayoutProvider>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <Toaster position="top-center" richColors />
+        </AuthProvider>
       </LayoutProvider>
     </ThemeProvider>
   );

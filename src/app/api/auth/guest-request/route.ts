@@ -4,7 +4,7 @@ import { hashPassword } from '@/lib/auth';
 import { sanitizeInput, hashEmail } from '@/lib/validations/auth';
 import { createRequestSchema } from '@/lib/validations/request';
 import { sendEmail } from '@/lib/email/service';
-import { getVerificationEmailTemplate } from '@/lib/email/templates';
+import { getVerificationEmailTemplate, getNewRequestForExistingUserTemplate } from '@/lib/email/templates';
 import { registerLimiter, getClientIp } from '@/lib/rate-limit';
 import crypto from 'crypto';
 import { z } from 'zod';
@@ -148,10 +148,48 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // User exists and is verified — they should log in
+      // User exists and is verified — create request as PENDING and send login email
+      const serviceRequest = await prisma.serviceRequest.create({
+        data: {
+          userId: existingUser.id,
+          title: requestData.title,
+          description: requestData.description,
+          categoryId: requestData.categoryId,
+          subcategoryId: requestData.subcategoryId || null,
+          countryId: requestData.countryId,
+          cityId: requestData.cityId,
+          areaId: requestData.areaId || null,
+          address: requestData.address || null,
+          budgetMin: requestData.budgetMin || null,
+          budgetMax: requestData.budgetMax || null,
+          currency: requestData.currency,
+          deadline: requestData.deadline ? new Date(requestData.deadline) : null,
+          urgency: requestData.urgency,
+          visibility: requestData.visibility,
+          images: requestData.images || [],
+          tags: requestData.tags || [],
+          allowRemote: requestData.allowRemote,
+          requireVerification: requestData.requireVerification,
+          status: 'PENDING',
+        },
+      });
+
+      const locale = request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en';
+      const loginUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/${locale}/auth/login?redirect=/dashboard/requests/${serviceRequest.id}`;
+      const emailTemplate = getNewRequestForExistingUserTemplate(contact.name, loginUrl, locale);
+      await sendEmail({ to: contact.email, template: emailTemplate });
+
       return NextResponse.json(
-        { success: false, error: 'user.exists', message: 'An account with this email already exists. Please log in to create a request.' },
-        { status: 409 }
+        {
+          success: true,
+          message: 'Request created. Please log in to view and manage it.',
+          data: {
+            requestId: serviceRequest.id,
+            isExistingUser: true,
+            emailSent: true
+          }
+        },
+        { status: 201 }
       );
     }
 
