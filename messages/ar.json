@@ -845,22 +845,31 @@
         "reviewTitle": "المراجعة والإرسال",
         "showReview": "مراجعة",
         "hideReview": "إخفاء المراجعة"
+      }
+    },
+    "edit": {
+      "title": "تعديل الطلب",
+      "save": "حفظ التعديلات",
+      "saving": "جاري الحفظ..."
+    },
+    "myRequests": {
+      "meta": {
+        "title": "طلباتي - سوق الخدمات",
+        "description": "إدارة طلبات الخدمة"
       },
-      "myRequests": {
-        "title": "طلباتي",
-        "createNew": "إنشاء جديد",
-        "noRequests": "لا يوجد طلبات",
-        "noRequestsDesc": "لم تقم بإنشاء أي طلبات خدمة بعد. ابدأ بوصف الخدمة التي تحتاجها.",
-        "view": "عرض",
-        "edit": "تعديل",
-        "delete": "حذف",
-        "cancel": "إلغاء",
-        "tabs": {
-          "all": "الكل",
-          "active": "نشط",
-          "completed": "مكتمل",
-          "cancelled": "ملغى"
-        }
+      "title": "طلباتي",
+      "createNew": "إنشاء طلب جديد",
+      "noRequests": "لا يوجد طلبات",
+      "noRequestsDesc": "لم تقم بإنشاء أي طلبات خدمة بعد. ابدأ بوصف الخدمة التي تحتاجها.",
+      "view": "عرض",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "cancel": "إلغاء",
+      "tabs": {
+        "all": "الكل",
+        "active": "نشط",
+        "completed": "مكتمل",
+        "cancelled": "ملغى"
       }
     },
     "list": {
@@ -999,22 +1008,6 @@
         "message": "تم تقديم عرضك بنجاح.",
         "viewRequest": "عرض الطلب"
       }
-    },
-    "myRequests": {
-      "meta": {
-        "title": "طلباتي - سوق الخدمات",
-        "description": "إدارة طلبات الخدمة"
-      },
-      "title": "طلباتي",
-      "tabs": {
-        "all": "الكل",
-        "active": "النشطة",
-        "completed": "المكتملة",
-        "cancelled": "الملغاة"
-      },
-      "createNew": "إنشاء طلب جديد",
-      "noRequests": "لا توجد طلبات بعد",
-      "noRequestsDesc": "أنشئ طلب الخدمة الأول للحصول على عروض أسعار من الشركات"
     }
   },
   "offers": {
@@ -1166,7 +1159,8 @@
       "cms": "إدارة المحتوى",
       "featureFlags": "إعدادات الميزات",
       "messages": "الرسائل",
-      "settings": "الإعدادات"
+      "settings": "الإعدادات",
+      "health": "صحة النظام"
     },
     "common": {
       "search": "بحث",
@@ -1194,6 +1188,53 @@
       "verified": "موثّق",
       "unverified": "غير موثّق",
       "page": "صفحة {page} من {total}"
+    },
+    "health": {
+      "title": "مراقبة صحة النظام",
+      "subtitle": "مراقبة فورية لجميع خدمات الموقع",
+      "lastRefresh": "آخر تحديث",
+      "refresh": "تحديث",
+      "runDiag": "تشغيل التشخيص",
+      "running": "جاري...",
+      "export": "تصدير السجلات",
+      "loadError": "فشل تحميل بيانات الصحة",
+      "diagComplete": "اكتمل التشخيص",
+      "diagError": "فشل التشخيص",
+      "loading": "جاري تحميل بيانات الصحة...",
+      "noLogs": "لا توجد مشكلات — جميع الأنظمة تعمل بشكل طبيعي!",
+      "overallStatus": "الحالة العامة",
+      "uptime24h": "وقت التشغيل (24ساعة)",
+      "avgLatency": "متوسط وقت الاستجابة",
+      "errors24h": "الأخطاء (24ساعة)",
+      "featureStatus": "حالة الميزات",
+      "latencyTrend": "اتجاه وقت الاستجابة (12ساعة)",
+      "errorsByCategory": "الأخطاء حسب الفئة (24ساعة)",
+      "recentLogs": "السجلات الحديثة",
+      "errors": "أخطاء",
+      "features": {
+        "auth": "المصادقة",
+        "database": "قاعدة البيانات",
+        "requests": "الطلبات",
+        "messaging": "المراسلات",
+        "uploads": "الرفع",
+        "api": "واجهة التطبيق",
+        "security": "الأمن",
+        "cache": "التخزين المؤقت"
+      },
+      "col": {
+        "status": "الحالة",
+        "service": "الخدمة",
+        "category": "الفئة",
+        "latency": "التأخير",
+        "http": "HTTP",
+        "error": "الخطأ",
+        "time": "وقت الفحص"
+      },
+      "filter": {
+        "all": "الكل",
+        "warning": "تحذيرات",
+        "critical": "حرجة فقط"
+      }
     },
     "users": {
       "title": "إدارة المستخدمين",

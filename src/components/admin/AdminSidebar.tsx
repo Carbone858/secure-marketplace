@@ -22,6 +22,7 @@ import {
   DollarSign,
   Menu,
   X,
+  Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -96,6 +97,11 @@ const menuItems = [
     titleKey: 'sidebar.settings',
     href: '/admin/settings',
     icon: Settings,
+  },
+  {
+    titleKey: 'sidebar.health',
+    href: '/admin/health',
+    icon: Activity,
   },
 ];
 

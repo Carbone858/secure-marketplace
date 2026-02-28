@@ -845,22 +845,31 @@
         "reviewTitle": "Review & Submit",
         "showReview": "Review",
         "hideReview": "Hide Review"
+      }
+    },
+    "edit": {
+      "title": "Edit Request",
+      "save": "Save Changes",
+      "saving": "Saving..."
+    },
+    "myRequests": {
+      "meta": {
+        "title": "My Requests - Service Marketplace",
+        "description": "Manage your service requests"
       },
-      "myRequests": {
-        "title": "My Requests",
-        "createNew": "Create New",
-        "noRequests": "No Requests Found",
-        "noRequestsDesc": "You haven't created any service requests yet. Start by describing what you need.",
-        "view": "View",
-        "edit": "Edit",
-        "delete": "Delete",
-        "cancel": "Cancel",
-        "tabs": {
-          "all": "All",
-          "active": "Active",
-          "completed": "Completed",
-          "cancelled": "Cancelled"
-        }
+      "title": "My Requests",
+      "createNew": "Create New Request",
+      "noRequests": "No Requests Found",
+      "noRequestsDesc": "You haven't created any service requests yet. Start by describing what you need.",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "tabs": {
+        "all": "All",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
       }
     },
     "list": {
@@ -999,22 +1008,6 @@
         "message": "Your offer has been submitted successfully.",
         "viewRequest": "View Request"
       }
-    },
-    "myRequests": {
-      "meta": {
-        "title": "My Requests - Service Marketplace",
-        "description": "Manage your service requests"
-      },
-      "title": "My Requests",
-      "tabs": {
-        "all": "All",
-        "active": "Active",
-        "completed": "Completed",
-        "cancelled": "Cancelled"
-      },
-      "createNew": "Create New Request",
-      "noRequests": "No requests yet",
-      "noRequestsDesc": "Create your first service request to get quotes from companies"
     }
   },
   "offers": {
@@ -1166,7 +1159,8 @@
       "cms": "Content (CMS)",
       "featureFlags": "Feature Flags",
       "messages": "Messages",
-      "settings": "Settings"
+      "settings": "Settings",
+      "health": "System Health"
     },
     "common": {
       "search": "Search",
@@ -1194,6 +1188,53 @@
       "verified": "Verified",
       "unverified": "Unverified",
       "page": "Page {page} of {total}"
+    },
+    "health": {
+      "title": "System Health Monitor",
+      "subtitle": "Real-time monitoring of all website services",
+      "lastRefresh": "Last refresh",
+      "refresh": "Refresh",
+      "runDiag": "Run Diagnostics",
+      "running": "Running...",
+      "export": "Export Logs",
+      "loadError": "Failed to load health data",
+      "diagComplete": "Diagnostics complete",
+      "diagError": "Diagnostics failed",
+      "loading": "Loading health data...",
+      "noLogs": "No issues detected — all systems operational!",
+      "overallStatus": "Overall Status",
+      "uptime24h": "Uptime (24h)",
+      "avgLatency": "Avg Response Time",
+      "errors24h": "Errors (24h)",
+      "featureStatus": "Feature Status",
+      "latencyTrend": "Response Time Trend (12h)",
+      "errorsByCategory": "Errors by Category (24h)",
+      "recentLogs": "Recent Logs",
+      "errors": "Errors",
+      "features": {
+        "auth": "Auth",
+        "database": "Database",
+        "requests": "Requests",
+        "messaging": "Messaging",
+        "uploads": "Uploads",
+        "api": "API",
+        "security": "Security",
+        "cache": "Cache"
+      },
+      "col": {
+        "status": "Status",
+        "service": "Service",
+        "category": "Category",
+        "latency": "Latency",
+        "http": "HTTP",
+        "error": "Error",
+        "time": "Tested At"
+      },
+      "filter": {
+        "all": "All",
+        "warning": "Warnings",
+        "critical": "Critical Only"
+      }
     },
     "users": {
       "title": "User Management",

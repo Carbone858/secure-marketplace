@@ -38,6 +38,8 @@ interface RequestFormSPAProps {
   categories: Category[];
   countries: Country[];
   mode?: 'authenticated' | 'guest';
+  initialData?: any;
+  requestId?: string;
   children?: React.ReactNode;
 }
 
@@ -131,7 +133,14 @@ function renderFieldError(fieldErrors: Record<string, string>, name: string) {
 }
 
 /* ── component ─────────────────────────────────────── */
-export function RequestFormSPA({ categories, countries, mode = 'authenticated', children }: RequestFormSPAProps) {
+export function RequestFormSPA({
+  categories,
+  countries,
+  mode = 'authenticated',
+  initialData,
+  requestId,
+  children
+}: RequestFormSPAProps) {
   const router = useRouter();
   const locale = useLocale();
   const isRTL = locale === 'ar';
@@ -148,21 +157,20 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated', 
   const [showReview, setShowReview] = useState(false);
 
   const [cities, setCities] = useState<City[]>([]);
-  const [subcategories, setSubcategories] = useState<Category[]>([]);
-  const [images, setImages] = useState<string[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState('');
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [dragOver, setDragOver] = useState(false);
-
   const [collapsed, setCollapsed] = useState<Record<SectionId, boolean>>({
-    details: false,
-    location: false,
+    details: !!initialData,
+    location: !!initialData,
     budget: true,
     media: true,
     visibility: true,
     account: false,
   });
+
+  const [images, setImages] = useState<string[]>(initialData?.images || []);
+  const [tags, setTags] = useState<string[]>(initialData?.tags || []);
+  const [tagInput, setTagInput] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
 
   const sectionRefs = useRef<Record<SectionId, HTMLDivElement | null>>({
     details: null,
@@ -181,6 +189,25 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated', 
   });
 
   const [formData, setFormData] = useState(() => {
+    if (initialData) {
+      return {
+        title: initialData.title || '',
+        description: initialData.description || '',
+        categoryId: initialData.categoryId || '',
+        subcategoryId: initialData.subcategoryId || '',
+        countryId: initialData.countryId || '',
+        cityId: initialData.cityId || '',
+        address: initialData.address || '',
+        budgetMin: initialData.budgetMin?.toString() || '',
+        budgetMax: initialData.budgetMax?.toString() || '',
+        currency: initialData.currency || 'USD',
+        deadline: initialData.deadline ? new Date(initialData.deadline).toISOString().split('T')[0] : '',
+        urgency: initialData.urgency || 'MEDIUM',
+        visibility: initialData.visibility || 'PUBLIC',
+        allowRemote: initialData.allowRemote || false,
+        requireVerification: initialData.requireVerification || false,
+      };
+    }
     const syriaCountry = countries.find((c) => c.code === 'SY');
     return {
       title: '',
@@ -200,6 +227,8 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated', 
       requireVerification: false,
     };
   });
+
+  const [subcategories, setSubcategories] = useState<Category[]>([]);
 
   /* ── section meta ───────────────────────────────── */
   const sectionMeta: SectionMeta[] = [
@@ -327,9 +356,20 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated', 
     }
   };
 
-  /* auto-load cities for default Syria */
+  /* auto-load data if initialData exists */
   useEffect(() => {
-    if (formData.countryId) handleCountryChange(formData.countryId);
+    if (initialData?.categoryId) {
+      handleCategoryChange(initialData.categoryId).then(() => {
+        setFormData(prev => ({ ...prev, subcategoryId: initialData.subcategoryId || '' }));
+      });
+    }
+    if (initialData?.countryId) {
+      handleCountryChange(initialData.countryId).then(() => {
+        setFormData(prev => ({ ...prev, cityId: initialData.cityId || '' }));
+      });
+    } else if (formData.countryId) {
+      handleCountryChange(formData.countryId);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── tags ────────────────────────────────────────── */
@@ -506,8 +546,11 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated', 
         // Guest mode: don't redirect, show check-email message or login button
       } else {
         // Authenticated flow
-        const res = await fetch('/api/requests', {
-          method: 'POST',
+        const url = requestId ? `/api/requests/${requestId}` : '/api/requests';
+        const method = requestId ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestPayload),
         });
@@ -518,7 +561,7 @@ export function RequestFormSPA({ categories, countries, mode = 'authenticated', 
         }
         setSuccess(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        setTimeout(() => router.push(`/${locale}/requests/${data.data.request.id}`), 1500);
+        setTimeout(() => router.push(`/${locale}/requests/${requestId || data.data.request.id}`), 1500);
       }
     } catch {
       setError(t('errors.general'));

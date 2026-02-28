@@ -860,3 +860,72 @@ model UserSettings {
 
   @@map("user_settings")
 }
+
+// ─── Health Monitoring ──────────────────────────────────────────────────────
+
+enum HealthStatus {
+  OK
+  WARNING
+  CRITICAL
+}
+
+enum HealthCategory {
+  API
+  DATABASE
+  CACHE
+  AUTH
+  REQUESTS
+  MESSAGING
+  UPLOADS
+  SECURITY
+}
+
+model HealthLog {
+  id           String         @id @default(cuid())
+  service      String         // e.g. "auth-login", "db-connection", "upload-endpoint"
+  category     HealthCategory
+  status       HealthStatus
+  latencyMs    Int?           // response time in milliseconds
+  statusCode   Int?           // HTTP status code if applicable
+  errorMessage String?        @db.Text
+  url          String?        // endpoint that was tested
+  details      String?        @db.Text // JSON blob for extra context
+  retryCount   Int            @default(0)
+  source       String         @default("synthetic") // "synthetic" | "user"
+  testedAt     DateTime       @default(now())
+
+  @@index([testedAt])
+  @@index([category, status])
+  @@index([source])
+  @@map("health_logs")
+}
+
+model AlertState {
+  id           String         @id @default(cuid())
+  service      String         @unique // one record per service
+  lastAlertAt  DateTime?      // when was the last alert sent
+  isSuppressed Boolean        @default(false) // smart dedupe flag
+  failCount    Int            @default(0)  // consecutive failures
+  updatedAt    DateTime       @updatedAt
+
+  @@map("alert_states")
+}
+
+// Monthly SLA Reports – one row per calendar month
+model SlaReport {
+  id               String   @id @default(cuid())
+  year             Int      // e.g. 2026
+  month            Int      // 1-12
+  uptimePercent    Float    // e.g. 99.93
+  totalChecks      Int
+  failedChecks     Int
+  downtimeMinutes  Int      // estimated total downtime in minutes
+  avgLatencyMs     Int
+  incidentsByCategory Json  // { API: 2, AUTH: 0, DATABASE: 1, ... }
+  generatedAt      DateTime @default(now())
+
+  @@unique([year, month])
+  @@index([year, month])
+  @@map("sla_reports")
+}
+
