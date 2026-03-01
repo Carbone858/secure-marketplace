@@ -28,3 +28,18 @@ Use this checklist before moving the site from Development to Production.
 - [ ] **Security Suite**: Run `npm run test:security`.
 - [ ] **Regression Suite**: Run `npm run test:regression`.
 - [ ] **E2E Visual**: Final manual walkthrough of the project posting flow.
+
+## 📊 Error Monitoring & Health
+- [ ] **Dashboard Integration**: 
+    To add `LiveErrorsPanel` to your health dashboard, simply import and render it:
+    ```tsx
+    import LiveErrorsPanel from '@/components/admin/LiveErrorsPanel';
+    // Then inside your dashboard page:
+    <LiveErrorsPanel />
+    ```
+- [ ] **API Instrumentation**:
+    To wrap future routes with automatic error monitoring:
+    ```ts
+    import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
+    export const POST = withErrorMonitoring(async (req) => { ... }, 'AUTH', 'auth-login');
+    ```
