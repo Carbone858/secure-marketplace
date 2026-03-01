@@ -49,7 +49,7 @@
 | [x] | C-15 | Exceed image size | Upload >5MB | Error | P1 |
 | [x] | C-16 | Submit twice quickly | Double click submit | Only 1 project created | P1 |
 | [ ] | C-17 | Slow internet submit | Throttle network | No duplicate submission | P2 |
-| [ ] | C-18 | Edit project | Modify description | Changes saved | P1 |
+| [x] | C-18 | Edit project | Modify description | Changes saved | P1 |
 | [x] | C-19 | Delete project before offers | Delete | Removed successfully | P2 |
 | [ ] | C-20 | Delete project after offers | Try delete | Proper restriction message | P1 |
 

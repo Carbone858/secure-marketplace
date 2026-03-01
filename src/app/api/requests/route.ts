@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { createRequestSchema, requestFilterSchema } from '@/lib/validations/request';
-import { isRequestLimitActive, isPaidPlanActive } from '@/lib/feature-flags';
+import { isRequestLimitActive, isPaidPlanActive, isRequestAutoApproveActive } from '@/lib/feature-flags';
 
 /**
  * GET /api/requests
@@ -52,8 +52,9 @@ export async function GET(request: NextRequest) {
     if (status) {
       where.status = status;
     } else {
-      // Default: show active requests only
-      where.status = { in: ['PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS'] };
+      // Default: only show ACTIVE (approved) requests publicly.
+      // PENDING requests are hidden until an admin approves them.
+      where.status = { in: ['ACTIVE', 'MATCHING', 'REVIEWING_OFFERS'] };
     }
 
     // Category filter
@@ -251,6 +252,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // If auto-approve flag is ON, publish immediately; otherwise hold for admin review.
+    const autoApprove = await isRequestAutoApproveActive();
+    const initialStatus = autoApprove ? 'ACTIVE' : 'PENDING';
+
     // Create request
     const serviceRequest = await prisma.serviceRequest.create({
       data: {
@@ -274,7 +279,7 @@ export async function POST(request: NextRequest) {
         tags: data.tags,
         allowRemote: data.allowRemote,
         requireVerification: data.requireVerification,
-        status: 'PENDING',
+        status: initialStatus,
       },
       include: {
         category: true,

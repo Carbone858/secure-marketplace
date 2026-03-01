@@ -685,15 +685,40 @@ model RefreshToken {
 // Feature Flags (Phase 2 Preparation)
 // ========================================
 model FeatureFlag {
-  id          String   @id @default(uuid())
-  key         String   @unique
-  value       Boolean  @default(false)
-  description String?
-  category    String   @default("general")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(uuid())
+  key           String   @unique
+  value         Boolean  @default(false)
+  description   String?  // EN description (legacy / dev notes)
+  descriptionAr String?  // AR description for admin UI
+  nameEn        String?  // Display name in English
+  nameAr        String?  // Display name in Arabic
+  category      String   @default("general")
+  isDynamic     Boolean  @default(true)  // true = admin can toggle; false = requires code deploy
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  auditLogs     FlagAuditLog[]
 
   @@map("feature_flags")
+}
+
+model FlagAuditLog {
+  id         String      @id @default(cuid())
+  flagId     String
+  flagKey    String      // Denormalized for fast display
+  adminId    String
+  adminName  String?     // Denormalized for fast display
+  prevValue  Boolean
+  newValue   Boolean
+  createdAt  DateTime    @default(now())
+
+  flag       FeatureFlag @relation(fields: [flagId], references: [id], onDelete: Cascade)
+
+  @@index([flagId])
+  @@index([adminId])
+  @@index([createdAt])
+  @@map("flag_audit_logs")
 }
 
 // ========================================
@@ -929,3 +954,18 @@ model SlaReport {
   @@map("sla_reports")
 }
 
+// ─── Project Approval Audit Log ─────────────────────────────────────────────
+
+model ProjectAuditLog {
+  id          String   @id @default(cuid())
+  requestId   String
+  adminId     String
+  action      String   // "APPROVED" | "REJECTED"
+  reason      String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  @@index([requestId])
+  @@index([adminId])
+  @@index([createdAt])
+  @@map("project_audit_logs")
+}

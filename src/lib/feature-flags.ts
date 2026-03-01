@@ -16,6 +16,9 @@ export const FEATURE_FLAG_KEYS = {
   isCompanyPaidPlanActive: 'isCompanyPaidPlanActive',
   isYellowPagesFeatured: 'isYellowPagesFeatured',
   isMilestoneTrackingEnabled: 'isMilestoneTrackingEnabled',
+
+  // Project Approval System
+  isRequestAutoApproveEnabled: 'isRequestAutoApproveEnabled',
 } as const;
 
 export type FeatureFlagKey = keyof typeof FEATURE_FLAG_KEYS;
@@ -99,8 +102,18 @@ export async function isMilestoneTrackingActive(): Promise<boolean> {
 }
 
 /**
+ * Check if new requests should auto-publish without admin approval.
+ * When false (default), new requests are PENDING until an admin approves them.
+ * When true, new requests are immediately ACTIVE and visible to companies.
+ */
+export async function isRequestAutoApproveActive(): Promise<boolean> {
+  return getFeatureFlag(FEATURE_FLAG_KEYS.isRequestAutoApproveEnabled);
+}
+
+/**
  * Invalidate the flag cache (e.g., after admin updates flags).
  */
 export function invalidateFlagCache(): void {
   cacheTimestamp = 0;
 }
+
