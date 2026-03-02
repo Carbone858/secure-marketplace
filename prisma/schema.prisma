@@ -434,6 +434,8 @@ model Project {
   currency    String        @default("USD")
   status      ProjectStatus @default(PENDING)
   progress    Int           @default(0)
+  completedByUser Boolean   @default(false)
+  completedByCompany Boolean @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 

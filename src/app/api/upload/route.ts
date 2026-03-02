@@ -4,8 +4,8 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE, sanitizeImageBuffer } from '@/lib/upload';
 
-// Allowed image types
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+// Allowed image and document types
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
 
 /**
  * POST /api/upload

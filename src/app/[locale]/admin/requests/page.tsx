@@ -13,7 +13,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { FileText, Search, Eye, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { FileText, Search, Eye, CheckCircle, XCircle, Clock, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PageSkeleton } from '@/components/ui/skeleton';
@@ -119,6 +119,23 @@ export default function AdminRequestsPage() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm(d('Are you sure you want to delete this project? This will also withdraw all pending offers.', 'هل أنت متأكد من حذف هذا المشروع؟ سيتم أيضاً سحب جميع العروض المعلقة.'))) return;
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/requests/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Error');
+      toast.success(d('Request deleted successfully', 'تم حذف الطلب بنجاح'));
+      fetchRequests();
+      fetchPendingCount();
+    } catch (err: any) {
+      toast.error(err.message || d('Failed to delete request', 'فشل في حذف الطلب'));
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   // ── Helpers ────────────────────────────────────────────────────────────────
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -147,8 +164,8 @@ export default function AdminRequestsPage() {
         <button
           onClick={() => { setTab('pending'); setPage(1); }}
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${tab === 'pending'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
+            ? 'border-primary text-primary'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
         >
           <Clock className="h-4 w-4" />
@@ -160,8 +177,8 @@ export default function AdminRequestsPage() {
         <button
           onClick={() => { setTab('all'); setPage(1); setStatusFilter(''); }}
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${tab === 'all'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
+            ? 'border-primary text-primary'
+            : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
         >
           <FileText className="h-4 w-4" />
@@ -266,6 +283,16 @@ export default function AdminRequestsPage() {
                               </Button>
                             </>
                           )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                            onClick={() => handleDelete(req.id)}
+                            disabled={actionLoading === req.id}
+                            title={d('Delete', 'حذف')}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                       </td>
                     </tr>

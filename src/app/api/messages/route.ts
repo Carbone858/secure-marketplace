@@ -124,15 +124,54 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = messageSchema.parse(body);
 
-    // Verify recipient exists
-    const recipient = await prisma.user.findUnique({
-      where: { id: validatedData.recipientId },
-    });
-
     if (!recipient) {
       return NextResponse.json(
         { error: 'Recipient not found' },
         { status: 404 }
+      );
+    }
+
+    // STRICT ENFORCEMENT: Messaging globally locked unless part of an accepted pair (ACTIVE/COMPLETED project)
+    let validPair = false;
+    let isReadOnly = false;
+
+    if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
+      validPair = true;
+    } else {
+      const projects = await prisma.project.findMany({
+        where: {
+          OR: [
+            { userId: user.id, company: { userId: recipient.id } },
+            { userId: recipient.id, company: { userId: user.id } },
+          ],
+        },
+        include: { request: true },
+      });
+
+      if (projects.length > 0) {
+        const hasActiveOrCompleted = projects.some(p => ['ACTIVE', 'COMPLETED', 'ON_HOLD'].includes(p.status));
+        if (hasActiveOrCompleted) {
+          validPair = true;
+          // If EVERYTHING is completed, it's read-only
+          const allCompleted = projects.every(p => p.status === 'COMPLETED' || p.request?.status === 'COMPLETED');
+          if (allCompleted) {
+            isReadOnly = true;
+          }
+        }
+      }
+    }
+
+    if (!validPair) {
+      return NextResponse.json(
+        { error: 'forbidden', message: 'Messaging is only allowed between users with an accepted project together.' },
+        { status: 403 }
+      );
+    }
+
+    if (isReadOnly) {
+      return NextResponse.json(
+        { error: 'forbidden', message: 'All projects between you and this user are completed. Communication is now read-only.' },
+        { status: 403 }
       );
     }
 

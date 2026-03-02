@@ -257,38 +257,7 @@ export default function CompanyDetailPage() {
                 )}
 
                 <div className="flex flex-wrap gap-2 mt-4">
-                  <Dialog open={messageDialogOpen} onOpenChange={setMessageDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button>
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Contact
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Send Message to {company.name}</DialogTitle>
-                        <DialogDescription>
-                          Your message will be sent to the company.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4 mt-4">
-                        <Textarea
-                          placeholder="Write your message..."
-                          value={messageText}
-                          onChange={(e) => setMessageText(e.target.value)}
-                          rows={4}
-                        />
-                        <Button
-                          onClick={handleSendMessage}
-                          disabled={!messageText.trim()}
-                          className="w-full"
-                        >
-                          <Send className="h-4 w-4 mr-2" />
-                          Send Message
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
+
 
                   {company.website && (
                     <Button variant="outline" asChild>
@@ -361,8 +330,8 @@ export default function CompanyDetailPage() {
                           >
                             <Star
                               className={`h-6 w-6 ${star <= reviewRating
-                                  ? 'fill-warning text-warning'
-                                  : 'text-muted-foreground/30'
+                                ? 'fill-warning text-warning'
+                                : 'text-muted-foreground/30'
                                 }`}
                             />
                           </button>
@@ -426,8 +395,8 @@ export default function CompanyDetailPage() {
                                   <Star
                                     key={i}
                                     className={`h-4 w-4 ${i < review.rating
-                                        ? 'fill-warning text-warning'
-                                        : 'text-muted-foreground/30'
+                                      ? 'fill-warning text-warning'
+                                      : 'text-muted-foreground/30'
                                       }`}
                                   />
                                 ))}

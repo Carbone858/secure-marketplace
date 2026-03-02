@@ -14,22 +14,44 @@ export default function CompanyProjectsPage() {
   const t = useTranslations('company_dashboard');
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCompleting, setIsCompleting] = useState<string | null>(null);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch('/api/projects');
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setProjects(data.projects || []);
+    } catch {
+      toast.error(t('projects.loadFailed'));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await fetch('/api/projects');
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setProjects(data.projects || []);
-      } catch {
-        toast.error(t('projects.loadFailed'));
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchProjects();
   }, [t]);
+
+  const handleComplete = async (requestId: string) => {
+    if (!requestId) return;
+    setIsCompleting(requestId);
+    try {
+      const res = await fetch(`/api/requests/${requestId}/complete`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to complete project');
+      toast.success(data.message || 'Project marked as completed');
+      fetchProjects();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to complete project');
+    } finally {
+      setIsCompleting(null);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-6">
@@ -67,9 +89,9 @@ export default function CompanyProjectsPage() {
                   </div>
                   <Badge className={
                     project.status === 'ACTIVE' ? 'bg-success' :
-                    project.status === 'PENDING' ? 'bg-warning' :
-                    project.status === 'COMPLETED' ? 'bg-primary' :
-                    project.status === 'CANCELLED' ? 'bg-destructive' : 'bg-muted'
+                      project.status === 'PENDING' ? 'bg-warning' :
+                        project.status === 'COMPLETED' ? 'bg-primary' :
+                          project.status === 'CANCELLED' ? 'bg-destructive' : 'bg-muted'
                   }>
                     {t(`status.${project.status}`)}
                   </Badge>
@@ -92,9 +114,29 @@ export default function CompanyProjectsPage() {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  <Link href={`/${locale}/dashboard/requests/${project.requestId}`}>
+                  <Link href={`/${locale}/requests/${project.requestId}`}>
                     <Button variant="outline" size="sm">{t('projects.viewRequest')}</Button>
                   </Link>
+                  <Link href={`/${locale}/dashboard/messages?with=${project.userId}`}>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      {t('projects.messageUser') || 'Message Client'}
+                    </Button>
+                  </Link>
+                  {/* Completion Button */}
+                  {project.status === 'ACTIVE' && project.requestId && (
+                    <Button
+                      variant={project.completedByCompany ? "secondary" : "default"}
+                      size="sm"
+                      onClick={() => handleComplete(project.requestId)}
+                      disabled={project.completedByCompany || isCompleting === project.requestId}
+                    >
+                      {project.completedByCompany
+                        ? (locale === 'ar' ? 'في انتظار العميل' : 'Waiting on Client')
+                        : (locale === 'ar' ? 'تحديد كمكتمل' : 'Mark Completed')
+                      }
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

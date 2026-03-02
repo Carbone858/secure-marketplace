@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
         endDate: validatedData.endDate ? new Date(validatedData.endDate) : null,
         budget: validatedData.budget,
         currency: validatedData.currency,
-        status: 'PENDING',
+        status: 'ACTIVE',
       },
       include: {
         user: {

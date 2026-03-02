@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
     const budgetMin = searchParams.get('budgetMin');
     const budgetMax = searchParams.get('budgetMax');
     const search = searchParams.get('search');
+    const userOnly = searchParams.get('userOnly');
     const userId = searchParams.get('userId');
     const page = parseInt(searchParams.get('page') || '1');
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
@@ -33,19 +34,31 @@ export async function GET(request: NextRequest) {
     console.log('[API DEBUG] Received Locale:', locale, 'Params:', searchParams.toString());
 
     // Build where clause
-    const where: Record<string, unknown> = {
-      isActive: true,
-    };
+    const where: Record<string, any> = {};
 
-    // Language filter based on locale (Strict separation)
-    if (locale === 'ar') {
-      where.tags = { has: 'lang:ar' };
-      console.log('[API DEBUG] Applied AR filter');
-    } else if (locale === 'en') {
-      where.tags = { has: 'lang:en' };
-      console.log('[API DEBUG] Applied EN filter');
+    // If filtering for "my requests" or a specific user, we don't strictly require isActive
+    if (userOnly === 'true' && session?.isAuthenticated && session.user?.id) {
+      where.userId = session.user.id;
+    } else if (userId) {
+      where.userId = userId;
     } else {
-      console.log('[API DEBUG] No language filter applied (Locale mismatch or missing)');
+      where.isActive = true;
+    }
+
+    // Language filter: show requests tagged for this locale, OR requests with NO language tag at all.
+    // Logic: include if (has lang:XX) OR (doesn't have lang:en AND doesn't have lang:ar)
+    // This means: untagged projects show everywhere; lang-tagged projects show only in their locale.
+    if (locale === 'ar' || locale === 'en') {
+      const myTag = `lang:${locale}`;
+      const otherTag = locale === 'ar' ? 'lang:en' : 'lang:ar';
+      const langFilter = {
+        OR: [
+          { tags: { has: myTag } },                                  // tagged for this locale
+          { NOT: { tags: { hasSome: [myTag, otherTag] } } },         // has NO lang tags at all
+        ],
+      };
+      // Merge into AND so it doesn't overwrite budget/search filters
+      where.AND = [...((where.AND as unknown[]) || []), langFilter];
     }
 
     // Status filter
@@ -80,23 +93,15 @@ export async function GET(request: NextRequest) {
       where.urgency = urgency;
     }
 
-    // Budget filter
+    // Budget filter — push into AND array (not overwrite — lang filter may already be there)
     if (budgetMin || budgetMax) {
-      where.AND = [];
+      if (!where.AND) where.AND = [];
       if (budgetMin) {
         (where.AND as unknown[]).push({ budgetMax: { gte: parseFloat(budgetMin as string) } });
       }
       if (budgetMax) {
         (where.AND as unknown[]).push({ budgetMin: { lte: parseFloat(budgetMax as string) } });
       }
-    }
-
-    // User filter (for "my requests")
-    const userOnly = searchParams.get('userOnly');
-    if (userOnly === 'true' && session?.isAuthenticated && session.user?.id) {
-      where.userId = session.user.id;
-    } else if (userId) {
-      where.userId = userId;
     }
 
     // Search filter
@@ -256,6 +261,15 @@ export async function POST(request: NextRequest) {
     const autoApprove = await isRequestAutoApproveActive();
     const initialStatus = autoApprove ? 'ACTIVE' : 'PENDING';
 
+    // Auto-inject locale tag so this request is visible in the correct language filter
+    // Read locale from body, or infer from Accept-Language header, defaulting to 'en'
+    const acceptLang = request.headers.get('accept-language') || '';
+    const requestLocale = body.locale || (acceptLang.startsWith('ar') ? 'ar' : 'en');
+    const langTag = `lang:${requestLocale}`;
+    const tagsWithLocale = Array.isArray(data.tags)
+      ? (data.tags.includes(langTag) ? data.tags : [...data.tags, langTag])
+      : [langTag];
+
     // Create request
     const serviceRequest = await prisma.serviceRequest.create({
       data: {
@@ -276,10 +290,11 @@ export async function POST(request: NextRequest) {
         visibility: data.visibility,
         images: data.images,
         attachments: data.attachments,
-        tags: data.tags,
+        tags: tagsWithLocale,
         allowRemote: data.allowRemote,
         requireVerification: data.requireVerification,
         status: initialStatus,
+        isActive: autoApprove, // false if PENDING, true if ACTIVE
       },
       include: {
         category: true,

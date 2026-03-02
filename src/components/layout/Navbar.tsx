@@ -107,20 +107,11 @@ export function Navbar() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuItem asChild>
-                      <Link href={`/${locale}/dashboard`}>
-                        <User className="h-4 w-4 me-2" />
-                        {t('nav.userMenu.dashboard')}
+                      <Link href={user.role === 'COMPANY' ? `/${locale}/company/dashboard` : `/${locale}/dashboard`}>
+                        {user.role === 'COMPANY' ? <Building2 className="h-4 w-4 me-2" /> : <User className="h-4 w-4 me-2" />}
+                        {user.role === 'COMPANY' ? t('nav.userMenu.companyDashboard') : t('nav.userMenu.dashboard')}
                       </Link>
                     </DropdownMenuItem>
-
-                    {user.role === 'COMPANY' && (
-                      <DropdownMenuItem asChild>
-                        <Link href={`/${locale}/company/dashboard`}>
-                          <Building2 className="h-4 w-4 me-2" />
-                          {t('nav.userMenu.companyDashboard')}
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
 
                     {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
                       <DropdownMenuItem asChild>

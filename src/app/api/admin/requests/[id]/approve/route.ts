@@ -9,6 +9,11 @@ import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { sendApprovalNotification } from '@/lib/requests/approval-notifications';
 import { invalidateFlagCache } from '@/lib/feature-flags';
+import {
+    assertValidRequestTransition,
+    InvalidTransitionError,
+    type RequestStatus,
+} from '@/lib/state-machine';
 
 export async function PUT(
     request: NextRequest,
@@ -40,8 +45,14 @@ export async function PUT(
             return NextResponse.json({ error: 'Request not found' }, { status: 404 });
         }
 
-        if (serviceRequest.status === 'ACTIVE') {
-            return NextResponse.json({ error: 'Request is already active' }, { status: 409 });
+        // Guard transition via state machine
+        try {
+            assertValidRequestTransition(serviceRequest.status as RequestStatus, 'ACTIVE');
+        } catch (err) {
+            if (err instanceof InvalidTransitionError) {
+                return NextResponse.json({ error: err.message }, { status: 409 });
+            }
+            throw err;
         }
 
         // Approve
@@ -67,6 +78,19 @@ export async function PUT(
                 userName: serviceRequest.user.name || 'User',
                 requestTitle: serviceRequest.title,
                 locale,
+            }).catch(() => { });
+
+            // In-app notification (Bug fix - add missing notification)
+            prisma.notification.create({
+                data: {
+                    userId: serviceRequest.user.id,
+                    type: 'SYSTEM',
+                    title: locale === 'ar' ? 'تمت الموافقة على طلبك' : 'Project Request Approved',
+                    message: locale === 'ar'
+                        ? `تمت الموافقة على طلبك "${serviceRequest.title}". يمكنك الآن استقبال العروض من الشركات.`
+                        : `Your project "${serviceRequest.title}" has been approved. You can now receive offers from companies.`,
+                    data: { requestId: id },
+                },
             }).catch(() => { });
         }
 

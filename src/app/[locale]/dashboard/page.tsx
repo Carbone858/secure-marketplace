@@ -28,6 +28,10 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
     redirect(`/${locale}/auth/login`);
   }
 
+  if (session.user?.role === 'COMPANY') {
+    redirect(`/${locale}/company/dashboard`);
+  }
+
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'dashboard' });
 

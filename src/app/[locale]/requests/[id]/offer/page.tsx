@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { createOfferSchema, type CreateOfferInput } from '@/lib/validations/request';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { FileUpload } from '@/components/ui/FileUpload';
 
 interface Request {
   id: string;
@@ -25,7 +26,8 @@ interface Request {
   currency: string;
   urgency: string;
   category: {
-    name: string;
+    nameEn: string;
+    nameAr: string;
   };
   user: {
     name: string | null;
@@ -38,7 +40,7 @@ export default function SubmitOfferPage() {
   const locale = useLocale();
   const t = useTranslations('requests.offer');
   const { user, isLoading: authLoading } = useAuth();
-  
+
   const [request, setRequest] = useState<Request | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,6 +56,8 @@ export default function SubmitOfferPage() {
     resolver: zodResolver(createOfferSchema),
     defaultValues: {
       currency: 'USD',
+      requestId: params.id as string,  // required by offerSchema
+      attachments: [],
     },
   });
 
@@ -79,8 +83,10 @@ export default function SubmitOfferPage() {
       const response = await fetch(`/api/requests/${params.id}`);
       if (!response.ok) throw new Error('Failed to fetch request');
       const data = await response.json();
-      setRequest(data.request);
-      setValue('currency', data.request.currency);
+      // API wraps response as: { success, data: { request } }
+      const req = data.data?.request ?? data.request ?? data;
+      setRequest(req);
+      setValue('currency', req.currency);
     } catch (err) {
       setError(t('errors.general'));
     } finally {
@@ -97,9 +103,10 @@ export default function SubmitOfferPage() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to submit offer');
+        throw new Error(result.message || result.error || 'Failed to submit offer');
       }
 
       toast.success(t('success.title'), {
@@ -114,6 +121,14 @@ export default function SubmitOfferPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Called when Zod validation fails BEFORE submit — show user what's wrong
+  const onInvalid = (errs: any) => {
+    const firstMsg = Object.values(errs)[0] as any;
+    toast.error('Please fix the form errors', {
+      description: firstMsg?.message || 'Check all required fields',
+    });
   };
 
   if (isLoading || authLoading) {
@@ -156,7 +171,7 @@ export default function SubmitOfferPage() {
               <div>
                 <h3 className="font-semibold text-lg">{request.title}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {request.category.name}
+                  {locale === 'ar' ? request.category.nameAr : request.category.nameEn}
                 </p>
               </div>
 
@@ -167,10 +182,10 @@ export default function SubmitOfferPage() {
                     {request.budgetMin && request.budgetMax
                       ? `${request.budgetMin.toLocaleString()} - ${request.budgetMax.toLocaleString()} ${request.currency}`
                       : request.budgetMin
-                      ? `From ${request.budgetMin.toLocaleString()} ${request.currency}`
-                      : request.budgetMax
-                      ? `Up to ${request.budgetMax.toLocaleString()} ${request.currency}`
-                      : 'Budget not specified'}
+                        ? `From ${request.budgetMin.toLocaleString()} ${request.currency}`
+                        : request.budgetMax
+                          ? `Up to ${request.budgetMax.toLocaleString()} ${request.currency}`
+                          : 'Budget not specified'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -195,29 +210,34 @@ export default function SubmitOfferPage() {
               <CardTitle>{t('title')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="price">{t('fields.price')} *</Label>
-                    <div className="flex gap-2">
+                    <div className="group flex items-center bg-card border rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all shadow-sm">
+                      <div className="px-3 border-e bg-muted/30 text-muted-foreground flex items-center justify-center">
+                        <DollarSign className="w-4 h-4" />
+                      </div>
                       <Input
                         id="price"
                         type="number"
                         {...register('price', { valueAsNumber: true })}
                         placeholder="0.00"
-                        className="flex-1"
+                        className="flex-1 border-none focus-visible:ring-0 shadow-none h-11"
                       />
-                      <select
-                        {...register('currency')}
-                        className="w-24 px-3 py-2 border rounded-md"
-                        value={currency}
-                      >
-                        <option value="USD">USD</option>
-                        <option value="EUR">EUR</option>
-                        <option value="GBP">GBP</option>
-                        <option value="SAR">SAR</option>
-                        <option value="AED">AED</option>
-                      </select>
+                      <div className="px-1 border-s bg-muted/10 h-11 flex items-center">
+                        <select
+                          {...register('currency')}
+                          className="bg-transparent px-3 py-2 text-sm font-medium border-none focus:ring-0 outline-none h-full cursor-pointer"
+                          value={currency}
+                        >
+                          <option value="USD">USD</option>
+                          <option value="EUR">EUR</option>
+                          <option value="GBP">GBP</option>
+                          <option value="SAR">SAR</option>
+                          <option value="AED">AED</option>
+                        </select>
+                      </div>
                     </div>
                     {errors.price && (
                       <p className="text-sm text-destructive">{errors.price.message}</p>
@@ -226,12 +246,20 @@ export default function SubmitOfferPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="estimatedDays">{t('fields.timeline')}</Label>
-                    <Input
-                      id="estimatedDays"
-                      type="number"
-                      {...register('estimatedDays', { valueAsNumber: true })}
-                      placeholder={t('fields.timelinePlaceholder')}
-                    />
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        id="estimatedDays"
+                        type="number"
+                        min={1}
+                        {...register('estimatedDays', { valueAsNumber: true })}
+                        placeholder="e.g. 14"
+                        className="pl-10 h-11 rounded-xl"
+                      />
+                    </div>
+                    {errors.estimatedDays && (
+                      <p className="text-sm text-destructive">{errors.estimatedDays.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -242,6 +270,7 @@ export default function SubmitOfferPage() {
                     {...register('description')}
                     placeholder={t('fields.descriptionPlaceholder')}
                     rows={6}
+                    className="rounded-xl resize-none"
                   />
                   {errors.description && (
                     <p className="text-sm text-destructive">{errors.description.message}</p>
@@ -249,13 +278,18 @@ export default function SubmitOfferPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="attachments">{t('fields.attachments')}</Label>
-                  <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center">
-                    <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground">
-                      {t('fields.attachmentsHint')}
-                    </p>
-                  </div>
+                  <FileUpload
+                    label={t('fields.attachments')}
+                    helperText={t('fields.attachmentsHint')}
+                    onUploadComplete={(url: string) => {
+                      const current = watch('attachments') || [];
+                      setValue('attachments', [...current, url]);
+                    }}
+                    onRemove={(url: string) => {
+                      const current = watch('attachments') || [];
+                      setValue('attachments', current.filter(f => f !== url));
+                    }}
+                  />
                 </div>
 
                 <div className="flex gap-4 pt-4">

@@ -1,167 +1,298 @@
-# 🧪 FULL MANUAL TEST TASKS – SERVICE MARKETPLACE
+# Manual Test Plan
+
+> **Secure Service Marketplace** — Next.js 14.1 / Prisma / PostgreSQL  
+> Version 1.2 · March 2, 2026  
+> Locales: Arabic (ar, default, RTL) + English (en, LTR)
 
 ---
 
-## 🔑 TEST CREDENTIALS (INTERNAL)
+## 🔑 Test Credentials
 
-> **Shared Password for all accounts:** `Test123456!@`
-> 
-> | Role | Email | Purpose |
-> |---|---|---|
-> | **Admin** | `admin@secure-marketplace.com` | Access Admin Dashboard & Approve Companies |
-> | **Owner** | `owner@secure-marketplace.com` | Full system access (Super Admin) |
-> | **Client** | `user@secure-marketplace.com` | Submit service requests & chat with providers |
-> | **Provider** | `company@secure-marketplace.com` | Verified company - Submit offers & view dashboard |
-> | **Pending** | `pending@secure-marketplace.com` | Unverified company - Restricted access until approved |
-> | **Unverified** | `unverified@secure-marketplace.com` | Account registered but email not verified |
-> | **Locked** | `locked@secure-marketplace.com` | Account locked for testing lockout scenarios |
+**Password for ALL accounts:** `Test123456!@`
+
+| Role | Email | Notes |
+|------|-------|-------|
+| **Admin** | `admin@secure-marketplace.com` | Full administrative access |
+| **Website Owner** (Super Admin) | `owner@secure-marketplace.com` | Root access, system configuration |
+| **Verified Company** | `company@secure-marketplace.com` | Approved service provider |
+| **Pending Company** | `pending@secure-marketplace.com` | Awaiting verification |
+| **Standard User** | `user@secure-marketplace.com` | Regular client account |
+| **Unverified User** | `unverified@secure-marketplace.com` | Email not yet verified |
+| **Locked Account** | `locked@secure-marketplace.com` | Account temporarily locked (for testing lockout) |
 
 ---
 
-> [!TIP]
-> **Interactive Dashboard:** Use the [Interactive Manual Test Dashboard](http://localhost:3000/ar/dev/manual-test) to track progress.
-> 
-> **Focus:** This list contains 140+ real tests. Keep descriptions short to ensure the dashboard UI remains clean.
+## 🧪 Core Lifecycle Stabilization (Verified March 2026)
 
-## 🟢 SECTION 1 — CLIENT (PROJECT OWNER) TESTING
+### Flow 1: User Creates a Project
+- [ ] **L1.1** — Log in as a regular user → Dashboard loads
+- [ ] **L1.2** — Navigate to `/requests/new` → Multi-step form appears
+- [ ] **L1.3** — Fill details (>20 chars), category, location → No errors
+- [ ] **L1.4** — Submit → Toast: "Request submitted"
+- [ ] **L1.5** — View project → Detail page shows **amber "Pending Admin Approval" banner**
+- [ ] **L1.6** — Verify invisible to others on public `/requests` list (AR and EN)
 
-### 🔹 A. Registration & Authentication
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | C-01 | Register with valid data | Fill all fields correctly | Account created + verification email sent | P1 |
-| [ ] | C-02 | Register with existing email | Use same email twice | Error: Email already exists | P1 |
-| [ ] | C-03 | Weak password | Enter weak password | Password strength validation appears | P1 |
-| [ ] | C-04 | Empty form submit | Submit blank | Required errors shown | P1 |
-| [ ] | C-05 | Invalid email format | Enter wrong email | Email validation error | P1 |
-| [ ] | C-06 | Verify email | Click verification link | Account becomes active | P1 |
-| [ ] | C-07 | Expired verification link | Use expired token | Error message | P2 |
-| [ ] | C-08 | Login with correct credentials | Enter valid login | Redirect to dashboard | P1 |
-| [ ] | C-09 | Login with wrong password 5 times | Try repeatedly | Account locks | P1 |
-| [ ] | C-10 | Reset password flow | Request reset + change | Password updated successfully | P1 |
+### Flow 2: Admin Operations
+- [ ] **L2.1** — Admin Dashboard → "Pending Approval" tab shows the project
+- [ ] **L2.2** — Click **Approve ✅** → Status becomes ACTIVE; in-app notification sent to user
+- [ ] **L2.3** — Project now visible to companies on public `/requests`
+- [ ] **L2.4** — State Guard: Try to approve ACTIVE project → ❌ Error (409)
+- [ ] **L2.5** — Reject a project with reason → User notified; project remains hidden
 
-### 🔹 B. Create Project Flow
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [x] | C-11 | Create project normal | Fill all fields | Project posted successfully | P1 |
-| [x] | C-12 | Missing category | Leave category empty | Error shown | P1 |
-| [x] | C-13 | Upload valid images | Upload JPG/PNG | Images saved | P1 |
-| [x] | C-14 | Upload invalid file type | Upload .exe | Rejected | P1 |
-| [x] | C-15 | Exceed image size | Upload >5MB | Error | P1 |
-| [x] | C-16 | Submit twice quickly | Double click submit | Only 1 project created | P1 |
-| [ ] | C-17 | Slow internet submit | Throttle network | No duplicate submission | P2 |
-| [x] | C-18 | Edit project | Modify description | Changes saved | P1 |
-| [x] | C-19 | Delete project before offers | Delete | Removed successfully | P2 |
-| [ ] | C-20 | Delete project after offers | Try delete | Proper restriction message | P1 |
+### Flow 3: Company Submission
+- [ ] **L3.1** — Log in as company → Navigate to `/requests` → Approved project visible
+- [ ] **L3.2** — Click project → "Send Offer" button visible
+- [ ] **L3.3** — Fill price/days/description → Submit → Toast: "Offer Submitted ✅"
+- [ ] **L3.4** — Project owner receives in-app "New Offer Received" notification
+- [ ] **L3.5** — State Guard: Try duplicate offer → ❌ Error: "Already submitted"
 
-### 🔹 C. Offer Handling
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | C-21 | Receive offer notification | Provider submits offer | Notification received | P1 |
-| [ ] | C-22 | Compare multiple offers | Open 3 offers | Clear comparison | P1 |
-| [ ] | C-23 | Accept offer | Click accept | Status updates | P1 |
-| [ ] | C-24 | Reject offer | Reject | Status updated | P1 |
-| [ ] | C-25 | Accept then refresh page | Refresh | State preserved | P1 |
-| [ ] | C-26 | Try accept twice | Click multiple times | Only 1 acceptance allowed | P1 |
-| [ ] | C-27 | Accept after expiration | Try expired offer | Error shown | P2 |
+### Flow 4: Offer Acceptance
+- [ ] **L4.1** — Owner clicks **Accept Offer** → Toast: "Offer accepted! 🎉"
+- [ ] **L4.2** — Other pending offers auto-rejected
+- [ ] **L4.3** — Project record created; company receives "Offer accepted" notification
+- [ ] **L4.4** — State Guard: Try double-accept → ❌ Error (state machine block)
 
-### 🔹 D. Messaging
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | C-28 | Send message | Type + send | Message delivered | P1 |
-| [ ] | C-29 | Send empty message | Try blank | Error shown | P1 |
-| [ ] | C-30 | Send long message | 2000+ chars | Handled properly | P2 |
-| [ ] | C-31 | Rapid send spam | Send 10 fast | Rate limit triggered | P1 |
-| [ ] | C-32 | Open chat on mobile | Use phone | UI responsive | P1 |
+### Flow 5: Atomic Deletion
+- [ ] **L5.1** — Delete project with pending offers → Multi-click confirmation
+- [ ] **L5.2** — Verify all PENDING offers are now WITHDRAWN in DB
+- [ ] **L5.3** — Project detail URL returns 404/redirect
 
-### 🔹 E. Completion & Reviews
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | C-33 | Mark project complete | Click complete | Status changes | P1 |
-| [ ] | C-34 | Leave review | Submit rating | Saved correctly | P1 |
-| [ ] | C-35 | Leave empty review | Submit blank | Validation shown | P1 |
-| [ ] | C-36 | Edit review | Modify | Saved | P2 |
-| [ ] | C-37 | Delete account with active project | Attempt | Proper restriction | P1 |
+---
 
-## 🟢 SECTION 2 — SERVICE PROVIDER TESTING
+## Progress Summary
 
-### 🔹 A. Provider Registration
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | P-01 | Multi-step registration | Complete all steps | Account created | P1 |
-| [ ] | P-02 | Skip required field | Leave empty | Validation error | P1 |
-| [ ] | P-03 | Add multiple cities | Select many | Saved correctly | P1 |
-| [ ] | P-04 | Add multiple services | Select multiple | Saved correctly | P1 |
-| [ ] | P-05 | Upload portfolio images | Upload valid | Saved | P1 |
-| [ ] | P-06 | Upload invalid file | Try .exe | Rejected | P1 |
+| Section | Tests | Done |
+|---------|-------|------|
+| L — Core Lifecycle | 25 | 0/25 |
+| A — User Flow | 115 | 0/115 |
+| B — Company Flow | 52 | 0/52 |
+| C — Project Management | 30 | 0/30 |
+| D — Company Directory | 25 | 0/25 |
+| E — Admin Panel | 65 | 0/65 |
+| F — Security | 43 | 0/43 |
+| G — i18n / RTL / Accessibility | 28 | 0/28 |
+| H — Regression | 26 | 0/26 |
+| I — Contact Page | 10 | 0/10 |
+| **Total** | **419** | **0/419** |
 
-### 🔹 B. Browse & Submit Offers
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | P-07 | Browse projects | View list | Relevant projects shown | P1 |
-| [ ] | P-08 | Filter by category | Apply filter | Correct results | P1 |
-| [ ] | P-09 | Submit offer | Fill price + message | Offer submitted | P1 |
-| [ ] | P-10 | Submit duplicate offer | Try again | Prevented | P1 |
-| [ ] | P-11 | Edit offer | Modify before accepted | Saved | P1 |
-| [ ] | P-12 | Withdraw offer | Withdraw | Removed | P1 |
+---
 
-### 🔹 C. Dashboard & Profile
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | P-13 | Edit profile | Change info | Saved | P1 |
-| [ ] | P-14 | Change services | Modify services | Updated | P1 |
-| [ ] | P-15 | Delete account with active offer | Try delete | Blocked | P1 |
-| [ ] | P-16 | View statistics | Open dashboard | Stats accurate | P2 |
+## A. User (Client) Flow
 
-## 🟢 SECTION 3 — ADMIN PANEL
-| Status | ID | Test Case | Steps | Expected Result | Priority |
-|---|---|---|---|---|---|
-| [ ] | A-01 | Admin login | Valid admin creds | Access granted | P1 |
-| [ ] | A-02 | Normal user tries admin route | Access /api/admin | 403 error | P1 |
-| [ ] | A-03 | Approve provider | Click approve | Status updated | P1 |
-| [ ] | A-04 | Block user | Block account | User locked | P1 |
-| [ ] | A-05 | View security logs | Open logs | Events recorded | P1 |
+### A.1 Registration `/ar/auth/register`
 
-## 🟢 SECTION 4 — EDGE CASES (CRITICAL)
-- [ ] 10 providers submit offers same second
-- [ ] Client deletes account after accepting offer
-- [ ] Provider deletes account mid-project
-- [ ] Two browsers editing same project
-- [ ] Refresh during payment (future)
-- [ ] Network disconnect during submit
-- [ ] Token expiration mid-session
-- [ ] Login from 2 devices simultaneously
-- [ ] Rapid multi-click on all buttons
+- [ ] **A1** — Page loads with: Name, Email, Phone, Password, Confirm Password, Terms checkbox
+- [ ] **A2** — Submit empty form → validation errors on all required fields
+- [ ] **A3** — Invalid email (`notanemail`) → "invalid email format" error
+- [ ] **A4** — Weak password (`123`) → strength indicator shows "Weak", blocked on submit
+  - Rules: min 12 chars, 1 upper, 1 lower, 1 digit, 1 special
+- [ ] **A5** — Strong password (`MyStr0ng!Pass99`) → strength shows "Strong" or "Very Strong"
+- [ ] **A6** — Mismatched confirm password → "passwords do not match" error
+- [ ] **A7** — Invalid phone (`123456`) → E.164 format error (`+XXXXXXXXXXX`)
+- [ ] **A8** — Valid phone (`+963912345678`) → no error
+- [ ] **A9** — Uncheck terms → "must accept terms" error
+- [ ] **A10** — Complete valid registration → success message, user created
+- [ ] **A11** — Duplicate email → generic error (security hardening)
+- [ ] **A12** — Rate limit: 6th registration in 5 min → 429 response
 
-## 🟢 SECTION 5 — SECURITY MANUAL TESTS
-- [ ] XSS injection in description `<script>alert(1)</script>`
-- [ ] SQL injection attempt `' OR 1=1 --`
-- [ ] ID enumeration `/api/project/1,2,3`
-- [ ] File upload malicious renamed file
-- [ ] JWT tampering
-- [ ] Rate limit abuse
-- [ ] Refresh token replay
-- [ ] Access admin without role
-- [ ] Change user ID in request payload
+### A.2 Email Verification
 
-## 🟢 SECTION 6 — UX QUALITY CHECK
-- [ ] Button clarity
-- [ ] CTA visibility
-- [ ] Arabic RTL alignment
-- [ ] Mobile spacing
-- [ ] Error message clarity
-- [ ] Loading indicators
-- [ ] Empty states design
-- [ ] First impression (5 second rule)
-- [ ] Onboarding clarity
-- [ ] Trust perception
+- [ ] **A14** — `/ar/auth/verify-email?token=VALID` → "Email verified", link to login (24h expiry)
+- [ ] **A15** — Invalid or expired token → error message
+- [ ] **A16** — Login with unverified email → 403, "Email not verified" + resend link
+- [ ] **A17** — Click resend → new verification email sent
 
-## 🟢 SECTION 7 — PRODUCTION CHECK
-- [ ] HTTPS only
-- [ ] No console errors
-- [ ] No exposed .env
-- [ ] No public test endpoints
-- [ ] Lighthouse > 85
-- [ ] SEO meta tags correct
-- [ ] OpenGraph preview correct
-- [ ] Sitemap valid
+### A.3 Login `/ar/auth/login`
 
+- [ ] **A18** — Page loads with: Email, Password, Remember Me checkbox
+- [ ] **A19** — Submit empty → validation errors
+- [ ] **A20** — Wrong credentials → "Invalid credentials" + remaining attempts shown
+- [ ] **A21** — Valid login → redirect to `/ar/dashboard`
+- [ ] **A22** — Remember Me checked → refresh token 30-day expiry
+- [ ] **A23** — 5 wrong passwords → account locked 30 min (HTTP 423)
+- [ ] **A24** — Correct password while locked → still locked, shows remaining time
+- [ ] **A28** — Social Login: Google button visible and functional
+
+### A.4 Forgot / Reset Password
+
+- [ ] **A29** — `/ar/auth/forgot-password` → form with email field
+- [ ] **A30** — Submit registered email → "Check Your Email" message
+- [ ] **A31** — `/ar/auth/reset-password?token=VALID` → password fields visible
+- [ ] **A32** — Weak reset password (`abc`) → validation errors
+- [ ] **A33** — Valid reset → "Password Reset Successful!" + login link
+
+### A.5 User Dashboard `/ar/dashboard`
+
+- [ ] **A36** — Dashboard shows: Active Requests, Offers, Messages stats
+- [ ] **A37** — 4 menu cards: Profile, Settings, Requests, Messages
+- [ ] **A38** — Unauthenticated → redirect to `/ar/auth/login`
+
+### A.6 Profile Management `/ar/dashboard/profile`
+
+- [ ] **A39** — Profile form + Password change form
+- [ ] **A40** — Email field is read-only, shows verified badge
+- [ ] **A41** — Update name → success toast
+- [ ] **A43** — Upload avatar (JPEG/PNG/WebP) → displays correctly
+- [ ] **A44** — Delete avatar → removed
+- [ ] **A45** — Change password (current + new + confirm) → success
+
+### A.7 Notification Settings `/ar/dashboard/settings`
+
+- [ ] **A46** — Page shows notification settings + delete account
+- [ ] **A47** — Toggle "Email — New Offers" off → saves via API
+- [ ] **A49** — All 10 toggles save independently
+
+### A.8 Delete Account
+
+- [ ] **A50** — Warning phase: 4 warning points + "Continue" button
+- [ ] **A51** — Confirmation: password, reason, type "DELETE"
+- [ ] **A54** — Wrong text (e.g. `delete`) → error (must be `DELETE`)
+- [ ] **A55** — Correct password + "DELETE" → success, redirect to home
+
+### A.9 Service Requests — Progressive SPA Wizard
+
+- [ ] **A56** — `/ar/requests/new` loads as single-page progressive form
+- [ ] **A57** — Sticky progress bar at top updates dynamically
+- [ ] **A59** — Syria auto-selected; cities load from API
+- [ ] **A61** — Validation errors scroll panel to first field
+- [ ] **A64** — Category/Subcategory dependency works (loads from API)
+- [ ] **A69** — "Allow remote / online service" checkbox works
+- [ ] **A71** — Budget min > max → inline error
+- [ ] **A76** — Drag & drop images → upload zone highlights
+- [ ] **A80** — Tags: type + Enter added as pills; max 10
+- [ ] **A82** — Visibility radio cards: PUBLIC / REGISTERED / VERIFIED
+- [ ] **A89** — "Review" button expands/collapses summary panel
+- [ ] **A93** — Successful submit → Success screen with auto-redirect
+
+### A.10 Guest Request Flow `/ar/requests/start`
+
+- [ ] **A99** — Page loads without login
+- [ ] **A100** — Same SPA wizard + "Account" section
+- [ ] **A102** — Guest user + request created in single transaction
+- [ ] **A105** — Verification email sent with completion link
+
+### A.12 Messaging `/ar/dashboard/messages`
+
+- [ ] **A110** — Conversation list + message thread
+- [ ] **A112** — Send message → appears in thread immediately
+- [ ] **A113** — Empty message blocked
+
+---
+
+## B. Company (Provider) Flow
+
+### B.1 Company Join Flow `/ar/company/join`
+
+- [ ] **B1** — Page loads with 2-step wizard
+- [ ] **B2** — Step 1: Company Details (Name/Phone/Location) validation
+- [ ] **B3** — Step 2: Admin Account (Email/Password) validation
+- [ ] **B4** — Valid submit → User created with role COMPANY; Company status PENDING
+- [ ] **B5** — Rate limiting and duplicate email checks
+- [ ] **B6** — RTL layout mirrors correctly in Arabic
+
+### B.2 Document Upload
+
+- [ ] **B17** — Upload form with LICENSE, ID_CARD, COMMERCIAL_REGISTER types
+- [ ] **B18** — Upload PDF/Image → status: PENDING
+- [ ] **B20** — Multiple documents listed with individual statuses
+
+### B.3 Company Dashboard
+
+- [ ] **B21** — Stats: Projects, Active, Completed, Offers
+- [ ] **B22** — Rating, reviews, and membership status visible
+
+### B.4 Browse Requests `/ar/company/dashboard/browse`
+
+- [ ] **B25** — List of active service requests (no pending projects)
+- [ ] **B26** — Filter by category and city
+- [ ] **B29** — Click request → detail with "Submit Offer" button
+
+### B.5 Submit Offers
+
+- [ ] **B30** — Form: price, currency, estimated days, description, message
+- [ ] **B31** — Offer status: PENDING after submission
+- [ ] **B33** — Offer history with statuses: ACCEPTED / REJECTED / WITHDRAWN
+- [ ] **B34** — Withdraw pending offer → status WITHDRAWN
+
+---
+
+## C. Project Management
+
+### C.1 Lifecycle
+
+- [ ] **C1** — Accept offer → project auto-created
+- [ ] **C4** — Detail page with status, progress %, milestones, messages
+
+### C.2 Status Transitions
+- [ ] **C5** — PENDING → ACTIVE
+- [ ] **C8** — ACTIVE → COMPLETED
+- [ ] **C9** — ACTIVE → CANCELLED
+- [ ] **C10** — Terminal state guards verify (COMPLETED/CANCELLED are final)
+
+### C.3 Milestones
+- [ ] **C12** — Add milestone (title, description, dueDate)
+- [ ] **C14** — Mark complete → project progress % updates
+
+### C.4 Project Files
+- [ ] **C16** — Upload files (name, size, mimeType saved)
+- [ ] **C18** — Download works correctly
+
+---
+
+## D. Company Directory (Yellow Pages) `/ar/companies`
+
+- [ ] **D1** — Search, filters, company cards, pagination
+- [ ] **D2** — Text search against name/description
+- [ ] **D3** — Filter by Country and City (IDs and Slugs supported)
+- [ ] **D6** — "Verified Only" toggle works
+- [ ] **D13** — Localization: Country/City names follow current locale
+
+---
+
+## E. Admin Panel `/ar/admin`
+
+- [ ] **E1** — Admin access for `admin@secure-marketplace.com`
+- [ ] **E6** — System stats (Users, Companies, Requests)
+- [ ] **E12** — User management (edit roles/status)
+- [ ] **E16** — Company management (verify/reject)
+- [ ] **E34** — Category management (icons/names/slugs)
+
+---
+
+## F. Security & Authorization
+
+- [ ] **F1** — HttpOnly session cookies
+- [ ] **F7** — Auth middleware protects `/dashboard`, `/company`, `/admin`
+- [ ] **F26** — Rate limiting on all auth endpoints active
+
+---
+
+## G. i18n / RTL / Accessibility
+
+- [ ] **G1** — Arabic as default with correct RTL mirroring
+- [ ] **G2** — Header/Footer/Nav localize correctly in English
+- [ ] **G19** — Dark mode persistent across sessions
+
+---
+
+## H. Regression Checks
+
+- [ ] **H1** — Homepage `AvailableProjects` loads correctly
+- [ ] **H3** — Critical path: Register -> Verify -> Login -> Submit Request -> Accept Offer -> Complete Project
+
+---
+
+## I. Contact Page `/ar/contact`
+
+- [ ] **I1** — Glassmorphism design renders
+- [ ] **I5** — Form submission creates toast
+- [ ] **I9** — Icons and arrows mirror correctly in RTL
+
+---
+
+## ✅ Pass Criteria
+
+1. All 419 tasks pass or are marked N/A with justification.
+2. No raw translation keys (e.g., `dashboard.errors.generic`) visible.
+3. State machine blocks all invalid transitions with 400/409 errors.
+4. Notifications (in-app + bell) trigger for all key events.

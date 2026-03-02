@@ -54,8 +54,12 @@ export default function CompanyDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (user && user.role !== 'COMPANY') {
+      router.push(`/${locale}/dashboard`);
+      return;
+    }
     fetchDashboardData();
-  }, []);
+  }, [user]);
 
   const fetchDashboardData = async () => {
     try {

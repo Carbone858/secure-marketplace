@@ -6,6 +6,9 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { MapPin, Briefcase, Clock, DollarSign, Calendar, User, Building2, CheckCircle, AlertCircle, Edit, Trash2 } from 'lucide-react';
 import { SendOfferButton } from '@/components/requests/SendOfferButton';
+import { RequestOwnerActions } from '@/components/requests/RequestOwnerActions';
+import { OfferActions } from '@/components/requests/OfferActions';
+import { BackButton } from '@/components/ui/BackButton';
 
 interface RequestDetailPageProps {
   params: { locale: string; id: string };
@@ -29,8 +32,9 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'requests' });
 
+  // Fetch the request — no isActive filter here; we check permissions below
   const request = await prisma.serviceRequest.findUnique({
-    where: { id, isActive: true },
+    where: { id },
     include: {
       user: {
         select: {
@@ -91,6 +95,15 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
           offers: true,
         },
       },
+      projects: {
+        include: {
+          company: {
+            select: {
+              userId: true
+            }
+          }
+        }
+      },
     },
   });
 
@@ -98,8 +111,47 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
     redirect(`/${locale}/requests`);
   }
 
+  // Extract the primary project if it exists
+  const project = (request as any).projects?.[0] || null;
+
   const isOwner = session.isAuthenticated && session.user?.id === request.userId;
-  const canSubmitOffer = session.isAuthenticated && !isOwner;
+
+  // Visibility gate:
+  // - Owner can always see their own project (even PENDING/CANCELLED)
+  // - Admins can see everything
+  // - Everyone else requires isActive=true
+  const isAdmin = session.isAuthenticated &&
+    (session.user?.role === 'ADMIN' || session.user?.role === 'SUPER_ADMIN');
+
+  // Check if the current user is a company that has already submitted an offer
+  let userCompanyId: string | null = null;
+  let hasAlreadyOffered = false;
+  if (session.isAuthenticated && session.user?.role === 'COMPANY') {
+    const company = await prisma.company.findUnique({
+      where: { userId: session.user.id },
+      select: { id: true }
+    });
+    if (company) {
+      userCompanyId = company.id;
+      hasAlreadyOffered = request.offers.some(o => o.company.id === company.id);
+    }
+  }
+
+  const canSeeRequest = request.isActive || isOwner || isAdmin || hasAlreadyOffered;
+
+  if (!canSeeRequest) {
+    redirect(`/${locale}/requests`);
+  }
+
+  // Offer gating logic: 
+  // 1. Not the owner
+  // 2. Is a company
+  // 3. Haven't offered yet (non-withdrawn)
+  // 4. Request status is ACTIVE or PENDING/MATCHING (not yet ACCEPTED/COMPLETED)
+  const canSendOffer = !isOwner &&
+    session.user?.role === 'COMPANY' &&
+    !hasAlreadyOffered &&
+    ['ACTIVE', 'PENDING', 'MATCHING', 'REVIEWING_OFFERS'].includes(request.status);
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
@@ -118,12 +170,22 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
     <div className="min-h-screen bg-muted/50 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4">
         {/* Back Link */}
-        <Link
-          href={`/${locale}/requests`}
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6"
-        >
-          ← {t('detail.backToList')}
-        </Link>
+        <BackButton fallbackHref={`/${locale}/requests`} label={t('detail.backToList')} />
+
+        {/* Pending Approval Banner — visible only to owner while project awaits admin review */}
+        {isOwner && request.status === 'PENDING' && (
+          <div className={`mb-4 flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800`}>
+            <AlertCircle className="w-5 h-5 flex-shrink-0 text-amber-500" />
+            <div>
+              <p className="font-medium text-sm">
+                {isRTL ? 'طلبك قيد المراجعة من قِبل الإدارة' : 'Your project is pending admin approval'}
+              </p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                {isRTL ? 'سيصبح مرئياً للشركات بعد الموافقة عليه' : 'It will become visible to companies after it is approved.'}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="bg-card rounded-xl shadow-lg overflow-hidden">
@@ -142,19 +204,20 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
                 <h1 className="text-2xl font-bold text-foreground">{request.title}</h1>
               </div>
               <div className="flex items-center gap-2">
-                {!isOwner && <SendOfferButton requestId={id} variant="page" />}
-                {isOwner && (
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/${locale}/requests/${id}/edit`}
-                      className="p-2 text-muted-foreground hover:bg-muted rounded-lg"
-                    >
-                      <Edit className="w-5 h-5" />
-                    </Link>
-                    <button className="p-2 text-destructive hover:bg-destructive/10 rounded-lg">
-                      <Trash2 className="w-5 h-5" />
-                    </button>
+                {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
+                {hasAlreadyOffered && request.status === 'ACCEPTED' && (
+                  <div className="flex items-center gap-2 px-4 py-2 bg-success/10 text-success rounded-lg border border-success/20">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="font-medium">{isRTL ? 'تم قبول عرضك' : 'Offer Accepted'}</span>
                   </div>
+                )}
+                {isOwner && (
+                  <RequestOwnerActions
+                    requestId={id}
+                    deleteLabel={isRTL ? 'حذف' : 'Delete'}
+                    editHref={`/${locale}/requests/${id}/edit`}
+                    editLabel={isRTL ? 'تعديل' : 'Edit'}
+                  />
                 )}
               </div>
             </div>
@@ -268,7 +331,7 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
               <h2 className="text-xl font-semibold text-foreground">
                 {t('detail.offers')} ({request._count.offers})
               </h2>
-              {!isOwner && <SendOfferButton requestId={id} variant="page" />}
+              {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
             </div>
 
             {request.offers.length === 0 ? (
@@ -319,14 +382,12 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
                       <p className="mt-3 text-muted-foreground">{offer.description}</p>
                     )}
                     {isOwner && offer.status === 'PENDING' && (
-                      <div className="mt-4 flex gap-3">
-                        <button className="px-4 py-2 bg-success text-white rounded-lg hover:bg-success/90">
-                          {t('detail.accept')}
-                        </button>
-                        <button className="px-4 py-2 border border-input rounded-lg hover:bg-muted/50">
-                          {t('detail.reject')}
-                        </button>
-                      </div>
+                      <OfferActions
+                        offerId={offer.id}
+                        requestId={id}
+                        acceptLabel={isRTL ? 'قبول العرض' : 'Accept Offer'}
+                        rejectLabel={isRTL ? 'رفض العرض' : 'Reject Offer'}
+                      />
                     )}
                   </div>
                 ))}

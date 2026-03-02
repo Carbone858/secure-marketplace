@@ -9,6 +9,11 @@ import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { sendRejectionNotification } from '@/lib/requests/approval-notifications';
 import { z } from 'zod';
+import {
+    assertValidRequestTransition,
+    InvalidTransitionError,
+    type RequestStatus,
+} from '@/lib/state-machine';
 
 const rejectSchema = z.object({
     reason: z.string().max(1000).optional(),
@@ -54,6 +59,16 @@ export async function PUT(
             return NextResponse.json({ error: 'Request not found' }, { status: 404 });
         }
 
+        // Guard: only PENDING can be rejected by admin (CANCELLED = terminal)
+        try {
+            assertValidRequestTransition(serviceRequest.status as RequestStatus, 'CANCELLED');
+        } catch (err) {
+            if (err instanceof InvalidTransitionError) {
+                return NextResponse.json({ error: err.message }, { status: 409 });
+            }
+            throw err;
+        }
+
         // Reject
         const updated = await prisma.serviceRequest.update({
             where: { id },
@@ -79,6 +94,19 @@ export async function PUT(
                 requestTitle: serviceRequest.title,
                 locale,
                 reason,
+            }).catch(() => { });
+
+            // In-app notification
+            prisma.notification.create({
+                data: {
+                    userId: serviceRequest.user.id,
+                    type: 'SYSTEM',
+                    title: locale === 'ar' ? 'لم تتم الموافقة على طلبك' : 'Project Request Not Approved',
+                    message: locale === 'ar'
+                        ? `لم تتم الموافقة على طلبك "${serviceRequest.title}".${reason ? ' السبب: ' + reason : ''}`
+                        : `Your project "${serviceRequest.title}" was not approved.${reason ? ' Reason: ' + reason : ''}`,
+                    data: { requestId: id },
+                },
             }).catch(() => { });
         }
 

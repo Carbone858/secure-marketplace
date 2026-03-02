@@ -1007,6 +1007,10 @@
         "title": "Offer Submitted!",
         "message": "Your offer has been submitted successfully.",
         "viewRequest": "View Request"
+      },
+      "common": {
+        "back": "Back",
+        "cancel": "Cancel"
       }
     }
   },

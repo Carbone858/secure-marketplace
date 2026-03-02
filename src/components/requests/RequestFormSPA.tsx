@@ -517,6 +517,7 @@ export function RequestFormSPA({
     try {
       const requestPayload = {
         ...formData,
+        locale,                  // Bug 2: explicitly include locale so API tags lang correctly
         budgetMin: formData.budgetMin ? parseFloat(formData.budgetMin) : undefined,
         budgetMax: formData.budgetMax ? parseFloat(formData.budgetMax) : undefined,
         images,

@@ -3,6 +3,12 @@ import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { updateRequestSchema } from '@/lib/validations/request';
 import { logApiError } from '@/lib/monitoring/apiErrorLogger';
+import {
+  assertRequestEditable,
+  assertRequestCancellable,
+  InvalidTransitionError,
+  type RequestStatus,
+} from '@/lib/state-machine';
 
 interface RouteParams {
   params: { id: string };
@@ -86,10 +92,48 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             offers: true,
           },
         },
+        projects: {
+          include: {
+            company: {
+              select: {
+                userId: true
+              }
+            }
+          }
+        },
       },
     });
 
-    if (!serviceRequest || !serviceRequest.isActive) {
+    if (!serviceRequest) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'request.notFound',
+          message: 'Request not found.',
+        },
+        { status: 404 }
+      );
+    }
+
+    // Extract the primary project if it exists
+    const project = (serviceRequest as any).projects?.[0] || null;
+
+    const isOwner = session.isAuthenticated && session.user?.id === serviceRequest.userId;
+    const isAdmin = session.isAuthenticated && (session.user?.role === 'ADMIN' || session.user?.role === 'SUPER_ADMIN');
+
+    // Check if the current user is a company that has submitted an offer
+    let hasOffer = false;
+    if (session.isAuthenticated && session.user?.role === 'COMPANY') {
+      const company = await prisma.company.findUnique({
+        where: { userId: session.user.id },
+        select: { id: true }
+      });
+      if (company) {
+        hasOffer = serviceRequest.offers.some(o => o.company.id === company.id);
+      }
+    }
+
+    if (!serviceRequest.isActive && !isOwner && !isAdmin && !hasOffer) {
       return NextResponse.json(
         {
           success: false,
@@ -134,7 +178,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json(
       {
         success: true,
-        data: { request: serviceRequest },
+        data: {
+          request: serviceRequest,
+          project: project
+        },
       },
       { status: 200 }
     );
@@ -191,11 +238,17 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    if (!['DRAFT', 'PENDING', 'ACTIVE'].includes(serviceRequest.status)) {
-      return NextResponse.json(
-        { success: false, error: 'request.notEditable', message: 'This request cannot be edited at this stage.' },
-        { status: 400 }
-      );
+    // Guard: only editable states (DRAFT, PENDING, ACTIVE)
+    try {
+      assertRequestEditable(serviceRequest.status as RequestStatus);
+    } catch (err) {
+      if (err instanceof InvalidTransitionError) {
+        return NextResponse.json(
+          { success: false, error: err.errorCode, message: 'This request cannot be edited at this stage.' },
+          { status: 400 }
+        );
+      }
+      throw err;
     }
 
     body = await request.json();
@@ -341,11 +394,30 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Soft delete - set isActive to false
-    await prisma.serviceRequest.update({
-      where: { id },
-      data: { isActive: false, status: 'CANCELLED' },
-    });
+    // Guard: can we cancel from current state?
+    try {
+      assertRequestCancellable(serviceRequest.status as RequestStatus);
+    } catch (err) {
+      if (err instanceof InvalidTransitionError) {
+        return NextResponse.json(
+          { success: false, error: err.errorCode, message: `Cannot cancel a request that is '${serviceRequest.status}'.` },
+          { status: 400 }
+        );
+      }
+      throw err;
+    }
+
+    // Atomically: withdraw all PENDING offers + soft-delete the request
+    await prisma.$transaction([
+      prisma.offer.updateMany({
+        where: { requestId: id, status: 'PENDING' },
+        data: { status: 'WITHDRAWN' },
+      }),
+      prisma.serviceRequest.update({
+        where: { id },
+        data: { isActive: false, status: 'CANCELLED' },
+      }),
+    ]);
 
     return NextResponse.json(
       {

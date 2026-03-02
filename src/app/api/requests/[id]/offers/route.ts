@@ -149,16 +149,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if request is open for offers
-    if (!['PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS'].includes(serviceRequest.status)) {
+    if (!['ACTIVE', 'REVIEWING_OFFERS'].includes(serviceRequest.status)) {
       return NextResponse.json(
         {
           success: false,
           error: 'request.notOpen',
-          message: 'This request is not accepting offers.',
+          message: 'This request is not currently accepting offers.',
         },
         { status: 400 }
       );
     }
+
 
     // Check if company already submitted an offer
     const existingOffer = await prisma.offer.findFirst({
@@ -246,7 +247,16 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       });
     }
 
-    // TODO: Notify request owner of new offer
+    // Notify request owner of new offer (Bug 8)
+    prisma.notification.create({
+      data: {
+        userId: serviceRequest.userId,
+        type: 'OFFER',
+        title: 'New Offer Received',
+        message: `${company.name} submitted an offer on your project "${serviceRequest.title}".`,
+        data: { offerId: offer.id, requestId: id },
+      },
+    }).catch(() => { }); // non-blocking — don't fail the request if notification fails
 
     return NextResponse.json(
       {

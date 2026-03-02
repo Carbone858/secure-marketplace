@@ -67,7 +67,20 @@ export default function MessagesPage() {
     }
 
     if (user) {
-      fetchConversations();
+      const searchParams = new URLSearchParams(window.location.search);
+      const withUserId = searchParams.get('with');
+
+      const initialize = async () => {
+        await fetchConversations();
+        if (withUserId) {
+          setSelectedConversation(withUserId);
+          // If conversation with this user doesn't exist in the list yet, 
+          // fetch it specifically to ensure it shows up in Chat Area
+          fetchMessages(withUserId);
+        }
+      };
+
+      initialize();
     }
   }, [user, authLoading, locale, router]);
 
@@ -161,9 +174,8 @@ export default function MessagesPage() {
           <div className="flex h-full">
             {/* Conversations List */}
             <div
-              className={`w-full md:w-80 border-r flex flex-col ${
-                selectedConversation ? 'hidden md:flex' : 'flex'
-              }`}
+              className={`w-full md:w-80 border-r flex flex-col ${selectedConversation ? 'hidden md:flex' : 'flex'
+                }`}
             >
               <div className="p-4 border-b">
                 <div className="relative">
@@ -189,11 +201,10 @@ export default function MessagesPage() {
                       <button
                         key={conversation.partner.id}
                         onClick={() => setSelectedConversation(conversation.partner.id)}
-                        className={`w-full p-4 flex items-center gap-3 hover:bg-muted transition-colors text-start ${
-                          selectedConversation === conversation.partner.id
+                        className={`w-full p-4 flex items-center gap-3 hover:bg-muted transition-colors text-start ${selectedConversation === conversation.partner.id
                             ? 'bg-muted'
                             : ''
-                        }`}
+                          }`}
                       >
                         <Avatar>
                           <AvatarImage src={conversation.partner.image || undefined} />
@@ -228,9 +239,8 @@ export default function MessagesPage() {
 
             {/* Chat Area */}
             <div
-              className={`flex-1 flex flex-col ${
-                selectedConversation ? 'flex' : 'hidden md:flex'
-              }`}
+              className={`flex-1 flex flex-col ${selectedConversation ? 'flex' : 'hidden md:flex'
+                }`}
             >
               {selectedConversation && selectedPartner ? (
                 <>
@@ -261,26 +271,23 @@ export default function MessagesPage() {
                       {messages.map((message) => (
                         <div
                           key={message.id}
-                          className={`flex ${
-                            message.senderId === user?.id
+                          className={`flex ${message.senderId === user?.id
                               ? 'justify-end'
                               : 'justify-start'
-                          }`}
+                            }`}
                         >
                           <div
-                            className={`max-w-[70%] rounded-lg px-4 py-2 ${
-                              message.senderId === user?.id
+                            className={`max-w-[70%] rounded-lg px-4 py-2 ${message.senderId === user?.id
                                 ? 'bg-primary text-white'
                                 : 'bg-muted'
-                            }`}
+                              }`}
                           >
                             <p>{message.content}</p>
                             <p
-                              className={`text-xs mt-1 ${
-                                message.senderId === user?.id
+                              className={`text-xs mt-1 ${message.senderId === user?.id
                                   ? 'text-white/70'
                                   : 'text-muted-foreground'
-                              }`}
+                                }`}
                             >
                               {new Date(message.createdAt).toLocaleTimeString([], {
                                 hour: '2-digit',

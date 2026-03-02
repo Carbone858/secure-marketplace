@@ -115,7 +115,7 @@ export default function RequestsClient({ categories, countries, allCities, defau
     // Filters
     const [search, setSearch] = useState('');
     const [category, setCategory] = useState('');
-    const [country, setCountry] = useState(defaultCountryId ?? '');
+    const [country, setCountry] = useState('');  // default to "All Countries" — don't pre-filter by country
     const [city, setCity] = useState('');
 
     // Cities scoped to selected country

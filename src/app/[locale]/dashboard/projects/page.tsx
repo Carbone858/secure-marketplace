@@ -14,22 +14,44 @@ export default function UserProjectsPage() {
   const t = useTranslations('dashboard_pages.projects');
   const [projects, setProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCompleting, setIsCompleting] = useState<string | null>(null);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch('/api/projects');
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setProjects(data.projects || []);
+    } catch {
+      toast.error(t('toasts.loadFailed'));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await fetch('/api/projects');
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setProjects(data.projects || []);
-      } catch {
-        toast.error(t('toasts.loadFailed'));
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchProjects();
   }, []);
+
+  const handleComplete = async (requestId: string) => {
+    if (!requestId) return;
+    setIsCompleting(requestId);
+    try {
+      const res = await fetch(`/api/requests/${requestId}/complete`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to complete project');
+      toast.success(data.message || 'Project marked as completed');
+      fetchProjects();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to complete project');
+    } finally {
+      setIsCompleting(null);
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -42,8 +64,10 @@ export default function UserProjectsPage() {
     return <StatusBadge variant={variants[status] || 'neutral'}>{status.replace('_', ' ')}</StatusBadge>;
   };
 
+  const isRTL = locale === 'ar';
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6" dir={isRTL ? 'rtl' : 'ltr'}>
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <Briefcase className="h-8 w-8" />
@@ -86,12 +110,28 @@ export default function UserProjectsPage() {
                 {project.description && (
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-3">{project.description}</p>
                 )}
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <MessageSquare className="h-4 w-4" />
-                    {project._count?.messages || 0} {t('messages')}
-                  </span>
-                  <span>{t('created')}{new Date(project.createdAt).toLocaleDateString()}</span>
+                <div className="flex gap-2 mt-4">
+                  <Link href={`/${locale}/dashboard/messages?with=${project.company.userId}`}>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <MessageSquare className="h-4 w-4" />
+                      {isRTL ? 'تواصل مع الشركة' : 'Message Company'}
+                    </Button>
+                  </Link>
+
+                  {/* Completion Button */}
+                  {project.status === 'ACTIVE' && project.request?.id && (
+                    <Button
+                      variant={project.completedByUser ? "secondary" : "default"}
+                      size="sm"
+                      onClick={() => handleComplete(project.request.id)}
+                      disabled={project.completedByUser || isCompleting === project.request.id}
+                    >
+                      {project.completedByUser
+                        ? (isRTL ? 'في انتظار الشركة' : 'Waiting on Company')
+                        : (isRTL ? 'تحديد كمكتمل' : 'Mark Completed')
+                      }
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

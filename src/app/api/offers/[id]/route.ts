@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { updateOfferSchema } from '@/lib/validations/request';
+import {
+  assertValidOfferTransition,
+  assertValidRequestTransition,
+  InvalidTransitionError,
+  type OfferStatus,
+  type RequestStatus,
+} from '@/lib/state-machine';
 
 interface RouteParams {
   params: { id: string };
@@ -148,16 +155,17 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         );
       }
 
-      // Prevent accepting/rejecting already finalized offers
-      if (offer.status !== 'PENDING') {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'offer.alreadyProcessed',
-            message: `This offer has already been ${offer.status.toLowerCase()}.`,
-          },
-          { status: 400 }
-        );
+      // Guard: validate the transition is legal
+      try {
+        assertValidOfferTransition(offer.status as OfferStatus, body.status as OfferStatus);
+      } catch (err) {
+        if (err instanceof InvalidTransitionError) {
+          return NextResponse.json(
+            { success: false, error: err.errorCode, message: err.message },
+            { status: 400 }
+          );
+        }
+        throw err;
       }
 
       // Use a transaction to prevent race conditions
@@ -171,6 +179,16 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
           if (!freshOffer || freshOffer.status !== 'PENDING') {
             throw new Error('OFFER_ALREADY_PROCESSED');
+          }
+
+          // Enforce strictly that the project can transition to ACCEPTED
+          try {
+            assertValidRequestTransition(freshOffer.request.status as RequestStatus, 'ACCEPTED');
+          } catch (err) {
+            if (err instanceof InvalidTransitionError) {
+              throw new Error(`INVALID_REQUEST_TRANSITION:${err.errorCode}:${err.message}`);
+            }
+            throw err;
           }
 
           // Update the accepted offer
@@ -205,7 +223,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
               requestId: freshOffer.requestId,
               budget: freshOffer.price,
               currency: freshOffer.currency,
-              status: 'PENDING',
+              status: 'ACTIVE',
             },
           });
 
@@ -233,11 +251,22 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         );
       }
 
-      // Handle rejection (simpler, no transaction needed)
+      // Notify company on rejection
       const updatedOffer = await prisma.offer.update({
         where: { id },
         data: { status: 'REJECTED' },
       });
+
+      // In-app notification for rejected company (Bug 14)
+      await prisma.notification.create({
+        data: {
+          userId: offer.company.userId,
+          type: 'OFFER',
+          title: 'Offer Not Accepted',
+          message: `Your offer for "${offer.request.title}" was not accepted by the client.`,
+          data: { offerId: updatedOffer.id, requestId: offer.requestId },
+        },
+      }).catch(() => { }); // non-blocking
 
       return NextResponse.json(
         {
@@ -309,6 +338,17 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
           message: 'This offer has already been processed by another action.',
         },
         { status: 409 }
+      );
+    }
+    if (error?.message?.startsWith('INVALID_REQUEST_TRANSITION:')) {
+      const parts = error.message.split(':');
+      return NextResponse.json(
+        {
+          success: false,
+          error: parts[1] || 'invalid.transition',
+          message: parts[2] || 'This request cannot accept offers at this stage.',
+        },
+        { status: 400 }
       );
     }
     console.error('Update offer error:', error);
