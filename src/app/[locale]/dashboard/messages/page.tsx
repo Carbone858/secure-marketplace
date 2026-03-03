@@ -96,7 +96,10 @@ export default function MessagesPage() {
 
   const fetchConversations = async () => {
     try {
-      const response = await fetch('/api/messages');
+      const searchParams = new URLSearchParams(window.location.search);
+      const withUserId = searchParams.get('with');
+      const url = withUserId ? `/api/messages?ensure=${withUserId}` : '/api/messages';
+      const response = await fetch(url);
       if (!response.ok) throw new Error('Failed to fetch conversations');
       const data = await response.json();
       setConversations(data.conversations);
@@ -202,8 +205,8 @@ export default function MessagesPage() {
                         key={conversation.partner.id}
                         onClick={() => setSelectedConversation(conversation.partner.id)}
                         className={`w-full p-4 flex items-center gap-3 hover:bg-muted transition-colors text-start ${selectedConversation === conversation.partner.id
-                            ? 'bg-muted'
-                            : ''
+                          ? 'bg-muted'
+                          : ''
                           }`}
                       >
                         <Avatar>
@@ -272,21 +275,21 @@ export default function MessagesPage() {
                         <div
                           key={message.id}
                           className={`flex ${message.senderId === user?.id
-                              ? 'justify-end'
-                              : 'justify-start'
+                            ? 'justify-end'
+                            : 'justify-start'
                             }`}
                         >
                           <div
                             className={`max-w-[70%] rounded-lg px-4 py-2 ${message.senderId === user?.id
-                                ? 'bg-primary text-white'
-                                : 'bg-muted'
+                              ? 'bg-primary text-white'
+                              : 'bg-muted'
                               }`}
                           >
                             <p>{message.content}</p>
                             <p
                               className={`text-xs mt-1 ${message.senderId === user?.id
-                                  ? 'text-white/70'
-                                  : 'text-muted-foreground'
+                                ? 'text-white/70'
+                                : 'text-muted-foreground'
                                 }`}
                             >
                               {new Date(message.createdAt).toLocaleTimeString([], {

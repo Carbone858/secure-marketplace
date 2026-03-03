@@ -1502,13 +1502,13 @@
     },
     "projects": {
       "title": "My Projects",
-      "subtitle": "Track your active and completed projects",
-      "noProjects": "No projects yet",
-      "noProjectsDescription": "Projects are created when you accept an offer on your request",
-      "createRequest": "Create a Request",
-      "company": "Company: ",
+      "subtitle": "Track your ongoing service projects",
+      "noProjects": "No Projects Found",
+      "noProjectsDescription": "You don't have any active projects yet.",
+      "createRequest": "Create New Request",
+      "company": "Provider: ",
       "unknown": "Unknown",
-      "messages": "messages",
+      "messages": "Messages",
       "created": "Created: ",
       "toasts": {
         "loadFailed": "Failed to load projects"
@@ -1656,7 +1656,8 @@
       "MATCHING": "Matching",
       "REVIEWING_OFFERS": "Reviewing Offers",
       "OPEN": "Open"
-    }
+    },
+    "messagesShortcut": "Messages"
   },
   "companies": {
     "title": "Company Directory",

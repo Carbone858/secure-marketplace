@@ -101,6 +101,21 @@ export async function GET(request: NextRequest) {
       }
     });
 
+    const ensureUserId = searchParams.get('ensure');
+    if (ensureUserId && !conversationMap.has(ensureUserId)) {
+      const ensureUser = await prisma.user.findUnique({
+        where: { id: ensureUserId },
+        select: { id: true, name: true, avatar: true },
+      });
+      if (ensureUser) {
+        conversationMap.set(ensureUserId, {
+          partner: ensureUser,
+          lastMessage: { content: '', senderId: '', recipientId: '', createdAt: new Date() },
+          unreadCount: 0,
+        });
+      }
+    }
+
     return NextResponse.json({
       conversations: Array.from(conversationMap.values()),
     });
@@ -123,6 +138,11 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validatedData = messageSchema.parse(body);
+
+    const recipient = await prisma.user.findUnique({
+      where: { id: validatedData.recipientId },
+    });
+
 
     if (!recipient) {
       return NextResponse.json(

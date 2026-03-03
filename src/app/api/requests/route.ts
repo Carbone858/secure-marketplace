@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     // Status filter
     if (status) {
       where.status = status;
-    } else {
+    } else if (userOnly !== 'true') {
       // Default: only show ACTIVE (approved) requests publicly.
       // PENDING requests are hidden until an admin approves them.
       where.status = { in: ['ACTIVE', 'MATCHING', 'REVIEWING_OFFERS'] };

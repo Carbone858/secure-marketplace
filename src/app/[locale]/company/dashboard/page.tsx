@@ -14,6 +14,7 @@ import {
   Clock,
   DollarSign,
   Crown,
+  MessageSquare,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -115,6 +116,10 @@ export default function CompanyDashboardPage() {
               {t('upgradePlan')}
             </Button>
           )}
+          <Button variant="outline" onClick={() => router.push(`/${locale}/dashboard/messages`)}>
+            <MessageSquare className="h-4 w-4 me-2" />
+            {t('messagesShortcut') || 'Messages'}
+          </Button>
           <Button onClick={() => router.push(`/${locale}/company/dashboard/profile`)}>
             {t('editProfile')}
           </Button>
