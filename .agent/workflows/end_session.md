@@ -16,18 +16,24 @@ This workflow is triggered when the user says "we are finish for today save ever
    git status
    ```
 
-3. Git Add and Commit.
+3. Git Add/Commit and Push (Project).
    Stage all changes and commit them with a timestamp.
    ```powershell
    & "C:\Program Files\Git\cmd\git.exe" add .
    $date = Get-Date -Format "yyyy-MM-dd HH:mm"
    & "C:\Program Files\Git\cmd\git.exe" commit -m "End of session - Work saved on $date"
+   & "C:\Program Files\Git\cmd\git.exe" push
    ```
 
-4. Git Push.
-   Push changes to the remote repository.
+4. Git Add/Commit and Push (Brain).
+   Stage conversation history and push to the brain repository.
    ```powershell
+   cd "$HOME\.gemini\antigravity"
+   & "C:\Program Files\Git\cmd\git.exe" add .
+   $date = Get-Date -Format "yyyy-MM-dd HH:mm"
+   & "C:\Program Files\Git\cmd\git.exe" commit -m "Brain Sync - $date"
    & "C:\Program Files\Git\cmd\git.exe" push
+   cd "$PSScriptRoot"
    ```
 
 5. Session Logging.
