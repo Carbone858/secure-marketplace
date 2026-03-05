@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.vercel/
+*.log
+*.tmp
+*.bak
+dist/
+build/
+package-lock.json
+*.tsbuildinfo
