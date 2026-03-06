@@ -120,7 +120,19 @@ export async function PUT(
         }
 
         // Single-sided initiation
+        const targetUserId = isOwner ? project.company.userId : project.userId;
         const waitingOn = isOwner ? 'the company' : 'the client';
+
+        await prisma.notification.create({
+            data: {
+                userId: targetUserId,
+                type: 'SYSTEM',
+                title: 'Project Completion Initiated',
+                message: `The ${isOwner ? 'client' : 'company'} has marked the project "${project.title}" as completed. Please confirm to finalize.`,
+                data: { projectId: project.id, requestId: id, action: 'CONFIRM_COMPLETION' },
+            },
+        });
+
         return NextResponse.json({
             success: true,
             message: `Completion initiated. Waiting for ${waitingOn} to confirm.`,
