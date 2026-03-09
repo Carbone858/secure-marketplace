@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -24,6 +25,7 @@ enum RequestStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+  REJECTED
   EXPIRED
 }
 
@@ -319,6 +321,8 @@ model ServiceRequest {
   requireVerification Boolean        @default(false)
   status             RequestStatus   @default(PENDING)
   isActive           Boolean         @default(true)
+  rejectionReason    String?         @db.Text
+  rejectedAt         DateTime?
   viewCount          Int             @default(0)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt

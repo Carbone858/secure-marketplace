@@ -1276,26 +1276,34 @@ export function RequestFormSPA({
             <Eye className="w-4 h-4" />
             {showReview ? t('spa.hideReview') : t('spa.showReview')}
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (validate()) handleSubmit();
-            }}
-            disabled={isLoading}
-            className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center gap-2 shadow-sm"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                {t('navigation.submitting')}
-              </>
-            ) : (
-              <>
-                <Send className="w-4 h-4" />
-                {t('navigation.submit')}
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href={requestId ? `/${locale}/requests/${requestId}` : `/${locale}/dashboard`}
+              className="px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t('navigation.cancel')}
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                if (validate()) handleSubmit();
+              }}
+              disabled={isLoading}
+              className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center gap-2 shadow-sm"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  {t('navigation.submitting')}
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  {t('navigation.submit')}
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </>

@@ -316,9 +316,20 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     console.log('[PUT /api/requests] Final updateData keys:', Object.keys(updateData));
 
+    const isResubmission = serviceRequest.status === 'REJECTED';
+
     const updatedRequest = await prisma.serviceRequest.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...updateData,
+        // If user edits a rejected request, it goes back to PENDING for admin review
+        ...(isResubmission ? {
+          status: 'PENDING',
+          rejectionReason: null,
+          rejectedAt: null,
+          isActive: true,
+        } : {}),
+      },
     });
 
     return NextResponse.json(

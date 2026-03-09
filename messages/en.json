@@ -795,7 +795,8 @@
         "back": "Back",
         "next": "Next",
         "submit": "Create Request",
-        "submitting": "Creating..."
+        "submitting": "Creating...",
+        "cancel": "Cancel"
       },
       "errors": {
         "titleRequired": "Title is required",
@@ -1524,9 +1525,11 @@
         "ACTIVE": "Active",
         "MATCHING": "Matching",
         "REVIEWING_OFFERS": "Reviewing",
+        "ACCEPTED": "Accepted",
         "IN_PROGRESS": "In Progress",
         "COMPLETED": "Completed",
         "CANCELLED": "Cancelled",
+        "REJECTED": "Rejected",
         "CLOSED": "Closed",
         "EXPIRED": "Expired"
       },

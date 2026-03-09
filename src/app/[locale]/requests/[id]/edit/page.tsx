@@ -48,7 +48,7 @@ export default async function EditRequestPage({ params: { locale, id } }: EditRe
     }
 
     const request = await prisma.serviceRequest.findUnique({
-        where: { id, isActive: true },
+        where: { id },
     });
 
     if (!request) {
@@ -61,7 +61,7 @@ export default async function EditRequestPage({ params: { locale, id } }: EditRe
     }
 
     // Check if editable
-    if (!['DRAFT', 'PENDING', 'ACTIVE'].includes(request.status)) {
+    if (!['DRAFT', 'PENDING', 'ACTIVE', 'CANCELLED', 'REJECTED'].includes(request.status)) {
         redirect(`/${locale}/requests/${id}`);
     }
 

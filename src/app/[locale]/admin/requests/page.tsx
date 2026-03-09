@@ -140,9 +140,10 @@ export default function AdminRequestsPage() {
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
       ACTIVE: 'open', IN_PROGRESS: 'warning', COMPLETED: 'completed',
-      CANCELLED: 'cancelled', PENDING: 'neutral',
+      CANCELLED: 'cancelled', REJECTED: 'rejected', PENDING: 'neutral',
     };
-    return <StatusBadge variant={variants[status] || 'neutral'}>{status.replace('_', ' ')}</StatusBadge>;
+    const translatedStatus = d(status.replace('_', ' '), status.replace('_', ' ')); // simple fallback, better to use dictionary
+    return <StatusBadge variant={variants[status] || 'neutral'}>{translatedStatus}</StatusBadge>;
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -209,6 +210,7 @@ export default function AdminRequestsPage() {
                 <option value="PENDING">{d('Pending', 'معلق')}</option>
                 <option value="ACTIVE">{d('Active', 'نشط')}</option>
                 <option value="CANCELLED">{d('Cancelled', 'ملغي')}</option>
+                <option value="REJECTED">{d('Rejected', 'مرفوض')}</option>
                 <option value="IN_PROGRESS">{d('In Progress', 'قيد التنفيذ')}</option>
                 <option value="COMPLETED">{d('Completed', 'مكتمل')}</option>
               </select>

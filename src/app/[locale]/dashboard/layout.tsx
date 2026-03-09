@@ -21,6 +21,11 @@ export default async function DashboardLayout({
     redirect(`/${locale}/auth/login`);
   }
 
+  // Admins and super admins do not have a user dashboard — redirect them to their admin panel
+  if (session.user?.role === 'ADMIN' || session.user?.role === 'SUPER_ADMIN') {
+    redirect(`/${locale}/admin`);
+  }
+
   let messages;
   try {
     messages = await getMessages();

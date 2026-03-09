@@ -1,8 +1,9 @@
 /**
  * PUT /api/admin/requests/[id]/reject
  *
- * Admin-only: Rejects a pending service request, sets status → CANCELLED,
- * writes a ProjectAuditLog entry, and sends the user a rejection email.
+ * Admin-only: Rejects a pending service request, sets status → REJECTED,
+ * stores the rejection reason, writes a ProjectAuditLog entry,
+ * and sends the user a rejection notification + email.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
@@ -59,9 +60,9 @@ export async function PUT(
             return NextResponse.json({ error: 'Request not found' }, { status: 404 });
         }
 
-        // Guard: only PENDING can be rejected by admin (CANCELLED = terminal)
+        // Guard: only PENDING can be rejected by admin
         try {
-            assertValidRequestTransition(serviceRequest.status as RequestStatus, 'CANCELLED');
+            assertValidRequestTransition(serviceRequest.status as RequestStatus, 'REJECTED');
         } catch (err) {
             if (err instanceof InvalidTransitionError) {
                 return NextResponse.json({ error: err.message }, { status: 409 });
@@ -69,10 +70,15 @@ export async function PUT(
             throw err;
         }
 
-        // Reject
+        // Reject — keep isActive true so the owner can still see and edit it
         const updated = await prisma.serviceRequest.update({
             where: { id },
-            data: { status: 'CANCELLED', isActive: false },
+            data: {
+                status: 'REJECTED',
+                isActive: true,
+                rejectionReason: reason ?? null,
+                rejectedAt: new Date(),
+            },
         });
 
         // Audit log
@@ -85,29 +91,32 @@ export async function PUT(
             },
         });
 
-        // Email notification (non-blocking)
-        if (serviceRequest.user?.email) {
+        // In-app notification (non-blocking)
+        if (serviceRequest.user) {
             const locale = serviceRequest.tags?.includes('lang:ar') ? 'ar' : 'en';
-            sendRejectionNotification({
-                userEmail: serviceRequest.user.email,
-                userName: serviceRequest.user.name || 'User',
-                requestTitle: serviceRequest.title,
-                locale,
-                reason,
-            }).catch(() => { });
 
-            // In-app notification
             prisma.notification.create({
                 data: {
                     userId: serviceRequest.user.id,
                     type: 'SYSTEM',
-                    title: locale === 'ar' ? 'لم تتم الموافقة على طلبك' : 'Project Request Not Approved',
+                    title: locale === 'ar' ? 'تم رفض طلبك' : 'Your Request Was Rejected',
                     message: locale === 'ar'
-                        ? `لم تتم الموافقة على طلبك "${serviceRequest.title}".${reason ? ' السبب: ' + reason : ''}`
-                        : `Your project "${serviceRequest.title}" was not approved.${reason ? ' Reason: ' + reason : ''}`,
+                        ? `تم رفض طلبك "${serviceRequest.title}".${reason ? ' السبب: ' + reason : ' يمكنك تعديله وإعادة تقديمه.'}`
+                        : `Your request "${serviceRequest.title}" was rejected.${reason ? ' Reason: ' + reason : ' You can edit and resubmit it.'}`,
                     data: { requestId: id },
                 },
             }).catch(() => { });
+
+            // Email notification (non-blocking)
+            if (serviceRequest.user.email) {
+                sendRejectionNotification({
+                    userEmail: serviceRequest.user.email,
+                    userName: serviceRequest.user.name || 'User',
+                    requestTitle: serviceRequest.title,
+                    locale,
+                    reason,
+                }).catch(() => { });
+            }
         }
 
         return NextResponse.json({

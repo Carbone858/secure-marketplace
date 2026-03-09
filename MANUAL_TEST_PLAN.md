@@ -25,22 +25,22 @@
 ## 🧪 Core Lifecycle Stabilization (Verified March 2026)
 
 ### Flow 1: User Creates a Project
-- [ ] **L1.1** — Log in as a regular user → Dashboard loads
-- [ ] **L1.2** — Navigate to `/requests/new` → Multi-step form appears
-- [ ] **L1.3** — Fill details (>20 chars), category, location → No errors
-- [ ] **L1.4** — Submit → Toast: "Request submitted"
-- [ ] **L1.5** — View project → Detail page shows **amber "Pending Admin Approval" banner**
-- [ ] **L1.6** — Verify invisible to others on public `/requests` list (AR and EN)
+- [x] **L1.1** — Log in as a regular user → Dashboard loads
+- [x] **L1.2** — Navigate to `/requests/new` → Multi-step form appears
+- [x] **L1.3** — Fill details (>20 chars), category, location → No errors
+- [x] **L1.4** — Submit → Toast: "Request submitted"
+- [x] **L1.5** — View project → Detail page shows **amber "Pending Admin Approval" banner**
+- [x] **L1.6** — Verify invisible to others on public `/requests` list (AR and EN)
 
 ### Flow 2: Admin Operations
-- [ ] **L2.1** — Admin Dashboard → "Pending Approval" tab shows the project
-- [ ] **L2.2** — Click **Approve ✅** → Status becomes ACTIVE; in-app notification sent to user
-- [ ] **L2.3** — Project now visible to companies on public `/requests`
+- [x] **L2.1** — Admin Dashboard → "Pending Approval" tab shows the project
+- [x] **L2.2** — Click **Approve ✅** → Status becomes ACTIVE; in-app notification sent to user
+- [x] **L2.3** — Project now visible to companies on public `/requests`
 - [ ] **L2.4** — State Guard: Try to approve ACTIVE project → ❌ Error (409)
-- [ ] **L2.5** — Reject a project with reason → User notified; project remains hidden
+- [x] **L2.5** — Reject a project with reason → User notified; project remains hidden
 
 ### Flow 3: Company Submission
-- [ ] **L3.1** — Log in as company → Navigate to `/requests` → Approved project visible
+- [x] **L3.1** — Log in as company → Navigate to `/requests` → Approved project visible
 - [ ] **L3.2** — Click project → "Send Offer" button visible
 - [ ] **L3.3** — Fill price/days/description → Submit → Toast: "Offer Submitted ✅"
 - [ ] **L3.4** — Project owner receives in-app "New Offer Received" notification

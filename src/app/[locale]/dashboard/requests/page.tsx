@@ -30,6 +30,7 @@ interface Request {
   budgetMax: number | null;
   currency: string;
   createdAt: string;
+  rejectionReason?: string | null;
   _count: {
     offers: number;
   };
@@ -45,6 +46,7 @@ const statusColors: Record<string, string> = {
   IN_PROGRESS: 'bg-info',
   COMPLETED: 'bg-success',
   CANCELLED: 'bg-destructive',
+  REJECTED: 'bg-destructive',
   EXPIRED: 'bg-muted-foreground',
 };
 
@@ -61,7 +63,7 @@ export default function MyRequestsPage() {
   const t = useTranslations('requests.myRequests');
   const td = useTranslations('dashboard_pages.requests');
   const { user, isLoading: authLoading } = useAuth();
-  
+
   const [requests, setRequests] = useState<Request[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
@@ -117,7 +119,7 @@ export default function MyRequestsPage() {
       return ['PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS', 'ACCEPTED', 'IN_PROGRESS'].includes(request.status);
     }
     if (activeTab === 'completed') return request.status === 'COMPLETED';
-    if (activeTab === 'cancelled') return ['CANCELLED', 'EXPIRED'].includes(request.status);
+    if (activeTab === 'cancelled') return ['CANCELLED', 'REJECTED', 'EXPIRED'].includes(request.status);
     return true;
   });
 
@@ -181,6 +183,13 @@ export default function MyRequestsPage() {
                         <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                           {request.description}
                         </p>
+                        {/* Rejection reason banner */}
+                        {request.status === 'REJECTED' && request.rejectionReason && (
+                          <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 mb-3">
+                            <span className="text-destructive text-xs font-semibold whitespace-nowrap mt-0.5">Admin note:</span>
+                            <p className="text-xs text-destructive/90">{request.rejectionReason}</p>
+                          </div>
+                        )}
                         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                           <span>
                             {(request.budgetMin || request.budgetMax) && (
@@ -207,14 +216,14 @@ export default function MyRequestsPage() {
                           <Eye className="h-4 w-4 me-2" />
                           {t('view')}
                         </Button>
-                        {['DRAFT', 'PENDING', 'ACTIVE'].includes(request.status) && (
+                        {['DRAFT', 'PENDING', 'ACTIVE', 'CANCELLED', 'REJECTED'].includes(request.status) && (
                           <Button
-                            variant="outline"
+                            variant={request.status === 'REJECTED' ? 'default' : 'outline'}
                             size="sm"
                             onClick={() => router.push(`/${locale}/requests/${request.id}/edit`)}
                           >
                             <Edit className="h-4 w-4 me-2" />
-                            {t('edit')}
+                            {request.status === 'REJECTED' ? 'Edit & Resubmit' : t('edit')}
                           </Button>
                         )}
                         {['DRAFT', 'PENDING'].includes(request.status) && (

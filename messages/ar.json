@@ -795,7 +795,8 @@
         "back": "رجوع",
         "next": "التالي",
         "submit": "إنشاء الطلب",
-        "submitting": "جاري الإنشاء..."
+        "submitting": "جاري الإنشاء...",
+        "cancel": "إلغاء"
       },
       "errors": {
         "titleRequired": "العنوان مطلوب",
@@ -1524,9 +1525,11 @@
         "ACTIVE": "نشط",
         "MATCHING": "مطابقة",
         "REVIEWING_OFFERS": "مراجعة",
+        "ACCEPTED": "مقبول",
         "IN_PROGRESS": "قيد التنفيذ",
         "COMPLETED": "مكتمل",
         "CANCELLED": "ملغي",
+        "REJECTED": "مرفوض",
         "CLOSED": "مغلق",
         "EXPIRED": "منتهي"
       },

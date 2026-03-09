@@ -9,6 +9,7 @@ import { SendOfferButton } from '@/components/requests/SendOfferButton';
 import { RequestOwnerActions } from '@/components/requests/RequestOwnerActions';
 import { OfferActions } from '@/components/requests/OfferActions';
 import { BackButton } from '@/components/ui/BackButton';
+import { StatusBadge } from '@/components/ui/composite';
 
 interface RequestDetailPageProps {
   params: { locale: string; id: string };
@@ -31,6 +32,7 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
   const session = await getSession();
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'requests' });
+  const td = await getTranslations({ locale, namespace: 'dashboard_pages.requests' });
 
   // Fetch the request — no isActive filter here; we check permissions below
   const request = await prisma.serviceRequest.findUnique({
@@ -170,7 +172,10 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
     <div className="min-h-screen bg-muted/50 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4">
         {/* Back Link */}
-        <BackButton fallbackHref={`/${locale}/requests`} label={t('detail.backToList')} />
+        <BackButton
+          fallbackHref={isAdmin ? `/${locale}/admin/requests` : isOwner ? `/${locale}/dashboard/requests` : `/${locale}/requests`}
+          label={t('detail.backToList')}
+        />
 
         {/* Pending Approval Banner — visible only to owner while project awaits admin review */}
         {isOwner && request.status === 'PENDING' && (
@@ -193,15 +198,29 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
           <div className="p-6 border-b">
             <div className="flex items-start justify-between">
               <div>
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
+                  <StatusBadge variant={request.status.toLowerCase()}>
+                    {td(`status.${request.status}`)}
+                  </StatusBadge>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${getUrgencyColor(request.urgency)}`}>
                     {t(`urgency.${request.urgency.toLowerCase()}`)}
                   </span>
-                  <span className="text-sm text-muted-foreground">
-                    {new Date(request.createdAt).toLocaleDateString()}
+                  <span className="text-sm text-muted-foreground ml-2">
+                    {new Date(request.createdAt).toLocaleDateString(locale)}
                   </span>
                 </div>
-                <h1 className="text-2xl font-bold text-foreground">{request.title}</h1>
+                <h1 className="text-2xl font-bold text-foreground mb-4">{request.title}</h1>
+                {/* @ts-ignore */}
+                {request.status === 'REJECTED' && request.rejectionReason && (
+                  <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3 mb-2 max-w-xl">
+                    <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-destructive font-semibold block mb-0.5">{isRTL ? 'سبب الرفض מן الإدارة:' : 'Admin Rejection Reason:'}</span>
+                      {/* @ts-ignore */}
+                      <p className="text-sm text-destructive/90">{request.rejectionReason}</p>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 {canSendOffer && <SendOfferButton requestId={id} variant="page" />}

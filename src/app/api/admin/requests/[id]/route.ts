@@ -4,7 +4,7 @@ import { authenticateRequest } from '@/lib/auth-middleware';
 import { z } from 'zod';
 
 const updateRequestSchema = z.object({
-  status: z.enum(['DRAFT', 'PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'EXPIRED']).optional(),
+  status: z.enum(['DRAFT', 'PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'REJECTED', 'EXPIRED']).optional(),
   isActive: z.boolean().optional(),
 });
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
@@ -35,6 +35,15 @@ export function Navbar() {
   const locale = useLocale();
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch('/api/notifications?unreadOnly=true&limit=1')
+      .then((r) => r.json())
+      .then((data) => setUnreadCount(data.unreadCount ?? 0))
+      .catch(() => { });
+  }, [user]);
 
 
   const navigation = [
@@ -81,9 +90,14 @@ export function Navbar() {
               <>
                 {/* Notifications & Messages */}
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" asChild className="rounded-full">
+                  <Button variant="ghost" size="icon" asChild className="rounded-full relative">
                     <Link href={`/${locale}/dashboard/notifications`}>
                       <Bell className="h-5 w-5" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center font-bold leading-none">
+                          {unreadCount > 9 ? '9+' : unreadCount}
+                        </span>
+                      )}
                     </Link>
                   </Button>
                   <Button variant="ghost" size="icon" asChild className="rounded-full">
@@ -107,20 +121,25 @@ export function Navbar() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuItem asChild>
-                      <Link href={user.role === 'COMPANY' ? `/${locale}/company/dashboard` : `/${locale}/dashboard`}>
-                        {user.role === 'COMPANY' ? <Building2 className="h-4 w-4 me-2" /> : <User className="h-4 w-4 me-2" />}
-                        {user.role === 'COMPANY' ? t('nav.userMenu.companyDashboard') : t('nav.userMenu.dashboard')}
+                      <Link href={
+                        (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+                          ? `/${locale}/admin`
+                          : user.role === 'COMPANY'
+                            ? `/${locale}/company/dashboard`
+                            : `/${locale}/dashboard`
+                      }>
+                        {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+                          ? <Briefcase className="h-4 w-4 me-2" />
+                          : user.role === 'COMPANY'
+                            ? <Building2 className="h-4 w-4 me-2" />
+                            : <User className="h-4 w-4 me-2" />}
+                        {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+                          ? t('nav.userMenu.adminPanel')
+                          : user.role === 'COMPANY'
+                            ? t('nav.userMenu.companyDashboard')
+                            : t('nav.userMenu.dashboard')}
                       </Link>
                     </DropdownMenuItem>
-
-                    {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && (
-                      <DropdownMenuItem asChild>
-                        <Link href={`/${locale}/admin`}>
-                          <Briefcase className="h-4 w-4 me-2" />
-                          {t('nav.userMenu.adminPanel')}
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
 
                     <DropdownMenuSeparator />
 

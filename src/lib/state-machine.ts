@@ -19,6 +19,7 @@ export type RequestStatus =
     | 'IN_PROGRESS'
     | 'COMPLETED'
     | 'CANCELLED'
+    | 'REJECTED'
     | 'EXPIRED';
 
 /**
@@ -38,7 +39,7 @@ export type RequestStatus =
  */
 const REQUEST_TRANSITIONS: Record<RequestStatus, RequestStatus[]> = {
     DRAFT: ['PENDING', 'CANCELLED'],
-    PENDING: ['ACTIVE', 'CANCELLED'],
+    PENDING: ['ACTIVE', 'CANCELLED', 'REJECTED'],
     ACTIVE: ['MATCHING', 'REVIEWING_OFFERS', 'CANCELLED'],
     MATCHING: ['REVIEWING_OFFERS', 'ACTIVE', 'CANCELLED'],
     REVIEWING_OFFERS: ['ACCEPTED', 'ACTIVE', 'CANCELLED'],
@@ -46,6 +47,7 @@ const REQUEST_TRANSITIONS: Record<RequestStatus, RequestStatus[]> = {
     IN_PROGRESS: ['COMPLETED', 'CANCELLED'],
     COMPLETED: [],
     CANCELLED: [],
+    REJECTED: ['PENDING'], // user can resubmit after editing
     EXPIRED: [],
 };
 
@@ -117,7 +119,7 @@ export function assertValidOfferTransition(
 // ── Editable states ───────────────────────────────────────────────────────────
 
 /** States in which a request's content (title, description etc.) can be changed. */
-export const REQUEST_EDITABLE_STATES: RequestStatus[] = ['DRAFT', 'PENDING', 'ACTIVE'];
+export const REQUEST_EDITABLE_STATES: RequestStatus[] = ['DRAFT', 'PENDING', 'ACTIVE', 'REJECTED'];
 
 /** Assert the request is in an editable state. */
 export function assertRequestEditable(status: RequestStatus): void {
