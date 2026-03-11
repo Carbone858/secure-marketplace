@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,9 +37,17 @@ interface Request {
 export default function SubmitOfferPage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const locale = useLocale();
   const t = useTranslations('requests.offer');
   const { user, isLoading: authLoading } = useAuth();
+  
+  const [fromParam, setFromParam] = useState<string>('');
+
+  useEffect(() => {
+    const from = searchParams?.get('from');
+    if (from) setFromParam(from);
+  }, [searchParams]);
 
   const [request, setRequest] = useState<Request | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -113,7 +121,8 @@ export default function SubmitOfferPage() {
         description: t('success.message'),
       });
 
-      router.push(`/${locale}/requests/${params.id}`);
+      const queryString = fromParam ? `?from=${fromParam}` : '';
+      router.push(`/${locale}/requests/${params.id}${queryString}`);
     } catch (err: any) {
       toast.error(t('errors.general'), {
         description: err.message,
@@ -154,7 +163,10 @@ export default function SubmitOfferPage() {
       <Button
         variant="ghost"
         className="mb-6"
-        onClick={() => router.push(`/${locale}/requests/${params.id}`)}
+        onClick={() => {
+          const queryString = fromParam ? `?from=${fromParam}` : '';
+          router.push(`/${locale}/requests/${params.id}${queryString}`);
+        }}
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         {t('common.back')}
@@ -296,7 +308,10 @@ export default function SubmitOfferPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => router.push(`/${locale}/requests/${params.id}`)}
+                    onClick={() => {
+                      const queryString = fromParam ? `?from=${fromParam}` : '';
+                      router.push(`/${locale}/requests/${params.id}${queryString}`);
+                    }}
                   >
                     {t('common.cancel')}
                   </Button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { Send } from 'lucide-react';
@@ -15,10 +15,14 @@ interface SendOfferButtonProps {
 export function SendOfferButton({ requestId, variant = 'card', className = '' }: SendOfferButtonProps) {
     const router = useRouter();
     const locale = useLocale();
+    const searchParamsHooks = useSearchParams();
     const { user } = useAuth();
     const isAr = locale === 'ar';
 
     const label = isAr ? 'إرسال عرض' : 'Send Offer';
+
+    const from = searchParamsHooks?.get('from');
+    const queryString = from ? `?from=${from}` : '';
 
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault(); // prevent Link parent from navigating
@@ -26,7 +30,7 @@ export function SendOfferButton({ requestId, variant = 'card', className = '' }:
 
         if (user && user.role === 'COMPANY') {
             // Authenticated company → go to offer form
-            router.push(`/${locale}/requests/${requestId}/offer`);
+            router.push(`/${locale}/requests/${requestId}/offer${queryString}`);
         } else {
             // Not logged in or not a company → go to company signup
             router.push(`/${locale}/company/join`);

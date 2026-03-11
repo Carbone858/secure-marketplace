@@ -31,18 +31,21 @@ export default function BrowseRequestsPage() {
   const [companyCategories, setCompanyCategories] = useState<string[]>([]);
   const [filterByCategories, setFilterByCategories] = useState(false); // Default to false
   const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [allCities, setAllCities] = useState<any[]>([]);
 
   // Manual filters
   const [selectedParentId, setSelectedParentId] = useState<string>('');
   const [selectedSubId, setSelectedSubId] = useState<string>('');
+  const [selectedCityId, setSelectedCityId] = useState<string>('');
 
-  // Initial load: get Company Profile (for categories) + All Categories
+  // Initial load: get Company Profile (for categories) + All Categories + Cities
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const [profileRes, catsRes] = await Promise.all([
+        const [profileRes, catsRes, countriesRes] = await Promise.all([
           fetch('/api/company/profile'),
-          fetch('/api/categories')
+          fetch('/api/categories'),
+          fetch('/api/countries?includeCities=true&locale=' + locale)
         ]);
 
         if (profileRes.ok) {
@@ -56,12 +59,20 @@ export default function BrowseRequestsPage() {
           const catsData = await catsRes.json();
           setAllCategories(catsData.categories || catsData.data?.categories || []);
         }
+
+        if (countriesRes.ok) {
+          const countriesData = await countriesRes.json();
+          const countries = countriesData.countries || [];
+          // Flatten cities from all countries
+          const cities = countries.flatMap((c: any) => c.cities || []);
+          setAllCities(cities);
+        }
       } catch (e) {
         console.error('Failed to load metadata', e);
       }
     };
     fetchMetadata();
-  }, []);
+  }, [locale]);
 
   // Fetch Requests when filters change
   const fetchRequests = useCallback(async () => {
@@ -99,6 +110,11 @@ export default function BrowseRequestsPage() {
         }
       }
 
+      // City filter
+      if (selectedCityId) {
+        params.set('cityId', selectedCityId);
+      }
+
       console.log('Fetching requests for locale:', locale);
       const res = await fetch(`/api/requests?${params}`, { cache: 'no-store' });
       if (!res.ok) throw new Error();
@@ -114,7 +130,7 @@ export default function BrowseRequestsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [page, search, filterByCategories, companyCategories, selectedParentId, selectedSubId, allCategories, isRTL, locale]);
+  }, [page, search, filterByCategories, companyCategories, selectedParentId, selectedSubId, selectedCityId, allCategories, isRTL, locale]);
 
   useEffect(() => { fetchRequests(); }, [fetchRequests]);
 
@@ -222,6 +238,22 @@ export default function BrowseRequestsPage() {
                   </select>
                 </div>
               )}
+
+              {/* City Filter (Always Visible) */}
+              <div className="flex w-full md:w-auto mt-2 md:mt-0">
+                <select
+                  className="flex h-10 w-full md:w-48 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  value={selectedCityId}
+                  onChange={(e) => { setSelectedCityId(e.target.value); setPage(1); }}
+                >
+                  <option value="">{isRTL ? 'كل المدن' : 'All Cities'}</option>
+                  {allCities.map(city => (
+                    <option key={city.id} value={city.id}>
+                      {city.name || (isRTL ? city.nameAr : city.nameEn)}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
