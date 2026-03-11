@@ -41,19 +41,19 @@
 
 ### Flow 3: Company Submission
 - [x] **L3.1** — Log in as company → Navigate to `/requests` → Approved project visible
-- [ ] **L3.2** — Click project → "Send Offer" button visible
-- [ ] **L3.3** — Fill price/days/description → Submit → Toast: "Offer Submitted ✅"
-- [ ] **L3.4** — Project owner receives in-app "New Offer Received" notification
+- [x] **L3.2** — Click project → "Send Offer" button visible
+- [x] **L3.3** — Fill price/days/description → Submit → Toast: "Offer Submitted ✅"
+- [x] **L3.4** — Project owner receives in-app "New Offer Received" notification
 - [ ] **L3.5** — State Guard: Try duplicate offer → ❌ Error: "Already submitted"
 
 ### Flow 4: Offer Acceptance
-- [ ] **L4.1** — Owner clicks **Accept Offer** → Toast: "Offer accepted! 🎉"
+- [x] **L4.1** — Owner clicks **Accept Offer** → Toast: "Offer accepted! 🎉"
 - [ ] **L4.2** — Other pending offers auto-rejected
-- [ ] **L4.3** — Project record created; company receives "Offer accepted" notification
+- [x] **L4.3** — Project record created; company receives "Offer accepted" notification
 - [ ] **L4.4** — State Guard: Try double-accept → ❌ Error (state machine block)
 
 ### Flow 5: Atomic Deletion
-- [ ] **L5.1** — Delete project with pending offers → Multi-click confirmation
+- [x] **L5.1** — Delete project with pending offers → Multi-click confirmation
 - [ ] **L5.2** — Verify all PENDING offers are now WITHDRAWN in DB
 - [ ] **L5.3** — Project detail URL returns 404/redirect
 

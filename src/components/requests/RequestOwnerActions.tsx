@@ -4,16 +4,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { toast } from 'sonner';
-import { Trash2, Loader2 } from 'lucide-react';
+import { Trash2, Loader2, RefreshCw, Edit2 } from 'lucide-react';
 
 interface Props {
     requestId: string;
     deleteLabel: string;
     editHref: string;
     editLabel: string;
+    status?: string;
+    repostLabel?: string;
 }
 
-export function RequestOwnerActions({ requestId, deleteLabel, editHref, editLabel }: Props) {
+export function RequestOwnerActions({ requestId, deleteLabel, editHref, editLabel, status, repostLabel }: Props) {
     const router = useRouter();
     const locale = useLocale();
     const [deleting, setDeleting] = useState(false);
@@ -43,14 +45,25 @@ export function RequestOwnerActions({ requestId, deleteLabel, editHref, editLabe
         }
     };
 
+    const isTerminal = status === 'CANCELLED' || status === 'REJECTED' || status === 'EXPIRED';
+
     return (
         <div className="flex gap-2">
-            <a
-                href={editHref}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border border-input rounded-lg hover:bg-muted transition-colors"
-            >
-                ✏️ {editLabel}
-            </a>
+            {isTerminal ? (
+                <a
+                    href={editHref} // Context: editHref is now a clone link e.g., /requests/new?clone=...
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium"
+                >
+                    <RefreshCw className="w-4 h-4" /> {repostLabel || 'Repost'}
+                </a>
+            ) : (
+                <a
+                    href={editHref}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border border-input rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                >
+                    <Edit2 className="w-4 h-4" /> {editLabel}
+                </a>
+            )}
             <button
                 onClick={handleDelete}
                 disabled={deleting}

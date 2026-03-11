@@ -24,23 +24,35 @@ export function DropdownMenu({
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
   const isControlled = open !== undefined;
   const currentOpen = isControlled ? open : uncontrolledOpen;
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const setOpen = (next: boolean) => {
+  const setOpen = React.useCallback((next: boolean) => {
     if (!isControlled) setUncontrolledOpen(next);
     onOpenChange?.(next);
-  };
+  }, [isControlled, onOpenChange]);
 
   React.useEffect(() => {
     if (currentOpen) {
       const handleScroll = () => setOpen(false);
+      const handleClickOutside = (event: MouseEvent) => {
+        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+          setOpen(false);
+        }
+      };
+
       window.addEventListener('scroll', handleScroll, { capture: true });
-      return () => window.removeEventListener('scroll', handleScroll, { capture: true });
+      window.addEventListener('mousedown', handleClickOutside);
+      
+      return () => {
+        window.removeEventListener('scroll', handleScroll, { capture: true });
+        window.removeEventListener('mousedown', handleClickOutside);
+      };
     }
-  }); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentOpen, setOpen]);
 
   return (
     <DropdownMenuContext.Provider value={{ open: currentOpen, setOpen }}>
-      <div className="relative inline-block text-left">{children}</div>
+      <div ref={containerRef} className="relative inline-block text-left">{children}</div>
     </DropdownMenuContext.Provider>
   );
 }

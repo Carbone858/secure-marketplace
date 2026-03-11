@@ -147,7 +147,7 @@ export function MobileNav() {
                         </SheetHeader>
 
                         <div className="px-4 overflow-y-auto max-h-[calc(85vh-100px)] pb-10">
-                            <div className="grid grid-cols-2 gap-3 mb-6">
+                            <div className="grid grid-cols-3 gap-3 mb-6">
                                 {user ? (
                                     <>
                                         <Link
@@ -169,6 +169,16 @@ export function MobileNav() {
                                                 <MessageSquare className="h-5 w-5" />
                                             </div>
                                             <span className="font-medium text-sm">{locale === 'ar' ? 'الرسائل' : 'Messages'}</span>
+                                        </Link>
+                                        <Link
+                                            href={`/${locale}/dashboard/notifications`}
+                                            onClick={() => setOpen(false)}
+                                            className="flex flex-col items-center justify-center p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors gap-2"
+                                        >
+                                            <div className="h-10 w-10 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-500">
+                                                <Bell className="h-5 w-5" />
+                                            </div>
+                                            <span className="font-medium text-sm">{locale === 'ar' ? 'الإشعارات' : 'Notifications'}</span>
                                         </Link>
                                     </>
                                 ) : (

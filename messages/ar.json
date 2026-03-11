@@ -869,6 +869,7 @@
       "tabs": {
         "all": "الكل",
         "active": "نشط",
+        "hasOffers": "العروض المستلمة",
         "completed": "مكتمل",
         "cancelled": "ملغى"
       }
@@ -1543,7 +1544,8 @@
         "loadFailed": "فشل تحميل الطلبات",
         "deleted": "تم حذف الطلب بنجاح",
         "deleteFailed": "فشل حذف الطلب"
-      }
+      },
+      "noOffers": "لا توجد عروض بعد"
     }
   },
   "company_dashboard": {

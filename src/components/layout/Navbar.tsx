@@ -29,21 +29,13 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 import { useAuth } from '@/components/providers/AuthProvider';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { NotificationDropdown } from '../notifications/NotificationDropdown';
 
 export function Navbar() {
   const t = useTranslations();
   const locale = useLocale();
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  useEffect(() => {
-    if (!user) return;
-    fetch('/api/notifications?unreadOnly=true&limit=1')
-      .then((r) => r.json())
-      .then((data) => setUnreadCount(data.unreadCount ?? 0))
-      .catch(() => { });
-  }, [user]);
 
 
   const navigation = [
@@ -81,25 +73,20 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* Right Side (LTR) / Left Side (RTL): theme, lang, login */}
-          <div className={`hidden md:flex items-center gap-4 ${isRTL ? 'order-1' : 'order-3'}`}>
-            <ThemeToggle />
-            <LanguageSwitcher />
+          {/* Right Side Tools & User Menu */}
+          <div className={`flex items-center gap-2 md:gap-4 ${isRTL ? 'order-1' : 'order-3'}`}>
+            <div className="hidden md:flex items-center gap-4">
+              <ThemeToggle />
+              <LanguageSwitcher />
+            </div>
 
             {user ? (
               <>
-                {/* Notifications & Messages */}
-                <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" asChild className="rounded-full relative">
-                    <Link href={`/${locale}/dashboard/notifications`}>
-                      <Bell className="h-5 w-5" />
-                      {unreadCount > 0 && (
-                        <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center font-bold leading-none">
-                          {unreadCount > 9 ? '9+' : unreadCount}
-                        </span>
-                      )}
-                    </Link>
-                  </Button>
+                {/* Notifications always visible */}
+                <NotificationDropdown />
+
+                {/* desktop-only message icon for now */}
+                <div className="hidden md:flex items-center gap-1">
                   <Button variant="ghost" size="icon" asChild className="rounded-full">
                     <Link href={`/${locale}/dashboard/messages`}>
                       <MessageSquare className="h-5 w-5" />
@@ -107,48 +94,50 @@ export function Navbar() {
                   </Button>
                 </div>
 
-                {/* User Menu */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-1 rounded-full hover:bg-muted">
-                      <Avatar className="h-8 w-8 ring-2 ring-background">
-                        <AvatarImage src={user.image || undefined} />
-                        <AvatarFallback className="bg-primary/10 text-primary">{user.name?.[0] || 'U'}</AvatarFallback>
-                      </Avatar>
-                      <span className="max-w-[100px] truncate hidden lg:inline-block font-medium">{user.name}</span>
-                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuItem asChild>
-                      <Link href={
-                        (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
-                          ? `/${locale}/admin`
-                          : user.role === 'COMPANY'
-                            ? `/${locale}/company/dashboard`
-                            : `/${locale}/dashboard`
-                      }>
-                        {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
-                          ? <Briefcase className="h-4 w-4 me-2" />
-                          : user.role === 'COMPANY'
-                            ? <Building2 className="h-4 w-4 me-2" />
-                            : <User className="h-4 w-4 me-2" />}
-                        {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
-                          ? t('nav.userMenu.adminPanel')
-                          : user.role === 'COMPANY'
-                            ? t('nav.userMenu.companyDashboard')
-                            : t('nav.userMenu.dashboard')}
-                      </Link>
-                    </DropdownMenuItem>
+                {/* User Menu - hides on mobile because MobileNav handles it, but maybe keep it? User said "missing icon", usually notification bell should be near the top */}
+                <div className="hidden md:flex">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-1 rounded-full hover:bg-muted">
+                        <Avatar className="h-8 w-8 ring-2 ring-background">
+                          <AvatarImage src={user.image || undefined} />
+                          <AvatarFallback className="bg-primary/10 text-primary">{user.name?.[0] || 'U'}</AvatarFallback>
+                        </Avatar>
+                        <span className="max-w-[100px] truncate hidden lg:inline-block font-medium">{user.name}</span>
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuItem asChild>
+                        <Link href={
+                          (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+                            ? `/${locale}/admin`
+                            : user.role === 'COMPANY'
+                              ? `/${locale}/company/dashboard`
+                              : `/${locale}/dashboard`
+                        }>
+                          {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+                            ? <Briefcase className="h-4 w-4 me-2" />
+                            : user.role === 'COMPANY'
+                              ? <Building2 className="h-4 w-4 me-2" />
+                              : <User className="h-4 w-4 me-2" />}
+                          {(user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')
+                            ? t('nav.userMenu.adminPanel')
+                            : user.role === 'COMPANY'
+                              ? t('nav.userMenu.companyDashboard')
+                              : t('nav.userMenu.dashboard')}
+                        </Link>
+                      </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
+                      <DropdownMenuSeparator />
 
-                    <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                      <LogOut className="h-4 w-4 me-2" />
-                      {t('nav.userMenu.logout')}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive focus:bg-destructive/10">
+                        <LogOut className="h-4 w-4 me-2" />
+                        {t('nav.userMenu.logout')}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </>
             ) : (
               <div className="flex items-center gap-2">

@@ -6,6 +6,7 @@ import { RequestFormSPA } from '@/components/requests/RequestFormSPA';
 
 interface NewRequestPageProps {
   params: { locale: string };
+  searchParams?: { clone?: string };
 }
 
 export async function generateMetadata({
@@ -33,7 +34,7 @@ async function getCountries() {
   });
 }
 
-export default async function NewRequestPage({ params: { locale } }: NewRequestPageProps) {
+export default async function NewRequestPage({ params: { locale }, searchParams }: NewRequestPageProps) {
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'requests' });
   const session = await getSession();
@@ -41,10 +42,21 @@ export default async function NewRequestPage({ params: { locale } }: NewRequestP
 
   const [categories, countries] = await Promise.all([getCategories(), getCountries()]);
 
+  let cloneData = null;
+  if (searchParams?.clone && session.isAuthenticated && session.user) {
+    const originalRequest = await prisma.serviceRequest.findUnique({
+      where: { id: searchParams.clone },
+    });
+    // Only allow cloning own requests (or if admin)
+    if (originalRequest && (originalRequest.userId === session.user.id || session.user.role === 'ADMIN' || session.user.role === 'SUPER_ADMIN')) {
+      cloneData = originalRequest;
+    }
+  }
+
   return (
     <div className="min-h-screen bg-muted/50 py-8 sm:py-12" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-3xl mx-auto px-4">
-        <RequestFormSPA categories={categories} countries={countries} mode={mode}>
+        <RequestFormSPA categories={categories} countries={countries} mode={mode} initialData={cloneData}>
           <div className="mb-6">
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">{t('new.title')}</h1>
           </div>

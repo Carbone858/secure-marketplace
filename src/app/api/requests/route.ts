@@ -45,21 +45,9 @@ export async function GET(request: NextRequest) {
       where.isActive = true;
     }
 
-    // Language filter: show requests tagged for this locale, OR requests with NO language tag at all.
-    // Logic: include if (has lang:XX) OR (doesn't have lang:en AND doesn't have lang:ar)
-    // This means: untagged projects show everywhere; lang-tagged projects show only in their locale.
-    if (locale === 'ar' || locale === 'en') {
-      const myTag = `lang:${locale}`;
-      const otherTag = locale === 'ar' ? 'lang:en' : 'lang:ar';
-      const langFilter = {
-        OR: [
-          { tags: { has: myTag } },                                  // tagged for this locale
-          { NOT: { tags: { hasSome: [myTag, otherTag] } } },         // has NO lang tags at all
-        ],
-      };
-      // Merge into AND so it doesn't overwrite budget/search filters
-      where.AND = [...((where.AND as unknown[]) || []), langFilter];
-    }
+    // Language filter: REMOVED.
+    // Companies should see all active projects regardless of their chosen UI language
+    // to maximize business opportunities.
 
     // Status filter
     if (status) {

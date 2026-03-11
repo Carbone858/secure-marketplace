@@ -869,6 +869,7 @@
       "tabs": {
         "all": "All",
         "active": "Active",
+        "hasOffers": "Received Offers",
         "completed": "Completed",
         "cancelled": "Cancelled"
       }
@@ -1543,7 +1544,8 @@
         "loadFailed": "Failed to load requests",
         "deleted": "Request deleted successfully",
         "deleteFailed": "Failed to delete request"
-      }
+      },
+      "noOffers": "No offers yet"
     }
   },
   "company_dashboard": {

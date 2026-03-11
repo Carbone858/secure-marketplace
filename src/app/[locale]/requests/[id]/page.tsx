@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import { getSession } from '@/lib/auth-session/session';
 import { prisma } from '@/lib/db/client';
@@ -13,6 +14,7 @@ import { StatusBadge } from '@/components/ui/composite';
 
 interface RequestDetailPageProps {
   params: { locale: string; id: string };
+  searchParams?: { from?: string };
 }
 
 export async function generateMetadata({
@@ -28,7 +30,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function RequestDetailPage({ params: { locale, id } }: RequestDetailPageProps) {
+export default async function RequestDetailPage({ params: { locale, id }, searchParams }: RequestDetailPageProps) {
   const session = await getSession();
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'requests' });
@@ -172,10 +174,20 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
     <div className="min-h-screen bg-muted/50 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto px-4">
         {/* Back Link */}
-        <BackButton
-          fallbackHref={isAdmin ? `/${locale}/admin/requests` : isOwner ? `/${locale}/dashboard/requests` : `/${locale}/requests`}
-          label={t('detail.backToList')}
-        />
+        <Suspense fallback={<div className="mb-6 h-6" />}>
+          <BackButton
+            fallbackHref={
+              isAdmin
+                ? `/${locale}/admin/requests`
+                : isOwner
+                ? `/${locale}/dashboard/requests`
+                : searchParams?.from === 'company-browse'
+                ? `/${locale}/company/dashboard/browse`
+                : `/${locale}/requests`
+            }
+            label={t('detail.backToList')}
+          />
+        </Suspense>
 
         {/* Pending Approval Banner — visible only to owner while project awaits admin review */}
         {isOwner && request.status === 'PENDING' && (
@@ -233,9 +245,11 @@ export default async function RequestDetailPage({ params: { locale, id } }: Requ
                 {isOwner && (
                   <RequestOwnerActions
                     requestId={id}
+                    status={request.status}
                     deleteLabel={isRTL ? 'حذف' : 'Delete'}
-                    editHref={`/${locale}/requests/${id}/edit`}
+                    editHref={['CANCELLED', 'REJECTED', 'EXPIRED'].includes(request.status) ? `/${locale}/requests/new?clone=${id}` : `/${locale}/requests/${id}/edit`}
                     editLabel={isRTL ? 'تعديل' : 'Edit'}
+                    repostLabel={isRTL ? 'إعادة نشر' : 'Repost / Duplicate'}
                   />
                 )}
               </div>

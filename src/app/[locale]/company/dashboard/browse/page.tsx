@@ -293,7 +293,7 @@ export default function BrowseRequestsPage() {
                 {req.category && (
                   <Badge variant="outline">{isRTL && req.category.nameAr ? req.category.nameAr : req.category.nameEn}</Badge>
                 )}
-                <Link href={`/${locale}/requests/${req.id}`}>
+                <Link href={`/${locale}/requests/${req.id}?from=company-browse`}>
                   <Button className="w-full mt-2">{isRTL ? 'عرض التفاصيل' : 'View Details'}</Button>
                 </Link>
               </CardContent>

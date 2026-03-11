@@ -120,6 +120,7 @@ export default function MyRequestsPage() {
     }
     if (activeTab === 'completed') return request.status === 'COMPLETED';
     if (activeTab === 'cancelled') return ['CANCELLED', 'REJECTED', 'EXPIRED'].includes(request.status);
+    if (activeTab === 'hasOffers') return request._count.offers > 0;
     return true;
   });
 
@@ -145,6 +146,7 @@ export default function MyRequestsPage() {
         <TabsList className="mb-6">
           <TabsTrigger value="all">{t('tabs.all')}</TabsTrigger>
           <TabsTrigger value="active">{t('tabs.active')}</TabsTrigger>
+          <TabsTrigger value="hasOffers">{t('tabs.hasOffers')}</TabsTrigger>
           <TabsTrigger value="completed">{t('tabs.completed')}</TabsTrigger>
           <TabsTrigger value="cancelled">{t('tabs.cancelled')}</TabsTrigger>
         </TabsList>
@@ -190,21 +192,34 @@ export default function MyRequestsPage() {
                             <p className="text-xs text-destructive/90">{request.rejectionReason}</p>
                           </div>
                         )}
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                          <span>
-                            {(request.budgetMin || request.budgetMax) && (
-                              <>
-                                {request.budgetMin?.toLocaleString()} - {request.budgetMax?.toLocaleString()} {request.currency}
-                              </>
-                            )}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MessageSquare className="h-4 w-4" />
-                            {request._count.offers} {td('offers')}
-                          </span>
-                          <span>
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mt-2">
+                          <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded-md">
+                            <span>
+                              {(request.budgetMin || request.budgetMax) && (
+                                <>
+                                  {request.budgetMin?.toLocaleString()} - {request.budgetMax?.toLocaleString()} {request.currency}
+                                </>
+                              )}
+                            </span>
+                          </div>
+
+                          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${
+                            request._count.offers > 0 
+                              ? 'bg-primary/10 text-primary border-primary/30 font-bold shadow-sm' 
+                              : 'bg-muted/30 text-muted-foreground border-transparent'
+                          }`}>
+                            <MessageSquare className={`h-4 w-4 ${request._count.offers > 0 ? 'fill-current' : ''}`} />
+                            <span>
+                              {request._count.offers > 0 
+                                ? `${request._count.offers} ${td('offers')}` 
+                                : td('noOffers')
+                              }
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 opacity-70">
                             {new Date(request.createdAt).toLocaleDateString(locale)}
-                          </span>
+                          </div>
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2">
