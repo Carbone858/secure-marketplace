@@ -40,7 +40,7 @@ This workflow is triggered when the user says "we are finish for today save ever
    Append the log entry to `SESSION_LOG.md`.
    ```powershell
    $logDate = Get-Date
-   $logEntry = "## Session Log - $logDate`n- Server stopped`n- Changes committed`n- Session ended successfully`n"
+   $logEntry = "## Session Log - $logDate`n- Server stopped`n- Database: Supabase Cloud (Always Active)`n- Changes committed`n- Session ended successfully`n"
    Add-Content -Path "SESSION_LOG.md" -Value $logEntry
    ```
 

@@ -4,23 +4,11 @@ description: Start server, pull changes, and log session (Start of Day Routine)
 
 This workflow is triggered when the user says "start session" or "let's work".
 
-0. Verify PostgreSQL Service.
-   Ensure the database is running before starting the session.
-   ```powershell
-   $service = Get-Service -Name "postgresql-x64-17" -ErrorAction SilentlyContinue
-   if ($null -eq $service) {
-       Write-Error "PostgreSQL 17 service not found."
-       exit 1
-   }
-   if ($service.Status -ne 'Running') {
-       Write-Host "Starting PostgreSQL service..."
-       Start-Service -Name "postgresql-x64-17"
-   } else {
-       Write-Host "PostgreSQL service is already running."
-   }
-   ```
+0. Sync Environment.
+   Ensure the Supabase connection strings in `.env` are ready for use.
 
 1. Git Pull (Project).
+
    Ensure we have the latest code from GitHub.
    ```powershell
    & "C:\Program Files\Git\cmd\git.exe" pull
