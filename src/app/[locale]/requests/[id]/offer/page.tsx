@@ -15,7 +15,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { createOfferSchema, type CreateOfferInput } from '@/lib/validations/request';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { FileUpload } from '@/components/ui/FileUpload';
+import dynamic from 'next/dynamic';
+
+const FileUpload = dynamic(() => import('@/components/ui/FileUpload').then(mod => mod.FileUpload), {
+  ssr: false, 
+  loading: () => (
+    <div className="border border-dashed rounded-xl p-8 flex flex-col items-center justify-center">
+      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mb-2" />
+      <p className="text-sm text-muted-foreground">Loading uploader...</p>
+    </div>
+  )
+});
 
 interface Request {
   id: string;
@@ -60,6 +70,7 @@ export default function SubmitOfferPage() {
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm<CreateOfferInput>({
     resolver: zodResolver(createOfferSchema),
     defaultValues: {
@@ -70,6 +81,45 @@ export default function SubmitOfferPage() {
   });
 
   const currency = watch('currency');
+  const formValues = watch();
+
+  const DRAFT_TTL = 48 * 60 * 60 * 1000; // 48 hours
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`marketplace_offer_draft_${params.id}`);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed?.content && parsed?.timestamp) {
+            const now = Date.now();
+            if (now - parsed.timestamp < DRAFT_TTL) {
+              reset({ ...parsed.content, requestId: params.id as string });
+              toast.success(t('progressRestored') || 'Progress Restored', {
+                description: t('progressRestoredDesc') || 'We have loaded your last draft.',
+                duration: 5000,
+              });
+            } else {
+              localStorage.removeItem(`marketplace_offer_draft_${params.id}`);
+            }
+          } else {
+            // legacy format fallback or invalid
+            localStorage.removeItem(`marketplace_offer_draft_${params.id}`);
+          }
+        } catch {}
+      }
+    }
+    // eslint-disable-next-deps
+  }, [params.id, reset, t]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && Object.keys(formValues).length > 2) { // check >2 so we don't save default empty state loop
+      localStorage.setItem(`marketplace_offer_draft_${params.id}`, JSON.stringify({
+        content: formValues,
+        timestamp: Date.now()
+      }));
+    }
+  }, [formValues, params.id]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -120,6 +170,10 @@ export default function SubmitOfferPage() {
       toast.success(t('success.title'), {
         description: t('success.message'),
       });
+
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(`marketplace_offer_draft_${params.id}`);
+      }
 
       const queryString = fromParam ? `?from=${fromParam}` : '';
       router.push(`/${locale}/requests/${params.id}${queryString}`);
@@ -299,7 +353,7 @@ export default function SubmitOfferPage() {
                     }}
                     onRemove={(url: string) => {
                       const current = watch('attachments') || [];
-                      setValue('attachments', current.filter(f => f !== url));
+                      setValue('attachments', current.filter((f: string) => f !== url));
                     }}
                   />
                 </div>

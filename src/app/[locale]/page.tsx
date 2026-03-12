@@ -3,15 +3,18 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
 
 import { HeroSection } from '@/components/home';
 import DynamicServicesBar from '@/components/home/DynamicServicesBar';
-import Statistics from '@/components/home/Statistics';
-import ServiceDiscovery from '@/components/home/ServiceDiscovery';
-import WhyChooseUs from '@/components/home/WhyChooseUs';
-import UserProcess from '@/components/home/UserProcess';
-import FeaturedCompanies from '@/components/home/FeaturedCompanies';
-import CompanyProcess from '@/components/home/CompanyProcess';
+
+// Lazy loading below-the-fold heavy components for low-bandwidth optimization
+const Statistics = dynamic(() => import('@/components/home/Statistics'), { ssr: true });
+const ServiceDiscovery = dynamic(() => import('@/components/home/ServiceDiscovery'), { ssr: true });
+const WhyChooseUs = dynamic(() => import('@/components/home/WhyChooseUs'), { ssr: true });
+const UserProcess = dynamic(() => import('@/components/home/UserProcess'), { ssr: true });
+const FeaturedCompanies = dynamic(() => import('@/components/home/FeaturedCompanies'), { ssr: true });
+const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'), { ssr: true });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });

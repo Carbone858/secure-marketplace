@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
@@ -56,7 +56,7 @@ export default function CompanyDashboardPage() {
 
   useEffect(() => {
     if (user && user.role !== 'COMPANY') {
-      router.push(`/${locale}/dashboard`);
+      router.push('/dashboard');
       return;
     }
     fetchDashboardData();
@@ -111,16 +111,16 @@ export default function CompanyDashboardPage() {
         </div>
         <div className="flex gap-2">
           {!data.membership && (
-            <Button variant="outline" onClick={() => router.push(`/${locale}/membership`)}>
+            <Button variant="outline" onClick={() => router.push('/membership')}>
               <Crown className="h-4 w-4 me-2" />
               {t('upgradePlan')}
             </Button>
           )}
-          <Button variant="outline" onClick={() => router.push(`/${locale}/dashboard/messages`)}>
+          <Button variant="outline" onClick={() => router.push('/dashboard/messages')}>
             <MessageSquare className="h-4 w-4 me-2" />
             {t('messagesShortcut') || 'Messages'}
           </Button>
-          <Button onClick={() => router.push(`/${locale}/company/dashboard/profile`)}>
+          <Button onClick={() => router.push('/company/dashboard/profile')}>
             {t('editProfile')}
           </Button>
         </div>
@@ -153,7 +153,7 @@ export default function CompanyDashboardPage() {
                   <p className="text-sm text-muted-foreground">{t('membership.upgradeDescription')}</p>
                 </div>
               </div>
-              <Button onClick={() => router.push(`/${locale}/membership`)}>{t('membership.viewPlans')}</Button>
+              <Button onClick={() => router.push('/membership')}>{t('membership.viewPlans')}</Button>
             </div>
           </CardContent>
         </Card>
@@ -229,7 +229,7 @@ export default function CompanyDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">{t('recent.recentProjects')}</CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/company/dashboard/projects`)}>
+            <Button variant="ghost" size="sm" onClick={() => router.push('/company/dashboard/projects')}>
               {t('recent.viewAll')}
             </Button>
           </CardHeader>
@@ -257,7 +257,7 @@ export default function CompanyDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-lg">{t('recent.recentOffers')}</CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => router.push(`/${locale}/company/dashboard/offers`)}>
+            <Button variant="ghost" size="sm" onClick={() => router.push('/company/dashboard/offers')}>
               {t('recent.viewAll')}
             </Button>
           </CardHeader>

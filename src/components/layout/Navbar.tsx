@@ -30,6 +30,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { NotificationDropdown } from '../notifications/NotificationDropdown';
+import { MessageIcon } from './MessageIcon';
 
 export function Navbar() {
   const t = useTranslations();
@@ -85,13 +86,9 @@ export function Navbar() {
                 {/* Notifications always visible */}
                 <NotificationDropdown />
 
-                {/* desktop-only message icon for now */}
-                <div className="hidden md:flex items-center gap-1">
-                  <Button variant="ghost" size="icon" asChild className="rounded-full">
-                    <Link href={`/${locale}/dashboard/messages`}>
-                      <MessageSquare className="h-5 w-5" />
-                    </Link>
-                  </Button>
+                {/* message icon visible on all screens next to notifications */}
+                <div className="flex items-center gap-1">
+                  <MessageIcon locale={locale} />
                 </div>
 
                 {/* User Menu - hides on mobile because MobileNav handles it, but maybe keep it? User said "missing icon", usually notification bell should be near the top */}

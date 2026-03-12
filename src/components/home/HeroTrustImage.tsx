@@ -70,7 +70,7 @@ export default function HeroTrustImage({
               <div className="h-7 w-7 rounded-full bg-primary/30 border-2 border-card" />
               <div className="h-7 w-7 rounded-full bg-primary/40 border-2 border-card" />
             </div>
-            <span className="text-xs font-semibold text-foreground">+10K</span>
+            <span className="text-xs font-semibold text-foreground">+150</span>
           </div>
         </div>
       </div>

@@ -845,7 +845,9 @@
         "requireVerificationDesc": "Only verified companies can see and offer on this request",
         "reviewTitle": "Review & Submit",
         "showReview": "Review",
-        "hideReview": "Hide Review"
+        "hideReview": "Hide Review",
+        "progressRestored": "Progress Restored",
+        "progressRestoredDesc": "We have loaded your last draft."
       }
     },
     "edit": {
@@ -1013,7 +1015,9 @@
       "common": {
         "back": "Back",
         "cancel": "Cancel"
-      }
+      },
+      "progressRestored": "Progress Restored",
+      "progressRestoredDesc": "We have loaded your last draft."
     }
   },
   "offers": {
@@ -1797,5 +1801,13 @@
       "account": "Account",
       "payments": "Payments"
     }
+  },
+  "membership": {
+    "title": "Choose the Perfect Plan for Your Business",
+    "subtitle": "Unlock exclusive features, increase your visibility, and reach more customers with our membership tiers.",
+    "customSolution": "Need a custom solution for your region?",
+    "customSolutionDesc": "We understand the unique challenges in certain markets. If you require specialized assistance or alternative payment methods, our team is here to help.",
+    "contactSupport": "Contact Support Team",
+    "comingSoon": "Payment gateway integration coming soon!"
   }
 }

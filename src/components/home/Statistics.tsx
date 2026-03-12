@@ -6,10 +6,10 @@ export default function Statistics() {
     const t = useTranslations('home');
 
     const stats = [
-        { value: '10K+', label: t('stats.verifiedCompanies') },
-        { value: '50K+', label: t('stats.serviceRequests') },
-        { value: '100K+', label: t('stats.happyCustomers') },
-        { value: '4.8', label: t('stats.averageRating') },
+        { value: '150+', label: t('stats.verifiedCompanies') },
+        { value: '800+', label: t('stats.serviceRequests') },
+        { value: '2,000+', label: t('stats.happyCustomers') },
+        { value: '4.9', label: t('stats.averageRating') },
     ];
 
     return (

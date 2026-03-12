@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import imageCompression from 'browser-image-compression';
 
 /* ── types ─────────────────────────────────────────── */
 interface Category {
@@ -47,6 +48,8 @@ interface RequestFormSPAProps {
 const SECTIONS_AUTH = ['details', 'location', 'budget', 'media', 'visibility'] as const;
 const SECTIONS_GUEST = ['details', 'location', 'budget', 'media', 'visibility', 'account'] as const;
 type SectionId = 'details' | 'location' | 'budget' | 'media' | 'visibility' | 'account';
+
+const DRAFT_TTL = 48 * 60 * 60 * 1000; // 48 hours in ms
 
 interface SectionMeta {
   id: SectionId;
@@ -182,13 +185,14 @@ export function RequestFormSPA({
   });
 
   /* ── guest contact info state ─────────────────── */
-  const [contactData, setContactData] = useState({
+  const [contactData, setContactData] = useState<{ name: string; email: string; phone: string }>({
     name: '',
     email: '',
     phone: '',
   });
 
-  const [formData, setFormData] = useState(() => {
+  const syriaCountry = countries.find((c) => c.code === 'SY');
+  const [formData, setFormData] = useState<any>(() => {
     if (initialData) {
       return {
         title: initialData.title || '',
@@ -208,7 +212,7 @@ export function RequestFormSPA({
         requireVerification: initialData.requireVerification || false,
       };
     }
-    const syriaCountry = countries.find((c) => c.code === 'SY');
+    
     return {
       title: '',
       description: '',
@@ -227,6 +231,70 @@ export function RequestFormSPA({
       requireVerification: false,
     };
   });
+
+  // Auto-load once on mount
+  useEffect(() => {
+    if (initialData || typeof window === 'undefined') return;
+
+    let restored = false;
+    const now = Date.now();
+
+    const savedForm = localStorage.getItem('marketplace_request_form_draft');
+    if (savedForm) {
+      try {
+        const parsed = JSON.parse(savedForm);
+        if (parsed?.content && parsed?.timestamp) {
+          if (now - parsed.timestamp < DRAFT_TTL) {
+            setFormData(parsed.content);
+            restored = true;
+          } else {
+            localStorage.removeItem('marketplace_request_form_draft');
+          }
+        }
+      } catch {}
+    }
+
+    const savedContact = localStorage.getItem('marketplace_request_contact_draft');
+    if (savedContact) {
+      try {
+        const parsed = JSON.parse(savedContact);
+        if (parsed?.content && parsed?.timestamp) {
+          if (now - parsed.timestamp < DRAFT_TTL) {
+            setContactData(parsed.content);
+            restored = true;
+          } else {
+            localStorage.removeItem('marketplace_request_contact_draft');
+          }
+        }
+      } catch {}
+    }
+
+    if (restored) {
+      toast.success(t('spa.progressRestored') || 'Progress Restored', {
+        description: t('spa.progressRestoredDesc') || 'We have loaded your last draft.',
+        duration: 5000,
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-save hooks
+  useEffect(() => {
+    if (!initialData && typeof window !== 'undefined') {
+      localStorage.setItem('marketplace_request_form_draft', JSON.stringify({
+        content: formData,
+        timestamp: Date.now()
+      }));
+    }
+  }, [formData, initialData]);
+
+  useEffect(() => {
+    if (!initialData && isGuest && typeof window !== 'undefined') {
+      localStorage.setItem('marketplace_request_contact_draft', JSON.stringify({
+        content: contactData,
+        timestamp: Date.now()
+      }));
+    }
+  }, [contactData, isGuest, initialData]);
 
   const [subcategories, setSubcategories] = useState<Category[]>([]);
 
@@ -283,18 +351,61 @@ export function RequestFormSPA({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
-    setFormData((prev) => ({
+    const newValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
+
+    setFormData((prev: any) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: newValue,
     }));
     setError('');
-    // clear field-level error on change
-    if (fieldErrors[name]) {
+    
+    // Live budget validation
+    if (name === 'budgetMin' || name === 'budgetMax') {
+      const minStr = name === 'budgetMin' ? newValue as string : formData.budgetMin;
+      const maxStr = name === 'budgetMax' ? newValue as string : formData.budgetMax;
+      
+      const min = parseFloat(minStr);
+      const max = parseFloat(maxStr);
+      
       setFieldErrors((prev) => {
         const copy = { ...prev };
-        delete copy[name];
+        
+        // Clear both initially to re-evaluate
+        delete copy.budgetMin;
+        delete copy.budgetMax;
+        
+        if (!isNaN(min) && min < 0) copy.budgetMin = t('errors.invalidBudget');
+        if (!isNaN(max) && max < 0) copy.budgetMax = t('errors.invalidBudget');
+        
+        if (minStr && maxStr && !isNaN(min) && !isNaN(max) && min > max) {
+          copy.budgetMin = t('errors.budgetMinExceedsMax');
+        }
+        
         return copy;
       });
+    } else if (name === 'deadline') {
+      const selectedDate = new Date(newValue as string);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      setFieldErrors((prev) => {
+        const copy = { ...prev };
+        if (newValue && selectedDate < today) {
+          copy.deadline = t('errors.deadlinePast');
+        } else {
+          delete copy.deadline;
+        }
+        return copy;
+      });
+    } else {
+      // clear field-level error on change for other fields
+      if (fieldErrors[name]) {
+        setFieldErrors((prev) => {
+          const copy = { ...prev };
+          delete copy[name];
+          return copy;
+        });
+      }
     }
   };
 
@@ -309,7 +420,7 @@ export function RequestFormSPA({
       }
     }
 
-    setContactData((prev) => ({ ...prev, [name]: value }));
+    setContactData((prev: any) => ({ ...prev, [name]: value }));
     const fieldKey = `contact${name.charAt(0).toUpperCase() + name.slice(1)}`;
     if (fieldErrors[fieldKey]) {
       setFieldErrors((prev) => { const c = { ...prev }; delete c[fieldKey]; return c; });
@@ -318,7 +429,7 @@ export function RequestFormSPA({
 
   /* ── category change (load subcategories) ───────── */
   const handleCategoryChange = async (categoryId: string) => {
-    setFormData((prev) => ({ ...prev, categoryId, subcategoryId: '' }));
+    setFormData((prev: any) => ({ ...prev, categoryId, subcategoryId: '' }));
     if (fieldErrors.categoryId) {
       setFieldErrors((prev) => { const c = { ...prev }; delete c.categoryId; return c; });
     }
@@ -339,7 +450,7 @@ export function RequestFormSPA({
 
   /* ── country change (load cities) ───────────────── */
   const handleCountryChange = async (countryId: string) => {
-    setFormData((prev) => ({ ...prev, countryId, cityId: '' }));
+    setFormData((prev: any) => ({ ...prev, countryId, cityId: '' }));
     if (fieldErrors.countryId) {
       setFieldErrors((prev) => { const c = { ...prev }; delete c.countryId; return c; });
     }
@@ -360,12 +471,12 @@ export function RequestFormSPA({
   useEffect(() => {
     if (initialData?.categoryId) {
       handleCategoryChange(initialData.categoryId).then(() => {
-        setFormData(prev => ({ ...prev, subcategoryId: initialData.subcategoryId || '' }));
+        setFormData((prev: any) => ({ ...prev, subcategoryId: initialData.subcategoryId || '' }));
       });
     }
     if (initialData?.countryId) {
       handleCountryChange(initialData.countryId).then(() => {
-        setFormData(prev => ({ ...prev, cityId: initialData.cityId || '' }));
+        setFormData((prev: any) => ({ ...prev, cityId: initialData.cityId || '' }));
       });
     } else if (formData.countryId) {
       handleCountryChange(formData.countryId);
@@ -395,15 +506,31 @@ export function RequestFormSPA({
         toast.error(t('spa.invalidFileType'));
         continue;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        console.warn(`File ${file.name} rejected. Size ${file.size} > 5MB`);
+      if (file.size > 20 * 1024 * 1024) {
+        console.warn(`File ${file.name} rejected. Size ${file.size} > 20MB before compression`);
         toast.error(t('spa.fileTooLarge'));
         continue;
       }
 
-      console.log(`File ${file.name} passed validation. Uploading...`);
+      console.log(`File ${file.name} passed validation. Compressing...`);
+      
+      let compressedFile = file;
+      try {
+        const options = {
+          maxSizeMB: 0.3, // Target 300KB
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          fileType: 'image/webp' // Convert to WebP for best compression
+        };
+        compressedFile = await imageCompression(file as File, options);
+        console.log(`Compressed from ${file.size / 1024 / 1024} MB to ${compressedFile.size / 1024 / 1024} MB`);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+        // If compression fails, gracefully fallback to the original file
+      }
+
       const fd = new FormData();
-      fd.append('file', file);
+      fd.append('file', compressedFile, compressedFile.name.replace(/\.[^/.]+$/, ".webp"));
       try {
         const res = await fetch('/api/upload', { method: 'POST', body: fd });
         const data = await res.json();
@@ -542,6 +669,12 @@ export function RequestFormSPA({
         if (data.data?.isExistingUser) {
           setIsExistingUserSuccess(true);
         }
+
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('marketplace_request_form_draft');
+          localStorage.removeItem('marketplace_request_contact_draft');
+        }
+
         setSuccess(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
         // Guest mode: don't redirect, show check-email message or login button
@@ -560,6 +693,12 @@ export function RequestFormSPA({
           setError(data.message || t('errors.general'));
           return;
         }
+
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('marketplace_request_form_draft');
+          localStorage.removeItem('marketplace_request_contact_draft');
+        }
+
         setSuccess(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => router.push(`/${locale}/requests/${requestId || data.data.request.id}`), 1500);
@@ -868,7 +1007,7 @@ export function RequestFormSPA({
                   <button
                     key={level}
                     type="button"
-                    onClick={() => setFormData((p) => ({ ...p, urgency: level }))}
+                    onClick={() => setFormData((p: any) => ({ ...p, urgency: level }))}
                     className={`px-3 py-2.5 rounded-lg border text-sm font-medium transition-all ${formData.urgency === level
                       ? `${colors[level]} ring-2 ring-offset-1 ring-current`
                       : 'border-border text-muted-foreground hover:border-primary/30'
@@ -1043,6 +1182,7 @@ export function RequestFormSPA({
                 onChange={handleChange}
                 className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base ${fieldErrors.deadline ? 'border-destructive' : 'border-input'
                   }`}
+                min={new Date().toISOString().split('T')[0]}
               />
             </div>
             {renderFieldError(fieldErrors, 'deadline')}

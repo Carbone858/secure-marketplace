@@ -83,28 +83,28 @@ export default function AdminDashboardPage() {
       value: data.stats.totalUsers,
       icon: Users,
       color: 'text-info',
-      href: `/${locale}/admin/users`,
+      href: '/admin/users',
     },
     {
       title: t('stats.totalCompanies'),
       value: data.stats.totalCompanies,
       icon: Building2,
       color: 'text-success',
-      href: `/${locale}/admin/companies`,
+      href: '/admin/companies',
     },
     {
       title: t('stats.totalRequests'),
       value: data.stats.totalRequests,
       icon: FileText,
       color: 'text-primary',
-      href: `/${locale}/admin/requests`,
+      href: '/admin/requests',
     },
     {
       title: t('stats.totalProjects'),
       value: data.stats.totalProjects,
       icon: Briefcase,
       color: 'text-warning',
-      href: `/${locale}/admin/projects`,
+      href: '/admin/projects',
     },
   ];
 
@@ -151,7 +151,7 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
               <Button
-                onClick={() => router.push(`/${locale}/admin/verifications`)}
+                onClick={() => router.push('/admin/verifications')}
               >
                 {t('pendingVerifications.review')}
               </Button>

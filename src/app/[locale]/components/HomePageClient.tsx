@@ -71,15 +71,15 @@ export default function HomePageClient({ locale }: HomePageClientProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-primary">10K+</div>
+              <div className="text-3xl font-bold text-primary">150+</div>
               <div className="text-muted-foreground">{isRTL ? 'شركة' : 'Companies'}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary">50K+</div>
+              <div className="text-3xl font-bold text-primary">800+</div>
               <div className="text-muted-foreground">{isRTL ? 'طلب' : 'Requests'}</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary">98%</div>
+              <div className="text-3xl font-bold text-primary">99%</div>
               <div className="text-muted-foreground">{isRTL ? 'رضا العملاء' : 'Satisfaction'}</div>
             </div>
           </div>

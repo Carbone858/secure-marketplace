@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Upload, X, FileText, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from './button';
 import { toast } from 'sonner';
+import imageCompression from 'browser-image-compression';
 
 interface FileUploadProps {
     onUploadComplete: (url: string) => void;
@@ -39,8 +40,29 @@ export function FileUpload({
         }
 
         setIsUploading(true);
+        let fileToUpload = selectedFile;
+
+        // Compress images before upload
+        if (selectedFile.type.startsWith('image/')) {
+             try {
+                 const options = {
+                     maxSizeMB: 0.3, // Target 300KB
+                     maxWidthOrHeight: 1920,
+                     useWebWorker: true,
+                     fileType: 'image/webp'
+                 };
+                 fileToUpload = await imageCompression(selectedFile as File, options);
+                 // Preserve original extension if browser-image-compression renames to 'image'
+                 const newName = selectedFile.name.replace(/\.[^/.]+$/, ".webp");
+                 fileToUpload = new File([fileToUpload], newName, { type: 'image/webp' });
+             } catch (error) {
+                 console.error('Error compressing image:', error);
+                 // Fallback to original file on failure
+             }
+        }
+
         const formData = new FormData();
-        formData.append('file', selectedFile);
+        formData.append('file', fileToUpload);
 
         try {
             const res = await fetch('/api/upload', {
