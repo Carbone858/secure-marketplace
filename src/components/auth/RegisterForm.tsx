@@ -75,6 +75,7 @@ export function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [regResult, setRegResult] = useState<{ verified?: boolean; message?: string } | null>(null);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -193,6 +194,7 @@ export function RegisterForm() {
         return;
       }
 
+      setRegResult(data.data || {});
       setIsSuccess(true);
     } catch (error) {
       console.error('Registration error:', error);
@@ -230,10 +232,16 @@ export function RegisterForm() {
           <h2 className="text-2xl font-bold text-success mb-2">
             {t('success.title')}
           </h2>
-          <p className="text-success mb-4">{t('success.message')}</p>
-          <p className="text-sm text-success mb-6">
-            {t('success.checkEmail', { email: formData.email })}
+          <p className="text-success mb-4">
+            {regResult?.verified 
+              ? (isRTL ? 'تم إنشاء حسابك بنجاح. يمكنك الآن تسجيل الدخول.' : 'Your account has been created successfully. You can now sign in.')
+              : t('success.message')}
           </p>
+          {!regResult?.verified && (
+            <p className="text-sm text-success mb-6">
+              {t('success.checkEmail', { email: formData.email })}
+            </p>
+          )}
           <Link
             href={`/${locale}/auth/login`}
             className="inline-block bg-success text-white px-6 py-2 rounded-lg hover:bg-success/90 transition-colors"

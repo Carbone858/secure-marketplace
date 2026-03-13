@@ -1902,11 +1902,27 @@
     "contactButton": "Contact Support"
   },
   "membership": {
-    "title": "Choose the Perfect Plan for Your Business",
-    "subtitle": "Unlock exclusive features, increase your visibility, and reach more customers with our membership tiers.",
-    "customSolution": "Need a custom solution for your region?",
-    "customSolutionDesc": "We understand the unique challenges in certain markets. If you require specialized assistance or alternative payment methods, our team is here to help.",
-    "contactSupport": "Contact Support Team",
-    "comingSoon": "Payment gateway integration coming soon!"
+    "badge": "Launch Announcement",
+    "heading": "Everything is Free!",
+    "subheading": "We're launching with full access at no cost for all users and service providers.",
+    "description": "Enjoy all platform features for free during our launch period. Paid plans may be introduced in the future — and early members will always get the best deal.",
+    "postRequest": "Post a Request — It's Free",
+    "contactUs": "Contact Us"
+  },
+  "coming_soon": {
+    "badge": "Coming Soon",
+    "heading": "We're working on it!",
+    "description": "This page is under construction. Check back soon — great things are on the way.",
+    "backHome": "Back to Home"
+  },
+  "maintenance": {
+    "title": "Under Maintenance",
+    "description": "Service Marketplace is currently undergoing scheduled improvements. We'll be back shortly with better tools to serve you.",
+    "estimatedTime": "Estimated Time",
+    "approxTime": "Approx. 2 hours",
+    "contactSupport": "Contact Support",
+    "checkAgain": "Check Again",
+    "systemStatus": "System Status",
+    "rightsReserved": "All rights reserved."
   }
 }

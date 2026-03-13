@@ -7,6 +7,7 @@ import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { registerLimiter, getClientIp } from '@/lib/rate-limit';
 import crypto from 'crypto';
 import { z } from 'zod';
+import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 
 // Standalone schema definition to avoid Zod extension issues
 const companyRegisterSchema = z.object({
@@ -134,6 +135,9 @@ export async function POST(request: NextRequest) {
         const verificationToken = generateVerificationToken();
         const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
+        // Check feature flag
+        const isVerificationRequired = await getFeatureFlag(FEATURE_FLAG_KEYS.isEmailVerificationRequired);
+
         // Transaction: Create User + Company + Token + Services
         await prisma.$transaction(async (tx) => {
             const user = await tx.user.create({
@@ -145,6 +149,7 @@ export async function POST(request: NextRequest) {
                     phone: data.phone,
                     role: 'COMPANY',
                     isActive: true,
+                    emailVerified: isVerificationRequired ? null : new Date(),
                 },
             });
 
@@ -165,13 +170,15 @@ export async function POST(request: NextRequest) {
                 },
             });
 
-            await tx.verificationToken.create({
-                data: {
-                    email: data.email,
-                    token: verificationToken,
-                    expires: tokenExpiry,
-                },
-            });
+            if (isVerificationRequired) {
+                await tx.verificationToken.create({
+                    data: {
+                        email: data.email,
+                        token: verificationToken,
+                        expires: tokenExpiry,
+                    },
+                });
+            }
 
             // Create Company Services based on selected Categories
             if (data.serviceIds && data.serviceIds.length > 0) {
@@ -193,15 +200,25 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        // Send Email
-        const locale = request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en';
-        const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/verify-email/${verificationToken}`;
-        const emailTemplate = getVerificationEmailTemplate(data.name, verifyUrl, locale);
+        let emailSent = false;
+        if (isVerificationRequired) {
+            // Send Email
+            const locale = request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en';
+            const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/verify-email/${verificationToken}`;
+            const emailTemplate = getVerificationEmailTemplate(data.name, verifyUrl, locale);
 
-        await sendEmail({ to: data.email, template: emailTemplate });
+            const emailResult = await sendEmail({ to: data.email, template: emailTemplate });
+            emailSent = emailResult.success;
+        }
 
         return NextResponse.json(
-            { success: true, message: 'Registration successful. Check your email.' },
+            { 
+                success: true, 
+                message: isVerificationRequired 
+                    ? 'Registration successful. Check your email.' 
+                    : 'Registration successful. You can now sign in.',
+                emailSent
+            },
             { status: 201 }
         );
 

@@ -12,6 +12,7 @@ import { registerLimiter, getClientIp, checkRateLimit } from '@/lib/rate-limit';
 import { SecurityLogType } from '@prisma/client';
 import crypto from 'crypto';
 import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
+import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 
 /**
  * Verify reCAPTCHA v3 token
@@ -184,6 +185,9 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
     // Hash password with Argon2
     const hashedPassword = await hashPassword(password);
 
+    // Check if email verification is required via feature flag
+    const isVerificationRequired = await getFeatureFlag(FEATURE_FLAG_KEYS.isEmailVerificationRequired);
+
     // Create user in database
     const user = await prisma.user.create({
       data: {
@@ -192,7 +196,7 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
         password: hashedPassword,
         name,
         phone,
-        emailVerified: null,
+        emailVerified: isVerificationRequired ? null : new Date(),
         isActive: true,
       },
       select: {
@@ -203,39 +207,45 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
       },
     });
 
-    // Generate verification token
-    const verificationToken = generateVerificationToken();
-    const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    let emailSent = false;
+    let verificationToken = null;
 
-    // Store verification token
-    await prisma.verificationToken.create({
-      data: {
-        email,
-        token: verificationToken,
-        expires: tokenExpiry,
-      },
-    });
+    if (isVerificationRequired) {
+      // Generate verification token
+      verificationToken = generateVerificationToken();
+      const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-    // Send verification email
-    const locale = request.headers.get('accept-language')?.startsWith('ar')
-      ? 'ar'
-      : 'en';
-    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/verify-email/${verificationToken}`;
+      // Store verification token
+      await prisma.verificationToken.create({
+        data: {
+          email,
+          token: verificationToken,
+          expires: tokenExpiry,
+        },
+      });
 
-    const emailTemplate = getVerificationEmailTemplate(
-      name || email,
-      verificationUrl,
-      locale
-    );
+      // Send verification email
+      const locale = request.headers.get('accept-language')?.startsWith('ar')
+        ? 'ar'
+        : 'en';
+      const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/verify-email/${verificationToken}`;
 
-    const emailResult = await sendEmail({
-      to: email,
-      template: emailTemplate,
-    });
+      const emailTemplate = getVerificationEmailTemplate(
+        name || email,
+        verificationUrl,
+        locale
+      );
 
-    if (!emailResult.success) {
-      console.error('Failed to send verification email:', emailResult.error);
-      // Don't fail registration if email fails, but log it
+      const emailResult = await sendEmail({
+        to: email,
+        template: emailTemplate,
+      });
+      
+      emailSent = emailResult.success;
+
+      if (!emailResult.success) {
+        console.error('Failed to send verification email:', emailResult.error);
+      }
     }
 
     // Log successful registration
@@ -247,11 +257,14 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: true,
-        message: 'Registration successful. Please check your email to verify your account.',
+        message: isVerificationRequired 
+          ? 'Registration successful. Please check your email to verify your account.'
+          : 'Registration successful. You can now sign in.',
         data: {
           userId: user.id,
           email: user.email,
-          emailSent: emailResult.success,
+          emailSent,
+          verified: !isVerificationRequired
         },
       },
       {

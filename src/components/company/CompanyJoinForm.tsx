@@ -251,6 +251,7 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
     const [completedSteps, setCompletedSteps] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [regResult, setRegResult] = useState<{ verified?: boolean; message?: string } | null>(null);
     const [error, setError] = useState('');
 
     // Data
@@ -409,6 +410,7 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || 'Registration failed');
+            setRegResult(data);
             setIsSuccess(true);
         } catch (err: any) {
             setError(err.message || 'Something went wrong');
@@ -432,25 +434,31 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
                     </div>
                     <h1 className="text-3xl font-bold mb-4">{isRTL ? 'تم التسجيل بنجاح!' : `Welcome, ${formData.companyName}!`}</h1>
                     <p className="text-muted-foreground mb-8 text-lg">
-                        {isRTL ? (
-                            <>لقد أرسلنا رابط التحقق إلى <strong className="text-foreground">{formData.email}</strong>.<br /> يرجى التحقق من بريدك لتفعيل لوحة التحكم.</>
+                        {regResult?.verified ? (
+                            isRTL ? 'لقد تم إنشاء حساب شركتك بنجاح. يمكنك الآن تسجيل الدخول والبدء في تقديم العطاءات.' : 'Your company account has been created successfully. You can now sign in and start bidding.'
                         ) : (
-                            <>We've sent a verification link to <strong className="text-foreground">{formData.email}</strong>.<br /> Please check your inbox to activate your dashboard.</>
+                            isRTL ? (
+                                <>لقد أرسلنا رابط التحقق إلى <strong className="text-foreground">{formData.email}</strong>.<br /> يرجى التحقق من بريدك لتفعيل لوحة التحكم.</>
+                            ) : (
+                                <>We've sent a verification link to <strong className="text-foreground">{formData.email}</strong>.<br /> Please check your inbox to activate your dashboard.</>
+                            )
                         )}
                     </p>
                     <div className="flex flex-col gap-3">
-                        <Link href={`/${locale}`} className="w-full bg-primary text-primary-foreground py-3 rounded-xl font-bold hover:bg-primary/90 transition-all">
-                            {isRTL ? 'الذهاب للرئيسية' : 'Go to Homepage'}
+                        <Link href={`/${locale}/auth/login`} className="w-full bg-primary text-primary-foreground py-3 rounded-xl font-bold hover:bg-primary/90 transition-all">
+                            {isRTL ? 'تسجيل الدخول' : 'Go to Login'}
                         </Link>
-                        <button
-                            disabled={resendTimer > 0}
-                            onClick={() => setResendTimer(60)}
-                            className="text-sm font-medium text-muted-foreground hover:text-primary disabled:opacity-50 transition-colors"
-                        >
-                            {resendTimer > 0
-                                ? (isRTL ? `إعادة الإرسال بعد ${resendTimer} ثانية` : `Resend email in ${resendTimer}s`)
-                                : (isRTL ? 'إعادة إرسال بريد التحقق' : 'Resend Verification Email')}
-                        </button>
+                        {!regResult?.verified && (
+                            <button
+                                disabled={resendTimer > 0}
+                                onClick={() => setResendTimer(60)}
+                                className="text-sm font-medium text-muted-foreground hover:text-primary disabled:opacity-50 transition-colors"
+                            >
+                                {resendTimer > 0
+                                    ? (isRTL ? `إعادة الإرسال بعد ${resendTimer} ثانية` : `Resend email in ${resendTimer}s`)
+                                    : (isRTL ? 'إعادة إرسال بريد التحقق' : 'Resend Verification Email')}
+                            </button>
+                        )}
                     </div>
                 </motion.div>
             </div>

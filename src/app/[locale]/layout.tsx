@@ -7,6 +7,10 @@ import { getMessages } from 'next-intl/server';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 
 const inter = Inter({
@@ -41,6 +45,23 @@ export default async function RootLayout({
   }
 
   const isRTL = locale === 'ar';
+
+  // Maintenance Mode Check
+  const isMaintenanceMode = await getFeatureFlag(FEATURE_FLAG_KEYS.isMaintenanceMode);
+  if (isMaintenanceMode) {
+    const isAdminPath = (await import('next/headers')).headers().get('x-pathname')?.includes('/admin');
+    const isMaintenancePath = (await import('next/headers')).headers().get('x-pathname')?.includes('/maintenance');
+    const isAuthPath = (await import('next/headers')).headers().get('x-pathname')?.includes('/auth/');
+
+    if (!isAdminPath && !isMaintenancePath && !isAuthPath) {
+      const session = await getServerSession(authOptions);
+      const isUserAdmin = session?.user?.role === 'ADMIN' || session?.user?.role === 'SUPER_ADMIN';
+
+      if (!isUserAdmin) {
+        redirect(`/${locale}/maintenance`);
+      }
+    }
+  }
 
   return (
     <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>

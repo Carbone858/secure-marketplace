@@ -15,10 +15,10 @@ This document outlines the authoritative manual testing path to verify the newly
 ### 1. State Machine & Visibility Rules
 
 **Scenario:** User creates a Request, Admin approves.
-- [ ] **Step 1:** User creates a request. It appears as `PENDING` on their dashboard.
-- [ ] **Step 2:** Ensure this `PENDING` request does **not** appear on the public `Browse` page or to any companies.
-- [ ] **Step 3:** Admin logs in, clicks `Approve`. Request status becomes `ACTIVE`.
-- [ ] **Step 4:** Ensure the `ACTIVE` request now appears on the public `Browse` page and for companies.
+- [ x] **Step 1:** User creates a request. It appears as `PENDING` on their dashboard.
+- [ x] **Step 2:** Ensure this `PENDING` request does **not** appear on the public `Browse` page or to any companies.
+- [ x] **Step 3:** Admin logs in, clicks `Approve`. Request status becomes `ACTIVE`.
+- [x ] **Step 4:** Ensure the `ACTIVE` request now appears on the public `Browse` page and for companies.
 - [ ] **Step 5:** **(Negative Test)** Try to edit the `ACTIVE` request. Verify changes stick.
 
 ---

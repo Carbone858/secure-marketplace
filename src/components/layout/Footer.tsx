@@ -29,6 +29,7 @@ export function Footer() {
     ],
   };
 
+
   const socialLinks = [
     { name: 'Facebook', icon: Facebook, href: '#' },
     { name: 'Twitter', icon: Twitter, href: '#' },

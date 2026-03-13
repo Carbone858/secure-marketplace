@@ -195,9 +195,7 @@ export default async function middleware(request: NextRequest) {
   }
 
   // Only apply next-intl to non-API routes (reuse existing pathname)
-  if (pathname.startsWith('/api/')) {
-    return NextResponse.next();
-  }
+  request.headers.set('x-pathname', pathname);
   return intlMiddleware(request);
 }
 
