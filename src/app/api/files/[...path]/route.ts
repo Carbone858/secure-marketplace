@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { getSession } from '@/lib/auth-session/session';
 import { resolveUploadPath } from '@/lib/upload';
 import { readFile } from 'fs/promises';

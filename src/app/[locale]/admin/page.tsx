@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import LiveErrorsPanel from '@/components/admin/LiveErrorsPanel';
 import {
   Users,
   Building2,
@@ -135,6 +136,9 @@ export default function AdminDashboardPage() {
           </Card>
         ))}
       </div>
+
+      {/* Live Errors Monitoring */}
+      <LiveErrorsPanel />
 
       {/* Pending Verifications Alert */}
       {data.stats.pendingVerifications > 0 && (

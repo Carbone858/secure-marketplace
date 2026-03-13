@@ -29,17 +29,27 @@ Use this checklist before moving the site from Development to Production.
 - [ ] **Regression Suite**: Run `npm run test:regression`.
 - [ ] **E2E Visual**: Final manual walkthrough of the project posting flow.
 
-## 📊 Error Monitoring & Health
-- [ ] **Dashboard Integration**: 
-    To add `LiveErrorsPanel` to your health dashboard, simply import and render it:
-    ```tsx
-    import LiveErrorsPanel from '@/components/admin/LiveErrorsPanel';
-    // Then inside your dashboard page:
-    <LiveErrorsPanel />
-    ```
-- [ ] **API Instrumentation**:
-    To wrap future routes with automatic error monitoring:
-    ```ts
-    import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
-    export const POST = withErrorMonitoring(async (req) => { ... }, 'AUTH', 'auth-login');
-    ```
+## 🏁 Phase 14: Final Launch Readiness (Pre-Deployment)
+- [ ] **End-to-End "Happy Path" Audit**: 
+    - [ ] Complete Registration → Email Verification.
+    - [ ] Post a Request → Receive/Review Offer.
+    - [ ] Admin approval of a new company.
+- [ ] **Production Environment Sync**:
+    - [ ] Verify `.env.production` contains valid reCAPTCHA, SMTP, and Supabase keys.
+    - [ ] Audit `NEXT_PUBLIC_APP_URL` and `NEXTAUTH_URL`.
+- [ ] **Performance & SEO Smoke Test**:
+    - [ ] Check `<title>` and `meta description` on home/login/register for both AR/EN.
+    - [ ] Verify images load correctly with intended WebP/AVIF formats.
+- [ ] **Final Build & Cleanup**:
+    - [ ] Run `npm run build` (Clean slate: `rmdir /s /q .next` first).
+    - [ ] Fix any remaining hydration or build-time warnings.
+- [ ] **Strict Security Mode**:
+    - [ ] **Final CSP Tightening**: Remove `'unsafe-eval'` from `next.config.js` for production.
+- [ ] **Database Readiness**:
+    - [ ] Run `npx prisma migrate deploy` against Supabase production instance.
+    - [ ] Verify seed data (Countries/Cities) is present in prod.
+
+## 📊 Monitoring & Maintenance (Post-Launch)
+- [ ] Monitor the `LiveErrorsPanel` for any recurring production issues.
+- [ ] Check SMTP logs for successful delivery of verification emails.
+- [ ] Audit `SecurityLog` table for failed login or registration spikes.

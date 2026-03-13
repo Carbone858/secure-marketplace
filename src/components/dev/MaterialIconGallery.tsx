@@ -9,7 +9,7 @@ export default function MaterialIconGallery() {
       <h1 style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 24 }}>Material Design Icons Gallery</h1>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 24 }}>
         {iconKeys.map((key) => {
-          const Icon = MdIcons[key];
+          const Icon = MdIcons[key as keyof typeof MdIcons];
           return (
             <div key={key} style={{ textAlign: 'center', fontSize: 16 }}>
               <Icon size={40} style={{ marginBottom: 8 }} />

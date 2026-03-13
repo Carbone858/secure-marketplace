@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
+import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
 
 // GET /api/offers - Fetch offers for the authenticated company
-export async function GET(request: NextRequest) {
+export const GET = withErrorMonitoring(async (request: NextRequest) => {
     try {
         const auth = await authenticateRequest(request);
         if (auth instanceof NextResponse) return auth;
@@ -69,4 +70,4 @@ export async function GET(request: NextRequest) {
             { status: 500 }
         );
     }
-}
+}, 'OFFERS', 'offers-list');

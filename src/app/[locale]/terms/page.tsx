@@ -1,4 +1,13 @@
+import { getTranslations } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+    const t = await getTranslations({ locale, namespace: 'terms' });
+    return {
+        title: t('meta.title'),
+        description: t('meta.description'),
+    };
+}
 
 export default function TermsPage() {
     const t = useTranslations('terms');
@@ -14,49 +23,44 @@ export default function TermsPage() {
                 <div className="prose prose-lg dark:prose-invert max-w-none">
                     <p>{t('intro')}</p>
 
-                    <h2>1. Introduction</h2>
+                    <h2>{t('sections.intro.title')}</h2>
                     <p>
-                        Welcome to Secure Service Marketplace. By using our website and services, you agree to these Terms of Service.
-                        Please read them carefully.
+                        {t('sections.intro.content')}
                     </p>
 
-                    <h2>2. User Accounts</h2>
+                    <h2>{t('sections.accounts.title')}</h2>
                     <p>
-                        To access certain features, you must create an account. You represent that the information you provide is accurate
-                        and that you will keep your password secure.
+                        {t('sections.accounts.content')}
                     </p>
 
-                    <h2>3. Service Requests & Offers</h2>
+                    <h2>{t('sections.requests.title')}</h2>
                     <p>
-                        Customers may post service requests, and Service Providers may submit offers. All transactions are solely between
-                        the Customer and the Service Provider. We do not guarantee the quality or safety of services provided.
+                        {t('sections.requests.content')}
                     </p>
 
-                    <h2>4. Verification</h2>
+                    <h2>{t('sections.verification.title')}</h2>
                     <p>
-                        We verify companies to the best of our ability, but this does not constitute an endorsement. Users should always
-                        exercise due diligence.
+                        {t('sections.verification.content')}
                     </p>
 
-                    <h2>5. Prohibited Conduct</h2>
+                    <h2>{t('sections.conduct.title')}</h2>
                     <p>
-                        You agree not to use the platform for any illegal purpose, to harass others, or to post false or misleading information.
+                        {t('sections.conduct.content')}
                     </p>
 
-                    <h2>6. Limitation of Liability</h2>
+                    <h2>{t('sections.liability.title')}</h2>
                     <p>
-                        Secure Service Marketplace is not liable for any damages arising from your use of the platform or any services
-                        procured through it.
+                        {t('sections.liability.content')}
                     </p>
 
-                    <h2>7. Changes to Terms</h2>
+                    <h2>{t('sections.changes.title')}</h2>
                     <p>
-                        We may modify these terms at any time. Your continued use of the platform constitutes agreement to the updated terms.
+                        {t('sections.changes.content')}
                     </p>
 
-                    <h2>8. Contact</h2>
+                    <h2>{t('sections.contact.title')}</h2>
                     <p>
-                        If you have any questions about these Terms, please contact us.
+                        {t('sections.contact.content')}
                     </p>
                 </div>
             </div>

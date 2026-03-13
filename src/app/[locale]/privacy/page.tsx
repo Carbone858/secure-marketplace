@@ -1,4 +1,13 @@
+import { getTranslations } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+    const t = await getTranslations({ locale, namespace: 'privacy' });
+    return {
+        title: t('meta.title'),
+        description: t('meta.description'),
+    };
+}
 
 export default function PrivacyPage() {
     const t = useTranslations('privacy');
@@ -14,47 +23,44 @@ export default function PrivacyPage() {
                 <div className="prose prose-lg dark:prose-invert max-w-none">
                     <p>{t('intro')}</p>
 
-                    <h2>1. Information We Collect</h2>
+                    <h2>{t('sections.collection.title')}</h2>
                     <p>
-                        We collect personal information such as your name, email, phone number, and location when you register or use our services.
-                        We may also collect documents for verification purposes.
+                        {t('sections.collection.content')}
                     </p>
 
-                    <h2>2. How We Use Your Information</h2>
+                    <h2>{t('sections.usage.title')}</h2>
                     <p>
-                        We use your data to:
+                        {t('sections.usage.content')}
                         <ul className="list-disc ml-6 mt-2">
-                            <li>Facilitate connections between customers and service providers.</li>
-                            <li>Verify accounts and enhance platform security.</li>
-                            <li>Send notifications about your requests and offers.</li>
-                            <li>Improve our services and user experience.</li>
+                            {(t.raw('sections.usage.points') as string[]).map((point, index) => (
+                                <li key={index}>{point}</li>
+                            ))}
                         </ul>
                     </p>
 
-                    <h2>3. Data Sharing</h2>
+                    <h2>{t('sections.sharing.title')}</h2>
                     <p>
-                        We share necessary information (like service request details) with service providers so they can send offers.
-                        We do not sell your personal data to third parties.
+                        {t('sections.sharing.content')}
                     </p>
 
-                    <h2>4. Cookies & Tracking</h2>
+                    <h2>{t('sections.cookies.title')}</h2>
                     <p>
-                        We use cookies to analyze site traffic and personalize your experience. You can control cookie preferences in your browser.
+                        {t('sections.cookies.content')}
                     </p>
 
-                    <h2>5. Security</h2>
+                    <h2>{t('sections.security.title')}</h2>
                     <p>
-                        We implement reasonable security measures to protect your data, but no method of transmission is 100% secure.
+                        {t('sections.security.content')}
                     </p>
 
-                    <h2>6. Your Rights</h2>
+                    <h2>{t('sections.rights.title')}</h2>
                     <p>
-                        You have the right to access, update, or delete your personal information. Contact support for assistance.
+                        {t('sections.rights.content')}
                     </p>
 
-                    <h2>7. Updates</h2>
+                    <h2>{t('sections.updates.title')}</h2>
                     <p>
-                        We may update this policy periodically. We will notify you of significant changes.
+                        {t('sections.updates.content')}
                     </p>
                 </div>
             </div>

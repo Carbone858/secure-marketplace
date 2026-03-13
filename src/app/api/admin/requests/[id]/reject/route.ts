@@ -6,6 +6,7 @@
  * and sends the user a rejection notification + email.
  */
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { sendRejectionNotification } from '@/lib/requests/approval-notifications';

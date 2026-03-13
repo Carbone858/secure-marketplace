@@ -5,6 +5,7 @@ import { loginSchema, hashEmail } from '@/lib/validations/auth';
 import { loginLimiter, getClientIp, getIdentifyKey, checkRateLimit } from '@/lib/rate-limit';
 import { SecurityLogType } from '@prisma/client';
 import { cookies } from 'next/headers';
+import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
 
 const ACCOUNT_LOCKOUT_ATTEMPTS = 5;
 const ACCOUNT_LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes
@@ -38,16 +39,15 @@ async function logSecurityEvent(
  * POST /api/auth/login
  * Handle user login
  */
-export async function POST(request: NextRequest) {
+export const POST = withErrorMonitoring(async (request: NextRequest) => {
   const ip = getClientIp(request);
   const userAgent = request.headers.get('user-agent');
 
-  try {
-    // Check rate limit (Redis-backed with in-memory fallback)
+  // Check rate limit (Redis-backed with in-memory fallback)
     const rateLimit = await checkRateLimit(request, loginLimiter, {
       type: SecurityLogType.LOGIN_FAILED
     });
-    if (rateLimit instanceof Response) return rateLimit;
+    if (rateLimit instanceof Response) return rateLimit as NextResponse;
 
     // Parse and validate request body
     const body = await request.json();
@@ -247,24 +247,5 @@ export async function POST(request: NextRequest) {
         },
       }
     );
-  } catch (error) {
-    console.error('CRITICAL LOGIN ERROR:', error);
-    if (error instanceof Error) {
-      console.error('STACK:', error.stack);
-    }
-
-    await logSecurityEvent('LOGIN_FAILED', ip, userAgent, undefined, {
-      reason: 'server_error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    });
-
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'server.error',
-        message: 'An unexpected error occurred. Please try again later.',
-      },
-      { status: 500 }
-    );
-  }
-}
+  
+}, 'AUTH', 'auth-login');

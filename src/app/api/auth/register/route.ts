@@ -11,6 +11,7 @@ import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { registerLimiter, getClientIp, checkRateLimit } from '@/lib/rate-limit';
 import { SecurityLogType } from '@prisma/client';
 import crypto from 'crypto';
+import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
 
 /**
  * Verify reCAPTCHA v3 token
@@ -75,12 +76,11 @@ async function logSecurityEvent(
  * POST /api/auth/register
  * Handle user registration
  */
-export async function POST(request: NextRequest) {
+export const POST = withErrorMonitoring(async (request: NextRequest) => {
   const ip = getClientIp(request);
   const userAgent = request.headers.get('user-agent');
 
-  try {
-    // Check rate limit (Redis-backed with in-memory fallback)
+  // Check rate limit (Redis-backed with in-memory fallback)
     const rateLimit = await checkRateLimit(request, registerLimiter, {
       type: SecurityLogType.REGISTER_FAILED
     });
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
         reason: 'rate_limit_exceeded',
       });
-      return rateLimit;
+      return rateLimit as NextResponse;
     }
 
     // Parse and validate request body
@@ -262,24 +262,8 @@ export async function POST(request: NextRequest) {
         },
       }
     );
-  } catch (error) {
-    console.error('Registration error:', error);
-
-    await logSecurityEvent('REGISTER_FAILED', ip, userAgent, {
-      reason: 'server_error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    });
-
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'server.error',
-        message: 'An unexpected error occurred. Please try again later.',
-      },
-      { status: 500 }
-    );
-  }
-}
+  
+}, 'AUTH', 'auth-register');
 
 /**
  * GET /api/auth/register

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import {
@@ -8,12 +9,13 @@ import {
   companySocialLinksSchema,
 } from '@/lib/validations/company';
 import { z } from 'zod';
+import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
 
 /**
  * GET /api/companies
  * Get list of companies with filtering
  */
-export async function GET(request: NextRequest) {
+export const GET = withErrorMonitoring(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     
@@ -112,13 +114,13 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+}, 'COMPANIES', 'companies-list');
 
 /**
  * POST /api/companies
  * Register a new company
  */
-export async function POST(request: NextRequest) {
+export const POST = withErrorMonitoring(async (request: NextRequest) => {
   try {
     const session = await getSession();
 
@@ -292,4 +294,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+}, 'COMPANIES', 'companies-register');

@@ -1,10 +1,13 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import ContactPageContent from '@/components/contact/ContactPageContent';
 
-export const metadata = {
-    title: 'Contact Us | Service Marketplace',
-    description: 'Get in touch with our team for support, questions, or feedback.',
-};
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+    const t = await getTranslations({ locale, namespace: 'contact' });
+    return {
+        title: t('meta.title'),
+        description: t('meta.description'),
+    };
+}
 
 export default function ContactPage() {
     return <ContactPageContent />;

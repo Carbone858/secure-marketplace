@@ -62,8 +62,8 @@
       "registerCompany": "Provide Services"
     },
     "meta": {
-      "title": "Service Marketplace | Find Top Pros & Manage Requests",
-      "description": "Connect with verified professionals for AC, plumbing, electrical, and more. Get quotes, compare prices, and hire the best."
+      "title": "Service Marketplace | Find Verified Professionals for Home & Business",
+      "description": "The leading marketplace for verified services in the Arab world. Get free quotes for AC maintenance, plumbing, electrical, cleaning, and more. Compare prices and hire the best."
     }
   },
   "auth": {
@@ -92,8 +92,8 @@
     },
     "register": {
       "meta": {
-        "title": "Register - Service Marketplace",
-        "description": "Create your account on Service Marketplace and get quotes from top service providers"
+        "title": "Create an Account | Join the Leading Service Marketplace",
+        "description": "Register today to post service requests, receive competitive offers, and connect with top-rated verified professionals."
       },
       "fields": {
         "name": {
@@ -229,8 +229,8 @@
     },
     "login": {
       "meta": {
-        "title": "Login - Service Marketplace",
-        "description": "Sign in to your Service Marketplace account"
+        "title": "Login | Access Your Service Marketplace Account",
+        "description": "Sign in to manage your service requests, view offers from professionals, and track your projects."
       },
       "fields": {
         "email": {
@@ -1707,8 +1707,8 @@
   },
   "about": {
     "meta": {
-      "title": "About Us - Service Marketplace",
-      "description": "Learn about our mission to connect customers with trusted professionals."
+      "title": "About Us | Leading Marketplace for Verified Services",
+      "description": "Learn about our mission to connect customers with the best verified professionals in the Arab world. Secure, reliable, and free for customers."
     },
     "title": "About Us",
     "subtitle": "Connecting Vision with Reality",
@@ -1723,8 +1723,8 @@
   },
   "contact": {
     "meta": {
-      "title": "Contact Us - Service Marketplace",
-      "description": "Get in touch with our support team."
+      "title": "Contact Us | Get Expert Support & Help",
+      "description": "Have questions? Our team is here to help. Contact us for support, partnerships, or feedback about our service marketplace."
     },
     "title": "Contact Us",
     "subtitle": "We're here to help",
@@ -1766,28 +1766,98 @@
       "getInTouch": "Get in touch"
     },
     "info": {
-      "email": "support@example.com",
+      "email": "support@servicemarket.com",
       "phone": "+1 (555) 123-4567",
       "address": "123 Market St, Tech City"
     }
   },
   "terms": {
     "meta": {
-      "title": "Terms of Service - Service Marketplace",
-      "description": "Read our Terms of Service."
+      "title": "Terms of Service | Secure Service Marketplace",
+      "description": "Read our terms and conditions for using the Service Marketplace platform."
     },
     "title": "Terms of Service",
-    "lastUpdated": "Last updated: February 15, 2026",
-    "intro": "Please read these terms carefully before using our service."
+    "lastUpdated": "Last updated: March 13, 2026",
+    "intro": "Welcome to Secure Service Marketplace. By using our website and services, you agree to these Terms of Service. Please read them carefully.",
+    "sections": {
+      "intro": {
+        "title": "1. Introduction",
+        "content": "Welcome to Secure Service Marketplace. By using our website and services, you agree to these Terms of Service. Please read them carefully."
+      },
+      "accounts": {
+        "title": "2. User Accounts",
+        "content": "To access certain features, you must create an account. You represent that the information you provide is accurate and that you will keep your password secure."
+      },
+      "requests": {
+        "title": "3. Service Requests & Offers",
+        "content": "Customers may post service requests, and Service Providers may submit offers. All transactions are solely between the Customer and the Service Provider. We do not guarantee the quality or safety of services provided."
+      },
+      "verification": {
+        "title": "4. Verification",
+        "content": "We verify companies to the best of our ability, but this does not constitute an endorsement. Users should always exercise due diligence."
+      },
+      "conduct": {
+        "title": "5. Prohibited Conduct",
+        "content": "You agree not to use the platform for any illegal purpose, to harass others, or to post false or misleading information."
+      },
+      "liability": {
+        "title": "6. Limitation of Liability",
+        "content": "Secure Service Marketplace is not liable for any damages arising from your use of the platform or any services procured through it."
+      },
+      "changes": {
+        "title": "7. Changes to Terms",
+        "content": "We may modify these terms at any time. Your continued use of the platform constitutes agreement to the updated terms."
+      },
+      "contact": {
+        "title": "8. Contact",
+        "content": "If you have any questions about these Terms, please contact us."
+      }
+    }
   },
   "privacy": {
     "meta": {
-      "title": "Privacy Policy - Service Marketplace",
-      "description": "Read our Privacy Policy."
+      "title": "Privacy Policy | Your Data Security Matters",
+      "description": "Learn how we protect your information and respect your privacy on our platform."
     },
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: February 15, 2026",
-    "intro": "We value your privacy and are committed to protecting your personal data."
+    "lastUpdated": "Last updated: March 13, 2026",
+    "intro": "We value your privacy and are committed to protecting your personal data. This policy explains how we collect and use your information.",
+    "sections": {
+      "collection": {
+        "title": "1. Information We Collect",
+        "content": "We collect personal information such as your name, email, phone number, and location when you register or use our services. We may also collect documents for verification purposes."
+      },
+      "usage": {
+        "title": "2. How We Use Your Information",
+        "content": "We use your data to: facilitate connections between customers and service providers, verify accounts, send notifications, and improve our services.",
+        "points": [
+          "Facilitate connections between customers and service providers",
+          "Verify accounts and enhance platform security",
+          "Send notifications about your requests and offers",
+          "Improve our services and user experience"
+        ]
+      },
+      "sharing": {
+        "title": "3. Data Sharing",
+        "content": "We share necessary information (like service request details) with service providers so they can send offers. We do not sell your personal data to third parties."
+      },
+      "cookies": {
+        "title": "4. Cookies & Tracking",
+        "content": "We use cookies to analyze site traffic and personalize your experience. You can control cookie preferences in your browser."
+      },
+      "security": {
+        "title": "5. Security",
+        "content": "We implement reasonable security measures to protect your data, but no method of transmission is 100% secure."
+      },
+      "rights": {
+        "title": "6. Your Rights",
+        "content": "You have the right to access, update, or delete your personal information. Contact support for assistance."
+      },
+      "updates": {
+        "title": "7. Updates",
+        "content": "We may update this policy periodically. We will notify you of significant changes."
+      }
+    }
   },
   "faq": {
     "meta": {
@@ -1800,7 +1870,36 @@
       "general": "General",
       "account": "Account",
       "payments": "Payments"
-    }
+    },
+    "questions": {
+      "q1": {
+        "question": "How does Service Marketplace work?",
+        "answer": "Post a detailed service request describing what you need. Verified companies in your area will view your request and send you competitive offers. You can compare profiles, ratings, and prices to choose the best professional."
+      },
+      "q2": {
+        "question": "Is it free to post a request?",
+        "answer": "Yes! Posting service requests is completely free for customers. There are no hidden fees or charges."
+      },
+      "q3": {
+        "question": "How do I know the companies are trustworthy?",
+        "answer": "All companies go through a multi-step verification process where we check their business licenses, commercial registrations, and identity. We also allow customers to leave verified reviews after a project is completed."
+      },
+      "q4": {
+        "question": "Can I cancel my request?",
+        "answer": "Yes, you can cancel your request at any time from your dashboard as long as you haven't accepted an offer yet."
+      },
+      "q5": {
+        "question": "How do I pay the service provider?",
+        "answer": "Currently, payment terms are agreed upon directly between you and the service provider. We recommend using secure payment methods and never paying the full amount upfront before service commencement."
+      },
+      "q6": {
+        "question": "Do service providers pay to use the platform?",
+        "answer": "Service providers pay a subscription fee or a small fee to send offers. This ensures we attract serious professionals committed to providing high-quality services."
+      }
+    },
+    "stillQuestions": "Still have questions?",
+    "contactSupport": "Can't find the answer you're looking for? Please contact our friendly support team.",
+    "contactButton": "Contact Support"
   },
   "membership": {
     "title": "Choose the Perfect Plan for Your Business",

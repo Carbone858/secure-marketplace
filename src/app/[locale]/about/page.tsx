@@ -1,5 +1,14 @@
+import { getTranslations } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+    const t = await getTranslations({ locale, namespace: 'about' });
+    return {
+        title: t('meta.title'),
+        description: t('meta.description'),
+    };
+}
 
 export default function AboutPage() {
     const t = useTranslations('about');

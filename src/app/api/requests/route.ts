@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { createRequestSchema, requestFilterSchema } from '@/lib/validations/request';
 import { isRequestLimitActive, isPaidPlanActive, isRequestAutoApproveActive } from '@/lib/feature-flags';
 
+import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
+
 /**
  * GET /api/requests
  * Get list of service requests with filtering
  */
-export async function GET(request: NextRequest) {
+export const GET = withErrorMonitoring(async (request: NextRequest) => {
   try {
     const session = await getSession();
     const { searchParams } = new URL(request.url);
@@ -180,13 +183,13 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+}, 'REQUESTS', 'requests-list');
 
 /**
  * POST /api/requests
  * Create a new service request
  */
-export async function POST(request: NextRequest) {
+export const POST = withErrorMonitoring(async (request: NextRequest) => {
   try {
     const session = await getSession();
 
@@ -312,4 +315,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+}, 'REQUESTS', 'requests-create');
