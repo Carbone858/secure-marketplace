@@ -413,6 +413,7 @@ model Review {
   projectId String?
   rating    Int
   comment   String
+  isApproved Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

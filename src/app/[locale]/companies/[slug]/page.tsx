@@ -119,23 +119,37 @@ export default function CompanyDetailPage() {
       router.push(`/${locale}/auth/login`);
       return;
     }
-
+ 
+    if (!company) {
+      return;
+    }
+ 
     setIsSubmittingReview(true);
     try {
-      const response = await fetch(`/api/companies/${company?.id}/reviews`, {
+      const url = `/api/companies/${company.id}/reviews`;
+      
+      const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating: reviewRating, comment: reviewComment }),
       });
+ 
+      const data = await response.json();
 
-      if (!response.ok) throw new Error('Failed to submit review');
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit review');
+      }
 
-      toast.success('Review submitted successfully');
-      setReviewComment('');
-      setReviewRating(5);
-      fetchCompany();
-    } catch (err) {
-      toast.error('Failed to submit review');
+      if (data.requiresModeration) {
+        toast.success('Review submitted! It will appear after admin approval.');
+      } else {
+        toast.success('Review submitted successfully');
+        fetchCompany();
+      }
+      setReviewComment(''); // Clear input on success
+    } catch (err: any) {
+      console.error('Submit review error:', err);
+      toast.error(err.message || 'Failed to submit review');
     } finally {
       setIsSubmittingReview(false);
     }

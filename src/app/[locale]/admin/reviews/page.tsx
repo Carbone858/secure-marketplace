@@ -37,6 +37,21 @@ export default function AdminReviewsPage() {
 
   useEffect(() => { fetchReviews(); }, [fetchReviews]);
 
+  const handleApprove = async (id: string) => {
+    try {
+      const res = await fetch('/api/admin/reviews', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isApproved: true }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success('Review approved');
+      fetchReviews();
+    } catch {
+      toast.error('Failed to approve review');
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this review?')) return;
     try {
@@ -85,10 +100,11 @@ export default function AdminReviewsPage() {
                   <tr className="border-b bg-muted/50">
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.user')}</th>
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.company')}</th>
+                    <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.status')}</th>
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.rating')}</th>
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.comment')}</th>
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.date')}</th>
-                    <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.actions')}</th>
+                    <th className="text-start p-3 font-medium text-center">{t('reviews_mgmt.tableHeaders.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -96,18 +112,35 @@ export default function AdminReviewsPage() {
                     <tr key={review.id} className="border-b hover:bg-muted/30 transition-colors">
                       <td className="p-3 font-medium">{review.user?.name || review.user?.email || '—'}</td>
                       <td className="p-3 text-muted-foreground">{review.company?.name || '—'}</td>
+                      <td className="p-3">
+                        <Badge variant={review.isApproved ? 'default' : 'secondary'}>
+                          {t(`reviews_mgmt.statusLabels.${review.isApproved ? 'approved' : 'pending'}`)}
+                        </Badge>
+                      </td>
                       <td className="p-3">{renderStars(review.rating)}</td>
                       <td className="p-3 max-w-xs truncate text-muted-foreground">{review.comment || '—'}</td>
                       <td className="p-3 text-muted-foreground">{new Date(review.createdAt).toLocaleDateString()}</td>
                       <td className="p-3">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive/80"
-                          onClick={() => handleDelete(review.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="flex items-center justify-center gap-2">
+                          {!review.isApproved && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-8 text-primary border-primary hover:bg-primary/10"
+                              onClick={() => handleApprove(review.id)}
+                            >
+                              {t('reviews_mgmt.approveButton')}
+                            </Button>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+                            onClick={() => handleDelete(review.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}

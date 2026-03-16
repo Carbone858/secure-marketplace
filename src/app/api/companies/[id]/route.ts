@@ -46,6 +46,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
           },
         },
         reviews: {
+          where: { isApproved: true } as any,
           include: {
             user: {
               select: {

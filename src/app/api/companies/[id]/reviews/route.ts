@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
 import { z } from 'zod';
+import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 
 const reviewSchema = z.object({
   rating: z.number().min(1).max(5),
@@ -23,7 +24,10 @@ export async function GET(
 
     const [reviews, total] = await Promise.all([
       prisma.review.findMany({
-        where: { companyId: id },
+        where: { 
+          companyId: id,
+          isApproved: true 
+        },
         include: {
           user: {
             select: {
@@ -36,7 +40,12 @@ export async function GET(
         skip,
         take: limit,
       }),
-      prisma.review.count({ where: { companyId: id } }),
+      prisma.review.count({ 
+        where: { 
+          companyId: id,
+          isApproved: true 
+        } 
+      }),
     ]);
 
     return NextResponse.json({
@@ -64,7 +73,10 @@ export async function POST(
 ) {
   try {
     const auth = await authenticateRequest(request);
-    if (auth instanceof NextResponse) return auth;
+
+    if (auth instanceof NextResponse) {
+      return auth;
+    }
 
     const { user } = auth;
     const { id } = params;
@@ -107,11 +119,14 @@ export async function POST(
     const body = await request.json();
     const validatedData = reviewSchema.parse(body);
 
+    const isModerationEnabled = await getFeatureFlag(FEATURE_FLAG_KEYS.isReviewModerationEnabled);
+
     const review = await prisma.review.create({
       data: {
         ...validatedData,
         companyId: id,
         userId: user.id,
+        isApproved: !isModerationEnabled,
       },
       include: {
         user: {
@@ -123,22 +138,38 @@ export async function POST(
       },
     });
 
-    // Recalculate company rating and reviewCount
-    const stats = await prisma.review.aggregate({
-      where: { companyId: id },
-      _avg: { rating: true },
-      _count: { rating: true },
-    });
+    // If moderation is disabled, recalculate company rating and reviewCount immediately
+    if (!isModerationEnabled) {
+      try {
+        console.log('[REVIEWS] Recalculating stats for company:', id);
+        const stats = await prisma.review.aggregate({
+          where: { 
+            companyId: id,
+            isApproved: true 
+          },
+          _avg: { rating: true },
+          _count: { rating: true },
+        });
+        console.log('[REVIEWS] New stats:', stats);
 
-    await prisma.company.update({
-      where: { id },
-      data: {
-        rating: Math.round((stats._avg.rating || 0) * 100) / 100,
-        reviewCount: stats._count.rating,
-      },
-    });
+        await prisma.company.update({
+          where: { id },
+          data: {
+            rating: stats._avg?.rating ? Math.round(stats._avg.rating * 100) / 100 : 0,
+            reviewCount: stats._count?.rating || 0,
+          },
+        });
+        console.log('[REVIEWS] Company stats updated for:', id);
+      } catch (statsError) {
+        console.error('[REVIEWS] Failed to update company stats:', statsError);
+        // We don't fail the whole request since the review WAS created
+      }
+    }
 
-    return NextResponse.json({ review }, { status: 201 });
+    return NextResponse.json({ 
+      review, 
+      requiresModeration: isModerationEnabled 
+    }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

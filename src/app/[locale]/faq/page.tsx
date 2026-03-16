@@ -8,7 +8,7 @@ interface FaqItem {
     id: string;
     question: string;
     answer: string;
-    category: 'general' | 'account' | 'payments';
+    category: 'general' | 'customers' | 'companies' | 'security';
 }
 
 export default function FaqPage() {
@@ -17,42 +17,15 @@ export default function FaqPage() {
     const [activeCategory, setActiveCategory] = useState<string>('all');
 
     const faqs: FaqItem[] = [
-        {
-            id: '1',
-            category: 'general',
-            question: t('questions.q1.question'),
-            answer: t('questions.q1.answer')
-        },
-        {
-            id: '2',
-            category: 'general',
-            question: t('questions.q2.question'),
-            answer: t('questions.q2.answer')
-        },
-        {
-            id: '3',
-            category: 'account',
-            question: t('questions.q3.question'),
-            answer: t('questions.q3.answer')
-        },
-        {
-            id: '4',
-            category: 'account',
-            question: t('questions.q4.question'),
-            answer: t('questions.q4.answer')
-        },
-        {
-            id: '5',
-            category: 'payments',
-            question: t('questions.q5.question'),
-            answer: t('questions.q5.answer')
-        },
-        {
-            id: '6',
-            category: 'payments',
-            question: t('questions.q6.question'),
-            answer: t('questions.q6.answer')
-        }
+        { id: '1', category: 'general', question: t('questions.q1.question'), answer: t('questions.q1.answer') },
+        { id: '2', category: 'general', question: t('questions.q2.question'), answer: t('questions.q2.answer') },
+        { id: '3', category: 'customers', question: t('questions.q5.question'), answer: t('questions.q5.answer') },
+        { id: '4', category: 'customers', question: t('questions.q6.question'), answer: t('questions.q6.answer') },
+        { id: '5', category: 'companies', question: t('questions.q7.question'), answer: t('questions.q7.answer') },
+        { id: '6', category: 'companies', question: t('questions.q8.question'), answer: t('questions.q8.answer') },
+        { id: '7', category: 'security', question: t('questions.q3.question'), answer: t('questions.q3.answer') },
+        { id: '8', category: 'security', question: t('questions.q9.question'), answer: t('questions.q9.answer') },
+        { id: '9', category: 'security', question: t('questions.q10.question'), answer: t('questions.q10.answer') },
     ];
 
     const toggleItem = (id: string) => {
@@ -80,25 +53,25 @@ export default function FaqPage() {
                         {t('categories.general')}
                     </button>
                     <button
-                        onClick={() => setActiveCategory('general')}
-                        className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${activeCategory === 'general' ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
-                    >
-                        <HelpCircle className="w-4 h-4" />
-                        {t('categories.general')}
-                    </button>
-                    <button
-                        onClick={() => setActiveCategory('account')}
-                        className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${activeCategory === 'account' ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
+                        onClick={() => setActiveCategory('customers')}
+                        className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${activeCategory === 'customers' ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
                     >
                         <User className="w-4 h-4" />
-                        {t('categories.account')}
+                        {t('categories.customers')}
                     </button>
                     <button
-                        onClick={() => setActiveCategory('payments')}
-                        className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${activeCategory === 'payments' ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
+                        onClick={() => setActiveCategory('companies')}
+                        className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${activeCategory === 'companies' ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
+                    >
+                        <HelpCircle className="w-4 h-4" />
+                        {t('categories.companies')}
+                    </button>
+                    <button
+                        onClick={() => setActiveCategory('security')}
+                        className={`px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 ${activeCategory === 'security' ? 'bg-primary text-primary-foreground' : 'bg-muted hover:bg-muted/80'}`}
                     >
                         <CreditCard className="w-4 h-4" />
-                        {t('categories.payments')}
+                        {t('categories.security')}
                     </button>
                 </div>
 

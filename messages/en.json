@@ -1099,10 +1099,10 @@
     }
   },
   "footer": {
-    "brand": "ServiceMarket",
-    "tagline": "The leading service marketplace connecting customers with verified companies across the Arab world.",
+    "brand": "Service Marketplace",
+    "tagline": "Founded in Syria with a global vision, connecting customers with the best verified professionals across Syria and Europe.",
     "contact": {
-      "location": "Damascus, Syria"
+      "location": "Syria | Sweden | Netherlands | Germany"
     },
     "sections": {
       "company": "Company",
@@ -1363,11 +1363,17 @@
       "tableHeaders": {
         "user": "User",
         "company": "Company",
+        "status": "Status",
         "rating": "Rating",
         "comment": "Comment",
         "date": "Date",
         "actions": "Actions"
-      }
+      },
+      "statusLabels": {
+        "pending": "Pending",
+        "approved": "Approved"
+      },
+      "approveButton": "Approve"
     },
     "verifications_mgmt": {
       "title": "Company Verifications",
@@ -1708,17 +1714,17 @@
   "about": {
     "meta": {
       "title": "About Us | Leading Marketplace for Verified Services",
-      "description": "Learn about our mission to connect customers with the best verified professionals in the Arab world. Secure, reliable, and free for customers."
+      "description": "Learn about our mission to connect customers with the best verified professionals. Founded in Syria, now with a global presence in Sweden, the Netherlands, and Germany."
     },
     "title": "About Us",
-    "subtitle": "Connecting Vision with Reality",
+    "subtitle": "Connecting Vision with Reality Globally",
     "mission": {
       "title": "Our Mission",
-      "description": "To create a seamless, trustworthy environment where customers can find reliable service providers for any task, and where professionals can grow their business through merit."
+      "description": "To create a seamless, trustworthy environment where customers can find reliable service providers for any task, and where professionals can grow their business through merit across borders."
     },
     "story": {
       "title": "Our Story",
-      "description": "Founded in 2026, we saw a gap in the market for a truly secure and verified service marketplace. We believe in transparency and quality above all."
+      "description": "Founded in 2026 with our first launch in Syria, we have rapidly expanded to become a global marketplace for trusted services. We believe in transparency and quality above all, which is why we proudly operate branches in Sweden, the Netherlands, and Germany today."
     }
   },
   "contact": {
@@ -1777,40 +1783,40 @@
       "description": "Read our terms and conditions for using the Service Marketplace platform."
     },
     "title": "Terms of Service",
-    "lastUpdated": "Last updated: March 13, 2026",
+    "lastUpdated": "Last updated: March 16, 2026",
     "intro": "Welcome to Secure Service Marketplace. By using our website and services, you agree to these Terms of Service. Please read them carefully.",
     "sections": {
       "intro": {
         "title": "1. Introduction",
-        "content": "Welcome to Secure Service Marketplace. By using our website and services, you agree to these Terms of Service. Please read them carefully."
+        "content": "These Terms of Service govern your use of the Secure Service Marketplace platform. By accessing our site, you agree to be bound by these terms. If you do not agree, please do not use our services."
       },
       "accounts": {
         "title": "2. User Accounts",
-        "content": "To access certain features, you must create an account. You represent that the information you provide is accurate and that you will keep your password secure."
+        "content": "To access professional features, you must create an account. You represent that all information provided is accurate and that you are responsible for maintaining the confidentiality of your credentials."
       },
       "requests": {
         "title": "3. Service Requests & Offers",
-        "content": "Customers may post service requests, and Service Providers may submit offers. All transactions are solely between the Customer and the Service Provider. We do not guarantee the quality or safety of services provided."
+        "content": "Customers may post service requests, and Service Providers may submit offers. All contractual agreements are made solely between the Customer and the Service Provider. We provide the marketplace infrastructure but are not a party to individual service contracts."
       },
       "verification": {
-        "title": "4. Verification",
-        "content": "We verify companies to the best of our ability, but this does not constitute an endorsement. Users should always exercise due diligence."
+        "title": "4. Verification & Trust",
+        "content": "We verify companies to enhance platform security, but this verification is not a guarantee of future performance. Users should always perform their own due diligence before hiring."
       },
       "conduct": {
         "title": "5. Prohibited Conduct",
-        "content": "You agree not to use the platform for any illegal purpose, to harass others, or to post false or misleading information."
+        "content": "You agree not to use the platform for fraudulent purposes, harassment, or to distribute malicious software. Posting false reviews or misleading information is strictly prohibited."
       },
       "liability": {
         "title": "6. Limitation of Liability",
-        "content": "Secure Service Marketplace is not liable for any damages arising from your use of the platform or any services procured through it."
+        "content": "Secure Service Marketplace is not liable for any direct or indirect damages arising from service quality, payment disputes between parties, or platform downtime."
       },
       "changes": {
         "title": "7. Changes to Terms",
-        "content": "We may modify these terms at any time. Your continued use of the platform constitutes agreement to the updated terms."
+        "content": "We reserve the right to modify these terms at any time. Significant changes will be announced via the dashboard or email."
       },
       "contact": {
-        "title": "8. Contact",
-        "content": "If you have any questions about these Terms, please contact us."
+        "title": "8. Contact Information",
+        "content": "For legal inquiries or clarifications regarding these terms, please contact our support team at support@servicemarket.com."
       }
     }
   },
@@ -1820,86 +1826,103 @@
       "description": "Learn how we protect your information and respect your privacy on our platform."
     },
     "title": "Privacy Policy",
-    "lastUpdated": "Last updated: March 13, 2026",
-    "intro": "We value your privacy and are committed to protecting your personal data. This policy explains how we collect and use your information.",
+    "lastUpdated": "Last updated: March 16, 2026",
+    "intro": "We value your privacy and are committed to protecting your personal data. This policy explains how we collect and use your information to provide a secure marketplace experience.",
     "sections": {
       "collection": {
         "title": "1. Information We Collect",
-        "content": "We collect personal information such as your name, email, phone number, and location when you register or use our services. We may also collect documents for verification purposes."
+        "content": "We collect personal information (name, email, phone) and professional data (business licenses, portfolio) only when necessary to facilitate marketplace operations and verify account authenticity."
       },
       "usage": {
         "title": "2. How We Use Your Information",
-        "content": "We use your data to: facilitate connections between customers and service providers, verify accounts, send notifications, and improve our services.",
+        "content": "Your data is used to match customers with providers, improve platform security, and send essential service updates.",
         "points": [
-          "Facilitate connections between customers and service providers",
-          "Verify accounts and enhance platform security",
-          "Send notifications about your requests and offers",
-          "Improve our services and user experience"
+          "Connecting customers with the right service professionals",
+          "Verification of business credentials and identity",
+          "Sending status updates for requests and offers",
+          "Analyzing platform performance to improve user experience"
         ]
       },
       "sharing": {
-        "title": "3. Data Sharing",
-        "content": "We share necessary information (like service request details) with service providers so they can send offers. We do not sell your personal data to third parties."
+        "title": "3. Information Sharing",
+        "content": "We only share your contact details and project requirements with the counterparties you interact with on the platform. We never sell your personal information to advertisers."
       },
       "cookies": {
-        "title": "4. Cookies & Tracking",
-        "content": "We use cookies to analyze site traffic and personalize your experience. You can control cookie preferences in your browser."
+        "title": "4. Cookies & Analytics",
+        "content": "We use essential cookies to maintain your login session and anonymous analytics to understand how users interact with our site."
       },
       "security": {
-        "title": "5. Security",
-        "content": "We implement reasonable security measures to protect your data, but no method of transmission is 100% secure."
+        "title": "5. Data Security",
+        "content": "We employ industry-standard encryption and security protocols to protect your data from unauthorized access or disclosure."
       },
       "rights": {
-        "title": "6. Your Rights",
-        "content": "You have the right to access, update, or delete your personal information. Contact support for assistance."
+        "title": "6. Your Data Rights",
+        "content": "You can access, update, or request deletion of your account and associated data through your profile settings or by contacting support."
       },
       "updates": {
-        "title": "7. Updates",
-        "content": "We may update this policy periodically. We will notify you of significant changes."
+        "title": "7. Policy Updates",
+        "content": "Significant changes to this policy will be communicated through our platform or via email notification."
       }
     }
   },
   "faq": {
     "meta": {
       "title": "FAQ - Service Marketplace",
-      "description": "Frequently Asked Questions."
+      "description": "Frequently Asked Questions about our secure service marketplace."
     },
     "title": "Frequently Asked Questions",
-    "subtitle": "Find answers to common questions about our platform.",
+    "subtitle": "Everything you need to know about using our platform during our free launch period.",
     "categories": {
       "general": "General",
-      "account": "Account",
-      "payments": "Payments"
+      "customers": "For Customers",
+      "companies": "For Companies",
+      "security": "Quality & Trust"
     },
     "questions": {
       "q1": {
         "question": "How does Service Marketplace work?",
-        "answer": "Post a detailed service request describing what you need. Verified companies in your area will view your request and send you competitive offers. You can compare profiles, ratings, and prices to choose the best professional."
+        "answer": "Post your service needs—from AC repair to design work. Verified companies will view your request and send you offers. You compare profiles, reviews, and prices to pick the perfect pro."
       },
       "q2": {
-        "question": "Is it free to post a request?",
-        "answer": "Yes! Posting service requests is completely free for customers. There are no hidden fees or charges."
+        "question": "Is it really free during the launch?",
+        "answer": "Yes! For a limited time, the platform is 100% free for both customers and service providers. No hidden fees, no subscriptions—just quality connections."
       },
       "q3": {
-        "question": "How do I know the companies are trustworthy?",
-        "answer": "All companies go through a multi-step verification process where we check their business licenses, commercial registrations, and identity. We also allow customers to leave verified reviews after a project is completed."
+        "question": "How do I know companies are verified?",
+        "answer": "We manually check business licenses and identity for every provider. Look for the 'Verified' badge on company profiles for extra peace of mind."
       },
       "q4": {
-        "question": "Can I cancel my request?",
-        "answer": "Yes, you can cancel your request at any time from your dashboard as long as you haven't accepted an offer yet."
+        "question": "What if I can't find a specific service?",
+        "answer": "We're expanding fast! If you don't see your category, choose 'Other' and describe your needs. We'll help find someone who can help."
       },
       "q5": {
-        "question": "How do I pay the service provider?",
-        "answer": "Currently, payment terms are agreed upon directly between you and the service provider. We recommend using secure payment methods and never paying the full amount upfront before service commencement."
+        "question": "How do I post a service request?",
+        "answer": "Click 'Post a Project', fill in the details of the work you need done, and hit submit. You'll start receiving offers from professionals within minutes."
       },
       "q6": {
-        "question": "Do service providers pay to use the platform?",
-        "answer": "Service providers pay a subscription fee or a small fee to send offers. This ensures we attract serious professionals committed to providing high-quality services."
+        "question": "Can I choose which provider to hire?",
+        "answer": "Absolutely. You are in full control. Compare the offers you receive, look at the company's past reviews, and message them directly before deciding."
+      },
+      "q7": {
+        "question": "How do I register my company?",
+        "answer": "Click 'Provide Services' and fill out your business profile. Our team will review your credentials and verify your account so you can start bidding on projects."
+      },
+      "q8": {
+        "question": "What are the benefits of verification?",
+        "answer": "Verified companies get a special badge, rank higher in search results, and build more trust with potential clients, leading to more projects."
+      },
+      "q9": {
+        "question": "Is my data safe on the platform?",
+        "answer": "We use industry-standard encryption and never share your private contact information until you choose to interact with a specific user or company."
+      },
+      "q10": {
+        "question": "How can I leave a review?",
+        "answer": "After a project is completed, both parties can leave a rating and review. This peer-review system ensures accountability and high service quality."
       }
     },
     "stillQuestions": "Still have questions?",
-    "contactSupport": "Can't find the answer you're looking for? Please contact our friendly support team.",
-    "contactButton": "Contact Support"
+    "contactSupport": "Our support team is ready to help you with anything you need.",
+    "contactButton": "Contact Us"
   },
   "membership": {
     "badge": "Launch Announcement",

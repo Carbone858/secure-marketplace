@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
 import { prisma } from '@/lib/db/client';
 import { apiLimiter, getClientIp } from '@/lib/rate-limit';
+import { getToken } from 'next-auth/jwt';
 
 export interface AuthenticatedUser {
   id: string;
@@ -42,8 +43,26 @@ export async function authenticateRequest(
     }
 
     const payload = await verifyToken(token);
+    let userId: string | undefined;
 
-    if (!payload || payload.type !== 'access') {
+    if (payload && payload.type === 'access') {
+      userId = payload.userId as string;
+    } else {
+      // If custom token fails, try NextAuth token
+      try {
+        const nextAuthToken = await getToken({
+          req: request,
+          secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
+        });
+        if (nextAuthToken?.sub || (nextAuthToken as any)?.id) {
+          userId = (nextAuthToken.sub || (nextAuthToken as any).id) as string;
+        }
+      } catch (err) {
+        console.error('NextAuth token verification error:', err);
+      }
+    }
+
+    if (!userId) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
         { status: 401 }
@@ -51,7 +70,7 @@ export async function authenticateRequest(
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
+      where: { id: userId },
       select: {
         id: true,
         email: true,
