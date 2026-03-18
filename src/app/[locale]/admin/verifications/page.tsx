@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import { CheckCircle, XCircle, FileCheck, ExternalLink } from 'lucide-react';
+import { CheckCircle, XCircle, FileCheck, ExternalLink, Info } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PageSkeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 export default function AdminVerificationsPage() {
   const locale = useLocale();
@@ -74,8 +75,14 @@ export default function AdminVerificationsPage() {
             <Card key={company.id}>
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">{company.name}</h3>
+                  <div className="space-y-2 flex-1">
+                    <Link 
+                      href={`/${locale}/admin/companies/${company.id}`}
+                      className="text-lg font-semibold hover:text-primary transition-colors flex items-center gap-2 group"
+                    >
+                      {company.name}
+                      <ExternalLink className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
                     <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                       <span>Email: {company.email}</span>
                       {company.phone && <span>Phone: {company.phone}</span>}
@@ -96,19 +103,26 @@ export default function AdminVerificationsPage() {
                       Applied: {new Date(company.createdAt).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className="flex gap-2 flex-shrink-0">
-                    <Button
-                      className="bg-success hover:bg-success/90 text-success-foreground"
-                      onClick={() => handleAction(company.id, 'VERIFIED')}
-                    >
-                      <CheckCircle className="h-4 w-4 mr-2" /> Verify
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={() => handleAction(company.id, 'REJECTED')}
-                    >
-                      <XCircle className="h-4 w-4 mr-2" /> Reject
-                    </Button>
+                  <div className="flex flex-col gap-2 flex-shrink-0">
+                    <Link href={`/${locale}/admin/companies/${company.id}`}>
+                      <Button variant="outline" className="w-full gap-2">
+                        <Info className="h-4 w-4" /> View Details
+                      </Button>
+                    </Link>
+                    <div className="flex gap-2">
+                      <Button
+                        className="bg-success hover:bg-success/90 text-success-foreground"
+                        onClick={() => handleAction(company.id, 'VERIFIED')}
+                      >
+                        <CheckCircle className="h-4 w-4 mr-2" /> Verify
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        onClick={() => handleAction(company.id, 'REJECTED')}
+                      >
+                        <XCircle className="h-4 w-4 mr-2" /> Reject
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>

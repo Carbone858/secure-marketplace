@@ -8,15 +8,24 @@ import { Button } from '@/components/ui/button';
 import { PageSkeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { useLocale, useTranslations } from 'next-intl';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { hasPermission } from '@/lib/permissions';
+import { ReviewDetailPanel } from '@/components/admin/details/ReviewDetailPanel';
+import { Eye } from 'lucide-react';
 
 export default function AdminReviewsPage() {
   const locale = useLocale();
   const t = useTranslations('admin');
+  const { user: currentUser } = useAuth();
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+
+  // Detail Panel State
+  const [selectedReview, setSelectedReview] = useState<any | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const fetchReviews = useCallback(async () => {
     setIsLoading(true);
@@ -37,6 +46,11 @@ export default function AdminReviewsPage() {
 
   useEffect(() => { fetchReviews(); }, [fetchReviews]);
 
+  const handleView = (review: any) => {
+    setSelectedReview(review);
+    setIsPanelOpen(true);
+  };
+
   const handleApprove = async (id: string) => {
     try {
       const res = await fetch('/api/admin/reviews', {
@@ -46,6 +60,7 @@ export default function AdminReviewsPage() {
       });
       if (!res.ok) throw new Error();
       toast.success('Review approved');
+      setIsPanelOpen(false);
       fetchReviews();
     } catch {
       toast.error('Failed to approve review');
@@ -58,6 +73,7 @@ export default function AdminReviewsPage() {
       const res = await fetch(`/api/admin/reviews?id=${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error();
       toast.success('Review deleted');
+      setIsPanelOpen(false);
       fetchReviews();
     } catch {
       toast.error('Failed to delete review');
@@ -104,12 +120,16 @@ export default function AdminReviewsPage() {
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.rating')}</th>
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.comment')}</th>
                     <th className="text-start p-3 font-medium">{t('reviews_mgmt.tableHeaders.date')}</th>
-                    <th className="text-start p-3 font-medium text-center">{t('reviews_mgmt.tableHeaders.actions')}</th>
+                    <th className="text-center p-3 font-medium">{t('reviews_mgmt.tableHeaders.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {reviews.map((review) => (
-                    <tr key={review.id} className="border-b hover:bg-muted/30 transition-colors">
+                    <tr 
+                      key={review.id} 
+                      className="border-b hover:bg-muted/30 transition-colors cursor-pointer group"
+                      onClick={() => handleView(review)}
+                    >
                       <td className="p-3 font-medium">{review.user?.name || review.user?.email || '—'}</td>
                       <td className="p-3 text-muted-foreground">{review.company?.name || '—'}</td>
                       <td className="p-3">
@@ -122,24 +142,29 @@ export default function AdminReviewsPage() {
                       <td className="p-3 text-muted-foreground">{new Date(review.createdAt).toLocaleDateString()}</td>
                       <td className="p-3">
                         <div className="flex items-center justify-center gap-2">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                            <Eye className="h-4 w-4" />
+                          </Button>
                           {!review.isApproved && (
                             <Button
                               variant="outline"
                               size="sm"
                               className="h-8 text-primary border-primary hover:bg-primary/10"
-                              onClick={() => handleApprove(review.id)}
+                              onClick={(e) => { e.stopPropagation(); handleApprove(review.id); }}
                             >
                               {t('reviews_mgmt.approveButton')}
                             </Button>
                           )}
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-destructive hover:text-destructive/80 hover:bg-destructive/10"
-                            onClick={() => handleDelete(review.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          {hasPermission(currentUser?.permissions, 'manage_staff', currentUser?.role, currentUser?.isStaff) && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+                              onClick={(e) => { e.stopPropagation(); handleDelete(review.id); }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -160,6 +185,17 @@ export default function AdminReviewsPage() {
           </div>
         </div>
       )}
+
+      {/* Detail Panel */}
+      <ReviewDetailPanel 
+        review={selectedReview}
+        open={isPanelOpen}
+        onOpenChange={setIsPanelOpen}
+        locale={locale}
+        onApprove={handleApprove}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
+

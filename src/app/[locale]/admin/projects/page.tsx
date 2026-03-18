@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
+import { ProjectDetailPanel } from '@/components/admin/details/ProjectDetailPanel';
+import { Eye } from 'lucide-react';
 
 export default function AdminProjectsPage() {
   const locale = useLocale();
@@ -19,6 +21,10 @@ export default function AdminProjectsPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  
+  // Detail Panel State
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const fetchProjects = useCallback(async () => {
     setIsLoading(true);
@@ -38,6 +44,11 @@ export default function AdminProjectsPage() {
   }, [page]);
 
   useEffect(() => { fetchProjects(); }, [fetchProjects]);
+
+  const handleView = (project: any) => {
+    setSelectedProject(project);
+    setIsPanelOpen(true);
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -77,17 +88,27 @@ export default function AdminProjectsPage() {
                     <th className="text-start p-3 font-medium">{t('projects_mgmt.tableHeaders.status')}</th>
                     <th className="text-start p-3 font-medium">{t('projects_mgmt.tableHeaders.messages')}</th>
                     <th className="text-start p-3 font-medium">{t('projects_mgmt.tableHeaders.created')}</th>
+                    <th className="text-center p-3 font-medium">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {projects.map((project) => (
-                    <tr key={project.id} className="border-b hover:bg-muted/30 transition-colors">
+                    <tr 
+                      key={project.id} 
+                      className="border-b hover:bg-muted/30 transition-colors cursor-pointer group"
+                      onClick={() => handleView(project)}
+                    >
                       <td className="p-3 font-medium">{project.title || '—'}</td>
                       <td className="p-3 text-muted-foreground">{project.user?.name || project.user?.email || '—'}</td>
                       <td className="p-3 text-muted-foreground">{project.company?.name || '—'}</td>
                       <td className="p-3">{getStatusBadge(project.status)}</td>
                       <td className="p-3 text-muted-foreground">{project._count?.messages || 0}</td>
                       <td className="p-3 text-muted-foreground">{new Date(project.createdAt).toLocaleDateString()}</td>
+                      <td className="p-3 text-center">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -106,6 +127,15 @@ export default function AdminProjectsPage() {
           </div>
         </div>
       )}
+
+      {/* Detail Panel */}
+      <ProjectDetailPanel 
+        project={selectedProject}
+        open={isPanelOpen}
+        onOpenChange={setIsPanelOpen}
+        locale={locale}
+      />
     </div>
   );
 }
+

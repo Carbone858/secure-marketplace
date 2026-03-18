@@ -9,6 +9,8 @@ import { PageSkeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { useLocale, useTranslations } from 'next-intl';
+import { OfferDetailPanel } from '@/components/admin/details/OfferDetailPanel';
+import { Eye } from 'lucide-react';
 
 export default function AdminOffersPage() {
   const locale = useLocale();
@@ -18,6 +20,10 @@ export default function AdminOffersPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+
+  // Detail Panel State
+  const [selectedOffer, setSelectedOffer] = useState<any | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const fetchOffers = useCallback(async () => {
     setIsLoading(true);
@@ -37,6 +43,11 @@ export default function AdminOffersPage() {
   }, [page]);
 
   useEffect(() => { fetchOffers(); }, [fetchOffers]);
+
+  const handleView = (offer: any) => {
+    setSelectedOffer(offer);
+    setIsPanelOpen(true);
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -75,16 +86,26 @@ export default function AdminOffersPage() {
                     <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.amount')}</th>
                     <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.status')}</th>
                     <th className="text-start p-3 font-medium">{t('offers_mgmt.tableHeaders.created')}</th>
+                    <th className="text-center p-3 font-medium">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {offers.map((offer) => (
-                    <tr key={offer.id} className="border-b hover:bg-muted/30 transition-colors">
+                    <tr 
+                      key={offer.id} 
+                      className="border-b hover:bg-muted/30 transition-colors cursor-pointer group"
+                      onClick={() => handleView(offer)}
+                    >
                       <td className="p-3 font-medium max-w-xs truncate">{offer.request?.title || '—'}</td>
                       <td className="p-3 text-muted-foreground">{offer.company?.name || '—'}</td>
-                      <td className="p-3">{offer.amount ? `$${offer.amount}` : '—'}</td>
+                      <td className="p-3">{offer.price ? `${offer.price} ${offer.currency}` : '—'}</td>
                       <td className="p-3">{getStatusBadge(offer.status)}</td>
                       <td className="p-3 text-muted-foreground">{new Date(offer.createdAt).toLocaleDateString()}</td>
+                      <td className="p-3 text-center">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -103,6 +124,15 @@ export default function AdminOffersPage() {
           </div>
         </div>
       )}
+
+      {/* Detail Panel */}
+      <OfferDetailPanel 
+        offer={selectedOffer}
+        open={isPanelOpen}
+        onOpenChange={setIsPanelOpen}
+        locale={locale}
+      />
     </div>
   );
 }
+

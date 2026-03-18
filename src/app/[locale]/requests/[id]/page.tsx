@@ -11,6 +11,7 @@ import { RequestOwnerActions } from '@/components/requests/RequestOwnerActions';
 import { OfferActions } from '@/components/requests/OfferActions';
 import { BackButton } from '@/components/ui/BackButton';
 import { StatusBadge } from '@/components/ui/composite';
+import { AdminRequestActions } from '@/components/admin/AdminRequestActions';
 
 interface RequestDetailPageProps {
   params: { locale: string; id: string };
@@ -251,6 +252,9 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                     editLabel={isRTL ? 'تعديل' : 'Edit'}
                     repostLabel={isRTL ? 'إعادة نشر' : 'Repost / Duplicate'}
                   />
+                )}
+                {isAdmin && (
+                  <AdminRequestActions requestId={id} status={request.status} />
                 )}
               </div>
             </div>
