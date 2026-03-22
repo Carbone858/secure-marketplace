@@ -10,6 +10,21 @@ This document outlines the authoritative manual testing path to verify the newly
 5. [In-App Notifications](#5-in-app-notifications)
 6. [UI & RTL Consistency](#6-ui--rtl-consistency)
 
+## 🔑 Test Credentials
+
+**Password for ALL accounts:** `Test123456!@`
+
+| Role | Email | Notes |
+|------|-------|-------|
+| **Admin** | `admin@secure-marketplace.com` | Full administrative access |
+| **Website Owner** (Super Admin) | `owner@secure-marketplace.com` | Root access, system configuration |
+| **Admin (Ops)** | `admin-ops@secure-marketplace.com` | Broad access, no settings |
+| **Finance Officer** | `finance@secure-marketplace.com` | Access to offers, projects |
+| **Support Agent** | `support@secure-marketplace.com` | Access to users, messages, companies |
+| **Content Manager** | `content-manager@secure-marketplace.com` | Access to CMS, categories |
+| **Verification Officer** | `verification@secure-marketplace.com` | Access to verifications |
+| **Staff (Employee)** | `staff-employee@secure-marketplace.com` | Restricted role for testing RBAC |
+
 ---
 
 ### 1. State Machine & Visibility Rules

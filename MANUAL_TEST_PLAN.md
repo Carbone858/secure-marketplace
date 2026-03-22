@@ -14,6 +14,12 @@
 |------|-------|-------|
 | **Admin** | `admin@secure-marketplace.com` | Full administrative access |
 | **Website Owner** (Super Admin) | `owner@secure-marketplace.com` | Root access, system configuration |
+| **Admin (Ops)** | `admin-ops@secure-marketplace.com` | Broad access, no settings |
+| **Finance Officer** | `finance@secure-marketplace.com` | Access to offers, projects |
+| **Support Agent** | `support@secure-marketplace.com` | Access to users, messages, companies |
+| **Content Manager** | `content-manager@secure-marketplace.com` | Access to CMS, categories |
+| **Verification Officer** | `verification@secure-marketplace.com` | Access to verifications |
+| **Staff (Employee)** | `staff-employee@secure-marketplace.com` | Restricted role for testing |
 | **Verified Company** | `company@secure-marketplace.com` | Approved service provider |
 | **Pending Company** | `pending@secure-marketplace.com` | Awaiting verification |
 | **Standard User** | `user@secure-marketplace.com` | Regular client account |
