@@ -18,8 +18,12 @@ export default function AdminLayout({
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!isLoading && user && user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-      router.push(`/${locale}/dashboard`);
+    if (!isLoading) {
+      if (!user) {
+        router.push(`/${locale}/auth/login`);
+      } else if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
+        router.push(`/${locale}/dashboard`);
+      }
     }
   }, [user, isLoading, router, locale]);
 
