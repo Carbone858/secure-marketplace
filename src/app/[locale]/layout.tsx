@@ -10,7 +10,7 @@ import { MobileNav } from '@/components/layout/MobileNav';
 import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { authOptions } from '@/lib/next-auth-options';
 
 
 const inter = Inter({
@@ -55,7 +55,7 @@ export default async function RootLayout({
 
     if (!isAdminPath && !isMaintenancePath && !isAuthPath) {
       const session = await getServerSession(authOptions);
-      const isUserAdmin = session?.user?.role === 'ADMIN' || session?.user?.role === 'SUPER_ADMIN';
+      const isUserAdmin = (session?.user as any)?.role === 'ADMIN' || (session?.user as any)?.role === 'SUPER_ADMIN';
 
       if (!isUserAdmin) {
         redirect(`/${locale}/maintenance`);

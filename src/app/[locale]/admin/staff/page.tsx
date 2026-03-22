@@ -2,13 +2,16 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
-import { Users, Shield, Building, Plus, Trash2, Edit2, Search, X } from 'lucide-react';
+import { Users, Shield, Building, Plus, Trash2, Edit2, Search, X, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { PageSkeleton } from '@/components/ui/skeleton';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { ADMIN_PERMISSIONS, AdminPermission } from '@/lib/permissions';
 
 type Tab = 'staff' | 'roles' | 'departments';
 
@@ -16,6 +19,7 @@ interface UserOption { id: string; name: string | null; email: string; }
 
 export default function AdminStaffPage() {
   const t = useTranslations('admin');
+  const locale = useLocale();
   const [activeTab, setActiveTab] = useState<Tab>('staff');
   const [staff, setStaff] = useState<any[]>([]);
   const [roles, setRoles] = useState<any[]>([]);
@@ -31,7 +35,19 @@ export default function AdminStaffPage() {
 
   // Forms
   const [showRoleForm, setShowRoleForm] = useState(false);
-  const [roleForm, setRoleForm] = useState({ name: '', nameAr: '', description: '' });
+  const [editingRole, setEditingRole] = useState<any | null>(null);
+  const [roleForm, setRoleForm] = useState<{
+    name: string;
+    nameAr: string;
+    description: string;
+    permissions: Record<string, boolean>;
+  }>({
+    name: '',
+    nameAr: '',
+    description: '',
+    permissions: {},
+  });
+
   const [showDeptForm, setShowDeptForm] = useState(false);
   const [deptForm, setDeptForm] = useState({ name: '', nameAr: '', description: '' });
   const [showStaffForm, setShowStaffForm] = useState(false);
@@ -90,20 +106,35 @@ export default function AdminStaffPage() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const createRole = async () => {
+  const saveRole = async () => {
     if (!roleForm.name) { toast.error('Role name is required'); return; }
     try {
-      const res = await fetch('/api/admin/roles', {
-        method: 'POST',
+      const url = '/api/admin/roles';
+      const method = editingRole ? 'PUT' : 'POST';
+      const body = editingRole ? { id: editingRole.id, ...roleForm } : roleForm;
+
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(roleForm),
+        body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error();
-      toast.success(t('staff_mgmt.toasts.roleCreated'));
+      toast.success(editingRole ? 'Role updated' : t('staff_mgmt.toasts.roleCreated'));
       setShowRoleForm(false);
-      setRoleForm({ name: '', nameAr: '', description: '' });
+      setEditingRole(null);
+      setRoleForm({ name: '', nameAr: '', description: '', permissions: {} });
       fetchAll();
-    } catch { toast.error(t('staff_mgmt.toasts.roleCreateFailed')); }
+    } catch { toast.error(editingRole ? 'Failed to update role' : t('staff_mgmt.toasts.roleCreateFailed')); }
+  };
+
+  const togglePermission = (key: string) => {
+    setRoleForm(prev => ({
+      ...prev,
+      permissions: {
+        ...prev.permissions,
+        [key]: !prev.permissions[key]
+      }
+    }));
   };
 
   const createDept = async () => {
@@ -407,16 +438,46 @@ export default function AdminStaffPage() {
           </div>
           {showRoleForm && (
             <Card>
-              <CardHeader><CardTitle>{t('staff_mgmt.createRole')}</CardTitle></CardHeader>
-              <CardContent>
+              <CardHeader><CardTitle>{editingRole ? 'Edit Role' : t('staff_mgmt.createRole')}</CardTitle></CardHeader>
+              <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Input placeholder={t('staff_mgmt.namePlaceholder')} value={roleForm.name} onChange={(e) => setRoleForm({ ...roleForm, name: e.target.value })} />
                   <Input placeholder={t('staff_mgmt.nameArPlaceholder')} value={roleForm.nameAr} onChange={(e) => setRoleForm({ ...roleForm, nameAr: e.target.value })} />
                   <Input placeholder={t('staff_mgmt.descriptionPlaceholder')} value={roleForm.description} onChange={(e) => setRoleForm({ ...roleForm, description: e.target.value })} />
                 </div>
-                <div className="flex gap-2 mt-4">
-                  <Button onClick={createRole}>{t('common.create')}</Button>
-                  <Button variant="outline" onClick={() => setShowRoleForm(false)}>{t('common.cancel')}</Button>
+
+                <div className="space-y-4">
+                  <Label className="text-base font-semibold">Granular Permissions</Label>
+                  <p className="text-sm text-muted-foreground">Select the permissions assigned to this staff role.</p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-muted/30 p-4 rounded-lg border">
+                    {Object.values(ADMIN_PERMISSIONS).map((perm) => (
+                      <div key={perm.key} className="flex items-start space-x-3 space-x-reverse">
+                        <Checkbox 
+                          id={`perm-${perm.key}`} 
+                          checked={!!roleForm.permissions[perm.key]}
+                          onCheckedChange={() => togglePermission(perm.key)}
+                          className="mt-1"
+                        />
+                        <div className="grid gap-1.5 leading-none">
+                          <Label 
+                            htmlFor={`perm-${perm.key}`}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                          >
+                            {locale === 'ar' ? perm.nameAr : perm.nameEn}
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            {perm.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button onClick={saveRole}>{editingRole ? 'Update Role' : t('common.create')}</Button>
+                  <Button variant="outline" onClick={() => { setShowRoleForm(false); setEditingRole(null); setRoleForm({ name: '', nameAr: '', description: '', permissions: {} }); }}>{t('common.cancel')}</Button>
                 </div>
               </CardContent>
             </Card>
@@ -429,11 +490,33 @@ export default function AdminStaffPage() {
                   <div>
                     <h3 className="font-semibold">{role.name} {role.nameAr && `(${role.nameAr})`}</h3>
                     {role.description && <p className="text-sm text-muted-foreground">{role.description}</p>}
-                    <Badge variant="secondary" className="mt-1">{role._count?.staffMembers || 0} {t('staff_mgmt.members')}</Badge>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <Badge variant="secondary">{role._count?.staffMembers || 0} {t('staff_mgmt.members')}</Badge>
+                      {role.permissions && Object.keys(role.permissions).filter(k => role.permissions[k]).length > 0 && (
+                        <Badge variant="outline" className="border-primary/30 text-primary">
+                          {Object.keys(role.permissions).filter(k => (role.permissions as any)[k]).length} permissions
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-destructive" onClick={() => deleteRole(role.id)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  <div className="flex gap-1">
+                    <Button variant="ghost" size="sm" onClick={() => {
+                      setEditingRole(role);
+                      setRoleForm({
+                        name: role.name,
+                        nameAr: role.nameAr || '',
+                        description: role.description || '',
+                        permissions: role.permissions || {}
+                      });
+                      setShowRoleForm(true);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}>
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="text-destructive" onClick={() => deleteRole(role.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}

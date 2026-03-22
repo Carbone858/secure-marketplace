@@ -64,6 +64,58 @@
     "meta": {
       "title": "Service Marketplace | Find Verified Professionals for Home & Business",
       "description": "The leading marketplace for verified services in the Arab world. Get free quotes for AC maintenance, plumbing, electrical, cleaning, and more. Compare prices and hire the best."
+    },
+    "trust": {
+      "title": "100% Secure & Reliable Platform",
+      "subtitle": "We believe trust is the foundation of any successful job, which is why safety is at the heart of everything we do.",
+      "manual": {
+        "title": "Manual Provider Verification",
+        "desc": "We manually review the documents of every company and professional for quality and credibility."
+      },
+      "privacy": {
+        "title": "Secure & Private Messaging",
+        "desc": "Your personal data and phone number are never public, only shared with the company you choose."
+      },
+      "reviews": {
+        "title": "Verified Review System",
+        "desc": "Reviews can only be added after a job is actually finished to ensure honest feedback."
+      },
+      "dispute": {
+        "title": "Dispute Resolution",
+        "desc": "Our team is always available to intervene if there is any misunderstanding between parties."
+      }
+    },
+    "faq": {
+      "title": "Have Questions? We Have Answers",
+      "subtitle": "Everything you need to know about how the platform works and managing your requests.",
+      "badge": "Common Questions",
+      "items": [
+        {
+          "q": "Is the platform free for customers?",
+          "a": "Yes, Secure Marketplace is 100% free for customers to post requests and receive offers. You only pay the service provider directly for the work done."
+        },
+        {
+          "q": "How do I pay service providers?",
+          "a": "Payments are negotiated directly between you and the service provider. We recommend discussing payment terms and milestones before starting the project."
+        },
+        {
+          "q": "Are service providers verified?",
+          "a": "Yes, every professional or company on our platform undergoes a manual verification process of their identity and business registration files to ensure safety."
+        },
+        {
+          "q": "Can I cancel a request after posting it?",
+          "a": "Absolutely. You can cancel or close your request at any time from your dashboard if you've changed your mind or found a solution elsewhere."
+        },
+        {
+          "q": "Is my personal phone number private?",
+          "a": "Yes. Your contact information is never shown publicly. It is only shared with a service provider after you explicitly accept their offer."
+        }
+      ],
+      "help": {
+        "title": "Still Need Help?",
+        "desc": "Our support team is always available to help you with any inquiries regarding the platform.",
+        "button": "Contact Support"
+      }
     }
   },
   "auth": {
@@ -1055,6 +1107,7 @@
     "showLess": "Show Less",
     "readMore": "Read More",
     "currency": {
+      "SYP": "SYP",
       "USD": "USD",
       "EUR": "EUR",
       "GBP": "GBP",
@@ -1677,6 +1730,7 @@
   "companies": {
     "title": "Company Directory",
     "subtitle": "Find verified companies for your projects",
+    "verified": "Verified",
     "searchPlaceholder": "Search companies, services...",
     "searchButton": "Search",
     "noResults": "No companies found",

@@ -18,6 +18,8 @@ import { Badge } from '@/components/ui/badge';
 import { StatusBadge } from '@/components/ui/composite';
 import { useRouter } from '@/i18n/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { hasPermission, AdminPermission } from '@/lib/permissions';
 
 interface DashboardStats {
   stats: {
@@ -78,6 +80,7 @@ export default function AdminDashboardPage() {
     );
   }
 
+  const { user: currentUser } = useAuth();
   const statCards = [
     {
       title: t('stats.totalUsers'),
@@ -85,6 +88,7 @@ export default function AdminDashboardPage() {
       icon: Users,
       color: 'text-info',
       href: '/admin/users',
+      permission: 'manage_users' as AdminPermission,
     },
     {
       title: t('stats.totalCompanies'),
@@ -92,6 +96,7 @@ export default function AdminDashboardPage() {
       icon: Building2,
       color: 'text-success',
       href: '/admin/companies',
+      permission: 'manage_companies' as AdminPermission,
     },
     {
       title: t('stats.totalRequests'),
@@ -99,6 +104,7 @@ export default function AdminDashboardPage() {
       icon: FileText,
       color: 'text-primary',
       href: '/admin/requests',
+      permission: 'manage_requests' as AdminPermission,
     },
     {
       title: t('stats.totalProjects'),
@@ -106,8 +112,9 @@ export default function AdminDashboardPage() {
       icon: Briefcase,
       color: 'text-warning',
       href: '/admin/projects',
+      permission: 'manage_projects' as AdminPermission,
     },
-  ];
+  ].filter(card => hasPermission(currentUser?.permissions, card.permission, currentUser?.role, currentUser?.isStaff));
 
   return (
     <div className="space-y-8">
@@ -167,64 +174,68 @@ export default function AdminDashboardPage() {
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Users */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">{t('recentUsers.title')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {data.recentUsers.map((user) => (
-                <div
-                  key={user.id}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
-                >
-                  <div>
-                    <p className="font-medium">{user.name || t('recentUsers.unknown')}</p>
-                    <p className="text-sm text-muted-foreground">{user.email}</p>
+        {hasPermission(currentUser?.permissions, 'manage_users', currentUser?.role, currentUser?.isStaff) && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">{t('recentUsers.title')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {data.recentUsers.map((user) => (
+                  <div
+                    key={user.id}
+                    className="flex items-center justify-between py-2 border-b last:border-0"
+                  >
+                    <div>
+                      <p className="font-medium">{user.name || t('recentUsers.unknown')}</p>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                    </div>
+                    <Badge variant={user.role === 'COMPANY' ? 'default' : 'secondary'}>
+                      {user.role}
+                    </Badge>
                   </div>
-                  <Badge variant={user.role === 'COMPANY' ? 'default' : 'secondary'}>
-                    {user.role}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Recent Requests */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">{t('recentRequests.title')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {data.recentRequests.map((req) => (
-                <div
-                  key={req.id}
-                  className="flex items-center justify-between py-2 border-b last:border-0"
-                >
-                  <div>
-                    <p className="font-medium truncate max-w-xs">{req.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {req.category?.name} • {req.user?.name}
-                    </p>
-                  </div>
-                  <Badge
-                    className={
-                      req.status === 'ACTIVE'
-                        ? 'bg-success/10 text-success'
-                        : req.status === 'PENDING'
-                          ? 'bg-warning/10 text-warning'
-                          : 'bg-muted text-muted-foreground'
-                    }
+        {hasPermission(currentUser?.permissions, 'manage_requests', currentUser?.role, currentUser?.isStaff) && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">{t('recentRequests.title')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {data.recentRequests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="flex items-center justify-between py-2 border-b last:border-0"
                   >
-                    {req.status}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                    <div>
+                      <p className="font-medium truncate max-w-xs">{req.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {req.category?.name} • {req.user?.name}
+                      </p>
+                    </div>
+                    <Badge
+                      className={
+                        req.status === 'ACTIVE'
+                          ? 'bg-success/10 text-success'
+                          : req.status === 'PENDING'
+                            ? 'bg-warning/10 text-warning'
+                            : 'bg-muted text-muted-foreground'
+                      }
+                    >
+                      {req.status}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

@@ -10,10 +10,14 @@ import { StatusBadge } from '@/components/ui/composite';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
 import { PageSkeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { hasPermission } from '@/lib/permissions';
+import Link from 'next/link';
 
 export default function AdminCompaniesPage() {
   const locale = useLocale();
   const t = useTranslations('admin');
+  const { user: currentUser } = useAuth();
   const [companies, setCompanies] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -148,27 +152,11 @@ export default function AdminCompaniesPage() {
                         </Button>
                       </td>
                       <td className="p-3">
-                        <div className="flex gap-1">
-                          {company.verificationStatus !== 'VERIFIED' && (
-                            <Button
-                              size="sm"
-                              variant="default"
-                              className="bg-success hover:bg-success/90 text-success-foreground"
-                              onClick={() => updateCompany(company.id, { verificationStatus: 'VERIFIED' })}
-                            >
-                              <CheckCircle className="h-3 w-3 mr-1" /> Verify
-                            </Button>
-                          )}
-                          {company.verificationStatus !== 'REJECTED' && (
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => updateCompany(company.id, { verificationStatus: 'REJECTED' })}
-                            >
-                              <XCircle className="h-3 w-3 mr-1" /> Reject
-                            </Button>
-                          )}
-                        </div>
+                        <Link href={`/${locale}/admin/companies/${company.id}`}>
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

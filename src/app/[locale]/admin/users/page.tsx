@@ -10,13 +10,7 @@ import { StatusBadge } from '@/components/ui/composite';
 import { Input } from '@/components/ui/input';
 import { useLocale, useTranslations } from 'next-intl';
 import { PageSkeleton } from '@/components/ui/skeleton';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
 
 const ROLES = ['USER', 'COMPANY', 'ADMIN', 'SUPER_ADMIN'] as const;
 
@@ -129,7 +123,7 @@ export default function AdminUsersPage() {
           ) : users.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">{t('users.noUsers')}</div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto min-h-[300px] pb-32">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b bg-muted/50">
@@ -158,39 +152,11 @@ export default function AdminUsersPage() {
                         {new Date(user.createdAt).toLocaleDateString()}
                       </td>
                       <td className="p-3">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" disabled={updatingId === user.id} className="gap-1">
-                              Actions <ChevronDown className="h-3 w-3" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">Change Role</div>
-                            {ROLES.map(role => (
-                              <DropdownMenuItem
-                                key={role}
-                                onClick={() => updateUser(user.id, { role })}
-                                className={user.role === role ? 'bg-muted font-medium' : ''}
-                              >
-                                {role}
-                                {user.role === role && <span className="ms-auto text-xs">✓</span>}
-                              </DropdownMenuItem>
-                            ))}
-                            <DropdownMenuSeparator />
-                            {user.isActive !== false ? (
-                              <DropdownMenuItem
-                                onClick={() => updateUser(user.id, { isActive: false })}
-                                className="text-destructive focus:text-destructive"
-                              >
-                                Ban User
-                              </DropdownMenuItem>
-                            ) : (
-                              <DropdownMenuItem onClick={() => updateUser(user.id, { isActive: true })}>
-                                Unban User
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Link href={`/${locale}/admin/users/${user.id}`}>
+                          <Button variant="outline" size="sm">
+                            View Profile
+                          </Button>
+                        </Link>
                       </td>
                     </tr>
                   ))}
