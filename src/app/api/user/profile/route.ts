@@ -41,9 +41,15 @@ export async function GET(request: NextRequest) {
         role: true,
         avatar: true,
         emailVerified: true,
+        isActive: true, // Also include isActive for checking
         createdAt: true,
         notificationSettings: true,
         userSettings: true,
+        staffMember: {
+          include: {
+            role: true
+          }
+        }
       },
     });
 
@@ -71,6 +77,8 @@ export async function GET(request: NextRequest) {
             avatar: user.avatar,
             emailVerified: user.emailVerified,
             createdAt: user.createdAt,
+            permissions: user.staffMember?.role?.permissions ?? {},
+            isStaff: !!user.staffMember,
           },
           notificationSettings: user.notificationSettings,
           userSettings: user.userSettings,

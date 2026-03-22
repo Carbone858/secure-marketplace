@@ -204,6 +204,18 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
       );
     }
 
+    // Only USER role can create requests — COMPANY accounts are providers, not requesters
+    if (session.user.role === 'COMPANY') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'forbidden',
+          message: 'Company accounts cannot create service requests.',
+        },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const validationResult = createRequestSchema.safeParse(body);
 

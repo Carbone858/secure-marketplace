@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { verifyPassword, generateAccessToken, generateRefreshToken, getAuthCookies } from '@/lib/auth';
@@ -249,3 +250,4 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
     );
   
 }, 'AUTH', 'auth-login');
+

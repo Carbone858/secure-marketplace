@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { hashPassword } from '@/lib/auth';
@@ -94,3 +95,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

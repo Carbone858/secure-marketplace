@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * /api/admin/feature-flags
  *
@@ -187,3 +188,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

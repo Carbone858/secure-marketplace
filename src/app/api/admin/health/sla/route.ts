@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * GET /api/admin/health/sla
  * Returns all stored monthly SLA reports + current month live data.
@@ -39,3 +40,4 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: err?.message }, { status: 500 });
     }
 }
+

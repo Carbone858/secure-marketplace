@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,3 +10,4 @@ export async function GET(request: NextRequest) {
         latency: `${Date.now() - start}ms`
     });
 }
+

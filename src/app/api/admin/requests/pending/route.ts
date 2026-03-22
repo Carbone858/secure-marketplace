@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * GET /api/admin/requests/pending
  * Returns count of PENDING (unapproved) service requests.
@@ -16,3 +17,4 @@ export async function GET() {
         return NextResponse.json({ count: 0 });
     }
 }
+

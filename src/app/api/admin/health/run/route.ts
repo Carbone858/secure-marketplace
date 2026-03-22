@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * /api/admin/health/run
  * Manually trigger a health check cycle from the admin dashboard.
@@ -23,3 +24,4 @@ export async function POST() {
         return NextResponse.json({ error: err?.message }, { status: 500 });
     }
 }
+

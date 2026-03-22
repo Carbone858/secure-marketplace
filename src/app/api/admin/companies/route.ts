@@ -1,6 +1,7 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { authenticateRequest } from '@/lib/auth-middleware';
+import { authenticateRequest, requirePermission } from '@/lib/auth-middleware';
 import { z } from 'zod';
 
 const updateCompanySchema = z.object({
@@ -14,9 +15,9 @@ export async function GET(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    // Base Access: Must have manage_companies permission
+    const forbidden = requirePermission(auth.user, 'manage_companies');
+    if (forbidden) return forbidden;
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -64,9 +65,9 @@ export async function PUT(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    // Base Access: Must have manage_companies permission
+    const forbidden = requirePermission(auth.user, 'manage_companies');
+    if (forbidden) return forbidden;
 
     const body = await request.json();
     const { id, ...data } = body;
@@ -80,9 +81,18 @@ export async function PUT(request: NextRequest) {
     }
 
     const updateData: any = { ...parsed.data };
-    if (parsed.data.verificationStatus === 'VERIFIED') {
-      updateData.verifiedAt = new Date();
-      updateData.verifiedBy = auth.user.id;
+    
+    // Fine-grained check: Modifying verification status requires specific manage_verifications permission
+    if (parsed.data.verificationStatus) {
+      const verificationForbidden = requirePermission(auth.user, 'manage_verifications');
+      if (verificationForbidden) {
+        return NextResponse.json({ error: 'Missing permission: manage_verifications' }, { status: 403 });
+      }
+
+      if (parsed.data.verificationStatus === 'VERIFIED') {
+        updateData.verifiedAt = new Date();
+        updateData.verifiedBy = auth.user.id;
+      }
     }
 
     const company = await prisma.company.update({
@@ -95,3 +105,4 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

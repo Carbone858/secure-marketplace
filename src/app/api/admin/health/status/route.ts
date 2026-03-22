@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * /api/admin/health/status
  * Returns aggregated health stats and the latest logs for the dashboard.
@@ -97,3 +98,4 @@ export async function GET() {
         return NextResponse.json({ error: err?.message }, { status: 500 });
     }
 }
+

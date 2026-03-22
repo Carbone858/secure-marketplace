@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * GET /api/status
  * Public status API — returns current system status with no sensitive data.
@@ -92,3 +93,4 @@ export async function GET() {
         return NextResponse.json({ error: 'Status unavailable' }, { status: 500 });
     }
 }
+

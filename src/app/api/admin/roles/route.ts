@@ -1,15 +1,17 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { authenticateRequest } from '@/lib/auth-middleware';
+import { authenticateRequest, requirePermission } from '@/lib/auth-middleware';
 import { z } from 'zod';
 
 export async function GET(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    
+    // Check permission
+    const forbidden = requirePermission(auth.user, 'manage_staff');
+    if (forbidden) return forbidden;
 
     const roles = await prisma.staffRole.findMany({
       include: { _count: { select: { staffMembers: true } } },
@@ -32,9 +34,10 @@ export async function POST(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    
+    // Check permission
+    const forbidden = requirePermission(auth.user, 'manage_staff');
+    if (forbidden) return forbidden;
 
     const body = await request.json();
     const parsed = createRoleSchema.safeParse(body);
@@ -53,9 +56,10 @@ export async function PUT(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    
+    // Check permission
+    const forbidden = requirePermission(auth.user, 'manage_staff');
+    if (forbidden) return forbidden;
 
     const body = await request.json();
     const { id, ...data } = body;
@@ -87,9 +91,10 @@ export async function DELETE(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    
+    // Check permission
+    const forbidden = requirePermission(auth.user, 'manage_staff');
+    if (forbidden) return forbidden;
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -108,3 +113,4 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

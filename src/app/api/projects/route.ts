@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
@@ -11,7 +12,7 @@ const projectSchema = z.object({
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   budget: z.number().min(0).optional(),
-  currency: z.string().default('USD'),
+  currency: z.string().default('SYP'),
 });
 
 // GET /api/projects - Get user's projects
@@ -180,3 +181,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

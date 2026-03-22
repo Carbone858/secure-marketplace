@@ -228,16 +228,28 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
             },
           });
 
-          // Create notification for company owner
-          await tx.notification.create({
-            data: {
+          // Check for existing notification to guarantee idempotency
+          const existingNotif = await tx.notification.findFirst({
+            where: {
               userId: freshOffer.company.userId,
               type: 'PROJECT',
               title: 'Offer Accepted - New Project',
               message: `Your offer for "${freshOffer.request.title}" has been accepted! A new project has been created.`,
-              data: { projectId: project.id, offerId: updatedOffer.id },
-            },
+            }
           });
+
+          if (!existingNotif) {
+            // Create notification for company owner
+            await tx.notification.create({
+              data: {
+                userId: freshOffer.company.userId,
+                type: 'PROJECT',
+                title: 'Offer Accepted - New Project',
+                message: `Your offer for "${freshOffer.request.title}" has been accepted! A new project has been created.`,
+                data: { projectId: project.id, offerId: updatedOffer.id },
+              },
+            });
+          }
 
           return { offer: updatedOffer, project };
         });

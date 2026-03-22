@@ -138,7 +138,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       where: { id },
     });
 
-    if (!serviceRequest || !serviceRequest.isActive) {
+    if (!serviceRequest) {
       return NextResponse.json(
         {
           success: false,

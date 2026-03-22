@@ -1,6 +1,7 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { authenticateRequest } from '@/lib/auth-middleware';
+import { authenticateRequest, requirePermission } from '@/lib/auth-middleware';
 import { z } from 'zod';
 
 const updateUserSchema = z.object({
@@ -15,14 +16,9 @@ export async function GET(request: NextRequest) {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
 
-    const { user } = auth;
-
-    if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
-      );
-    }
+    // Check permission
+    const forbidden = requirePermission(auth.user, 'manage_users');
+    if (forbidden) return forbidden;
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -89,20 +85,14 @@ export async function GET(request: NextRequest) {
 }
 
 // PUT /api/admin/users - Update user (Admin only)
-// Accepts `id` in request body since this is not a dynamic [id] route
 export async function PUT(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
 
-    const { user } = auth;
-
-    if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 403 }
-      );
-    }
+    // Check permission
+    const forbidden = requirePermission(auth.user, 'manage_users');
+    if (forbidden) return forbidden;
 
     const body = await request.json();
     const id = body.id;
@@ -122,12 +112,43 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // --- FINE-GRAINED RBAC CHECKS ---
+    // 1. If modifying the role, the current user MUST have `manage_staff` permission
+    if (parsed.data.role && parsed.data.role !== auth.user.role) {
+      const staffForbidden = requirePermission(auth.user, 'manage_staff');
+      if (staffForbidden) {
+        return NextResponse.json(
+          { error: 'Missing permission: manage_staff. Only Staff Managers can modify roles.' },
+          { status: 403 }
+        );
+      }
+    }
+
     // Prevent non-SUPER_ADMIN from assigning SUPER_ADMIN role
-    if (parsed.data.role === 'SUPER_ADMIN' && user.role !== 'SUPER_ADMIN') {
+    if (parsed.data.role === 'SUPER_ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
       return NextResponse.json(
         { error: 'Only SUPER_ADMIN can assign SUPER_ADMIN role' },
         { status: 403 }
       );
+    }
+
+    // 2. Fetch target user to prevent banning other Admins unless authorized
+    const targetUser = await prisma.user.findUnique({ where: { id }, select: { role: true } });
+    if (!targetUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    if (
+      parsed.data.isActive !== undefined && 
+      (targetUser.role === 'ADMIN' || targetUser.role === 'SUPER_ADMIN')
+    ) {
+      const staffForbidden = requirePermission(auth.user, 'manage_staff');
+      if (staffForbidden) {
+        return NextResponse.json(
+          { error: 'Missing permission: manage_staff. Cannot modify active status of Admin/Super Admin.' },
+          { status: 403 }
+        );
+      }
     }
 
     const updatedUser = await prisma.user.update({
@@ -157,3 +178,4 @@ export async function PUT(request: NextRequest) {
     );
   }
 }
+

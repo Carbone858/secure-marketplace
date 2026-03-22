@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 /**
  * GET /api/admin/health/errors
  * Returns recent user-triggered errors from HealthLog (source = "user").
@@ -40,3 +41,4 @@ export async function GET() {
         return NextResponse.json({ error: err?.message }, { status: 500 });
     }
 }
+

@@ -1,14 +1,14 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { authenticateRequest } from '@/lib/auth-middleware';
+import { authenticateRequest, requirePermission } from '@/lib/auth-middleware';
 
 export async function GET(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    const forbidden = requirePermission(auth.user, 'manage_reviews');
+    if (forbidden) return forbidden;
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -52,9 +52,8 @@ export async function PATCH(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    const forbidden = requirePermission(auth.user, 'manage_reviews');
+    if (forbidden) return forbidden;
 
     const body = await request.json();
     const { id, isApproved } = body;
@@ -98,9 +97,9 @@ export async function DELETE(request: NextRequest) {
   try {
     const auth = await authenticateRequest(request);
     if (auth instanceof NextResponse) return auth;
-    if (auth.user.role !== 'ADMIN' && auth.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-    }
+    // Hard deletion of reviews requires elevated staff management capabilities (Ops Admin / Super Admin)
+    const forbidden = requirePermission(auth.user, 'manage_staff');
+    if (forbidden) return forbidden;
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -145,3 +144,4 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
