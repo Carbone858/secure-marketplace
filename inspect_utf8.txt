@@ -1,0 +1,39 @@
+--- ALL USERS WITH ADMIN/SUPER_ADMIN ROLES ---
+User: owner@secure-marketplace.com
+  ID: 5a529f50-7761-4049-a023-1b9120b244d7
+  Role in User table: SUPER_ADMIN
+  Has StaffMember record: false
+---
+User: tester@example.com
+  ID: b6d062aa-1954-4a9e-9d1a-6d9a636fe691
+  Role in User table: ADMIN
+  Has StaffMember record: false
+---
+User: company@secure-marketplace.com
+  ID: 366db2af-9cf4-45d6-b0b7-896f68acd563
+  Role in User table: ADMIN
+  Has StaffMember record: true
+  Staff Role: Admin
+  Permissions: []
+---
+User: admin@secure-marketplace.com
+  ID: 2849b948-60db-409c-aac1-5dc6cf411051
+  Role in User table: ADMIN
+  Has StaffMember record: false
+---
+
+--- ALL STAFF ROLES ---
+Role: Super Admin (ID: dbb2ff93-1d27-4c49-a2c5-3d773d5f2340)
+  Permissions: []
+Role: Admin (ID: 946a7c6c-2e9f-4d33-8004-7dcd24529798)
+  Permissions: []
+Role: Department Admin (ID: 03699509-f9a7-473c-94de-120dd6b3e119)
+  Permissions: []
+Role: Support Agent (ID: dc47ac29-ee4c-4177-ac93-f6413c828c84)
+  Permissions: []
+Role: Content Manager (ID: c67c6fe8-2a88-498e-a169-4a2e82f6ec2b)
+  Permissions: []
+Role: Verification Officer (ID: bbb576ff-6de1-4516-8b44-0bfee4827c18)
+  Permissions: []
+Role: Employee (ID: f664f8cf-846e-4d03-9948-29b24c7f20ad)
+  Permissions: []

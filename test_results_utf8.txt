@@ -1,0 +1,23 @@
+--- Case: Owner (SUPER_ADMIN, no staff) ---
+Checking: role='SUPER_ADMIN', isStaff=false, permission='view_dashboard'
+Result: true
+
+--- Case: Tester (ADMIN, no staff) ---
+Checking: role='ADMIN', isStaff=false, permission='view_dashboard'
+Result: true
+
+--- Case: Admin with record (StaffMember, but no perms set) ---
+Checking: role='ADMIN', isStaff=true, permission='view_dashboard'
+  Check value for key 'view_dashboard': undefined -> false
+Result: false
+
+--- Case: Admin with array record (Prisma empty JSON) ---
+Checking: role='ADMIN', isStaff=true, permission='view_dashboard'
+  Check value for key 'view_dashboard': undefined -> false
+Result: false
+
+--- Case: Employee (USER role) ---
+Checking: role='USER', isStaff=true, permission='manage_users'
+  Check value for key 'manage_users': undefined -> false
+Result: false
+
