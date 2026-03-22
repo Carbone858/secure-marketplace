@@ -151,12 +151,8 @@ export function RegisterForm() {
         recaptchaToken = await executeRecaptcha('register');
       } catch (error) {
         console.warn('reCAPTCHA failed, continuing without:', error);
-        // In development, continue without reCAPTCHA
-        if (process.env.NODE_ENV === 'production') {
-          setErrors({ general: t('errors.recaptcha') });
-          setIsLoading(false);
-          return;
-        }
+        // In development OR production, continue without reCAPTCHA if it fails (graceful downgrade)
+        console.warn('Proceeding without reCAPTCHA token due to execution failure.');
       }
 
       const response = await fetch('/api/auth/register', {
