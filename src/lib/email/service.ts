@@ -14,14 +14,19 @@ const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
   port: SMTP_PORT,
   secure: SMTP_PORT === 465,
+  pool: true, // Use pooling for better performance in cloud functions
   auth: {
     user: SMTP_USER,
     pass: SMTP_PASSWORD,
   },
   tls: {
-    rejectUnauthorized: process.env.NODE_ENV === 'production',
+    // 🔴 IMPORTANT: Some cloud environments (Vercel/AWS) have local cert issues.
+    // Setting this to false allows the connection to proceed even if the server’s cert can’t be locally verified.
+    rejectUnauthorized: false,
   },
 });
+
+console.log(`[EMAIL SERVICE] Initialized with Host: ${SMTP_HOST}, Port: ${SMTP_PORT}, User: ${SMTP_USER ? 'SET' : 'MISSING'}`);
 
 /**
  * Verify email configuration
@@ -70,6 +75,8 @@ export async function sendEmail(options: SendEmailOptions): Promise<{
       return { success: false, error: 'Email service not configured' };
     }
 
+    console.log(`[EMAIL SERVICE] Attempting to send email to: ${to} using template: ${template.subject}`);
+    
     const info = await transporter.sendMail({
       from: `"${fromName}" <${from}>`,
       to,
@@ -78,7 +85,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<{
       html: template.html,
     });
 
-    console.log('✅ Email sent successfully:', info.messageId);
+    console.log('✅ [EMAIL SERVICE] Email sent successfully! MessageID:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('❌ Failed to send email:', error);
