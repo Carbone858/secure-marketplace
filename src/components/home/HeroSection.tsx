@@ -7,7 +7,6 @@ import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CategoryQuickSelect, { type FeaturedCategory } from './CategoryQuickSelect';
 import HeroTrustImage from './HeroTrustImage';
-import HowItWorksSection from './HowItWorksSection';
 
 /**
  * HeroSection — offerta.se / mittanbud.no inspired hero.
@@ -112,13 +111,8 @@ export default function HeroSection() {
             hideOnMobile={true}
             position="right"
           />
-        </div>
-
-        {/* How It Works Section — now embedded below hero content, visible together */}
-        <div className="mt-4">
-          <HowItWorksSection />
-        </div>
       </div>
+    </div>
 
       {/* Subtle decorative gradient orb — purely visual */}
       <div

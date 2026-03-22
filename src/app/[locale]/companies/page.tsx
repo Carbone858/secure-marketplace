@@ -71,6 +71,7 @@ function FilterDropdown({ label, icon: Icon, children, className = '' }: {
         <div
           className="absolute top-full mt-1 z-50 bg-popover border border-border rounded-md shadow-md min-w-[200px] max-h-[300px] overflow-y-auto py-1"
           onMouseDown={e => e.stopPropagation()}
+          onClick={() => setOpen(false)}
         >
           {children}
         </div>
@@ -85,7 +86,9 @@ function FilterOption({ onClick, children, active = false }: { onClick: () => vo
       type="button"
       className={`w-full text-left px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground transition-colors ${active ? 'font-semibold text-primary' : ''
         }`}
-      onMouseDown={e => { e.preventDefault(); onClick(); }}
+      onClick={(e) => {
+        onClick();
+      }}
     >
       {children}
     </button>

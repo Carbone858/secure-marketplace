@@ -87,6 +87,11 @@ export default function MessagesPage() {
   useEffect(() => {
     if (selectedConversation) {
       fetchMessages(selectedConversation);
+      const interval = setInterval(() => {
+        fetchMessages(selectedConversation);
+        fetchConversations();
+      }, 5000); // Poll every 5s for real-time feel
+      return () => clearInterval(interval);
     }
   }, [selectedConversation]);
 

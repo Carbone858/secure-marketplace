@@ -3,6 +3,7 @@ import { verifyToken } from '@/lib/auth';
 import { prisma } from '@/lib/db/client';
 import { apiLimiter, getClientIp } from '@/lib/rate-limit';
 import { getToken } from 'next-auth/jwt';
+import { AdminPermission, hasPermission } from '@/lib/permissions';
 
 export interface AuthenticatedUser {
   id: string;
@@ -11,6 +12,8 @@ export interface AuthenticatedUser {
   role: string;
   image: string | null;
   emailVerified: Date | null;
+  permissions: Record<string, boolean>;
+  isStaff: boolean;
 }
 
 export interface AuthResult {
@@ -55,7 +58,7 @@ export async function authenticateRequest(
           secret: process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
         });
         if (nextAuthToken?.sub || (nextAuthToken as any)?.id) {
-          userId = (nextAuthToken.sub || (nextAuthToken as any).id) as string;
+          userId = (nextAuthToken?.sub || (nextAuthToken as any)?.id) as string;
         }
       } catch (err) {
         console.error('NextAuth token verification error:', err);
@@ -79,6 +82,11 @@ export async function authenticateRequest(
         avatar: true,
         emailVerified: true,
         isActive: true,
+        staffMember: {
+          include: {
+            role: true
+          }
+        }
       },
     });
 
@@ -89,6 +97,16 @@ export async function authenticateRequest(
       );
     }
 
+    // Extract permissions from staff role
+    const permissions: Record<string, boolean> = {};
+    if (user.role === 'SUPER_ADMIN') {
+      // Super admins get all permissions (handled in hasPermission helper too)
+      // but we populate it for completeness
+    } else if (user.staffMember?.role?.permissions) {
+      const rolePerms = user.staffMember.role.permissions as Record<string, boolean>;
+      Object.assign(permissions, rolePerms);
+    }
+
     return {
       user: {
         id: user.id,
@@ -97,6 +115,8 @@ export async function authenticateRequest(
         role: user.role,
         image: user.avatar, // Map avatar field to image for API compatibility
         emailVerified: user.emailVerified,
+        permissions,
+        isStaff: !!user.staffMember,
       },
     };
   } catch (error) {
@@ -114,6 +134,16 @@ export async function authenticateRequest(
 export function requireAdmin(user: AuthenticatedUser): NextResponse | null {
   if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  }
+  return null;
+}
+
+/**
+ * Require specific permission. Returns 403 if user lacks it.
+ */
+export function requirePermission(user: AuthenticatedUser, permission: AdminPermission): NextResponse | null {
+  if (!hasPermission(user.permissions, permission, user.role, user.isStaff)) {
+    return NextResponse.json({ error: `Forbidden: Missing permission ${permission}` }, { status: 403 });
   }
   return null;
 }

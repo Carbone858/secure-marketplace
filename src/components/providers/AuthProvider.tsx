@@ -11,6 +11,8 @@ export interface AuthUser {
   avatar: string | null;
   image: string | null;
   emailVerified: string | null;
+  permissions: Record<string, boolean>;
+  isStaff: boolean;
 }
 
 interface AuthContextValue {
@@ -44,6 +46,8 @@ async function fetchCurrentUser(): Promise<AuthUser | null> {
       avatar: user.avatar ?? null,
       image: user.avatar ?? null,
       emailVerified: user.emailVerified ?? null,
+      permissions: user.permissions ?? {},
+      isStaff: user.isStaff ?? false,
     };
   } catch {
     return null;

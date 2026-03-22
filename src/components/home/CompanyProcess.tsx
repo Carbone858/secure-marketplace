@@ -42,6 +42,7 @@ import {
     Loader2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function CompanyProcess() {
     const locale = useLocale();
@@ -240,7 +241,39 @@ export default function CompanyProcess() {
                     </p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
+                {/* --- LITE: ILLUSTRATIONS FOR ALL DEVICES --- */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 lg:mb-24">
+                    {[
+                        { id: 1, titleEn: "1. Create Profile", titleAr: "1. إنشاء حساب الشركة", descEn: "Add your services, locations, and portfolio to stand out.", descAr: "أضف خدماتك، مواقع عملك، ومعرض أعمالك لتتميز.", img: "/images/illustrations/company_step_1.png" },
+                        { id: 2, titleEn: "2. Find & Bid on Projects", titleAr: "2. البحث وتقديم العروض", descEn: "Browse relevant requests and submit competitive quotes directly.", descAr: "تصفح الطلبات المناسبة وقدم عروض أسعار تنافسية مباشرة.", img: "/images/illustrations/company_step_2.png" },
+                        { id: 3, titleEn: "3. Collaborate & Earn", titleAr: "3. التعاون والنمو", descEn: "Communicate with clients, manage ongoing work, and grow your business.", descAr: "تواصل مع العملاء، أوصل العمل المطلوب، ونَمِّ أعمالك.", img: "/images/illustrations/company_step_3.png" }
+                    ].map((step) => (
+                        <div key={step.id} className="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border bg-white dark:bg-gray-900 group flex flex-col">
+                            <div className="relative h-80 lg:h-96 w-full bg-gradient-to-br from-indigo-50/50 to-blue-50/50 dark:from-indigo-950/20 dark:to-blue-950/20 shrink-0 border-b dark:border-gray-800">
+                                 <Image
+                                     src={step.img}
+                                     alt={locale === 'ar' ? step.titleAr : step.titleEn}
+                                     fill
+                                     className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                 />
+                            </div>
+                            <div className="p-8 relative bg-white dark:bg-gray-900 flex-1 border-t dark:border-gray-800">
+                                <h3 className="font-bold text-2xl text-primary mb-3">
+                                    {locale === 'ar' ? step.titleAr : step.titleEn}
+                                </h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
+                                    {locale === 'ar' ? step.descAr : step.descEn}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* --- HEAVY: INTERACTIVE MOCKUP (DESKTOP ONLY) --- */}
+                <div className="hidden lg:flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20 relative mt-12 bg-white dark:bg-[#0a0a0a] border dark:border-gray-800 rounded-[3rem] p-12 shadow-sm">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gray-100 dark:bg-gray-800 px-6 py-2 rounded-full text-xs font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase shadow-sm border dark:border-gray-700 whitespace-nowrap z-10">
+                        {locale === 'ar' ? 'نظرة تفصيلية على واجهة الشركة' : 'Interactive App Preview'}
+                    </div>
 
                     {/* LEFT: Steps List */}
                     <div className="w-full lg:w-1/3 space-y-4">

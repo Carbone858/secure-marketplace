@@ -28,7 +28,7 @@ const createRequestBaseSchema = z.object({
   address: z.string().max(500).optional(),
   budgetMin: z.number().min(0, 'Budget must be 0 or greater').optional(),
   budgetMax: z.number().min(0, 'Budget must be 0 or greater').optional(),
-  currency: z.string().default('USD'),
+  currency: z.string().default('SYP'),
   deadline: z.string().optional().refine(
     (val) => {
       if (!val) return true;
@@ -84,7 +84,7 @@ export const requestFilterSchema = z.object({
 export const offerSchema = z.object({
   requestId: z.string().min(1, 'Request ID is required'),
   price: z.number().min(0, 'Price must be positive'),
-  currency: z.string().default('USD'),
+  currency: z.string().default('SYP'),
   description: z.string().max(2000, 'Description is too long').optional(),
   estimatedDays: z.number().min(1).optional(),
   attachments: z.array(z.string()).max(5).default([]),

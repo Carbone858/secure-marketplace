@@ -204,7 +204,7 @@ export function RequestFormSPA({
         address: initialData.address || '',
         budgetMin: initialData.budgetMin?.toString() || '',
         budgetMax: initialData.budgetMax?.toString() || '',
-        currency: initialData.currency || 'USD',
+        currency: initialData.currency || 'SYP',
         deadline: initialData.deadline ? new Date(initialData.deadline).toISOString().split('T')[0] : '',
         urgency: initialData.urgency || 'MEDIUM',
         visibility: initialData.visibility || 'PUBLIC',
@@ -223,7 +223,7 @@ export function RequestFormSPA({
       address: '',
       budgetMin: '',
       budgetMax: '',
-      currency: 'USD',
+      currency: 'SYP',
       deadline: '',
       urgency: 'MEDIUM',
       visibility: 'PUBLIC',
@@ -1163,6 +1163,7 @@ export function RequestFormSPA({
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-base"
               >
+                <option value="SYP">SYP (ل.س)</option>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
                 <option value="GBP">GBP (£)</option>

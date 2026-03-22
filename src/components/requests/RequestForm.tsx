@@ -432,6 +432,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-ring focus:border-ring"
                 >
+                  <option value="SYP">SYP</option>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="GBP">GBP</option>

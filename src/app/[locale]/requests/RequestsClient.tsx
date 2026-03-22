@@ -125,7 +125,7 @@ export default function RequestsClient({ categories, countries, allCities, defau
         switch (urgency) {
             case 'URGENT': return 'bg-destructive/10 text-destructive';
             case 'HIGH': return 'bg-warning/10 text-warning';
-            case 'MEDIUM': return 'bg-warning/10 text-warning';
+            case 'MEDIUM': return 'bg-primary/10 text-primary';
             default: return 'bg-success/10 text-success';
         }
     };
@@ -289,7 +289,7 @@ export default function RequestsClient({ categories, countries, allCities, defau
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 mb-2">
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(request.urgency)}`}>
-                                                {t(`urgency.${request.urgency.toLowerCase()}`)}
+                                                {t('list.filters.urgency')}: {t(`urgency.${request.urgency.toLowerCase()}`)}
                                             </span>
                                             <span className="text-sm text-muted-foreground">
                                                 {new Date(request.createdAt).toLocaleDateString()}

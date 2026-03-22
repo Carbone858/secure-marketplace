@@ -26,82 +26,99 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { AdminPermission, hasPermission } from '@/lib/permissions';
 
-const menuItems = [
+const menuItems: { titleKey: string; href: string; icon: any; permission?: AdminPermission }[] = [
   {
     titleKey: 'sidebar.dashboard',
     href: '/admin',
     icon: LayoutDashboard,
+    permission: 'view_dashboard',
   },
   {
     titleKey: 'sidebar.users',
     href: '/admin/users',
     icon: Users,
+    permission: 'manage_users',
   },
   {
     titleKey: 'sidebar.companies',
     href: '/admin/companies',
     icon: Building2,
+    permission: 'manage_companies',
   },
   {
     titleKey: 'sidebar.verifications',
     href: '/admin/verifications',
     icon: CheckCircle,
+    permission: 'manage_verifications',
   },
   {
     titleKey: 'sidebar.requests',
     href: '/admin/requests',
     icon: FileText,
+    permission: 'manage_requests',
   },
   {
     titleKey: 'sidebar.projects',
     href: '/admin/projects',
     icon: Briefcase,
+    permission: 'manage_projects',
   },
   {
     titleKey: 'sidebar.offers',
     href: '/admin/offers',
     icon: DollarSign,
+    permission: 'manage_offers',
   },
   {
     titleKey: 'sidebar.categories',
     href: '/admin/categories',
     icon: Tags,
+    permission: 'manage_categories',
   },
   {
     titleKey: 'sidebar.reviews',
     href: '/admin/reviews',
     icon: Star,
+    permission: 'manage_reviews',
   },
   {
     titleKey: 'sidebar.staff',
     href: '/admin/staff',
     icon: Shield,
+    permission: 'manage_staff',
   },
   {
     titleKey: 'sidebar.cms',
     href: '/admin/cms',
     icon: FileText,
+    permission: 'manage_cms',
   },
   {
     titleKey: 'sidebar.featureFlags',
     href: '/admin/feature-flags',
     icon: Flag,
+    permission: 'manage_feature_flags',
   },
   {
     titleKey: 'sidebar.messages',
     href: '/admin/messages',
     icon: MessageSquare,
+    permission: 'manage_messages',
   },
   {
     titleKey: 'sidebar.settings',
     href: '/admin/settings',
     icon: Settings,
+    permission: 'manage_settings',
   },
   {
     titleKey: 'sidebar.health',
     href: '/admin/health',
     icon: Activity,
+    permission: 'view_health',
   },
 ];
 
@@ -109,12 +126,19 @@ export function AdminSidebar() {
   const locale = useLocale();
   const pathname = usePathname();
   const t = useTranslations('admin');
+  const { user } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Filter menu items based on user permissions
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (!item.permission) return true;
+    return hasPermission(user?.permissions, item.permission, user?.role, user?.isStaff);
+  });
+
   const navContent = (isMobile = false) => (
     <nav className="p-2 space-y-1 overflow-y-auto flex-1">
-      {menuItems.map((item) => {
+      {filteredMenuItems.map((item) => {
         const isActive = pathname === `/${locale}${item.href}`;
         return (
           <Link

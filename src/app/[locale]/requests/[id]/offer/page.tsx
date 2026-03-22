@@ -74,7 +74,7 @@ export default function SubmitOfferPage() {
   } = useForm<CreateOfferInput>({
     resolver: zodResolver(createOfferSchema),
     defaultValues: {
-      currency: 'USD',
+      currency: 'SYP',
       requestId: params.id as string,  // required by offerSchema
       attachments: [],
     },
@@ -297,6 +297,7 @@ export default function SubmitOfferPage() {
                           className="bg-transparent px-3 py-2 text-sm font-medium border-none focus:ring-0 outline-none h-full cursor-pointer"
                           value={currency}
                         >
+                          <option value="SYP">SYP</option>
                           <option value="USD">USD</option>
                           <option value="EUR">EUR</option>
                           <option value="GBP">GBP</option>

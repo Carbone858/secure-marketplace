@@ -89,6 +89,7 @@ export default function CompanyDetailPage() {
 
   const [company, setCompany] = useState<Company | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isAr = locale === 'ar';
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
@@ -204,7 +205,7 @@ export default function CompanyDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Cover Image */}
       <div className="h-48 md:h-64 bg-gradient-to-r from-primary/20 to-primary/40 relative">
         {company.coverImage && (
@@ -240,29 +241,29 @@ export default function CompanyDetailPage() {
                   <h1 className="text-2xl md:text-3xl font-bold">{company.name}</h1>
                   {company.verificationStatus === 'VERIFIED' && (
                     <Badge className="bg-primary/100">
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      Verified
+                      <CheckCircle className="h-3 w-3 mr-1 flex-shrink-0" />
+                      {isAr ? 'موثق' : 'Verified'}
                     </Badge>
                   )}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
                   <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    {company.city?.name}, {company.country?.name}
+                    <MapPin className="h-4 w-4 flex-shrink-0" />
+                    {isAr ? company.city?.nameAr || company.city?.name : company.city?.name}, {isAr ? company.country?.nameAr || company.country?.name : company.country?.name}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-warning" />
+                    <Star className="h-4 w-4 text-warning flex-shrink-0" />
                     <span className="font-medium">{averageRating.toFixed(1)}</span>
-                    <span>({company._count.reviews} reviews)</span>
+                    <span>({company._count.reviews} {isAr ? 'تقييمات' : 'reviews'})</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Briefcase className="h-4 w-4" />
-                    {company._count.completedProjects} projects
+                    <Briefcase className="h-4 w-4 flex-shrink-0" />
+                    {company._count.completedProjects} {isAr ? 'مشاريع' : 'projects'}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    Member since {new Date(company.createdAt).getFullYear()}
+                    <Calendar className="h-4 w-4 flex-shrink-0" />
+                    {isAr ? 'عضو منذ' : 'Member since'} {new Date(company.createdAt).getFullYear()}
                   </div>
                 </div>
 
@@ -277,7 +278,7 @@ export default function CompanyDetailPage() {
                     <Button variant="outline" asChild>
                       <a href={company.website} target="_blank" rel="noopener noreferrer">
                         <Globe className="h-4 w-4 mr-2" />
-                        Website
+                        {isAr ? 'الموقع الإلكتروني' : 'Website'}
                       </a>
                     </Button>
                   )}
@@ -289,11 +290,11 @@ export default function CompanyDetailPage() {
 
         {/* Tabs */}
         <Tabs defaultValue="services" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="services">Services</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews ({company._count.reviews})</TabsTrigger>
-            <TabsTrigger value="about">About</TabsTrigger>
-            <TabsTrigger value="contact">Contact</TabsTrigger>
+          <TabsList className="flex flex-wrap h-auto w-full justify-start overflow-x-auto">
+            <TabsTrigger value="services">{isAr ? 'الخدمات' : 'Services'}</TabsTrigger>
+            <TabsTrigger value="reviews">{isAr ? 'التقييمات' : 'Reviews'} ({company._count.reviews})</TabsTrigger>
+            <TabsTrigger value="about">{isAr ? 'نبذة' : 'About'}</TabsTrigger>
+            <TabsTrigger value="contact">{isAr ? 'التواصل' : 'Contact'}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="services">
@@ -309,12 +310,12 @@ export default function CompanyDetailPage() {
                     )}
                     {(service.priceFrom || service.priceTo) && (
                       <div className="text-sm">
-                        <span className="font-medium">Price: </span>
+                        <span className="font-medium">{isAr ? 'السعر:' : 'Price:'} </span>
                         {service.priceFrom && service.priceTo
                           ? `${service.priceFrom} - ${service.priceTo}`
                           : service.priceFrom
-                            ? `From ${service.priceFrom}`
-                            : `Up to ${service.priceTo}`}
+                            ? `${isAr ? 'من' : 'From'} ${service.priceFrom}`
+                            : `${isAr ? 'حتى' : 'Up to'} ${service.priceTo}`}
                       </div>
                     )}
                   </CardContent>
@@ -328,12 +329,12 @@ export default function CompanyDetailPage() {
               {/* Review Form */}
               <Card className="lg:col-span-1">
                 <CardHeader>
-                  <CardTitle>Write a Review</CardTitle>
+                  <CardTitle>{isAr ? 'اكتب تقييماً' : 'Write a Review'}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <Label>Rating</Label>
+                      <Label>{isAr ? 'التقييم' : 'Rating'}</Label>
                       <div className="flex gap-1 mt-2">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <button
@@ -353,12 +354,12 @@ export default function CompanyDetailPage() {
                       </div>
                     </div>
                     <div>
-                      <Label htmlFor="comment">Your Review</Label>
+                      <Label htmlFor="comment">{isAr ? 'تقييمك' : 'Your Review'}</Label>
                       <Textarea
                         id="comment"
                         value={reviewComment}
                         onChange={(e) => setReviewComment(e.target.value)}
-                        placeholder="Share your experience..."
+                        placeholder={isAr ? 'شارك تجربتك...' : 'Share your experience...'}
                         rows={4}
                         className="mt-2"
                       />
@@ -371,7 +372,7 @@ export default function CompanyDetailPage() {
                       {isSubmittingReview ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       ) : (
-                        'Submit Review'
+                        isAr ? 'إرسال التقييم' : 'Submit Review'
                       )}
                     </Button>
                   </div>
@@ -384,9 +385,9 @@ export default function CompanyDetailPage() {
                   <Card>
                     <CardContent className="p-8 text-center">
                       <MessageSquare className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No reviews yet</h3>
+                      <h3 className="text-lg font-semibold mb-2">{isAr ? 'لا توجد تقييمات بعد' : 'No reviews yet'}</h3>
                       <p className="text-muted-foreground">
-                        Be the first to review this company
+                        {isAr ? 'كن أول من يقيم هذه الشركة' : 'Be the first to review this company'}
                       </p>
                     </CardContent>
                   </Card>
@@ -431,24 +432,24 @@ export default function CompanyDetailPage() {
           </TabsContent>
 
           <TabsContent value="about">
-            <Card>
+             <Card>
               <CardContent className="p-6">
-                <h3 className="font-semibold mb-4">About {company.name}</h3>
+                <h3 className="font-semibold mb-4">{isAr ? `نبذة عن ${company.name}` : `About ${company.name}`}</h3>
                 {company.description ? (
                   <p className="text-muted-foreground">{company.description}</p>
                 ) : (
-                  <p className="text-muted-foreground">No description available.</p>
+                  <p className="text-muted-foreground">{isAr ? 'لا يوجد وصف متاح.' : 'No description available.'}</p>
                 )}
 
                 {company.workingHours && (
                   <div className="mt-6">
-                    <h4 className="font-semibold mb-3">Working Hours</h4>
+                    <h4 className="font-semibold mb-3">{isAr ? 'أوقات العمل' : 'Working Hours'}</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {Object.entries(company.workingHours).map(([day, hours]) => (
                         <div key={day} className="text-sm">
                           <span className="font-medium capitalize">{day}:</span>{' '}
                           <span className="text-muted-foreground">
-                            {hours || 'Closed'}
+                            {hours || (isAr ? 'مغلق' : 'Closed')}
                           </span>
                         </div>
                       ))}
@@ -464,46 +465,55 @@ export default function CompanyDetailPage() {
               <CardContent className="p-6">
                 <div className="space-y-4">
                   {company.email && (
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Email</p>
-                        <a href={`mailto:${company.email}`} className="font-medium">
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1 overflow-hidden">
+                        <p className="text-sm text-muted-foreground">{isAr ? 'البريد الإلكتروني' : 'Email'}</p>
+                        <a href={`mailto:${company.email}`} className="font-medium truncate block hover:text-primary transition-colors">
                           {company.email}
                         </a>
                       </div>
                     </div>
                   )}
                   {company.phone && (
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Phone</p>
-                        <a href={`tel:${company.phone}`} className="font-medium">
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1 overflow-hidden">
+                        <p className="text-sm text-muted-foreground">{isAr ? 'رقم الهاتف' : 'Phone'}</p>
+                        <a href={`tel:${company.phone}`} dir="ltr" className="font-medium text-left truncate block hover:text-primary transition-colors">
                           {company.phone}
                         </a>
                       </div>
                     </div>
                   )}
                   {company.address && (
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-muted-foreground" />
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <MapPin className="h-5 w-5 text-primary" />
+                      </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Address</p>
+                        <p className="text-sm text-muted-foreground">{isAr ? 'العنوان' : 'Address'}</p>
                         <p className="font-medium">{company.address}</p>
                       </div>
                     </div>
                   )}
                   {company.website && (
-                    <div className="flex items-center gap-3">
-                      <Globe className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Website</p>
+                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Globe className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1 overflow-hidden">
+                        <p className="text-sm text-muted-foreground">{isAr ? 'الموقع الإلكتروني' : 'Website'}</p>
                         <a
                           href={company.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-medium text-primary"
+                          dir="ltr"
+                          className="font-medium text-left text-primary truncate block hover:underline"
                         >
                           {company.website}
                         </a>

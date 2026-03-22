@@ -5,7 +5,7 @@ import { getSession } from '@/lib/auth-session/session';
 import { prisma } from '@/lib/db/client';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { MapPin, Briefcase, Clock, DollarSign, Calendar, User, Building2, CheckCircle, AlertCircle, Edit, Trash2 } from 'lucide-react';
+import { MapPin, Briefcase, Clock, DollarSign, Calendar, User, Building2, CheckCircle, AlertCircle, Edit, Trash2, Shield } from 'lucide-react';
 import { SendOfferButton } from '@/components/requests/SendOfferButton';
 import { RequestOwnerActions } from '@/components/requests/RequestOwnerActions';
 import { OfferActions } from '@/components/requests/OfferActions';
@@ -158,6 +158,13 @@ export default async function RequestDetailPage({ params: { locale, id }, search
     !hasAlreadyOffered &&
     ['ACTIVE', 'PENDING', 'MATCHING', 'REVIEWING_OFFERS'].includes(request.status);
 
+  // Sealed Bidding implementation
+  const visibleOffers = request.offers.filter(offer => {
+    if (isOwner || isAdmin) return true;
+    if (userCompanyId && offer.company.id === userCompanyId) return true;
+    return false;
+  });
+
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
       case 'URGENT':
@@ -165,7 +172,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
       case 'HIGH':
         return 'bg-warning/10 text-warning';
       case 'MEDIUM':
-        return 'bg-warning/10 text-warning';
+        return 'bg-primary/10 text-primary';
       default:
         return 'bg-success/10 text-success';
     }
@@ -216,7 +223,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                     {td(`status.${request.status}`)}
                   </StatusBadge>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${getUrgencyColor(request.urgency)}`}>
-                    {t(`urgency.${request.urgency.toLowerCase()}`)}
+                    {t('list.filters.urgency')}: {t(`urgency.${request.urgency.toLowerCase()}`)}
                   </span>
                   <span className="text-sm text-muted-foreground ml-2">
                     {new Date(request.createdAt).toLocaleDateString(locale)}
@@ -371,14 +378,22 @@ export default async function RequestDetailPage({ params: { locale, id }, search
               {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
             </div>
 
-            {request.offers.length === 0 ? (
+            {request._count.offers === 0 ? (
               <div className="text-center py-8 bg-muted/50 rounded-lg">
                 <Building2 className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
                 <p className="text-muted-foreground">{t('detail.noOffers')}</p>
               </div>
+            ) : visibleOffers.length === 0 ? (
+              <div className="text-center py-10 bg-muted/30 rounded-lg border border-dashed">
+                <Shield className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="font-medium text-foreground">{isRTL ? 'العروض مخفية' : 'Offers are hidden'}</p>
+                <p className="text-sm text-muted-foreground mt-1 max-w-md mx-auto">
+                  {isRTL ? 'حفاظاً على الخصوصية والمنافسة العادلة، يمكن لصاحب الطلب فقط رؤية تفاصيل العروض.' : 'To maintain privacy and fair competition, only the request owner can see the offer details.'}
+                </p>
+              </div>
             ) : (
               <div className="space-y-4">
-                {request.offers.map((offer) => (
+                {visibleOffers.map((offer) => (
                   <div key={offer.id} className="border rounded-lg p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">

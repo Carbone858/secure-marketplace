@@ -15,6 +15,8 @@ const WhyChooseUs = dynamic(() => import('@/components/home/WhyChooseUs'), { ssr
 const UserProcess = dynamic(() => import('@/components/home/UserProcess'), { ssr: true });
 const FeaturedCompanies = dynamic(() => import('@/components/home/FeaturedCompanies'), { ssr: true });
 const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'), { ssr: true });
+const TrustSafety = dynamic(() => import('@/components/home/TrustSafety'), { ssr: true });
+const FAQSection = dynamic(() => import('@/components/home/FAQSection'), { ssr: true });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });
@@ -49,16 +51,22 @@ export default function HomePage({ params: { locale } }: { params: { locale: str
       {/* 5. Trust & Differentiation - Why Choose Us */}
       <WhyChooseUs />
 
-      {/* 6. Education - How it Works for Users */}
+      {/* 6. Security & Peace of Mind - Trust Section */}
+      <TrustSafety />
+
+      {/* 7. Education - How it Works for Users */}
       <UserProcess />
 
-      {/* 7. Validation - Featured Companies */}
+      {/* 8. Validation - Featured Companies */}
       <FeaturedCompanies />
 
-      {/* 8. Supply Side - How it Works for Companies */}
+      {/* 9. Supply Side - How it Works for Companies */}
       <CompanyProcess />
 
-      {/* 9. Final CTA - Call to Action */}
+      {/* 10. Education - FAQ */}
+      <FAQSection />
+
+      {/* 11. Final CTA - Call to Action */}
       <section className="py-24 bg-primary/5 border-t">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary">

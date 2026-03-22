@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from 'next-intl';
 import { FileText, MessageSquare, CheckCircle, Star, Shield, User, Globe, Moon, Sun, Menu, ChevronRight, MapPin, DollarSign, Image as ImageIcon, Plus, Home as HomeIcon, Wifi, Battery, Signal } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function UserProcess() {
     const locale = useLocale();
@@ -74,7 +75,39 @@ export default function UserProcess() {
                     </p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
+                {/* --- LITE: ILLUSTRATIONS FOR ALL DEVICES --- */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 lg:mb-24">
+                    {[
+                        { id: 1, titleEn: "1. Create Request", titleAr: "1. إرسال الطلب", descEn: "Start by creating a new request with your location, budget, and details.", descAr: "ابدأ بإنشاء طلب جديد مع تحديد الموقع والميزانية والتفاصيل.", img: "/images/illustrations/user_step_1.png" },
+                        { id: 2, titleEn: "2. Receive Offers", titleAr: "2. تلقي العروض", descEn: "Browse multiple offers from pros, compare prices, and choose the best.", descAr: "تصفح عدة عروض من المحترفين وأسعارهم، واختر الأفضل.", img: "/images/illustrations/user_step_2.png" },
+                        { id: 3, titleEn: "3. Job Done", titleAr: "3. إنجاز العمل", descEn: "Collaborate directly and get the job done quickly and securely.", descAr: "تواصل مباشرة وأنجز العمل بسرعة وأمان.", img: "/images/illustrations/user_step_3.png" }
+                    ].map((step) => (
+                        <div key={step.id} className="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border bg-white dark:bg-gray-900 group flex flex-col">
+                            <div className="relative h-80 lg:h-96 w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 shrink-0 border-b dark:border-gray-800">
+                                <Image
+                                    src={step.img}
+                                    alt={locale === 'ar' ? step.titleAr : step.titleEn}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                />
+                            </div>
+                            <div className="p-8 relative bg-white dark:bg-gray-900 flex-1 border-t dark:border-gray-800">
+                                <h3 className="font-bold text-2xl text-primary mb-3">
+                                    {locale === 'ar' ? step.titleAr : step.titleEn}
+                                </h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
+                                    {locale === 'ar' ? step.descAr : step.descEn}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* --- HEAVY: INTERACTIVE MOCKUP (DESKTOP ONLY) --- */}
+                <div className="hidden lg:flex flex-col lg:flex-row items-center justify-center gap-16 relative mt-12 bg-white dark:bg-[#0a0a0a] border dark:border-gray-800 rounded-[3rem] p-12 shadow-sm">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gray-100 dark:bg-gray-800 px-6 py-2 rounded-full text-xs font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase shadow-sm border dark:border-gray-700 whitespace-nowrap z-10">
+                        {locale === 'ar' ? 'نظرة تفصيلية على تطبيق المستخدم' : 'Interactive App Preview'}
+                    </div>
 
                     {/* Left Side: Steps (Text) */}
                     <div className="w-full lg:w-1/2 space-y-6">

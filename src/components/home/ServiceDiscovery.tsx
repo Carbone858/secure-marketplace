@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { categories, getSubcategories } from "@/lib/services-data";
@@ -70,20 +71,24 @@ export default function ServiceDiscovery() {
                                 >
                                     {/* Background Image */}
                                     <div className="absolute inset-0">
-                                        <img
+                                        <Image
                                             src={sub.img}
-                                            alt="Category"
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            alt={isAr ? sub.title.ar : sub.title.en}
+                                            fill
+                                            unoptimized
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            priority={idx < 4}
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+                                        {/* Extremely subtle bottom shadow strictly for text readability */}
+                                        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80" />
                                     </div>
 
                                     {/* Content */}
                                     <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                                        <h4 className="text-white text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                                        <h4 className="text-white text-xl font-bold mb-2 group-hover:text-primary transition-colors drop-shadow-md">
                                             {isAr ? sub.title.ar : sub.title.en}
                                         </h4>
-                                        <div className="flex items-center gap-2 text-white/80 text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                                        <div className="flex items-center gap-2 text-white/90 text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 drop-shadow-md">
                                             {isAr ? "عرض المحترفين" : "View Pros"} <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                                         </div>
                                     </div>
