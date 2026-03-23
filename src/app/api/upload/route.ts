@@ -15,7 +15,8 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf
  */
 export async function POST(request: NextRequest) {
     try {
-        // Detect Vercel Environment - Vercel filesystem is read-only
+        // Detect Vercel Environment - Vercel filesystem is read-only.
+        // This prevents local file storage from working in the live preview.
         const isVercel = !!process.env.VERCEL || !!process.env.VERCEL_ENV;
         
         if (isVercel) {
