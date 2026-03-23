@@ -58,8 +58,8 @@ export default function HeroTrustImage({
             fill
             sizes="(max-width: 1024px) 0px, 480px"
             className="object-cover object-center"
-            priority={false}
-            quality={80}
+            priority={true}
+            quality={85}
           />
         </div>
         {/* Trust indicator floating badge */}

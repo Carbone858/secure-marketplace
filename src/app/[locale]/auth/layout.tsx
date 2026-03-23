@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import Link from 'next/link';
+import Script from 'next/script';
 import { Building2, Quote } from 'lucide-react';
 
 interface AuthLayoutProps {
@@ -23,7 +24,12 @@ export default async function AuthLayout({
   const isRTL = locale === 'ar';
 
   return (
-    <div className="min-h-screen w-full lg:grid lg:grid-cols-2" dir={isRTL ? 'rtl' : 'ltr'}>
+    <>
+      <Script
+        src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+        strategy="lazyOnload"
+      />
+      <div className="min-h-screen w-full lg:grid lg:grid-cols-2" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Branding Side (Desktop Only) */}
       <div className="hidden lg:flex flex-col justify-between bg-muted/30 border-r border-border p-10 relative overflow-hidden text-foreground">
         {/* Background Pattern */}
@@ -96,5 +102,6 @@ export default async function AuthLayout({
         </div>
       </div>
     </div>
+    </>
   );
 }
