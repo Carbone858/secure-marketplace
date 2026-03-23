@@ -1,5 +1,6 @@
 import path from 'path';
 import crypto from 'crypto';
+import { supabase } from '@/lib/supabase';
 
 /**
  * Upload utility - centralized upload path and security helpers
@@ -82,4 +83,41 @@ export function sanitizeImageBuffer(buffer: Buffer): Buffer {
   // For now, this is a placeholder for metadata stripping.
   // In a real prod environment with 'sharp', we would use .keepMetadata(false)
   return buffer;
+}
+
+/**
+ * Upload a file buffer to Supabase Storage
+ */
+export async function uploadToSupabase(
+  category: 'documents' | 'avatars' | 'projects',
+  fileName: string,
+  buffer: Buffer,
+  contentType: string
+): Promise<string | null> {
+  try {
+    const bucket = process.env.SUPABASE_BUCKET_NAME || 'marketplace-uploads';
+    const filePath = `${category}/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, buffer, {
+        contentType,
+        upsert: true,
+      });
+
+    if (error) {
+      console.error('Supabase upload error:', error);
+      return null;
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  } catch (error) {
+    console.error('Supabase integration crash:', error);
+    return null;
+  }
 }
