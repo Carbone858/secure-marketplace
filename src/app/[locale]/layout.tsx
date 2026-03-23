@@ -11,6 +11,7 @@ import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/next-auth-options';
+import Script from 'next/script';
 
 
 const inter = Inter({
@@ -65,6 +66,12 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <head>
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${inter.variable} ${notoSansArabic.variable} ${isRTL ? 'font-arabic' : 'font-sans'} min-h-screen flex flex-col antialiased`}
       >
