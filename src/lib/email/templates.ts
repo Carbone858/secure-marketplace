@@ -237,6 +237,41 @@ export function getWelcomeEmailTemplate(
 }
 
 /**
+ * 2b. Welcome Email for Companies (Next Steps)
+ */
+export function getWelcomeCompanyEmailTemplate(
+    companyName: string,
+    locale: string = 'en'
+  ): EmailTemplate {
+    const isRTL = locale === 'ar';
+    const uploadUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/company/dashboard/documents`;
+    const subject = isRTL ? 'خطوتك التالية كشركة في سوق الخدمات' : 'Next Steps for Your Company - Service Marketplace';
+    
+    const content = `
+      <h1 class="h1">${isRTL ? 'أهلاً بشركة' : 'Welcome'} ${companyName}!</h1>
+      <p class="p">
+          ${isRTL 
+              ? 'لقد قمت بإنشاء ملفك التجاري بنجاح. الخطوة الأخيرة لتتمكن من إرسال العروض للزبائن هي توثيق هويتك التجارية.' 
+              : 'You have successfully created your business profile. The final step to start bidding on jobs is to verify your business identity.'}
+      </p>
+      <div class="button-container">
+          <a href="${uploadUrl}" class="button">
+              ${isRTL ? 'رفع وثائق التوثيق' : 'Upload Documents'}
+          </a>
+      </div>
+      <p style="font-size: 14px; color: #64748b;">
+          ${isRTL ? 'يستغرق التدقيق في الوثائق من 24 إلى 48 ساعة عادةً.' : 'Document review usually takes 24-48 hours.'}
+      </p>
+    `;
+  
+    return {
+      subject,
+      html: renderBaseTemplate({ locale, title: subject }, content),
+      text: `${isRTL ? 'أهلاً بشركة' : 'Welcome'} ${companyName}, ${isRTL ? 'يرجى رفع الوثائق:' : 'Please upload documents:'} ${uploadUrl}`
+    };
+}
+
+/**
  * 3. Password Reset Template
  */
 export function getPasswordResetEmailTemplate(
@@ -272,7 +307,7 @@ export function getPasswordResetEmailTemplate(
 }
 
 /**
- * 4. New Offer Received
+ * 4. New Offer Received (To User)
  */
 export function getNewOfferEmailTemplate(
   userName: string,
@@ -313,7 +348,162 @@ export function getNewOfferEmailTemplate(
 }
 
 /**
- * 5. Request Status Update
+ * 5. Offer Accepted (To Company)
+ */
+export function getOfferAcceptedEmailTemplate(
+    companyName: string,
+    clientName: string,
+    requestTitle: string,
+    contactUrl: string,
+    locale: string = 'en'
+  ): EmailTemplate {
+    const isRTL = locale === 'ar';
+    const subject = isRTL ? `مبروك! تم قبول عرضك لـ ${requestTitle}` : `Congrats! Your offer was accepted for ${requestTitle}`;
+    
+    const content = `
+      <h1 class="h1">${isRTL ? 'خبر ممتاز!' : 'Excellent News!'}</h1>
+      <p class="p">
+          ${isRTL 
+              ? `لقد قام الزبون <strong>${clientName}</strong> بالموافقة على عرضك لطلب <strong>"${requestTitle}"</strong>. تهانينا على الفوز بالمهمة!` 
+              : `Customer <strong>${clientName}</strong> has just accepted your offer for <strong>"${requestTitle}"</strong>. Congratulations on winning the job!`}
+      </p>
+      <p class="p">
+          ${isRTL ? 'يرجى التواصل مع الزبون الآن لتنسيق الموعد وبدء العمل.' : 'Please contact the customer now to coordinate the timing and start working.'}
+      </p>
+      <div class="button-container">
+          <a href="${contactUrl}" class="button" style="background-color: #22c55e;">
+              ${isRTL ? 'تواصل مع الزبون' : 'Contact Customer'}
+          </a>
+      </div>
+    `;
+  
+    return {
+      subject,
+      html: renderBaseTemplate({ locale, title: subject }, content),
+      text: `${isRTL ? 'مبروك!' : 'Congrats!'} ${isRTL ? 'تم قبول عرضك لـ' : 'Your offer was accepted for'} ${requestTitle}: ${contactUrl}`
+    };
+}
+
+/**
+ * 6. New Message Received
+ */
+export function getNewMessageEmailTemplate(
+    senderName: string,
+    requestTitle: string,
+    locale: string = 'en'
+  ): EmailTemplate {
+    const isRTL = locale === 'ar';
+    const chatUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/dashboard/messages`;
+    const subject = isRTL ? `رسالة جديدة من ${senderName}` : `New message from ${senderName}`;
+    
+    const content = `
+      <h1 class="h1">${isRTL ? 'لديك رسالة جديدة' : 'You have a new message'}</h1>
+      <p class="p">
+          ${isRTL 
+              ? `أرسل لك <strong>${senderName}</strong> رسالة جديدة بخصوص الطلب <strong>"${requestTitle}"</strong>.` 
+              : `<strong>${senderName}</strong> sent you a new message regarding <strong>"${requestTitle}"</strong>.`}
+      </p>
+      <div class="button-container">
+          <a href="${chatUrl}" class="button">
+              ${isRTL ? 'الرد على الرسالة' : 'Reply to Message'}
+          </a>
+      </div>
+    `;
+  
+    return {
+      subject,
+      html: renderBaseTemplate({ locale, title: subject }, content),
+      text: `${isRTL ? 'رسالة جديدة من' : 'New message from'} ${senderName}: ${chatUrl}`
+    };
+}
+
+/**
+ * 7. Verification Status Update
+ */
+export function getVerificationStatusEmailTemplate(
+    companyName: string,
+    isApproved: boolean,
+    locale: string = 'en'
+  ): EmailTemplate {
+    const isRTL = locale === 'ar';
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/company/dashboard`;
+    
+    const subject = isApproved 
+        ? (isRTL ? 'تم توثيق هويتك بنجاح!' : 'Your Identity is Verified!') 
+        : (isRTL ? 'يوجد مشكلة في وثائق التوثيق' : 'Issue with Id Verification');
+    
+    const content = isApproved ? `
+      <h1 class="h1">${isRTL ? 'رائع! أنت موثق الآن' : 'Great! You are verified'}</h1>
+      <p class="p">
+          ${isRTL 
+              ? 'لقد تمت مراجعة وثائق الشركة الخاصة بك وهي مطابقة لشروطنا. يمكنك الآن البدء بإرسال عروض الأسعار والمنافسة على الطلبات.' 
+              : 'Your company documents have been reviewed and they match our requirements. You can now start bidding on requests and winning jobs.'}
+      </p>
+      <div class="button-container">
+          <a href="${dashboardUrl}" class="button" style="background-color: #22c55e;">
+              ${isRTL ? 'ابدأ العمل الآن' : 'Start Working Now'}
+          </a>
+      </div>
+    ` : `
+      <h1 class="h1">${isRTL ? 'نعتذر، لم يتم التوثيق' : 'Sorry, Verification Failed'}</h1>
+      <p class="p">
+          ${isRTL 
+              ? 'بناءً على مراجعتنا، الوثائق التي قمت برفعها لم تكن مكتملة أو واضحة بما يكفي. يرجى إعادة رفع الوثائق المطلوبة مرة أخرى.' 
+              : 'Based on our review, the documents you uploaded were incomplete or not clear enough. Please re-upload the required documents.'}
+      </p>
+      <div class="button-container">
+          <a href="${dashboardUrl}/documents" class="button" style="background-color: #ef4444;">
+              ${isRTL ? 'إعادة رفع الوثائق' : 'Re-upload Documents'}
+          </a>
+      </div>
+    `;
+  
+    return {
+      subject,
+      html: renderBaseTemplate({ locale, title: subject }, content),
+      text: subject + ': ' + dashboardUrl
+    };
+}
+
+/**
+ * 8. New Review Received
+ */
+export function getNewReviewEmailTemplate(
+    companyName: string,
+    rating: number,
+    comment: string,
+    locale: string = 'en'
+  ): EmailTemplate {
+    const isRTL = locale === 'ar';
+    const profileUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/company/profile`;
+    const subject = isRTL ? 'حصلت على تقييم جديد!' : 'You got a new review!';
+    
+    const content = `
+      <h1 class="h1">${isRTL ? 'تهانينا! تقييم جديد' : 'Congrats! A new review'}</h1>
+      <p class="p">
+          ${isRTL 
+              ? `ترك أحد الزبائن تقييماً لك بـ <strong>${rating} نجوم</strong>.` 
+              : `A customer just rated your service with <strong>${rating} stars</strong>.`}
+      </p>
+      <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; font-style: italic; border: 1px solid #e2e8f0;">
+          "${comment}"
+      </div>
+      <div class="button-container">
+          <a href="${profileUrl}" class="button">
+              ${isRTL ? 'مشاهدة التقييم' : 'View Review'}
+          </a>
+      </div>
+    `;
+  
+    return {
+      subject,
+      html: renderBaseTemplate({ locale, title: subject }, content),
+      text: `${isRTL ? 'تقييم جديد:' : 'New review:'} ${rating} stars. ${comment}`
+    };
+}
+
+/**
+ * 9. Request Status Update
  */
 export function getRequestStatusUpdateEmailTemplate(
   userName: string,
@@ -346,7 +536,7 @@ export function getRequestStatusUpdateEmailTemplate(
 }
 
 /**
- * 6. Existing User Guest Request Detection
+ * 10. Existing User Guest Request Detection
  */
 export function getNewRequestForExistingUserTemplate(
   name: string,
