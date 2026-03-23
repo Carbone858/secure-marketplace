@@ -4,50 +4,35 @@ import { sendEmail, verifyEmailConfig } from '@/lib/email/service';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  console.log('[DEBUG] Starting Email Service Test...');
+  console.log('[DEBUG] Starting Super-Diagnostic Email Test...');
   
+  // Scour all environment variables to see what's visible to the server
+  const allKeys = Object.keys(process.env);
+  const smtpRelatedKeys = allKeys.filter(k => k.startsWith('SMTP_') || k.startsWith('FROM_') || k.includes('RECAPTCHA'));
+  
+  const envSummary = smtpRelatedKeys.map(key => ({
+    key,
+    exists: !!process.env[key],
+    length: process.env[key]?.length || 0,
+    isDevelopment: process.env.NODE_ENV === 'development'
+  }));
+
   const isConfigValid = await verifyEmailConfig();
   
-  if (!isConfigValid) {
-    return NextResponse.json({
-      success: false,
-      message: 'SMTP Configuration Verification Failed. Check your Vercel Environment Variables.',
-      debug: {
-        host: process.env.SMTP_HOST || 'default (smtp.gmail.com)',
-        port: process.env.SMTP_PORT || 'default (587)',
-        userExists: !!process.env.SMTP_USER,
-        passExists: !!process.env.SMTP_PASSWORD
-      }
-    }, { status: 500 });
-  }
-
-  const testEmail = {
-    to: process.env.SMTP_USER || '',
-    template: {
-      subject: '🚀 Secure Marketplace - LIVE SMTP TEST',
-      text: 'Congratulations! If you received this, your Vercel email service is perfectly configured.',
-      html: '<h1>🚀 Success!</h1><p>Your Vercel email service is working perfectly. You can now reliably send verification emails.</p>'
-    }
-  };
-
-  if (!testEmail.to) {
-    return NextResponse.json({
-        success: false,
-        message: 'SMTP_USER is not defined in environment variables.'
-    }, { status: 400 });
-  }
-
-  const result = await sendEmail(testEmail);
+  const testEmailTo = process.env.SMTP_USER || '';
 
   return NextResponse.json({
-    success: result.success,
-    message: result.success ? 'Email sent successfully! Check your inbox (or spam).' : 'Failed to send email. Check Vercel logs for detail.',
-    error: result.error,
-    messageId: result.messageId,
-    config: {
-        host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
-        user: process.env.SMTP_USER
-    }
+    timestamp: new Date().toISOString(),
+    nodeEnv: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV,
+    isConfigValid,
+    keysFound: envSummary,
+    diagnostics: {
+        host: process.env.SMTP_HOST || 'MISSING (Defaults to smtp.gmail.com)',
+        port: process.env.SMTP_PORT || 'MISSING (Defaults to 587)',
+        user: testEmailTo ? `${testEmailTo.substring(0, 3)}...` : 'MISSING',
+        passExists: !!process.env.SMTP_PASSWORD
+    },
+    action: testEmailTo ? 'Attempting to send test email...' : 'Stopping. SMTP_USER is missing.'
   });
 }
