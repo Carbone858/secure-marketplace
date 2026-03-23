@@ -3,7 +3,9 @@ import {
     getVerificationEmailTemplate, 
     getNewOfferEmailTemplate, 
     getPasswordResetEmailTemplate,
-    getWelcomeEmailTemplate
+    getWelcomeEmailTemplate,
+    getRequestStatusUpdateEmailTemplate,
+    getNewRequestForExistingUserTemplate
 } from '@/lib/email/templates';
 
 export const dynamic = 'force-dynamic';
@@ -31,6 +33,18 @@ export async function GET(request: NextRequest) {
             break;
         case 'reset':
             template = getPasswordResetEmailTemplate('Hamza', '#', locale);
+            break;
+        case 'status':
+            template = getRequestStatusUpdateEmailTemplate(
+                'Hamza', 
+                'AC Repair', 
+                locale === 'ar' ? 'تم الاكتمال' : 'Completed', 
+                '#', 
+                locale
+            );
+            break;
+        case 'linked':
+            template = getNewRequestForExistingUserTemplate('Hamza', '#', locale);
             break;
         default:
             template = getVerificationEmailTemplate('Hamza Asfour', '#', locale);

@@ -1,7 +1,7 @@
 /**
  * Email Template Configuration
  * These templates are designed to be modern, professional, and consistent with the 
- * Service Marketplace brand. They support both English (LTR) and Arabic (RTL).
+ * Service Marketplace brand colors and typography.
  */
 
 export interface EmailTemplate {
@@ -14,19 +14,21 @@ interface CommonProps {
     locale?: string;
     title: string;
     previewText?: string;
-    footerText?: string;
 }
 
 /**
- * Base Shell for all HTML emails
+ * Base Shell for all HTML emails (Matches Website Design Tokens)
  */
 function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
     const isRTL = props.locale === 'ar';
-    const primaryColor = '#2563eb';
-    const bgColor = '#f8fafc';
-    const cardBg = '#ffffff';
-    const textColor = '#334155';
-    const mutedColor = '#64748b';
+    
+    // Exact colors from globals.css
+    const primaryColor = '#1e40af';      // --primary: 226 71% 40%
+    const bgColor = '#f8fafc';           // --background: 210 40% 98%
+    const cardBg = '#ffffff';            // --card: 0 0% 100%
+    const textColor = '#0f172a';         // --foreground: 222 47% 11%
+    const mutedColor = '#64748b';        // --muted-foreground: 215 16% 47%
+    const borderColor = '#e2e8f0';       // --border: 210 40% 91%
     
     return `
 <!DOCTYPE html>
@@ -60,34 +62,36 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
             max-width: 600px;
             margin: 0 auto;
             background-color: ${cardBg};
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid ${borderColor};
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
         }
         .header {
-            background: linear-gradient(135deg, ${primaryColor} 0%, #1d4ed8 100%);
-            padding: 40px 20px;
+            background-color: ${primaryColor};
+            padding: 48px 24px;
             text-align: center;
         }
         .logo {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
             color: #ffffff;
             text-decoration: none;
             letter-spacing: -0.5px;
+            text-transform: uppercase;
         }
         .content {
-            padding: 40px 32px;
+            padding: 48px 40px;
             color: ${textColor};
-            line-height: 1.6;
+            line-height: 1.7;
             ${isRTL ? 'text-align: right;' : 'text-align: left;'}
         }
         .h1 {
             font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #0f172a;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: ${textColor};
+            letter-spacing: -0.5px;
         }
         .p {
             font-size: 16px;
@@ -95,33 +99,34 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
             color: ${textColor};
         }
         .button-container {
-            padding: 24px 0;
+            padding: 32px 0;
             text-align: center;
         }
         .button {
             display: inline-block;
             background-color: ${primaryColor};
             color: #ffffff !important;
-            padding: 16px 36px;
-            border-radius: 12px;
+            padding: 18px 44px;
+            border-radius: 10px;
             font-weight: 700;
             text-decoration: none;
             font-size: 16px;
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
         }
         .footer {
             text-align: center;
-            padding: 32px;
-            font-size: 14px;
+            padding: 40px 32px;
+            font-size: 13px;
             color: ${mutedColor};
+            background-color: #f1f5f9;
         }
         .divider {
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid ${borderColor};
             margin: 32px 0;
         }
         @media only screen and (max-width: 600px) {
-            .content { padding: 32px 20px; }
-            .h1 { font-size: 20px; }
+            .content { padding: 40px 24px; }
+            .h1 { font-size: 22px; }
+            .button { width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
@@ -132,22 +137,22 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
         </div>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
             <tr>
-                <td align="center" style="padding: 20px 0;">
+                <td align="center" style="padding: 24px 0;">
                     <div class="container">
                         <div class="header">
                             <a href="${process.env.NEXT_PUBLIC_APP_URL || '#'}" class="logo">
-                                ${isRTL ? 'سوق الخدمات' : 'Service Marketplace'}
+                                ${isRTL ? 'سوق الخدمات الموثوق' : 'Service Marketplace'}
                             </a>
                         </div>
                         <div class="content">
                             ${contentHtml}
                         </div>
                         <div class="footer">
-                            <p style="margin-bottom: 8px;">
-                                ${props.footerText || (isRTL ? 'تحتاج مساعدة؟ تواصل مع دعمنا' : 'Need help? Contact our support')}
+                            <p style="margin: 0 0 12px 0; font-weight: 600; color: ${textColor};">
+                                ${isRTL ? 'دائماً في خدمتك' : 'Always here for you'}
                             </p>
                             <p style="margin: 0;">
-                                ${isRTL ? '© 2024 سوق الخدمات. جميع الحقوق محفوظة.' : '© 2024 Service Marketplace. All rights reserved.'}
+                                ${isRTL ? 'حقوق النشر © 2024 سوق الخدمات. جميع الحقوق محفوظة.' : '© 2024 Service Marketplace. All rights reserved.'}
                             </p>
                         </div>
                     </div>
@@ -169,33 +174,33 @@ export function getVerificationEmailTemplate(
   locale: string = 'en'
 ): EmailTemplate {
   const isRTL = locale === 'ar';
-  const subject = isRTL ? 'تأكيد بريدك الإلكتروني - سوق الخدمات' : 'Verify Your Email - Service Marketplace';
+  const subject = isRTL ? 'تفعيل حسابك - سوق الخدمات' : 'Activate Your Account - Service Marketplace';
   
   const content = `
     <h1 class="h1">${isRTL ? 'مرحباً،' : 'Hello,'} ${name}</h1>
     <p class="p">
         ${isRTL 
-            ? 'شكراً لتسجيلك في سوق الخدمات. نحن متحمسون لانضمامك إلينا! يرجى النقر على الزر أدناه لتأكيد بريدك الإلكتروني وتفعيل حسابك:' 
-            : 'Thank you for registering with Service Marketplace. We\'re excited to have you on board! Please click the button below to verify your email address and activate your account:'}
+            ? 'نسعد بانضمامك كعضو جديد في منصتنا. يرجى الضغط على الزر أدناه لتأكيد بريدك الإلكتروني والبدء في استكشاف أفضل مقدمي الخدمات:' 
+            : 'We\'re so happy to have you as a new member of our platform. Please click the button below to verify your email address and start exploring the best service providers:'}
     </p>
     <div class="button-container">
         <a href="${verificationUrl}" class="button">
-            ${isRTL ? 'تأكيد البريد الإلكتروني' : 'Verify Email Address'}
+            ${isRTL ? 'تأكيد الحساب الآن' : 'Verify Account Now'}
         </a>
     </div>
     <div class="divider"></div>
     <p style="font-size: 14px; color: #64748b; margin-bottom: 8px;">
-        ${isRTL ? 'إذا لم يعمل الزر أعلاه، قم بنسخ الرابط التالي ولصقه في متصفحك:' : 'If the button above didn\'t work, copy and paste this link into your browser:'}
+        ${isRTL ? 'إذا لم يفتح الزر، قم بنسخ هذا الرابط:' : 'If the button doesn\'t open, copy this link:'}
     </p>
-    <p style="font-size: 14px; word-break: break-all; color: #2563eb;">
+    <p style="font-size: 14px; word-break: break-all; color: #1e40af;">
         ${verificationUrl}
     </p>
   `;
 
   return {
     subject,
-    html: renderBaseTemplate({ locale, title: subject, previewText: isRTL ? 'قم بتأكيد حسابك للبدء' : 'Verify your account to get started' }, content),
-    text: `${isRTL ? 'مرحباً' : 'Hello'} ${name}, ${isRTL ? 'يرجى تأكيد حسابك من هنا:' : 'Please verify your account:'} ${verificationUrl}`
+    html: renderBaseTemplate({ locale, title: subject, previewText: isRTL ? 'تفعيل حسابك الجديد' : 'Activate your new account' }, content),
+    text: `${isRTL ? 'مرحباً' : 'Hello'} ${name}, ${isRTL ? 'تفعيل الحساب:' : 'Account verification:'} ${verificationUrl}`
   };
 }
 
@@ -208,25 +213,25 @@ export function getWelcomeEmailTemplate(
 ): EmailTemplate {
   const isRTL = locale === 'ar';
   const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/dashboard`;
-  const subject = isRTL ? 'مرحباً بك في سوق الخدمات! 🎉' : 'Welcome to Service Marketplace! 🎉';
+  const subject = isRTL ? 'أهلاً بك في سوق الخدمات! 🎉' : 'Welcome to Service Marketplace! 🎉';
   
   const content = `
-    <h1 class="h1">${isRTL ? 'أهلاً بك في عائلتنا!' : 'Welcome to the family!'}</h1>
+    <h1 class="h1">${isRTL ? 'تم تفعيل حسابك بنجاح!' : 'Your account is ready!'}</h1>
     <p class="p">
         ${isRTL 
-            ? 'تم تفعيل حسابك بنجاح. أنت الآن جزء من أكبر منصة للخدمات الموثوقة في المنطقة.' 
-            : 'Your account has been activated successfully. You are now part of the leading platform for trusted services in the region.'}
+            ? 'أهلاً بك في أكبر تجمع للمحترفين في المنطقة. يمكنك الآن البدء في طلب الخدمات أو عرض خدماتك ونمو عملك.' 
+            : 'Welcome to the largest gathering of professionals in the region. You can now start requesting services or grow your business by providing services.'}
     </p>
     <div class="button-container">
         <a href="${dashboardUrl}" class="button">
-            ${isRTL ? 'ابدأ طلبك الأول' : 'Start Your First Request'}
+            ${isRTL ? 'استكشف لوحة التحكم' : 'Explore Your Dashboard'}
         </a>
     </div>
   `;
 
   return {
     subject,
-    html: renderBaseTemplate({ locale, title: subject, previewText: isRTL ? 'تم تفعيل حسابك' : 'Account activated successfully' }, content),
+    html: renderBaseTemplate({ locale, title: subject }, content),
     text: `${isRTL ? 'مرحباً' : 'Hello'} ${name}, ${isRTL ? 'تم تفعيل حسابك!' : 'Account activated!'}`
   };
 }
@@ -240,26 +245,29 @@ export function getPasswordResetEmailTemplate(
   locale: string = 'en'
 ): EmailTemplate {
   const isRTL = locale === 'ar';
-  const subject = isRTL ? 'إعادة تعيين كلمة المرور - سوق الخدمات' : 'Reset Your Password - Service Marketplace';
+  const subject = isRTL ? 'طلب إعادة تعيين كلمة المرور' : 'Password Reset Request';
   
   const content = `
-    <h1 class="h1">${isRTL ? 'نسيت كلمة المرور؟' : 'Forgot your password?'}</h1>
+    <h1 class="h1">${isRTL ? 'هل نسيت كلمة المرور؟' : 'Forgot your password?'}</h1>
     <p class="p">
         ${isRTL 
-            ? 'لقد تلقينا طلباً لإعادة تعيين كلمة المرور. انقر على الزر لتغييرها:' 
-            : 'We received a request to reset your password. Click the button to choose a new one:'}
+            ? 'وصلنا طلب لإعادة تعيين كلمة مرور حسابك. إذا كنت أنت من طلب ذلك، اضغط على الزر أدناه:' 
+            : 'We received a request to reset your account password. If this was you, please click the button below to proceed:'}
     </p>
     <div class="button-container">
         <a href="${resetUrl}" class="button">
-            ${isRTL ? 'إعادة تعيين كلمة المرور' : 'Reset Password'}
+            ${isRTL ? 'تغيير كلمة المرور' : 'Change Password'}
         </a>
     </div>
+    <p style="font-size: 14px; color: #64748b;">
+        ${isRTL ? 'إذا لم تطلب هذا التغيير، تجاهل هذا البريد تماماً.' : 'If you didn\'t request this, please ignore this email entirely.'}
+    </p>
   `;
 
   return {
     subject,
-    html: renderBaseTemplate({ locale, title: subject, previewText: isRTL ? 'رابط إعادة التعيين' : 'Password reset link' }, content),
-    text: `${isRTL ? 'إعادة تعيين كلمة المرور:' : 'Password reset link:'} ${resetUrl}`
+    html: renderBaseTemplate({ locale, title: subject }, content),
+    text: `${isRTL ? 'تغيير كلمة المرور:' : 'Change password:'} ${resetUrl}`
   };
 }
 
@@ -278,18 +286,21 @@ export function getNewOfferEmailTemplate(
   const subject = isRTL ? `عرض جديد لطلبك: ${requestTitle}` : `New Offer for: ${requestTitle}`;
   
   const content = `
-    <h1 class="h1">${isRTL ? 'تلقيت عرضاً جديداً' : 'New Offer Received'}</h1>
+    <h1 class="h1">${isRTL ? 'وصلك عرض جديد!' : 'You have a new offer!'}</h1>
     <p class="p">
         ${isRTL 
-            ? `أرسلت شركة <strong>${companyName}</strong> عرضاً لطلبك <strong>"${requestTitle}"</strong>.` 
-            : `<strong>${companyName}</strong> sent an offer for <strong>"${requestTitle}"</strong>.`}
+            ? `قامت شركة <strong>${companyName}</strong> بتقديم عرض لطلبك <strong>"${requestTitle}"</strong>.` 
+            : `<strong>${companyName}</strong> just submitted a professional offer for <strong>"${requestTitle}"</strong>.`}
     </p>
-    <div style="background-color: #f1f5f9; border-radius: 12px; padding: 24px; text-align: center;">
-        <div style="font-size: 32px; font-weight: 800; color: #2563eb;">${offerAmount}</div>
+    <div style="background-color: #f1f5f9; border-radius: 12px; padding: 32px; text-align: center; border: 1px dashed #cbd5e1;">
+        <span style="font-size: 14px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+            ${isRTL ? 'القيمة التقديرية' : 'Estimated Budget'}
+        </span>
+        <div style="font-size: 36px; font-weight: 800; color: #1e40af; margin-top: 10px;">${offerAmount}</div>
     </div>
     <div class="button-container">
         <a href="${viewOfferUrl}" class="button">
-            ${isRTL ? 'عرض التفاصيل' : 'View Details'}
+            ${isRTL ? 'مراجعة وقبول العرض' : 'Review & Accept Offer'}
         </a>
     </div>
   `;
@@ -297,7 +308,7 @@ export function getNewOfferEmailTemplate(
   return {
     subject,
     html: renderBaseTemplate({ locale, title: subject }, content),
-    text: `${isRTL ? 'تلقيت عرضاً بقيمة' : 'New offer for'} ${offerAmount}: ${viewOfferUrl}`
+    text: `${isRTL ? 'وصلك عرض جديد بقيمة' : 'New offer for'} ${offerAmount}: ${viewOfferUrl}`
   };
 }
 
@@ -312,17 +323,17 @@ export function getRequestStatusUpdateEmailTemplate(
   locale: string = 'en'
 ): EmailTemplate {
   const isRTL = locale === 'ar';
-  const subject = isRTL ? `تحديث للطلب: ${requestTitle}` : `Update for Request: ${requestTitle}`;
+  const subject = isRTL ? `تحديث حالة الطلب: ${requestTitle}` : `Request Update: ${requestTitle}`;
   
   const content = `
-    <h1 class="h1">${isRTL ? 'تغيرت حالة طلبك' : 'Request Status Updated'}</h1>
+    <h1 class="h1">${isRTL ? 'تم تحديث حالة طلبك' : 'Request Status Updated'}</h1>
     <p class="p">
-        ${isRTL ? `حالة طلبك "${requestTitle}" هي الآن:` : `Status for "${requestTitle}" is now:`}
-        <strong>${newStatus}</strong>
+        ${isRTL ? `لقد أصبحت حالة طلبك "${requestTitle}" هي:` : `The status of your request "${requestTitle}" is now:`}
+        <strong style="color: #1e40af;">${newStatus}</strong>
     </p>
     <div class="button-container">
         <a href="${viewUrl}" class="button">
-            ${isRTL ? 'الذهاب إلى الطلب' : 'Go to Request'}
+            ${isRTL ? 'عرض تفاصيل الحالة' : 'View Status Details'}
         </a>
     </div>
   `;
@@ -343,18 +354,18 @@ export function getNewRequestForExistingUserTemplate(
   locale: string = 'en'
 ): EmailTemplate {
   const isRTL = locale === 'ar';
-  const subject = isRTL ? 'تم ربط طلبك بحسابك' : 'Request linked to account';
+  const subject = isRTL ? 'تم حفظ طلبك في حسابك' : 'Request Saved to Your Account';
   
   const content = `
-    <h1 class="h1">${isRTL ? 'مرحباً،' : 'Hello,'} ${name}</h1>
+    <h1 class="h1">${isRTL ? 'مرحباً مجدداً،' : 'Welcome back,'} ${name}</h1>
     <p class="p">
         ${isRTL 
-            ? 'لقد استلمنا طلب خدمتك الجديد. بما أن لديك حساباً مسجلاً، فقد قمنا بربطه تلقائياً.' 
-            : 'We received your new request. Since you already have an account, we\'ve linked it automatically.'}
+            ? 'شكراً لإرسال طلبك. لقد تعرفنا على حسابك وقمنا بربط الطلب به تلقائياً. يمكنك متابعته بعد الدخول.' 
+            : 'Thank you for your request. We recognized your account and linked it automatically. You can track it after logging in.'}
     </p>
     <div class="button-container">
         <a href="${loginUrl}" class="button">
-            ${isRTL ? 'تسجيل الدخول للمتابعة' : 'Login to Continue'}
+            ${isRTL ? 'تسجيل الدخول' : 'Sign In Now'}
         </a>
     </div>
   `;
@@ -362,6 +373,6 @@ export function getNewRequestForExistingUserTemplate(
   return {
     subject,
     html: renderBaseTemplate({ locale, title: subject }, content),
-    text: `${isRTL ? 'قم بتسجيل الدخول لمشاهدة طلبك الجديد:' : 'Login to see your new request:'} ${loginUrl}`
+    text: `${isRTL ? 'قم بتسجيل الدخول لمتابعة طلبك:' : 'Login to see your request:'} ${loginUrl}`
   };
 }
