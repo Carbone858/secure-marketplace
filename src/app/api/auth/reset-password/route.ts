@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { resetPasswordSchema } from '@/lib/validations/auth';
-import { hashPassword } from '@/lib/auth';
+import { hashPassword, verifyPassword } from '@/lib/auth';
 import { authLimiter, getClientIp } from '@/lib/rate-limit';
 
 /**
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
   const userAgent = request.headers.get('user-agent');
 
   try {
-    // Check rate limit (Redis-backed with in-memory fallback)
+    // Check rate limit
     const rateLimit = await authLimiter.check(ip);
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -153,6 +153,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 🔒 Prevent reusing the same password
+    const isSamePassword = await verifyPassword(password, user.password);
+    if (isSamePassword) {
+      await logSecurityEvent('PASSWORD_RESET_FAILED', ip, userAgent, user.id, {
+        reason: 'same_password',
+      });
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'password.sameAsOld',
+          message: 'Your new password must be different from your current password.',
+        },
+        { status: 400 }
+      );
+    }
+
     // Hash new password
     const hashedPassword = await hashPassword(password);
 
@@ -172,7 +188,7 @@ export async function POST(request: NextRequest) {
       data: { usedAt: new Date() },
     });
 
-    // Revoke all existing refresh tokens for this user
+    // Revoke all existing refresh tokens for this user (force re-login)
     await prisma.refreshToken.updateMany({
       where: {
         userId: user.id,
@@ -215,4 +231,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
