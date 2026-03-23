@@ -12,6 +12,7 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf
  * POST /api/upload
  * Generic upload endpoint (used by project creation forms)
  * Switches between Local Storage (Dev) and Supabase Storage (Production/Vercel)
+ * Note: Requires supabase keys to be set in Vercel for live site uploads.
  */
 export async function POST(request: NextRequest) {
     try {
