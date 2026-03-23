@@ -23,6 +23,9 @@ const optionalEnvVars = [
   'RATE_LIMIT_LOGIN_WINDOW_SEC',
   'RATE_LIMIT_API_MAX',
   'RATE_LIMIT_API_WINDOW_SEC',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'SUPABASE_BUCKET_NAME',
 ] as const;
 
 function validateEnv() {
