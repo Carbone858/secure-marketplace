@@ -15,6 +15,20 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf
  */
 export async function POST(request: NextRequest) {
     try {
+        // Detect Vercel Environment - Vercel filesystem is read-only
+        const isVercel = !!process.env.VERCEL || !!process.env.VERCEL_ENV;
+        
+        if (isVercel) {
+            console.error('Upload attempted on Vercel. Local storage disabled.');
+            return NextResponse.json(
+                { 
+                    success: false, 
+                    error: 'env.unsupported', 
+                    message: 'Image uploads are not supported in the live Vercel version yet. Use local environment or wait for Supabase Storage integration.' 
+                },
+                { status: 501 }
+            );
+        }
         // Parse form data
         const formData = await request.formData();
         const file = formData.get('file') as File | null;
@@ -79,9 +93,9 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
-        console.error('Upload error:', error);
+        console.error('Critical upload error:', error);
         return NextResponse.json(
-            { success: false, error: 'server.error', message: 'An unexpected error occurred. Please try again later.' },
+            { success: false, error: 'server.error', message: process.env.NODE_ENV === 'development' ? `Error: ${error}` : 'An unexpected error occurred. Please try again later.' },
             { status: 500 }
         );
     }
