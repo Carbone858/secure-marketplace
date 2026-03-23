@@ -62,7 +62,7 @@ const FIELD_SECTION_MAP: Record<string, SectionId> = {
   title: 'details', description: 'details', categoryId: 'details',
   countryId: 'location', cityId: 'location',
   budgetMin: 'budget', budgetMax: 'budget', deadline: 'budget',
-  contactName: 'account', contactEmail: 'account',
+  contactName: 'account', contactEmail: 'account', contactPhone: 'account',
 };
 
 /* ── Panel (stable, outside main component) ──────── */
@@ -494,64 +494,93 @@ export function RequestFormSPA({
 
   /* ── image upload (file input + drag & drop) ────── */
   const processFiles = async (files: FileList | File[]) => {
-    console.log('processFiles started with files:', files);
-    setUploadingImage(true);
-    for (const file of Array.from(files)) {
-      console.log(`Processing file: ${file.name} | type: ${file.type} | size: ${file.size}`);
-      if (images.length >= 10) break;
-
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        console.warn(`File ${file.name} rejected. Type ${file.type} not in allowed:`, allowedTypes);
-        toast.error(t('spa.invalidFileType'));
-        continue;
+    try {
+      console.log('processFiles started with files:', files);
+      setUploadingImage(true);
+      if (images.length >= 10) {
+        toast.error(t('spa.maxImagesReached') || 'Maximum 10 images reached');
+        return;
       }
-      if (file.size > 20 * 1024 * 1024) {
-        console.warn(`File ${file.name} rejected. Size ${file.size} > 20MB before compression`);
-        toast.error(t('spa.fileTooLarge'));
-        continue;
-      }
-
-      console.log(`File ${file.name} passed validation. Compressing...`);
       
-      let compressedFile = file;
-      try {
-        const options = {
-          maxSizeMB: 0.3, // Target 300KB
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-          fileType: 'image/webp' // Convert to WebP for best compression
-        };
-        compressedFile = await imageCompression(file as File, options);
-        console.log(`Compressed from ${file.size / 1024 / 1024} MB to ${compressedFile.size / 1024 / 1024} MB`);
-      } catch (error) {
-        console.error('Error compressing image:', error);
-        // If compression fails, gracefully fallback to the original file
-      }
-
-      const fd = new FormData();
-      fd.append('file', compressedFile, compressedFile.name.replace(/\.[^/.]+$/, ".webp"));
-      try {
-        const res = await fetch('/api/upload', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (data.success) {
-          console.log(`Upload successful for ${file.name}:`, data.data.url);
-          setImages((prev) => [...prev, data.data.url]);
-        } else {
-          console.error(`Upload failed for ${file.name}:`, data);
+      let currentImageCount = images.length;
+      
+      for (const file of Array.from(files)) {
+        if (currentImageCount >= 10) {
+          toast.error(t('spa.maxImagesReached') || 'Maximum 10 images reached');
+          break;
         }
-      } catch (err) {
-        console.error('Upload fetch error:', err);
+
+        console.log(`Processing file: ${file.name} | type: ${file.type} | size: ${file.size}`);
+
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+          console.warn(`File ${file.name} rejected. Type ${file.type} not in allowed:`, allowedTypes);
+          toast.error(t('spa.invalidFileType'));
+          continue;
+        }
+        
+        if (file.size > 20 * 1024 * 1024) {
+          console.warn(`File ${file.name} rejected. Size ${file.size} > 20MB before compression`);
+          toast.error(t('spa.fileTooLarge'));
+          continue;
+        }
+
+        console.log(`File ${file.name} passed validation. Compressing...`);
+        
+        let compressedFile: File | Blob = file;
+        try {
+          const options = {
+            maxSizeMB: 0.5, // Target 500KB
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+            fileType: 'image/webp'
+          };
+          // Cast file to any because browser-image-compression types can be picky
+          compressedFile = await imageCompression(file as any, options);
+          console.log(`Compressed from ${file.size / 1024 / 1024} MB to ${compressedFile.size / 1024 / 1024} MB`);
+        } catch (error) {
+          console.error('Error compressing image:', error);
+          // If compression fails, gracefully fallback to the original file
+          compressedFile = file;
+        }
+
+        const fd = new FormData();
+        // Fallback for file name if it's missing on a Blob
+        const fileName = (compressedFile as any).name || (file as any).name || 'image.webp';
+        const safeName = fileName.replace(/\.[^/.]+$/, ".webp");
+        fd.append('file', compressedFile, safeName);
+        
+        try {
+          const res = await fetch('/api/upload', { method: 'POST', body: fd });
+          const data = await res.json();
+          if (data.success) {
+            console.log(`Upload successful for ${file.name}:`, data.data.url);
+            setImages((prev) => [...prev, data.data.url]);
+            currentImageCount++;
+          } else {
+            console.error(`Upload failed for ${file.name}:`, data);
+            toast.error(data.message || t('errors.general'));
+          }
+        } catch (err) {
+          console.error('Upload fetch error:', err);
+          toast.error(t('errors.general'));
+        }
       }
+    } catch (err) {
+      console.error('General processFiles error:', err);
+      toast.error(t('errors.general'));
+    } finally {
+      setUploadingImage(false);
     }
-    setUploadingImage(false);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('handleImageUpload triggered. files length:', e.target.files?.length);
-    if (e.target.files) {
-      processFiles(e.target.files);
+    const files = e.target.files;
+    console.log('handleImageUpload triggered. files length:', files?.length);
+    if (files && files.length > 0) {
+      processFiles(files);
     }
+    // Reset value so same file can be selected again
     e.target.value = '';
   };
 
@@ -624,6 +653,7 @@ export function RequestFormSPA({
 
     setFieldErrors(errs);
     if (Object.keys(errs).length > 0) {
+      toast.error(t('errors.missingRequiredFields') || 'Please fill in all required fields correctly');
       // expand & scroll to first errored section
       const firstErrField = Object.keys(errs)[0];
       const sec = FIELD_SECTION_MAP[firstErrField];
@@ -1214,6 +1244,13 @@ export function RequestFormSPA({
                 : 'border-input hover:border-primary/40 hover:bg-muted/30'
                 }`}
             >
+              <input
+                type="file"
+                multiple
+                onChange={handleImageUpload}
+                title="Upload Files"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
               {uploadingImage ? (
                 <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
               ) : (
@@ -1224,14 +1261,6 @@ export function RequestFormSPA({
                     <button type="button" className="px-4 py-2 bg-primary/10 text-primary rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors pointer-events-none">
                       {t('spa.browse')}
                     </button>
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleImageUpload}
-                      onClick={() => console.log('File input directly clicked')}
-                      title="Upload Files"
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
                   </div>
                 </>
               )}

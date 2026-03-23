@@ -863,6 +863,7 @@
         "deadlinePast": "Deadline must be a future date",
         "nameRequired": "Full name is required",
         "emailRequired": "Email address is required",
+        "missingRequiredFields": "Please fill in all required fields correctly.",
         "userExists": "An account with this email already exists. Please log in instead.",
         "general": "An error occurred. Please try again later."
       },
@@ -891,6 +892,7 @@
         "browse": "Browse Files",
         "images": "images",
         "imagesHint": "Up to 10 images. JPG, PNG, WebP. Max 5 MB each.",
+        "maxImagesReached": "Maximum 10 images reached.",
         "invalidFileType": "Invalid file type. Only JPG, PNG, and WebP are allowed.",
         "fileTooLarge": "File too large. Maximum size is 5MB.",
         "requireVerification": "Require company verification",
