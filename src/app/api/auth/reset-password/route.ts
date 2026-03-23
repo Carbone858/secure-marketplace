@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'password.sameAsOld',
-          message: 'Your new password must be different from your current password.',
+          message: 'Please choose a password you have not used before.',
         },
         { status: 400 }
       );
