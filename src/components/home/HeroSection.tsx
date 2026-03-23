@@ -10,22 +10,17 @@ import HeroTrustImage from './HeroTrustImage';
 
 /**
  * HeroSection — offerta.se / mittanbud.no inspired hero.
- *
- * Layout:
- *   Desktop: 2-column grid — Left (headline + CTA + categories) | Right (trust image)
- *   Mobile:  Single column — Headline → CTA → Categories → Image (optional)
- *
- * Data fetching happens here (top of the component tree for the hero),
- * then passed down to presentational children.
  */
-export default function HeroSection() {
+export default function HeroSection({ initialCategories = [] }: { initialCategories?: FeaturedCategory[] }) {
   const locale = useLocale();
   const t = useTranslations('home');
-  const [categories, setCategories] = useState<FeaturedCategory[]>([]);
+  const [categories, setCategories] = useState<FeaturedCategory[]>(initialCategories.length > 0 ? initialCategories : []);
 
   useEffect(() => {
+    // If we have initialCategories specifically for this locale, don't re-fetch
+    if (initialCategories.length > 0) return;
     fetchFeaturedCategories();
-  }, [locale]);
+  }, [locale, initialCategories]);
 
   const fetchFeaturedCategories = async () => {
     try {

@@ -1,10 +1,10 @@
 
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
 
+import { getFeaturedCategories } from '@/lib/services/categoryService';
 import { HeroSection } from '@/components/home';
 import DynamicServicesBar from '@/components/home/DynamicServicesBar';
 
@@ -31,13 +31,14 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
-  const t = useTranslations('home');
+export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  const t = await getTranslations({ locale, namespace: 'home' });
+  const categories = await getFeaturedCategories(locale);
 
   return (
     <div className="min-h-screen">
       {/* 1. Hero Section - Value Proposition & CTA */}
-      <HeroSection />
+      <HeroSection initialCategories={categories} />
 
       {/* 2. Visual Flair - Dynamic Services */}
       <DynamicServicesBar />
