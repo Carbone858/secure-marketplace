@@ -5,8 +5,7 @@ import { getSession } from '@/lib/auth-session/session';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
-import crypto from 'crypto';
-import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE, sanitizeImageBuffer } from '@/lib/upload';
+import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE, sanitizeImageBuffer, uploadToSupabase } from '@/lib/upload';
 
 // Allowed image types
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -21,11 +20,7 @@ export async function POST(request: NextRequest) {
 
     if (!session.isAuthenticated || !session.user) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'unauthorized',
-          message: 'You must be logged in to upload an avatar.',
-        },
+        { success: false, error: 'unauthorized', message: 'You must be logged in to upload an avatar.' },
         { status: 401 }
       );
     }
@@ -36,11 +31,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'file.missing',
-          message: 'No file provided.',
-        },
+        { success: false, error: 'file.missing', message: 'No file provided.' },
         { status: 400 }
       );
     }
@@ -48,11 +39,7 @@ export async function POST(request: NextRequest) {
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'file.invalidType',
-          message: 'Invalid file type. Only JPEG, PNG, and WebP are allowed.',
-        },
+        { success: false, error: 'file.invalidType', message: 'Invalid file type. Only JPEG, PNG, and WebP are allowed.' },
         { status: 400 }
       );
     }
@@ -60,36 +47,22 @@ export async function POST(request: NextRequest) {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'file.tooLarge',
-          message: `File is too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`,
-        },
+        { success: false, error: 'file.tooLarge', message: `File is too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB.` },
         { status: 400 }
       );
     }
 
     // Generate safe filename using UUID
     const fileName = generateSafeFileName(file.name);
-
-    // Ensure uploads directory exists (OUTSIDE public/ for controlled access)
     const uploadsDir = UPLOAD_PATHS.avatars;
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
-    // Save file
     const filePath = path.join(uploadsDir, fileName);
+    
     let fileBuffer = Buffer.from(await file.arrayBuffer() as any);
 
     // Validate magic bytes match claimed MIME type
     if (!validateFileMagicBytes(fileBuffer, file.type)) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'file.contentMismatch',
-          message: 'File content does not match the declared file type.',
-        },
+        { success: false, error: 'file.contentMismatch', message: 'The file type check failed. Please try a different image or format.' },
         { status: 400 }
       );
     }
@@ -97,50 +70,46 @@ export async function POST(request: NextRequest) {
     // Sanitize image (metadata stripping)
     fileBuffer = sanitizeImageBuffer(fileBuffer);
 
-    await writeFile(filePath, fileBuffer);
+    // Detect Environment
+    const isVercel = !!process.env.VERCEL || !!process.env.VERCEL_ENV;
+    let url: string;
 
-    // Validate magic bytes match claimed MIME type
-    if (!validateFileMagicBytes(fileBuffer, file.type)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'file.contentMismatch',
-          message: 'File content does not match the declared file type.',
-        },
-        { status: 400 }
-      );
+    if (isVercel) {
+        console.log('Uploading avatar to Supabase Storage...');
+        const cloudUrl = await uploadToSupabase('avatars', fileName, fileBuffer, file.type);
+        if (!cloudUrl) throw new Error('Supabase upload failed');
+        url = cloudUrl;
+    } else {
+        try {
+            if (!existsSync(uploadsDir)) await mkdir(uploadsDir, { recursive: true });
+            await writeFile(filePath, fileBuffer);
+            url = getFileServeUrl('avatars', fileName);
+        } catch (err) {
+            console.warn('Local save failed, fallback to cloud:', err);
+            const cloudUrl = await uploadToSupabase('avatars', fileName, fileBuffer, file.type);
+            if (!cloudUrl) throw err;
+            url = cloudUrl;
+        }
     }
-
-    await writeFile(filePath, fileBuffer);
-
-    // Generate URL served via /api/files/... (avatars are semi-public)
-    const avatarUrl = getFileServeUrl('avatars', fileName);
 
     // Update user avatar in database
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { avatar: avatarUrl },
+      data: { avatar: url },
     });
 
     return NextResponse.json(
       {
         success: true,
         message: 'Avatar uploaded successfully.',
-        data: {
-          avatarUrl,
-        },
+        data: { avatarUrl: url },
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Avatar upload error:', error);
-
     return NextResponse.json(
-      {
-        success: false,
-        error: 'server.error',
-        message: 'An unexpected error occurred. Please try again later.',
-      },
+      { success: false, error: 'server.error', message: 'An unexpected error occurred. Please try again later.' },
       { status: 500 }
     );
   }
@@ -148,7 +117,6 @@ export async function POST(request: NextRequest) {
 
 /**
  * DELETE /api/user/avatar
- * Delete user avatar
  */
 export async function DELETE(request: NextRequest) {
   try {
@@ -156,34 +124,9 @@ export async function DELETE(request: NextRequest) {
 
     if (!session.isAuthenticated || !session.user) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'unauthorized',
-          message: 'You must be logged in to delete your avatar.',
-        },
+        { success: false, error: 'unauthorized', message: 'You must be logged in to delete your avatar.' },
         { status: 401 }
       );
-    }
-
-    // Get current user
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { avatar: true },
-    });
-
-    if (user?.avatar) {
-      // Delete file from disk (safe path resolution)
-      try {
-        const avatarFileName = path.basename(user.avatar);
-        const filePath = resolveUploadPath('avatars', avatarFileName);
-        if (filePath && existsSync(filePath)) {
-          const { unlink } = await import('fs/promises');
-          await unlink(filePath);
-        }
-      } catch (error) {
-        console.error('Failed to delete avatar file:', error);
-        // Continue even if file deletion fails
-      }
     }
 
     // Update user to remove avatar
@@ -192,23 +135,9 @@ export async function DELETE(request: NextRequest) {
       data: { avatar: null },
     });
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: 'Avatar deleted successfully.',
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, message: 'Avatar deleted successfully.' }, { status: 200 });
   } catch (error) {
     console.error('Avatar delete error:', error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'server.error',
-        message: 'An unexpected error occurred. Please try again later.',
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'server.error', message: 'Internal server error.' }, { status: 500 });
   }
 }
