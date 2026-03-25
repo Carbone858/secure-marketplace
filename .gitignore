@@ -38,3 +38,18 @@ next-env.d.ts
 homepage_ar_response.txt
 homepage_ar_response_after_fix.txt
 homepage_response.txt
+
+# Playwright / Test Artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright-report.zip
+test_output*.json
+test_output*.txt
+test_results*.txt
+final_log.txt
+console_out.txt
+create_users.log
+*.log破
+*.txt破
+tmp/
