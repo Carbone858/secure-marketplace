@@ -1,0 +1,217 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "ServiceMarket" [ref=e5] [cursor=pointer]:
+          - /url: /en
+          - img [ref=e6]
+          - generic [ref=e10]: ServiceMarket
+        - generic [ref=e11]:
+          - link "Home" [ref=e12] [cursor=pointer]:
+            - /url: /en
+          - link "Companies" [ref=e13] [cursor=pointer]:
+            - /url: /en/companies
+          - link "Requests" [ref=e14] [cursor=pointer]:
+            - /url: /en/requests
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - button "Toggle theme" [ref=e18] [cursor=pointer]:
+              - img [ref=e19]
+              - img
+              - img
+              - generic [ref=e25]: Toggle theme
+            - button "English" [ref=e27] [cursor=pointer]:
+              - img [ref=e28]
+              - generic [ref=e31]: English
+          - button [ref=e33] [cursor=pointer]:
+            - img [ref=e34]
+          - button [ref=e39] [cursor=pointer]:
+            - img [ref=e40]
+          - button "V Verified Company" [ref=e44] [cursor=pointer]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - generic [ref=e47]: V
+            - generic [ref=e48]: Verified Company
+            - img [ref=e49]
+  - main [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e55]:
+        - link "ServiceMarket" [ref=e56] [cursor=pointer]:
+          - /url: /en
+        - navigation [ref=e57]:
+          - link "Dashboard" [ref=e58] [cursor=pointer]:
+            - /url: /en/company/dashboard
+          - link "Browse Projects" [ref=e59] [cursor=pointer]:
+            - /url: /en/company/dashboard/browse
+          - link "My Offers" [ref=e60] [cursor=pointer]:
+            - /url: /en/company/dashboard/offers
+          - link "My Projects" [ref=e61] [cursor=pointer]:
+            - /url: /en/company/dashboard/projects
+          - link "Company Profile" [ref=e62] [cursor=pointer]:
+            - /url: /en/company/dashboard/profile
+        - generic [ref=e63]:
+          - generic [ref=e64]: Verified Company
+          - button "Logout" [ref=e66] [cursor=pointer]
+      - main [ref=e67]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - heading "Company Dashboard" [level=1] [ref=e71]
+              - paragraph [ref=e72]: Welcome back, Verified Company
+            - generic [ref=e73]:
+              - button "Upgrade Plan" [ref=e74] [cursor=pointer]:
+                - img [ref=e75]
+                - text: Upgrade Plan
+              - button "Messages" [ref=e77] [cursor=pointer]:
+                - img [ref=e78]
+                - text: Messages
+              - button "Edit Profile" [ref=e80] [cursor=pointer]
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - generic [ref=e87]:
+                - paragraph [ref=e88]: No Active Membership
+                - paragraph [ref=e89]: Upgrade to access premium features
+            - button "View Plans" [ref=e90] [cursor=pointer]
+          - generic [ref=e91]:
+            - generic [ref=e94]:
+              - generic [ref=e95]:
+                - paragraph [ref=e96]: Total Projects
+                - paragraph [ref=e97]: "0"
+              - img [ref=e98]
+            - generic [ref=e103]:
+              - generic [ref=e104]:
+                - paragraph [ref=e105]: Active Projects
+                - paragraph [ref=e106]: "0"
+              - img [ref=e107]
+            - generic [ref=e112]:
+              - generic [ref=e113]:
+                - paragraph [ref=e114]: Completed
+                - paragraph [ref=e115]: "0"
+              - img [ref=e116]
+            - generic [ref=e121]:
+              - generic [ref=e122]:
+                - paragraph [ref=e123]: Total Offers
+                - paragraph [ref=e124]: "0"
+              - img [ref=e125]
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - heading "Rating" [level=3] [ref=e131]:
+                - img [ref=e132]
+                - text: Rating
+              - generic [ref=e135]:
+                - generic [ref=e136]: "0.0"
+                - generic [ref=e137]:
+                  - generic [ref=e138]:
+                    - img [ref=e139]
+                    - img [ref=e141]
+                    - img [ref=e143]
+                    - img [ref=e145]
+                    - img [ref=e147]
+                  - paragraph [ref=e149]: Based on 0 reviews
+            - generic [ref=e150]:
+              - heading "Offer Success Rate" [level=3] [ref=e152]:
+                - img [ref=e153]
+                - text: Offer Success Rate
+              - generic [ref=e157]:
+                - generic [ref=e158]:
+                  - generic [ref=e159]: "Accepted: 0"
+                  - generic [ref=e160]: "Pending: 0"
+                - progressbar [ref=e161]
+                - paragraph [ref=e162]: No offers yet
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - heading "Recent Projects" [level=3] [ref=e166]
+                - button "View All" [ref=e167] [cursor=pointer]
+              - paragraph [ref=e169]: No projects yet
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - heading "Recent Offers" [level=3] [ref=e172]
+                - button "View All" [ref=e173] [cursor=pointer]
+              - paragraph [ref=e175]: No offers yet
+  - contentinfo [ref=e176]:
+    - generic [ref=e177]:
+      - generic [ref=e178]:
+        - generic [ref=e179]:
+          - link "Service Marketplace" [ref=e180] [cursor=pointer]:
+            - /url: /en
+            - img [ref=e181]
+            - generic [ref=e185]: Service Marketplace
+          - paragraph [ref=e186]: Founded in Syria with a global vision, connecting customers with the best verified professionals across Syria and Europe.
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - img [ref=e189]
+              - generic [ref=e192]: support@servicemarket.com
+            - generic [ref=e193]:
+              - img [ref=e194]
+              - generic [ref=e196]: +963 11 000 0000
+            - generic [ref=e197]:
+              - img [ref=e198]
+              - generic [ref=e201]: Syria | Sweden | Netherlands | Germany
+        - generic [ref=e202]:
+          - heading "Company" [level=3] [ref=e203]
+          - list [ref=e204]:
+            - listitem [ref=e205]:
+              - link "About Us" [ref=e206] [cursor=pointer]:
+                - /url: /en/about
+            - listitem [ref=e207]:
+              - link "Careers" [ref=e208] [cursor=pointer]:
+                - /url: /en/careers
+            - listitem [ref=e209]:
+              - link "Press" [ref=e210] [cursor=pointer]:
+                - /url: /en/press
+            - listitem [ref=e211]:
+              - link "Blog" [ref=e212] [cursor=pointer]:
+                - /url: /en/blog
+        - generic [ref=e213]:
+          - heading "Support" [level=3] [ref=e214]
+          - list [ref=e215]:
+            - listitem [ref=e216]:
+              - link "Help Center" [ref=e217] [cursor=pointer]:
+                - /url: /en/faq
+            - listitem [ref=e218]:
+              - link "Contact Us" [ref=e219] [cursor=pointer]:
+                - /url: /en/contact
+            - listitem [ref=e220]:
+              - link "Privacy Policy" [ref=e221] [cursor=pointer]:
+                - /url: /en/privacy
+            - listitem [ref=e222]:
+              - link "Terms of Service" [ref=e223] [cursor=pointer]:
+                - /url: /en/terms
+        - generic [ref=e224]:
+          - heading "Services" [level=3] [ref=e225]
+          - list [ref=e226]:
+            - listitem [ref=e227]:
+              - link "For Companies" [ref=e228] [cursor=pointer]:
+                - /url: /en/for-companies
+            - listitem [ref=e229]:
+              - link "For Customers" [ref=e230] [cursor=pointer]:
+                - /url: /en/for-customers
+            - listitem [ref=e231]:
+              - link "Pricing" [ref=e232] [cursor=pointer]:
+                - /url: /en/pricing
+            - listitem [ref=e233]:
+              - link "Success Stories" [ref=e234] [cursor=pointer]:
+                - /url: /en/stories
+      - generic [ref=e235]:
+        - paragraph [ref=e236]: © 2026 ServiceMarket. All rights reserved.
+        - generic [ref=e237]:
+          - link [ref=e238] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e239]
+          - link [ref=e241] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e242]
+          - link [ref=e244] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e245]
+          - link [ref=e249] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e250]
+  - region "Notifications alt+T"
+  - alert [ref=e253]
+```

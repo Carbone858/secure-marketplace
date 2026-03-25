@@ -86,3 +86,25 @@ export async function expectNoMissingTranslations(page: Page) {
 export async function expectDashboard(page: Page) {
   await expect(page).toHaveURL(/(dashboard|admin|company\/dashboard)/, { timeout: 15_000 });
 }
+
+/**
+ * Make an authenticated API request using the browser context's active session.
+ */
+export async function apiRequest(page: Page, method: string, path: string, data?: any) {
+  const response = await page.request.fetch(`${BASE}${path}`, {
+    method,
+    data,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const isJson = response.headers()['content-type']?.includes('application/json');
+  const body = isJson ? await response.json() : await response.text();
+
+  if (!response.ok()) {
+    throw new Error(`API Error ${method} ${path}: ${response.status()} ${response.statusText()} - ${JSON.stringify(body)}`);
+  }
+
+  return body;
+}

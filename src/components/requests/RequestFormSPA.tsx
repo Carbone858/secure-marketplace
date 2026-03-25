@@ -45,9 +45,9 @@ interface RequestFormSPAProps {
 }
 
 /* ── section ids (for progress & anchor scrolling) ── */
-const SECTIONS_AUTH = ['details', 'location', 'budget', 'media', 'visibility'] as const;
-const SECTIONS_GUEST = ['details', 'location', 'budget', 'media', 'visibility', 'account'] as const;
-type SectionId = 'details' | 'location' | 'budget' | 'media' | 'visibility' | 'account';
+const SECTIONS_AUTH = ['details', 'location', 'budget', 'media'] as const;
+const SECTIONS_GUEST = ['details', 'location', 'budget', 'media', 'account'] as const;
+type SectionId = 'details' | 'location' | 'budget' | 'media' | 'account';
 
 const DRAFT_TTL = 48 * 60 * 60 * 1000; // 48 hours in ms
 
@@ -165,7 +165,7 @@ export function RequestFormSPA({
     location: !!initialData,
     budget: true,
     media: true,
-    visibility: true,
+
     account: false,
   });
 
@@ -180,7 +180,6 @@ export function RequestFormSPA({
     location: null,
     budget: null,
     media: null,
-    visibility: null,
     account: null,
   });
 
@@ -304,7 +303,7 @@ export function RequestFormSPA({
     { id: 'location', icon: <MapPin className="w-5 h-5" />, required: true },
     { id: 'budget', icon: <DollarSign className="w-5 h-5" />, required: false },
     { id: 'media', icon: <Image className="w-5 h-5" />, required: false },
-    { id: 'visibility', icon: <Eye className="w-5 h-5" />, required: false },
+
     ...(isGuest ? [{ id: 'account' as SectionId, icon: <Shield className="w-5 h-5" />, required: true }] : []),
   ];
 
@@ -315,7 +314,7 @@ export function RequestFormSPA({
       location: t('steps.location.title'),
       budget: t('steps.budget.title'),
       media: t('spa.media'),
-      visibility: t('steps.visibility.title'),
+
       account: t('steps.account.title'),
     };
     return labels[id];
@@ -331,7 +330,7 @@ export function RequestFormSPA({
     if (formData.countryId) filled++;
     if (formData.cityId) filled++;
     if (formData.budgetMin || formData.budgetMax) filled++;
-    if (formData.visibility) filled++;
+
     return Math.round((filled / total) * 100);
   })();
 
@@ -794,11 +793,7 @@ export function RequestFormSPA({
       URGENT: t('steps.details.urgencyOptions.URGENT'),
     };
 
-    const visLabels: Record<string, string> = {
-      PUBLIC: t('steps.visibility.options.PUBLIC'),
-      REGISTERED_ONLY: t('steps.visibility.options.REGISTERED_ONLY'),
-      VERIFIED_COMPANIES: t('steps.visibility.options.VERIFIED_COMPANIES'),
-    };
+
 
     return (
       <div className="space-y-6">
@@ -868,11 +863,7 @@ export function RequestFormSPA({
               )}
             </div>
           )}
-          {/* Visibility */}
-          <div className="p-4 space-y-1">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{t('steps.visibility.title')}</p>
-            <p className="text-sm text-foreground">{visLabels[formData.visibility]}</p>
-          </div>
+
         </div>
       </div>
     );
@@ -1319,55 +1310,7 @@ export function RequestFormSPA({
           </div>
         </Panel>
 
-        {/* ── Section 5: Visibility (optional, collapsible) ── */}
-        <Panel
-          id="visibility"
-          icon={<Eye className="w-5 h-5" />}
-          required={false}
-          isOpen={!collapsed.visibility}
-          hasError={getSectionHasError('visibility')}
-          sectionLabel={sectionLabel('visibility')}
-          onToggle={() => toggle('visibility')}
-          sectionRef={(el) => { sectionRefs.current.visibility = el; }}
-          badge={formData.visibility !== 'PUBLIC' ? t(`steps.visibility.options.${formData.visibility}`) : undefined}
-        >
-          <div className="space-y-3">
-            {(['PUBLIC', 'REGISTERED_ONLY', 'VERIFIED_COMPANIES'] as const).map((vis) => (
-              <label
-                key={vis}
-                className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.visibility === vis
-                  ? 'border-primary/40 bg-primary/5 ring-1 ring-primary/20'
-                  : 'border-border hover:border-primary/20 hover:bg-muted/30'
-                  }`}
-              >
-                <input
-                  type="radio"
-                  name="visibility"
-                  value={vis}
-                  checked={formData.visibility === vis}
-                  onChange={handleChange}
-                  className="mt-0.5"
-                />
-                <div>
-                  <span className="font-medium text-foreground">{t(`steps.visibility.options.${vis}`)}</span>
-                </div>
-              </label>
-            ))}
-          </div>
-          <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-muted/50 transition-colors mt-2">
-            <input
-              type="checkbox"
-              name="requireVerification"
-              checked={formData.requireVerification}
-              onChange={handleChange}
-              className="w-5 h-5 text-primary rounded focus:ring-ring"
-            />
-            <div>
-              <span className="font-medium text-foreground">{t('spa.requireVerification')}</span>
-              <p className="text-xs text-muted-foreground">{t('spa.requireVerificationDesc')}</p>
-            </div>
-          </label>
-        </Panel>
+
 
         {/* ── Section 6: Account (guest mode only) ──── */}
         {isGuest && (

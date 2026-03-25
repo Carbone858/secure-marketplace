@@ -54,6 +54,7 @@ export async function loginViaUI(
     (url) => !url.pathname.includes('/auth/login'),
     { timeout: 15_000 }
   );
+  await page.waitForLoadState('networkidle');
 }
 
 // ─── API Login (fast-path — injects session cookie without UI overhead) ───────

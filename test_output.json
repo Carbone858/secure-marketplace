@@ -1,0 +1,496 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\playwright.config.ts",
+    "rootDir": "C:/Users/t3sfo/Projects/secure-marketplace/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/t3sfo/Projects/secure-marketplace/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/t3sfo/Projects/secure-marketplace/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/0[1-9]-*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/t3sfo/Projects/secure-marketplace/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "C:/Users/t3sfo/Projects/secure-marketplace/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/0[1-9]-*.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "07-lifecycle.spec.ts",
+      "file": "07-lifecycle.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Service Lifecycle E2E (UI + API)",
+          "file": "07-lifecycle.spec.ts",
+          "line": 7,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Block A: Request Creation, State, and Admin Approval",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11448,
+                      "error": {
+                        "message": "Error: page.evaluate: Error: API Error GET /api/public/categories: 404 Not Found - \"<!DOCTYPE html><html><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/webpack.js?v=1774431969838\\\"/><script src=\\\"/_next/static/chunks/main-app.js?v=1774431969838\\\" async=\\\"\\\"></script><script src=\\\"/_next/static/chunks/app-pages-internals.js\\\" async=\\\"\\\"></script><meta name=\\\"robots\\\" content=\\\"noindex\\\"/><title>404: This page could not be found.</title><script src=\\\"/_next/static/chunks/polyfills.js\\\" noModule=\\\"\\\"></script></head><body><div style=\\\"font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center\\\"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class=\\\"next-error-h1\\\" style=\\\"display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px\\\">404</h1><div style=\\\"display:inline-block\\\"><h2 style=\\\"font-size:14px;font-weight:400;line-height:49px;margin:0\\\">This page could not be found.</h2></div></div></div><script src=\\\"/_next/static/chunks/webpack.js?v=1774431969838\\\" async=\\\"\\\"></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,\\\"0:D{\\\\\\\"name\\\\\\\":\\\\\\\"r5\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"1:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n4:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n5:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\ne:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n2:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"column\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"},\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0},\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:D{\\\\\\\"name\\\\\\\":\\\\\\\"DefaultLayout\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n7:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n8:{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"colu\\\"])</script><script>self.__next_f.push([1,\\\"mn\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"}\\\\n9:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"}\\\\na:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"}\\\\nb:{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0}\\\\n7:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$8\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":\\\\\\\"$9\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$a\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$b\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:[\\\\\\\"$\\\\\\\",\\\\\\\"html\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"body\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$7\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":[]}]}]}]\\\\nc:D{\\\\\\\"name\\\\\\\":\\\\\\\"r6\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nc:[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",null,{\\\\\\\"name\\\\\\\":\\\\\\\"robots\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"noindex\\\\\\\"}]\\\\nd:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nf:[]\\\\n0:[\\\\\\\"$\\\\\\\",\\\\\\\"$L1\\\\\\\",null,{\\\\\\\"buildId\\\\\\\":\\\\\\\"development\\\\\\\",\\\\\\\"assetPrefix\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"urlParts\\\\\\\":[\\\\\\\"\\\\\\\",\\\\\\\"api\\\\\\\",\\\\\\\"public\\\\\\\",\\\\\\\"categories\\\\\\\"],\\\\\\\"initialTree\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{}]}]},\\\\\\\"$undefined\\\\\\\",\\\\\\\"$undefined\\\\\\\",true],\\\\\\\"initialSeedData\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{},[[\\\\\\\"$L2\\\\\\\",\\\\\\\"$3\\\\\\\",null],null],null]},[null,[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\",\\\\\\\"/_not-found\\\\\\\",\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\"}]],null]},[[\\\"])</script><script>self.__next_f.push([1,\\\"null,\\\\\\\"$6\\\\\\\"],null],null],\\\\\\\"couldBeIntercepted\\\\\\\":false,\\\\\\\"initialHead\\\\\\\":[\\\\\\\"$c\\\\\\\",\\\\\\\"$Ld\\\\\\\"],\\\\\\\"globalErrorComponent\\\\\\\":\\\\\\\"$e\\\\\\\",\\\\\\\"missingSlots\\\\\\\":\\\\\\\"$Wf\\\\\\\"}]\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"d:[[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"0\\\\\\\",{\\\\\\\"name\\\\\\\":\\\\\\\"viewport\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"width=device-width, initial-scale=1\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"1\\\\\\\",{\\\\\\\"charSet\\\\\\\":\\\\\\\"utf-8\\\\\\\"}]]\\\\n2:null\\\\n\\\"])</script></body></html>\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30",
+                        "stack": "Error: page.evaluate: Error: API Error GET /api/public/categories: 404 Not Found - \"<!DOCTYPE html><html><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/webpack.js?v=1774431969838\\\"/><script src=\\\"/_next/static/chunks/main-app.js?v=1774431969838\\\" async=\\\"\\\"></script><script src=\\\"/_next/static/chunks/app-pages-internals.js\\\" async=\\\"\\\"></script><meta name=\\\"robots\\\" content=\\\"noindex\\\"/><title>404: This page could not be found.</title><script src=\\\"/_next/static/chunks/polyfills.js\\\" noModule=\\\"\\\"></script></head><body><div style=\\\"font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center\\\"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class=\\\"next-error-h1\\\" style=\\\"display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px\\\">404</h1><div style=\\\"display:inline-block\\\"><h2 style=\\\"font-size:14px;font-weight:400;line-height:49px;margin:0\\\">This page could not be found.</h2></div></div></div><script src=\\\"/_next/static/chunks/webpack.js?v=1774431969838\\\" async=\\\"\\\"></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,\\\"0:D{\\\\\\\"name\\\\\\\":\\\\\\\"r5\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"1:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n4:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n5:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\ne:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n2:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"column\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"},\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0},\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:D{\\\\\\\"name\\\\\\\":\\\\\\\"DefaultLayout\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n7:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n8:{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"colu\\\"])</script><script>self.__next_f.push([1,\\\"mn\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"}\\\\n9:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"}\\\\na:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"}\\\\nb:{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0}\\\\n7:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$8\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":\\\\\\\"$9\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$a\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$b\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:[\\\\\\\"$\\\\\\\",\\\\\\\"html\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"body\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$7\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":[]}]}]}]\\\\nc:D{\\\\\\\"name\\\\\\\":\\\\\\\"r6\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nc:[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",null,{\\\\\\\"name\\\\\\\":\\\\\\\"robots\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"noindex\\\\\\\"}]\\\\nd:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nf:[]\\\\n0:[\\\\\\\"$\\\\\\\",\\\\\\\"$L1\\\\\\\",null,{\\\\\\\"buildId\\\\\\\":\\\\\\\"development\\\\\\\",\\\\\\\"assetPrefix\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"urlParts\\\\\\\":[\\\\\\\"\\\\\\\",\\\\\\\"api\\\\\\\",\\\\\\\"public\\\\\\\",\\\\\\\"categories\\\\\\\"],\\\\\\\"initialTree\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{}]}]},\\\\\\\"$undefined\\\\\\\",\\\\\\\"$undefined\\\\\\\",true],\\\\\\\"initialSeedData\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{},[[\\\\\\\"$L2\\\\\\\",\\\\\\\"$3\\\\\\\",null],null],null]},[null,[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\",\\\\\\\"/_not-found\\\\\\\",\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\"}]],null]},[[\\\"])</script><script>self.__next_f.push([1,\\\"null,\\\\\\\"$6\\\\\\\"],null],null],\\\\\\\"couldBeIntercepted\\\\\\\":false,\\\\\\\"initialHead\\\\\\\":[\\\\\\\"$c\\\\\\\",\\\\\\\"$Ld\\\\\\\"],\\\\\\\"globalErrorComponent\\\\\\\":\\\\\\\"$e\\\\\\\",\\\\\\\"missingSlots\\\\\\\":\\\\\\\"$Wf\\\\\\\"}]\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"d:[[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"0\\\\\\\",{\\\\\\\"name\\\\\\\":\\\\\\\"viewport\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"width=device-width, initial-scale=1\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"1\\\\\\\",{\\\\\\\"charSet\\\\\\\":\\\\\\\"utf-8\\\\\\\"}]]\\\\n2:null\\\\n\\\"])</script></body></html>\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:24:37",
+                        "location": {
+                          "file": "eval at evaluate (:290:30), <anonymous>",
+                          "column": 13,
+                          "line": 17
+                        }
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "eval at evaluate (:290:30), <anonymous>",
+                            "column": 13,
+                            "line": 17
+                          },
+                          "message": "Error: page.evaluate: Error: API Error GET /api/public/categories: 404 Not Found - \"<!DOCTYPE html><html><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/webpack.js?v=1774431969838\\\"/><script src=\\\"/_next/static/chunks/main-app.js?v=1774431969838\\\" async=\\\"\\\"></script><script src=\\\"/_next/static/chunks/app-pages-internals.js\\\" async=\\\"\\\"></script><meta name=\\\"robots\\\" content=\\\"noindex\\\"/><title>404: This page could not be found.</title><script src=\\\"/_next/static/chunks/polyfills.js\\\" noModule=\\\"\\\"></script></head><body><div style=\\\"font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center\\\"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class=\\\"next-error-h1\\\" style=\\\"display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px\\\">404</h1><div style=\\\"display:inline-block\\\"><h2 style=\\\"font-size:14px;font-weight:400;line-height:49px;margin:0\\\">This page could not be found.</h2></div></div></div><script src=\\\"/_next/static/chunks/webpack.js?v=1774431969838\\\" async=\\\"\\\"></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,\\\"0:D{\\\\\\\"name\\\\\\\":\\\\\\\"r5\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"1:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n4:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n5:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\ne:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n2:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"column\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"},\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0},\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:D{\\\\\\\"name\\\\\\\":\\\\\\\"DefaultLayout\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n7:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n8:{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"colu\\\"])</script><script>self.__next_f.push([1,\\\"mn\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"}\\\\n9:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"}\\\\na:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"}\\\\nb:{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0}\\\\n7:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$8\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":\\\\\\\"$9\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$a\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$b\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:[\\\\\\\"$\\\\\\\",\\\\\\\"html\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"body\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$7\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":[]}]}]}]\\\\nc:D{\\\\\\\"name\\\\\\\":\\\\\\\"r6\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nc:[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",null,{\\\\\\\"name\\\\\\\":\\\\\\\"robots\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"noindex\\\\\\\"}]\\\\nd:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nf:[]\\\\n0:[\\\\\\\"$\\\\\\\",\\\\\\\"$L1\\\\\\\",null,{\\\\\\\"buildId\\\\\\\":\\\\\\\"development\\\\\\\",\\\\\\\"assetPrefix\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"urlParts\\\\\\\":[\\\\\\\"\\\\\\\",\\\\\\\"api\\\\\\\",\\\\\\\"public\\\\\\\",\\\\\\\"categories\\\\\\\"],\\\\\\\"initialTree\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{}]}]},\\\\\\\"$undefined\\\\\\\",\\\\\\\"$undefined\\\\\\\",true],\\\\\\\"initialSeedData\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{},[[\\\\\\\"$L2\\\\\\\",\\\\\\\"$3\\\\\\\",null],null],null]},[null,[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\",\\\\\\\"/_not-found\\\\\\\",\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\"}]],null]},[[\\\"])</script><script>self.__next_f.push([1,\\\"null,\\\\\\\"$6\\\\\\\"],null],null],\\\\\\\"couldBeIntercepted\\\\\\\":false,\\\\\\\"initialHead\\\\\\\":[\\\\\\\"$c\\\\\\\",\\\\\\\"$Ld\\\\\\\"],\\\\\\\"globalErrorComponent\\\\\\\":\\\\\\\"$e\\\\\\\",\\\\\\\"missingSlots\\\\\\\":\\\\\\\"$Wf\\\\\\\"}]\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"d:[[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"0\\\\\\\",{\\\\\\\"name\\\\\\\":\\\\\\\"viewport\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"width=device-width, initial-scale=1\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"1\\\\\\\",{\\\\\\\"charSet\\\\\\\":\\\\\\\"utf-8\\\\\\\"}]]\\\\n2:null\\\\n\\\"])</script></body></html>\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:24:37"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Standard User ID: 1381a890-7f48-4ece-8c0a-06a7898f8a57\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-25T09:45:58.914Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-dc283-on-State-and-Admin-Approval-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-dc283-on-State-and-Admin-Approval-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "eval at evaluate (:290:30), <anonymous>",
+                        "column": 13,
+                        "line": 17
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5510,
+                      "error": {
+                        "message": "Error: page.evaluate: Error: API Error GET /api/public/categories: 404 Not Found - \"<!DOCTYPE html><html><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/webpack.js?v=1774431978060\\\"/><script src=\\\"/_next/static/chunks/main-app.js?v=1774431978060\\\" async=\\\"\\\"></script><script src=\\\"/_next/static/chunks/app-pages-internals.js\\\" async=\\\"\\\"></script><meta name=\\\"robots\\\" content=\\\"noindex\\\"/><title>404: This page could not be found.</title><script src=\\\"/_next/static/chunks/polyfills.js\\\" noModule=\\\"\\\"></script></head><body><div style=\\\"font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center\\\"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class=\\\"next-error-h1\\\" style=\\\"display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px\\\">404</h1><div style=\\\"display:inline-block\\\"><h2 style=\\\"font-size:14px;font-weight:400;line-height:49px;margin:0\\\">This page could not be found.</h2></div></div></div><script src=\\\"/_next/static/chunks/webpack.js?v=1774431978060\\\" async=\\\"\\\"></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,\\\"0:D{\\\\\\\"name\\\\\\\":\\\\\\\"r5\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"1:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n4:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n5:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\ne:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n2:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"column\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"},\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0},\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:D{\\\\\\\"name\\\\\\\":\\\\\\\"DefaultLayout\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n7:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n8:{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"colu\\\"])</script><script>self.__next_f.push([1,\\\"mn\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"}\\\\n9:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"}\\\\na:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"}\\\\nb:{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0}\\\\n7:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$8\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":\\\\\\\"$9\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$a\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$b\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:[\\\\\\\"$\\\\\\\",\\\\\\\"html\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"body\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$7\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":[]}]}]}]\\\\nc:D{\\\\\\\"name\\\\\\\":\\\\\\\"r6\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nc:[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",null,{\\\\\\\"name\\\\\\\":\\\\\\\"robots\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"noindex\\\\\\\"}]\\\\nd:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nf:[]\\\\n0:[\\\\\\\"$\\\\\\\",\\\\\\\"$L1\\\\\\\",null,{\\\\\\\"buildId\\\\\\\":\\\\\\\"development\\\\\\\",\\\\\\\"assetPrefix\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"urlParts\\\\\\\":[\\\\\\\"\\\\\\\",\\\\\\\"api\\\\\\\",\\\\\\\"public\\\\\\\",\\\\\\\"categories\\\\\\\"],\\\\\\\"initialTree\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{}]}]},\\\\\\\"$undefined\\\\\\\",\\\\\\\"$undefined\\\\\\\",true],\\\\\\\"initialSeedData\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{},[[\\\\\\\"$L2\\\\\\\",\\\\\\\"$3\\\\\\\",null],null],null]},[null,[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\",\\\\\\\"/_not-found\\\\\\\",\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\"}]],null]},[[\\\"])</script><script>self.__next_f.push([1,\\\"null,\\\\\\\"$6\\\\\\\"],null],null],\\\\\\\"couldBeIntercepted\\\\\\\":false,\\\\\\\"initialHead\\\\\\\":[\\\\\\\"$c\\\\\\\",\\\\\\\"$Ld\\\\\\\"],\\\\\\\"globalErrorComponent\\\\\\\":\\\\\\\"$e\\\\\\\",\\\\\\\"missingSlots\\\\\\\":\\\\\\\"$Wf\\\\\\\"}]\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"d:[[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"0\\\\\\\",{\\\\\\\"name\\\\\\\":\\\\\\\"viewport\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"width=device-width, initial-scale=1\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"1\\\\\\\",{\\\\\\\"charSet\\\\\\\":\\\\\\\"utf-8\\\\\\\"}]]\\\\n2:null\\\\n\\\"])</script></body></html>\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30",
+                        "stack": "Error: page.evaluate: Error: API Error GET /api/public/categories: 404 Not Found - \"<!DOCTYPE html><html><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/webpack.js?v=1774431978060\\\"/><script src=\\\"/_next/static/chunks/main-app.js?v=1774431978060\\\" async=\\\"\\\"></script><script src=\\\"/_next/static/chunks/app-pages-internals.js\\\" async=\\\"\\\"></script><meta name=\\\"robots\\\" content=\\\"noindex\\\"/><title>404: This page could not be found.</title><script src=\\\"/_next/static/chunks/polyfills.js\\\" noModule=\\\"\\\"></script></head><body><div style=\\\"font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center\\\"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class=\\\"next-error-h1\\\" style=\\\"display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px\\\">404</h1><div style=\\\"display:inline-block\\\"><h2 style=\\\"font-size:14px;font-weight:400;line-height:49px;margin:0\\\">This page could not be found.</h2></div></div></div><script src=\\\"/_next/static/chunks/webpack.js?v=1774431978060\\\" async=\\\"\\\"></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,\\\"0:D{\\\\\\\"name\\\\\\\":\\\\\\\"r5\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"1:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n4:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n5:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\ne:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n2:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"column\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"},\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0},\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:D{\\\\\\\"name\\\\\\\":\\\\\\\"DefaultLayout\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n7:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n8:{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"colu\\\"])</script><script>self.__next_f.push([1,\\\"mn\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"}\\\\n9:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"}\\\\na:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"}\\\\nb:{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0}\\\\n7:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$8\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":\\\\\\\"$9\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$a\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$b\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:[\\\\\\\"$\\\\\\\",\\\\\\\"html\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"body\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$7\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":[]}]}]}]\\\\nc:D{\\\\\\\"name\\\\\\\":\\\\\\\"r6\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nc:[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",null,{\\\\\\\"name\\\\\\\":\\\\\\\"robots\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"noindex\\\\\\\"}]\\\\nd:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nf:[]\\\\n0:[\\\\\\\"$\\\\\\\",\\\\\\\"$L1\\\\\\\",null,{\\\\\\\"buildId\\\\\\\":\\\\\\\"development\\\\\\\",\\\\\\\"assetPrefix\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"urlParts\\\\\\\":[\\\\\\\"\\\\\\\",\\\\\\\"api\\\\\\\",\\\\\\\"public\\\\\\\",\\\\\\\"categories\\\\\\\"],\\\\\\\"initialTree\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{}]}]},\\\\\\\"$undefined\\\\\\\",\\\\\\\"$undefined\\\\\\\",true],\\\\\\\"initialSeedData\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{},[[\\\\\\\"$L2\\\\\\\",\\\\\\\"$3\\\\\\\",null],null],null]},[null,[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\",\\\\\\\"/_not-found\\\\\\\",\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\"}]],null]},[[\\\"])</script><script>self.__next_f.push([1,\\\"null,\\\\\\\"$6\\\\\\\"],null],null],\\\\\\\"couldBeIntercepted\\\\\\\":false,\\\\\\\"initialHead\\\\\\\":[\\\\\\\"$c\\\\\\\",\\\\\\\"$Ld\\\\\\\"],\\\\\\\"globalErrorComponent\\\\\\\":\\\\\\\"$e\\\\\\\",\\\\\\\"missingSlots\\\\\\\":\\\\\\\"$Wf\\\\\\\"}]\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"d:[[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"0\\\\\\\",{\\\\\\\"name\\\\\\\":\\\\\\\"viewport\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"width=device-width, initial-scale=1\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"1\\\\\\\",{\\\\\\\"charSet\\\\\\\":\\\\\\\"utf-8\\\\\\\"}]]\\\\n2:null\\\\n\\\"])</script></body></html>\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:24:37",
+                        "location": {
+                          "file": "eval at evaluate (:290:30), <anonymous>",
+                          "column": 13,
+                          "line": 17
+                        }
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "eval at evaluate (:290:30), <anonymous>",
+                            "column": 13,
+                            "line": 17
+                          },
+                          "message": "Error: page.evaluate: Error: API Error GET /api/public/categories: 404 Not Found - \"<!DOCTYPE html><html><head><meta charSet=\\\"utf-8\\\"/><meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\"/><link rel=\\\"preload\\\" as=\\\"script\\\" fetchPriority=\\\"low\\\" href=\\\"/_next/static/chunks/webpack.js?v=1774431978060\\\"/><script src=\\\"/_next/static/chunks/main-app.js?v=1774431978060\\\" async=\\\"\\\"></script><script src=\\\"/_next/static/chunks/app-pages-internals.js\\\" async=\\\"\\\"></script><meta name=\\\"robots\\\" content=\\\"noindex\\\"/><title>404: This page could not be found.</title><script src=\\\"/_next/static/chunks/polyfills.js\\\" noModule=\\\"\\\"></script></head><body><div style=\\\"font-family:system-ui,&quot;Segoe UI&quot;,Roboto,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;;height:100vh;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center\\\"><div><style>body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}</style><h1 class=\\\"next-error-h1\\\" style=\\\"display:inline-block;margin:0 20px 0 0;padding:0 23px 0 0;font-size:24px;font-weight:500;vertical-align:top;line-height:49px\\\">404</h1><div style=\\\"display:inline-block\\\"><h2 style=\\\"font-size:14px;font-weight:400;line-height:49px;margin:0\\\">This page could not be found.</h2></div></div></div><script src=\\\"/_next/static/chunks/webpack.js?v=1774431978060\\\" async=\\\"\\\"></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,\\\"0:D{\\\\\\\"name\\\\\\\":\\\\\\\"r5\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"1:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n4:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n5:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\ne:I[\\\\\\\"(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js\\\\\\\",[\\\\\\\"app-pages-internals\\\\\\\",\\\\\\\"static/chunks/app-pages-internals.js\\\\\\\"],\\\\\\\"\\\\\\\"]\\\\n2:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n3:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"column\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"},\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"},\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0},\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:D{\\\\\\\"name\\\\\\\":\\\\\\\"DefaultLayout\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n7:D{\\\\\\\"name\\\\\\\":\\\\\\\"NotFound\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\n8:{\\\\\\\"fontFamily\\\\\\\":\\\\\\\"system-ui,\\\\\\\\\\\\\\\"Segoe UI\\\\\\\\\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\\\\\\\\\"Apple Color Emoji\\\\\\\\\\\\\\\",\\\\\\\\\\\\\\\"Segoe UI Emoji\\\\\\\\\\\\\\\"\\\\\\\",\\\\\\\"height\\\\\\\":\\\\\\\"100vh\\\\\\\",\\\\\\\"textAlign\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"display\\\\\\\":\\\\\\\"flex\\\\\\\",\\\\\\\"flexDirection\\\\\\\":\\\\\\\"colu\\\"])</script><script>self.__next_f.push([1,\\\"mn\\\\\\\",\\\\\\\"alignItems\\\\\\\":\\\\\\\"center\\\\\\\",\\\\\\\"justifyContent\\\\\\\":\\\\\\\"center\\\\\\\"}\\\\n9:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\",\\\\\\\"margin\\\\\\\":\\\\\\\"0 20px 0 0\\\\\\\",\\\\\\\"padding\\\\\\\":\\\\\\\"0 23px 0 0\\\\\\\",\\\\\\\"fontSize\\\\\\\":24,\\\\\\\"fontWeight\\\\\\\":500,\\\\\\\"verticalAlign\\\\\\\":\\\\\\\"top\\\\\\\",\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\"}\\\\na:{\\\\\\\"display\\\\\\\":\\\\\\\"inline-block\\\\\\\"}\\\\nb:{\\\\\\\"fontSize\\\\\\\":14,\\\\\\\"fontWeight\\\\\\\":400,\\\\\\\"lineHeight\\\\\\\":\\\\\\\"49px\\\\\\\",\\\\\\\"margin\\\\\\\":0}\\\\n7:[[\\\\\\\"$\\\\\\\",\\\\\\\"title\\\\\\\",null,{\\\\\\\"children\\\\\\\":\\\\\\\"404: This page could not be found.\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$8\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"children\\\\\\\":[[\\\\\\\"$\\\\\\\",\\\\\\\"style\\\\\\\",null,{\\\\\\\"dangerouslySetInnerHTML\\\\\\\":{\\\\\\\"__html\\\\\\\":\\\\\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\\\\\"}}],[\\\\\\\"$\\\\\\\",\\\\\\\"h1\\\\\\\",null,{\\\\\\\"className\\\\\\\":\\\\\\\"next-error-h1\\\\\\\",\\\\\\\"style\\\\\\\":\\\\\\\"$9\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"404\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"div\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$a\\\\\\\",\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"h2\\\\\\\",null,{\\\\\\\"style\\\\\\\":\\\\\\\"$b\\\\\\\",\\\\\\\"children\\\\\\\":\\\\\\\"This page could not be found.\\\\\\\"}]}]]}]}]]\\\\n6:[\\\\\\\"$\\\\\\\",\\\\\\\"html\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"body\\\\\\\",null,{\\\\\\\"children\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$7\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":[]}]}]}]\\\\nc:D{\\\\\\\"name\\\\\\\":\\\\\\\"r6\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nc:[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",null,{\\\\\\\"name\\\\\\\":\\\\\\\"robots\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"noindex\\\\\\\"}]\\\\nd:D{\\\\\\\"name\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"env\\\\\\\":\\\\\\\"Server\\\\\\\"}\\\\nf:[]\\\\n0:[\\\\\\\"$\\\\\\\",\\\\\\\"$L1\\\\\\\",null,{\\\\\\\"buildId\\\\\\\":\\\\\\\"development\\\\\\\",\\\\\\\"assetPrefix\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"urlParts\\\\\\\":[\\\\\\\"\\\\\\\",\\\\\\\"api\\\\\\\",\\\\\\\"public\\\\\\\",\\\\\\\"categories\\\\\\\"],\\\\\\\"initialTree\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{}]}]},\\\\\\\"$undefined\\\\\\\",\\\\\\\"$undefined\\\\\\\",true],\\\\\\\"initialSeedData\\\\\\\":[\\\\\\\"\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"/_not-found\\\\\\\",{\\\\\\\"children\\\\\\\":[\\\\\\\"__PAGE__\\\\\\\",{},[[\\\\\\\"$L2\\\\\\\",\\\\\\\"$3\\\\\\\",null],null],null]},[null,[\\\\\\\"$\\\\\\\",\\\\\\\"$L4\\\\\\\",null,{\\\\\\\"parallelRouterKey\\\\\\\":\\\\\\\"children\\\\\\\",\\\\\\\"segmentPath\\\\\\\":[\\\\\\\"children\\\\\\\",\\\\\\\"/_not-found\\\\\\\",\\\\\\\"children\\\\\\\"],\\\\\\\"error\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"errorScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"template\\\\\\\":[\\\\\\\"$\\\\\\\",\\\\\\\"$L5\\\\\\\",null,{}],\\\\\\\"templateStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"templateScripts\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFound\\\\\\\":\\\\\\\"$undefined\\\\\\\",\\\\\\\"notFoundStyles\\\\\\\":\\\\\\\"$undefined\\\\\\\"}]],null]},[[\\\"])</script><script>self.__next_f.push([1,\\\"null,\\\\\\\"$6\\\\\\\"],null],null],\\\\\\\"couldBeIntercepted\\\\\\\":false,\\\\\\\"initialHead\\\\\\\":[\\\\\\\"$c\\\\\\\",\\\\\\\"$Ld\\\\\\\"],\\\\\\\"globalErrorComponent\\\\\\\":\\\\\\\"$e\\\\\\\",\\\\\\\"missingSlots\\\\\\\":\\\\\\\"$Wf\\\\\\\"}]\\\\n\\\"])</script><script>self.__next_f.push([1,\\\"d:[[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"0\\\\\\\",{\\\\\\\"name\\\\\\\":\\\\\\\"viewport\\\\\\\",\\\\\\\"content\\\\\\\":\\\\\\\"width=device-width, initial-scale=1\\\\\\\"}],[\\\\\\\"$\\\\\\\",\\\\\\\"meta\\\\\\\",\\\\\\\"1\\\\\\\",{\\\\\\\"charSet\\\\\\\":\\\\\\\"utf-8\\\\\\\"}]]\\\\n2:null\\\\n\\\"])</script></body></html>\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:24:37"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Standard User ID: 1381a890-7f48-4ece-8c0a-06a7898f8a57\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-03-25T09:46:12.996Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-dc283-on-State-and-Admin-Approval-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-dc283-on-State-and-Admin-Approval-chromium-retry1\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-dc283-on-State-and-Admin-Approval-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-dc283-on-State-and-Admin-Approval-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "eval at evaluate (:290:30), <anonymous>",
+                        "column": 13,
+                        "line": 17
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "212508cdd54b54472c9c-b959a9bbcabbbbccf828",
+              "file": "07-lifecycle.spec.ts",
+              "line": 14,
+              "column": 7
+            },
+            {
+              "title": "Block B: Offer Submission and Acceptance",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8722,
+                      "error": {
+                        "message": "Error: page.evaluate: Error: API Error POST /api/requests//offers: 405 Method Not Allowed - \"\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30",
+                        "stack": "Error: page.evaluate: Error: API Error POST /api/requests//offers: 405 Method Not Allowed - \"\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at submitOffer (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:61:16)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:84:39",
+                        "location": {
+                          "file": "eval at evaluate (:290:30), <anonymous>",
+                          "column": 13,
+                          "line": 17
+                        }
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "eval at evaluate (:290:30), <anonymous>",
+                            "column": 13,
+                            "line": 17
+                          },
+                          "message": "Error: page.evaluate: Error: API Error POST /api/requests//offers: 405 Method Not Allowed - \"\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at submitOffer (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:61:16)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:84:39"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Company User ID: 1b46b902-1c58-446c-b602-8488be3569ae\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-25T09:46:21.372Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-048fa-r-Submission-and-Acceptance-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-048fa-r-Submission-and-Acceptance-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "eval at evaluate (:290:30), <anonymous>",
+                        "column": 13,
+                        "line": 17
+                      }
+                    },
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6723,
+                      "error": {
+                        "message": "Error: page.evaluate: Error: API Error POST /api/requests//offers: 405 Method Not Allowed - \"\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30",
+                        "stack": "Error: page.evaluate: Error: API Error POST /api/requests//offers: 405 Method Not Allowed - \"\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at submitOffer (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:61:16)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:84:39",
+                        "location": {
+                          "file": "eval at evaluate (:290:30), <anonymous>",
+                          "column": 13,
+                          "line": 17
+                        }
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "eval at evaluate (:290:30), <anonymous>",
+                            "column": 13,
+                            "line": 17
+                          },
+                          "message": "Error: page.evaluate: Error: API Error POST /api/requests//offers: 405 Method Not Allowed - \"\"\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at eval (eval at evaluate (:290:30), <anonymous>:17:13)\n    at async <anonymous>:316:30\n    at apiRequest (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:10:21)\n    at submitOffer (C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\fixtures\\api.ts:61:16)\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:84:39"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Company User ID: 1b46b902-1c58-446c-b602-8488be3569ae\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-03-25T09:46:32.276Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-048fa-r-Submission-and-Acceptance-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-048fa-r-Submission-and-Acceptance-chromium-retry1\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-048fa-r-Submission-and-Acceptance-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-048fa-r-Submission-and-Acceptance-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "eval at evaluate (:290:30), <anonymous>",
+                        "column": 13,
+                        "line": 17
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "212508cdd54b54472c9c-4c205cc419154da4af5d",
+              "file": "07-lifecycle.spec.ts",
+              "line": 75,
+              "column": 7
+            },
+            {
+              "title": "Block C: Communication Gating and Dual-Sided Completion",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3306,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:117:27",
+                        "location": {
+                          "file": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts",
+                          "column": 27,
+                          "line": 117
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 115 |\u001b[39m     \u001b[36mawait\u001b[39m loginViaUI(page\u001b[33m,\u001b[39m \u001b[32m'user'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m     \u001b[36mconst\u001b[39m msgResUser \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m sendMessage(page\u001b[33m,\u001b[39m companyUserId\u001b[33m,\u001b[39m \u001b[32m'Hello Company!'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 117 |\u001b[39m     expect(msgResUser\u001b[33m.\u001b[39mok)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 118 |\u001b[39m\n \u001b[90m 119 |\u001b[39m     \u001b[90m// 2. User marks complete\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mconst\u001b[39m compUser \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m markComplete(page\u001b[33m,\u001b[39m requestId)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts",
+                            "column": 27,
+                            "line": 117
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  115 |     await loginViaUI(page, 'user');\n  116 |     const msgResUser = await sendMessage(page, companyUserId, 'Hello Company!');\n> 117 |     expect(msgResUser.ok).toBeTruthy();\n      |                           ^\n  118 |\n  119 |     // 2. User marks complete\n  120 |     const compUser = await markComplete(page, requestId);\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:117:27"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-25T09:46:41.860Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-68ac9-g-and-Dual-Sided-Completion-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-68ac9-g-and-Dual-Sided-Completion-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts",
+                        "column": 27,
+                        "line": 117
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4782,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:117:27",
+                        "location": {
+                          "file": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts",
+                          "column": 27,
+                          "line": 117
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 115 |\u001b[39m     \u001b[36mawait\u001b[39m loginViaUI(page\u001b[33m,\u001b[39m \u001b[32m'user'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 116 |\u001b[39m     \u001b[36mconst\u001b[39m msgResUser \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m sendMessage(page\u001b[33m,\u001b[39m companyUserId\u001b[33m,\u001b[39m \u001b[32m'Hello Company!'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 117 |\u001b[39m     expect(msgResUser\u001b[33m.\u001b[39mok)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 118 |\u001b[39m\n \u001b[90m 119 |\u001b[39m     \u001b[90m// 2. User marks complete\u001b[39m\n \u001b[90m 120 |\u001b[39m     \u001b[36mconst\u001b[39m compUser \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m markComplete(page\u001b[33m,\u001b[39m requestId)\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts",
+                            "column": 27,
+                            "line": 117
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  115 |     await loginViaUI(page, 'user');\n  116 |     const msgResUser = await sendMessage(page, companyUserId, 'Hello Company!');\n> 117 |     expect(msgResUser.ok).toBeTruthy();\n      |                           ^\n  118 |\n  119 |     // 2. User marks complete\n  120 |     const compUser = await markComplete(page, requestId);\n    at C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts:117:27"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-03-25T09:46:47.639Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-68ac9-g-and-Dual-Sided-Completion-chromium-retry1\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-68ac9-g-and-Dual-Sided-Completion-chromium-retry1\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-68ac9-g-and-Dual-Sided-Completion-chromium-retry1\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\test-results\\07-lifecycle-Service-Lifec-68ac9-g-and-Dual-Sided-Completion-chromium-retry1\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\t3sfo\\Projects\\secure-marketplace\\tests\\e2e\\07-lifecycle.spec.ts",
+                        "column": 27,
+                        "line": 117
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "212508cdd54b54472c9c-d0402d6fd2d827f9c919",
+              "file": "07-lifecycle.spec.ts",
+              "line": 113,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-25T09:45:42.215Z",
+    "duration": 70905.76999999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,184 @@
+
+Running 3 tests using 1 worker
+
+node.exe : [2m[WebServer] [22m[Redis] REDIS_URL not set — using 
+in-memory rate limiting
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo          : NotSpecified: ([2m[WebServer]...y ra 
+   te limiting:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[2m[WebServer] [22m(node:1160) [DEP0169] DeprecationWarning: 
+`url.parse()` behavior is not standardized and prone to errors that 
+have security implications. Use the WHATWG URL API instead. CVEs 
+are not issued for `url.parse()` vulnerabilities.
+[2m[WebServer] [22m(Use `node --trace-deprecation ...` to show 
+where the warning was created)
+  ✘  1 [chromium] › tests\e2e\07-lifecycle.spec.ts:20:7 › Service Lifecycle E2E (API Driven) › Block A: Request Creation, State, and Admin Approval (2.9s)
+[2m[WebServer] [22m[Redis] REDIS_URL not set — using in-memory 
+rate limiting
+  ✘  2 [chromium] › tests\e2e\07-lifecycle.spec.ts:20:7 › Service Lifecycle E2E (API Driven) › Block A: Request Creation, State, and Admin Approval (retry #1) (2.6s)
+[2m[WebServer] [22m[Redis] REDIS_URL not set — using in-memory 
+rate limiting
+  ✘  3 [chromium] › tests\e2e\07-lifecycle.spec.ts:82:7 › Service Lifecycle E2E (API Driven) › Block B: Offer Submission and Acceptance (709ms)
+[2m[WebServer] [22m[Redis] REDIS_URL not set — using in-memory 
+rate limiting
+  ✘  4 [chromium] › tests\e2e\07-lifecycle.spec.ts:82:7 › Service Lifecycle E2E (API Driven) › Block B: Offer Submission and Acceptance (retry #1) (948ms)
+[2m[WebServer] [22m[Redis] REDIS_URL not set — using in-memory 
+rate limiting
+  ✘  5 [chromium] › tests\e2e\07-lifecycle.spec.ts:123:7 › Service Lifecycle E2E (API Driven) › Block C: Communication Gating and Dual-Sided Completion (1.4s)
+[2m[WebServer] [22m[Redis] REDIS_URL not set — using in-memory 
+rate limiting
+  ✘  6 [chromium] › tests\e2e\07-lifecycle.spec.ts:123:7 › Service Lifecycle E2E (API Driven) › Block C: Communication Gating and Dual-Sided Completion (retry #1) (929ms)
+
+
+  1) [chromium] › tests\e2e\07-lifecycle.spec.ts:20:7 › Service Lifecycle E2E (API Driven) › Block A: Request Creation, State, and Admin Approval 
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      25 |     const meRes = await page.request.get(`${BASE}/api/auth/session`);
+      26 |     const session = await meRes.json();
+    > 27 |     standardUserId = session.user.id;
+         |                                   ^
+      28 |
+      29 |     // Fetch required dropdown data to create a valid request
+      30 |     const catsRes = await page.request.get(`${BASE}/api/public/categories`);
+        at C:\Users\t3sfo\Projects\secure-marketplace\tests\e2e\07-lifecycle.spec.ts:27:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-e0106-on-State-and-Admin-Approval-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      25 |     const meRes = await page.request.get(`${BASE}/api/auth/session`);
+      26 |     const session = await meRes.json();
+    > 27 |     standardUserId = session.user.id;
+         |                                   ^
+      28 |
+      29 |     // Fetch required dropdown data to create a valid request
+      30 |     const catsRes = await page.request.get(`${BASE}/api/public/categories`);
+        at C:\Users\t3sfo\Projects\secure-marketplace\tests\e2e\07-lifecycle.spec.ts:27:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-e0106-on-State-and-Admin-Approval-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-e0106-on-State-and-Admin-Approval-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-e0106-on-State-and-Admin-Approval-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\07-lifecycle-Service-Lifec-e0106-on-State-and-Admin-Approval-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests\e2e\07-lifecycle.spec.ts:82:7 › Service Lifecycle E2E (API Driven) › Block B: Offer Submission and Acceptance 
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      86 |     const meRes = await page.request.get(`${BASE}/api/auth/session`);
+      87 |     const session = await meRes.json();
+    > 88 |     companyUserId = session.user.id;
+         |                                  ^
+      89 |
+      90 |     // 2. Submit Offer
+      91 |     const offerRes = await submitOffer(page, requestId);
+        at C:\Users\t3sfo\Projects\secure-marketplace\tests\e2e\07-lifecycle.spec.ts:88:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-9a23b-r-Submission-and-Acceptance-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TypeError: Cannot read properties of undefined (reading 'id')
+
+      86 |     const meRes = await page.request.get(`${BASE}/api/auth/session`);
+      87 |     const session = await meRes.json();
+    > 88 |     companyUserId = session.user.id;
+         |                                  ^
+      89 |
+      90 |     // 2. Submit Offer
+      91 |     const offerRes = await submitOffer(page, requestId);
+        at C:\Users\t3sfo\Projects\secure-marketplace\tests\e2e\07-lifecycle.spec.ts:88:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-9a23b-r-Submission-and-Acceptance-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-9a23b-r-Submission-and-Acceptance-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-9a23b-r-Submission-and-Acceptance-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\07-lifecycle-Service-Lifec-9a23b-r-Submission-and-Acceptance-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests\e2e\07-lifecycle.spec.ts:123:7 › Service Lifecycle E2E (API Driven) › Block C: Communication Gating and Dual-Sided Completion 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      129 |     await loginViaApi(page, 'user');
+      130 |     const msgResUser = await sendMessage(page, companyUserId, 'Hello Company!');
+    > 131 |     expect(msgResUser.ok).toBeTruthy();
+          |                           ^
+      132 |
+      133 |     // 2. User marks complete
+      134 |     const compUser = await markComplete(page, requestId);
+        at C:\Users\t3sfo\Projects\secure-marketplace\tests\e2e\07-lifecycle.spec.ts:131:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-07f4c-g-and-Dual-Sided-Completion-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      129 |     await loginViaApi(page, 'user');
+      130 |     const msgResUser = await sendMessage(page, companyUserId, 'Hello Company!');
+    > 131 |     expect(msgResUser.ok).toBeTruthy();
+          |                           ^
+      132 |
+      133 |     // 2. User marks complete
+      134 |     const compUser = await markComplete(page, requestId);
+        at C:\Users\t3sfo\Projects\secure-marketplace\tests\e2e\07-lifecycle.spec.ts:131:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-07f4c-g-and-Dual-Sided-Completion-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-07f4c-g-and-Dual-Sided-Completion-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\07-lifecycle-Service-Lifec-07f4c-g-and-Dual-Sided-Completion-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\07-lifecycle-Service-Lifec-07f4c-g-and-Dual-Sided-Completion-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › tests\e2e\07-lifecycle.spec.ts:20:7 › Service Lifecycle E2E (API Driven) › Block A: Request Creation, State, and Admin Approval 
+    [chromium] › tests\e2e\07-lifecycle.spec.ts:82:7 › Service Lifecycle E2E (API Driven) › Block B: Offer Submission and Acceptance 
+    [chromium] › tests\e2e\07-lifecycle.spec.ts:123:7 › Service Lifecycle E2E (API Driven) › Block C: Communication Gating and Dual-Sided Completion 
