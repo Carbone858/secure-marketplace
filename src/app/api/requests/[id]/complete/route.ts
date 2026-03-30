@@ -75,23 +75,22 @@ export async function PUT(
                     where: { id: serviceRequest.id },
                     data: { status: 'UNDER_REVIEW' },
                 }),
-            ]);
-
-            // Notify User
-            await prisma.notification.create({
-                data: {
-                    userId: serviceRequest.userId,
-                    type: 'PROJECT_DELIVERED',
-                    title: 'Project Delivered - Review Required',
-                    message: `The company has marked the project "${project.title}" as finished. You have 10 days to review and confirm. After that, it will be automatically completed.`,
-                    data: { 
-                        projectId: project.id, 
-                        requestId: id, 
-                        action: 'CONFIRM_COMPLETION',
-                        deadline: reviewDeadline
+                // Notify User (Moved inside transaction)
+                prisma.notification.create({
+                    data: {
+                        userId: serviceRequest.userId,
+                        type: 'PROJECT_DELIVERED',
+                        title: 'Project Delivered - Review Required',
+                        message: `The company has marked the project "${project.title}" as finished. You have 10 days to review and confirm. After that, it will be automatically completed.`,
+                        data: { 
+                            projectId: project.id, 
+                            requestId: id, 
+                            action: 'CONFIRM_COMPLETION',
+                            deadline: reviewDeadline
+                        },
                     },
-                },
-            });
+                }),
+            ]);
 
             return NextResponse.json({
                 success: true,

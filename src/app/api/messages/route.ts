@@ -35,12 +35,14 @@ export async function GET(request: NextRequest) {
             select: {
               name: true,
               avatar: true,
+              image: true,
             },
           },
           recipient: {
             select: {
               name: true,
               avatar: true,
+              image: true,
             },
           },
         },
@@ -61,7 +63,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all conversations
-    const conversations = await prisma.message.findMany({
+    const messages = await prisma.message.findMany({
       where: {
         OR: [{ senderId: user.id }, { recipientId: user.id }],
       },
@@ -71,6 +73,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             avatar: true,
+            image: true,
           },
         },
         recipient: {
@@ -78,6 +81,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             avatar: true,
+            image: true,
           },
         },
       },
@@ -86,13 +90,19 @@ export async function GET(request: NextRequest) {
 
     // Group by conversation partner
     const conversationMap = new Map();
-    conversations.forEach((msg) => {
+    messages.forEach((msg) => {
       const partnerId = msg.senderId === user.id ? msg.recipientId : msg.senderId;
       const partner = msg.senderId === user.id ? msg.recipient : msg.sender;
 
+      // Ensure partner has an 'image' field for the frontend
+      const partnerData = {
+        ...partner,
+        image: partner.image || partner.avatar
+      };
+
       if (!conversationMap.has(partnerId)) {
         conversationMap.set(partnerId, {
-          partner,
+          partner: partnerData,
           lastMessage: msg,
           unreadCount: msg.recipientId === user.id && !msg.isRead ? 1 : 0,
         });
@@ -106,11 +116,11 @@ export async function GET(request: NextRequest) {
     if (ensureUserId && !conversationMap.has(ensureUserId)) {
       const ensureUser = await prisma.user.findUnique({
         where: { id: ensureUserId },
-        select: { id: true, name: true, avatar: true },
+        select: { id: true, name: true, avatar: true, image: true },
       });
       if (ensureUser) {
         conversationMap.set(ensureUserId, {
-          partner: ensureUser,
+          partner: { ...ensureUser, image: ensureUser.image || ensureUser.avatar },
           lastMessage: { content: '', senderId: '', recipientId: '', createdAt: new Date() },
           unreadCount: 0,
         });
@@ -144,7 +154,6 @@ export async function POST(request: NextRequest) {
       where: { id: validatedData.recipientId },
     });
 
-
     if (!recipient) {
       return NextResponse.json(
         { error: 'Recipient not found' },
@@ -152,7 +161,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // STRICT ENFORCEMENT: Messaging globally locked unless part of an accepted pair (ACTIVE/COMPLETED project)
+    // STRICT ENFORCEMENT: Messaging globally locked unless part of an accepted pair (ACTIVE/DELIVERED/COMPLETED project)
     let validPair = false;
     let isReadOnly = false;
 
@@ -170,7 +179,10 @@ export async function POST(request: NextRequest) {
       });
 
       if (projects.length > 0) {
-        const hasActiveOrCompleted = projects.some(p => ['ACTIVE', 'COMPLETED', 'ON_HOLD'].includes(p.status));
+        // Allow messaging for ACTIVE, ON_HOLD, DELIVERED, and UNDER_REVIEW projects
+        const hasActiveOrCompleted = projects.some(p => 
+          ['ACTIVE', 'COMPLETED', 'ON_HOLD', 'DELIVERED', 'UNDER_REVIEW'].includes(p.status)
+        );
         if (hasActiveOrCompleted) {
           validPair = true;
           // If EVERYTHING is completed, it's read-only
@@ -209,12 +221,14 @@ export async function POST(request: NextRequest) {
           select: {
             name: true,
             avatar: true,
+            image: true,
           },
         },
         recipient: {
           select: {
             name: true,
             avatar: true,
+            image: true,
           },
         },
       },
@@ -246,4 +260,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

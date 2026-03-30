@@ -86,19 +86,18 @@ export async function POST(
                         rating: rating,
                         comment: review || '',
                     }
-                })
+                }),
+                // Notify Company
+                prisma.notification.create({
+                    data: {
+                        userId: project.company.userId,
+                        type: 'PROJECT_COMPLETED',
+                        title: 'Project Completed & Rated',
+                        message: `The client has approved your work for "${project.title}" and left a ${rating}-star review.`,
+                        data: { projectId: project.id, requestId: id },
+                    },
+                }),
             ]);
-
-            // Notify Company
-            await prisma.notification.create({
-                data: {
-                    userId: project.company.userId,
-                    type: 'PROJECT_COMPLETED',
-                    title: 'Project Completed & Rated',
-                    message: `The client has approved your work for "${project.title}" and left a ${rating}-star review.`,
-                    data: { projectId: project.id, requestId: id },
-                },
-            });
 
             return NextResponse.json({
                 success: true,
@@ -125,18 +124,17 @@ export async function POST(
                     where: { id: serviceRequest.id },
                     data: { status: 'IN_PROGRESS' },
                 }),
+                // Notify Company
+                prisma.notification.create({
+                    data: {
+                        userId: project.company.userId,
+                        type: 'PROJECT_CHANGES_REQUESTED',
+                        title: 'Changes Requested',
+                        message: `The client has reviewed your work and requested changes: "${feedback}"`,
+                        data: { projectId: project.id, requestId: id },
+                    },
+                }),
             ]);
-
-            // Notify Company
-            await prisma.notification.create({
-                data: {
-                    userId: project.company.userId,
-                    type: 'PROJECT_CHANGES_REQUESTED',
-                    title: 'Changes Requested',
-                    message: `The client has reviewed your work and requested changes: "${feedback}"`,
-                    metadata: { projectId: project.id, requestId: id },
-                },
-            });
 
             return NextResponse.json({
                 success: true,
