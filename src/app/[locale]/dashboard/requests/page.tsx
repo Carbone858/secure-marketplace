@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { toast } from 'sonner';
-import { Loader2, Plus, FileText, MessageSquare, Eye, Edit, Trash2 } from 'lucide-react';
+import { Loader2, Plus, FileText, MessageSquare, Eye, Edit, Trash2, DollarSign, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -136,31 +136,37 @@ export default function MyRequestsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{t('title')}</h1>
-        <Button onClick={() => router.push(`/${locale}/requests/new`)}>
+    <div className="container mx-auto px-4 py-6 md:py-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t('title')}</h1>
+        <Button onClick={() => router.push(`/${locale}/requests/new`)} className="w-full sm:w-auto shadow-sm">
           <Plus className="h-4 w-4 me-2" />
           {t('createNew')}
         </Button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="mb-6">
-          <TabsTrigger value="all">{t('tabs.all')}</TabsTrigger>
-          <TabsTrigger value="active">{t('tabs.active')}</TabsTrigger>
-          {requests.some(r => r.status === 'UNDER_REVIEW') && (
-            <TabsTrigger value="needsReview" className="text-orange-600 font-bold">
-              {td('status.UNDER_REVIEW')}
-              <Badge variant="secondary" className="ms-2 bg-orange-100 text-orange-700 border-orange-200">
-                {requests.filter(r => r.status === 'UNDER_REVIEW').length}
-              </Badge>
-            </TabsTrigger>
-          )}
-          <TabsTrigger value="hasOffers">{t('tabs.hasOffers')}</TabsTrigger>
-          <TabsTrigger value="completed">{t('tabs.completed')}</TabsTrigger>
-          <TabsTrigger value="cancelled">{t('tabs.cancelled')}</TabsTrigger>
-        </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <div className="relative">
+          <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex h-11 w-full sm:w-auto justify-start bg-muted/50 p-1 mb-2">
+              <TabsTrigger value="all" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.all')}</TabsTrigger>
+              <TabsTrigger value="active" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.active')}</TabsTrigger>
+              {requests.some(r => r.status === 'UNDER_REVIEW') && (
+                <TabsTrigger value="needsReview" className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-orange-600">
+                  <span className="flex items-center gap-1.5">
+                    {td('status.UNDER_REVIEW')}
+                    <Badge variant="secondary" className="h-4.5 min-w-[18px] justify-center px-1 bg-orange-100 text-orange-700 border-orange-200 text-[10px]">
+                      {requests.filter(r => r.status === 'UNDER_REVIEW').length}
+                    </Badge>
+                  </span>
+                </TabsTrigger>
+              )}
+              <TabsTrigger value="hasOffers" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.hasOffers')}</TabsTrigger>
+              <TabsTrigger value="completed" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.completed')}</TabsTrigger>
+              <TabsTrigger value="cancelled" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.cancelled')}</TabsTrigger>
+            </TabsList>
+          </div>
+        </div>
 
         <TabsContent value={activeTab}>
           {filteredRequests.length === 0 ? (
@@ -180,31 +186,34 @@ export default function MyRequestsPage() {
           ) : (
             <div className="space-y-4">
               {filteredRequests.map((request) => (
-                <Card key={request.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-center gap-2 mb-2">
-                          <Badge className={statusColors[request.status]}>
+                <Card key={request.id} className="hover:shadow-md transition-shadow overflow-hidden border-border/50">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                          <Badge className={`${statusColors[request.status]} px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider`}>
                             {td(`status.${request.status}`)}
                           </Badge>
-                          <Badge className={urgencyColors[request.urgency]}>
+                          <Badge className={`${urgencyColors[request.urgency]} px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-opacity-10 text-current border-current/20`}>
                             {td(`urgency.${request.urgency}`)}
                           </Badge>
                         </div>
-                        <h3 className="text-lg font-semibold mb-1">{request.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{request.title}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
                           {request.description}
                         </p>
+                        
                         {/* Rejection reason banner */}
                         {request.status === 'REJECTED' && request.rejectionReason && (
-                          <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-3 py-2 mb-3">
-                            <span className="text-destructive text-xs font-semibold whitespace-nowrap mt-0.5">Admin note:</span>
-                            <p className="text-xs text-destructive/90">{request.rejectionReason}</p>
+                          <div className="flex items-start gap-2 bg-destructive/5 border border-destructive/10 rounded-lg px-3 py-2.5 mb-4">
+                            <span className="text-destructive text-[10px] font-bold uppercase tracking-tight mt-0.5">Admin Note:</span>
+                            <p className="text-xs text-destructive/90 italic font-medium">{request.rejectionReason}</p>
                           </div>
                         )}
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mt-2">
-                          <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded-md">
+
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-2 bg-muted/30 px-2.5 py-1 rounded-full border border-border/50 font-semibold text-foreground/80">
+                            <DollarSign className="h-3.5 w-3.5" />
                             <span>
                               {(request.budgetMin || request.budgetMax) && (
                                 <>
@@ -214,13 +223,13 @@ export default function MyRequestsPage() {
                             </span>
                           </div>
 
-                          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${
+                          <div className={`flex items-center gap-2 px-3 py-1 rounded-full border transition-all ${
                             request._count.offers > 0 
-                              ? 'bg-primary/10 text-primary border-primary/30 font-bold shadow-sm' 
-                              : 'bg-muted/30 text-muted-foreground border-transparent'
+                              ? 'bg-primary/5 text-primary border-primary/20 font-bold' 
+                              : 'bg-muted/20 text-muted-foreground border-transparent'
                           }`}>
-                            <MessageSquare className={`h-4 w-4 ${request._count.offers > 0 ? 'fill-current' : ''}`} />
-                            <span>
+                            <MessageSquare className={`h-3.5 w-3.5 ${request._count.offers > 0 ? 'fill-current' : ''}`} />
+                            <span className="text-xs uppercase tracking-tight">
                               {request._count.offers > 0 
                                 ? `${request._count.offers} ${td('offers')}` 
                                 : td('noOffers')
@@ -228,52 +237,59 @@ export default function MyRequestsPage() {
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-1.5 opacity-70">
-                            {new Date(request.createdAt).toLocaleDateString(locale)}
+                          <div className="flex items-center gap-1.5 px-1 py-1 text-[11px] font-medium opacity-60">
+                            <Calendar className="h-3.5 w-3.5" />
+                            {new Date(request.createdAt).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' })}
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+
+                      <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full lg:w-auto shrink-0 pt-4 lg:pt-0 border-t lg:border-0 border-border/50">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => router.push(`/${locale}/requests/${request.id}`)}
+                          className="flex-1 lg:flex-none h-10 font-bold shadow-sm"
                         >
                           <Eye className="h-4 w-4 me-2" />
                           {t('view')}
                         </Button>
+                        
                         {request.status === 'UNDER_REVIEW' && (
                           <Button
                             variant="default"
                             size="sm"
-                            className="bg-orange-600 hover:bg-orange-700 text-white"
+                            className="flex-1 lg:flex-none h-10 bg-orange-600 hover:bg-orange-700 text-white font-bold shadow-md shadow-orange-100"
                             onClick={() => router.push(`/${locale}/requests/${request.id}`)}
                           >
                             {td('completion.actions.reviewConfirm')}
                           </Button>
                         )}
+                        
                         {['DRAFT', 'PENDING', 'ACTIVE', 'CANCELLED', 'REJECTED'].includes(request.status) && (
                           <Button
                             variant={request.status === 'REJECTED' ? 'default' : 'outline'}
                             size="sm"
+                            className={`flex-1 lg:flex-none h-10 font-bold ${request.status === 'REJECTED' ? 'bg-primary shadow-md' : 'shadow-sm'}`}
                             onClick={() => router.push(`/${locale}/requests/${request.id}/edit`)}
                           >
                             <Edit className="h-4 w-4 me-2" />
                             {request.status === 'REJECTED' ? 'Edit & Resubmit' : t('edit')}
                           </Button>
                         )}
+                        
                         {['DRAFT', 'PENDING'].includes(request.status) && (
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            className="text-destructive hover:bg-destructive/10"
+                            className="h-10 px-3 text-destructive hover:bg-destructive/10 lg:flex-none"
                             onClick={() => {
                               setRequestToDelete(request.id);
                               setDeleteDialogOpen(true);
                             }}
                           >
-                            <Trash2 className="h-4 w-4 me-2" />
-                            {t('delete')}
+                            <Trash2 className="h-4 w-4" />
+                            <span className="sm:hidden ms-2 font-bold">{t('delete')}</span>
                           </Button>
                         )}
                       </div>
