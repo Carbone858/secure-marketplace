@@ -222,14 +222,6 @@ export default function MessagesPage() {
         >
           <div className="p-3 border-b shrink-0 flex items-center justify-between">
             <h1 className="font-bold text-base">{t('title')}</h1>
-            <Button variant="ghost" size="sm" asChild className="h-8 gap-1.5 px-2 hover:bg-primary/5 hover:text-primary">
-              <Link href={user?.role === 'COMPANY' ? `/${locale}/company/dashboard` : `/${locale}/dashboard`}>
-                <LayoutDashboard className="h-3.5 w-3.5" />
-                <span className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline">
-                  {locale === 'ar' ? 'الرئيسية' : 'Dashboard'}
-                </span>
-              </Link>
-            </Button>
           </div>
           
           <div className="p-3 border-b shrink-0">
@@ -239,7 +231,7 @@ export default function MessagesPage() {
                 placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="ps-10 h-9 bg-background focus-visible:ring-1"
+                className="ps-10 h-9 bg-background focus-visible:ring-1 border-border/50"
               />
             </div>
           </div>
@@ -250,7 +242,7 @@ export default function MessagesPage() {
                 <p className="text-sm">{t('noConversations')}</p>
               </div>
             ) : (
-              <div className="divide-y divide-border/50">
+              <div className="divide-y divide-border/30">
                 {filteredConversations.map((conv) => (
                   <button
                     key={conv.partner.id}
@@ -258,7 +250,7 @@ export default function MessagesPage() {
                         setSelectedConversation(conv.partner.id);
                         fetchMessages(conv.partner.id, true);
                     }}
-                    className={`w-full p-4 flex items-start gap-3 transition-all hover:bg-muted/50 ${selectedConversation === conv.partner.id ? 'bg-muted/80 shadow-inner' : ''
+                    className={`w-full p-4 flex items-start gap-3 transition-all hover:bg-muted/50 ${selectedConversation === conv.partner.id ? 'bg-muted shadow-inner' : ''
                       }`}
                   >
                     <Avatar className="h-11 w-11 shrink-0 border-2 border-background shadow-sm">

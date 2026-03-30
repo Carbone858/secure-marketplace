@@ -210,7 +210,6 @@
 
   /* Messaging Page Overrides to ensure one-screen experience */
   body:has(.messages-page-active) footer,
-  body:has(.messages-page-active) .dashboard-layout-header,
   body:has(.messages-page-active) .dashboard-breadcrumbs-container {
     display: none !important;
   }
@@ -220,7 +219,7 @@
     padding-bottom: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
-    height: calc(100dvh - 64px); /* Subtract only main Navbar height */
+    height: calc(100dvh - 128px); /* Navbar (64px) + Dashboard Header (64px) */
     overflow: hidden;
   }
 
