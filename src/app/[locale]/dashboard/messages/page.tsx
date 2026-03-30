@@ -62,7 +62,9 @@ export default function MessagesPage() {
   const t = useTranslations('dashboard_pages.messages');
   const tStatus = useTranslations('company_dashboard.status');
   const { user, isLoading: authLoading } = useAuth();
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastMessageIdRef = useRef<string | null>(null);
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -99,15 +101,20 @@ export default function MessagesPage() {
     if (selectedConversation) {
       fetchMessages(selectedConversation);
       const interval = setInterval(() => {
-        fetchMessages(selectedConversation);
+        fetchMessages(selectedConversation, false); // Poll without forcing scroll unless new
         fetchConversations();
-      }, 5000); // Poll every 5s for real-time feel
+      }, 5000); 
       return () => clearInterval(interval);
     }
   }, [selectedConversation]);
 
   useEffect(() => {
-    scrollToBottom();
+    // Only scroll to bottom if the last message has changed
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg && lastMsg.id !== lastMessageIdRef.current) {
+        scrollToBottom();
+        lastMessageIdRef.current = lastMsg.id;
+    }
   }, [messages]);
 
   const fetchConversations = async () => {
@@ -120,7 +127,6 @@ export default function MessagesPage() {
       const data = await response.json();
       setConversations(data.conversations);
       
-      // Update selected project context if we have a selection
       if (selectedConversation) {
         const currentConv = data.conversations.find((c: Conversation) => c.partner.id === selectedConversation);
         if (currentConv?.projectContext) {
@@ -128,23 +134,29 @@ export default function MessagesPage() {
         }
       }
     } catch (err) {
-      toast.error(t('toasts.loadFailed'));
+      console.error('Fetch conversations error:', err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fetchMessages = async (partnerId: string) => {
+  const fetchMessages = async (partnerId: string, forceScroll = true) => {
     try {
       const response = await fetch(`/api/messages?with=${partnerId}`);
       if (!response.ok) throw new Error('Failed to fetch messages');
       const data = await response.json();
+      
       setMessages(data.messages);
       if (data.contextProject) {
         setSelectedProjectContext(data.contextProject);
       }
+      
+      if (forceScroll) {
+          // Reset ref to force scroll on initial load or manual click
+          lastMessageIdRef.current = null;
+      }
     } catch (err) {
-      toast.error(t('toasts.messagesFailed'));
+      console.error('Fetch messages error:', err);
     }
   };
 
@@ -169,6 +181,8 @@ export default function MessagesPage() {
       setMessages([...messages, data.message]);
       setNewMessage('');
       fetchConversations();
+      // Force scroll for user's own sent message
+      lastMessageIdRef.current = null;
     } catch (err) {
       toast.error(t('toasts.sendFailed'));
     } finally {
@@ -190,210 +204,215 @@ export default function MessagesPage() {
 
   if (isLoading || authLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center h-[calc(100dvh-64px)]">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-4 h-[calc(100vh-80px)] overflow-hidden flex flex-col">
-      <div className="flex items-center justify-between mb-4 shrink-0">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+    <div className="messages-page-active flex flex-col h-[calc(100dvh-64px)] overflow-hidden bg-background">
+      {/* Header section is compact */}
+      <div className="px-4 py-3 border-b flex items-center justify-between shrink-0">
+        <h1 className="text-xl font-bold leading-none">{t('title')}</h1>
       </div>
 
-      <Card className="flex-1 overflow-hidden">
-        <CardContent className="p-0 h-full">
-          <div className="flex h-full">
-            {/* Conversations List */}
-            <div
-              className={`w-full md:w-80 border-e flex flex-col shrink-0 ${selectedConversation ? 'hidden md:flex' : 'flex'
-                }`}
-            >
-              <div className="p-4 border-b">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Conversations List */}
+        <aside
+          className={`w-full md:w-72 lg:w-80 border-e flex flex-col shrink-0 bg-muted/10 ${selectedConversation ? 'hidden md:flex' : 'flex'
+            }`}
+        >
+          <div className="p-3 border-b shrink-0">
+            <div className="relative">
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder={t('searchPlaceholder')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="ps-10 h-9 bg-background"
+              />
+            </div>
+          </div>
+
+          <ScrollArea className="flex-1">
+            {filteredConversations.length === 0 ? (
+              <div className="p-8 text-center text-muted-foreground">
+                <p className="text-sm">{t('noConversations')}</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-border/50">
+                {filteredConversations.map((conv) => (
+                  <button
+                    key={conv.partner.id}
+                    onClick={() => {
+                        setSelectedConversation(conv.partner.id);
+                        fetchMessages(conv.partner.id, true);
+                    }}
+                    className={`w-full p-3 flex items-start gap-3 transition-colors hover:bg-muted/50 ${selectedConversation === conv.partner.id ? 'bg-muted shadow-inner' : ''
+                      }`}
+                  >
+                    <Avatar className="h-10 w-10 shrink-0 border border-background shadow-sm">
+                      <AvatarImage src={conv.partner.image || undefined} />
+                      <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">{conv.partner.name?.[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0 text-start">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="font-semibold text-sm truncate">{conv.partner.name}</span>
+                        <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                          {new Date(conv.lastMessage.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate leading-relaxed">
+                        {conv.lastMessage.content || 'No messages yet'}
+                      </p>
+                      {conv.unreadCount > 0 && (
+                        <Badge variant="default" className="mt-1.5 h-4 min-w-[16px] justify-center px-1 text-[9px] font-bold">
+                          {conv.unreadCount}
+                        </Badge>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </ScrollArea>
+        </aside>
+
+        {/* Chat Area */}
+        <main
+          className={`flex-1 flex flex-col min-w-0 bg-background ${selectedConversation ? 'flex' : 'hidden md:flex'
+            }`}
+        >
+          {selectedConversation && selectedPartner ? (
+            <>
+              {/* Chat Header */}
+              <div className="p-2.5 border-b flex items-center gap-3 shrink-0 bg-background/95 backdrop-blur-sm z-10 shadow-sm">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden h-8 w-8"
+                  onClick={() => setSelectedConversation(null)}
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </Button>
                 <div className="relative">
-                  <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder={t('searchPlaceholder')}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="ps-10 h-9"
-                  />
+                    <Avatar className="h-9 w-9 border shadow-sm">
+                      <AvatarImage src={selectedPartner.image || undefined} />
+                      <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">{selectedPartner.name?.[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-green-500 shadow-sm" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2 className="font-bold text-sm truncate leading-none mb-0.5">{selectedPartner.name}</h2>
+                  <span className="text-[10px] text-muted-foreground">Active now</span>
                 </div>
               </div>
 
-              <ScrollArea className="flex-1">
-                {filteredConversations.length === 0 ? (
-                  <div className="p-8 text-center text-muted-foreground">
-                    <p>{t('noConversations')}</p>
+              {/* Project Context (Integrated) */}
+              {selectedProjectContext && (
+                <div className="px-4 py-1.5 border-b bg-muted/20 flex items-center gap-4 shrink-0 overflow-x-auto no-scrollbar">
+                  <div className="flex items-center gap-1.5 text-[11px] whitespace-nowrap">
+                    <Briefcase className="h-3 w-3 text-primary" />
+                    <span className="text-muted-foreground">Project:</span>
+                    <span className="font-bold text-foreground">{selectedProjectContext.title}</span>
                   </div>
-                ) : (
-                  <div className="divide-y">
-                    {filteredConversations.map((conv) => (
-                      <button
-                        key={conv.partner.id}
-                        onClick={() => setSelectedConversation(conv.partner.id)}
-                        className={`w-full p-4 flex items-start gap-4 transition-colors hover:bg-muted/50 ${selectedConversation === conv.partner.id ? 'bg-muted' : ''
+                  <div className="flex items-center gap-1.5 text-[11px] whitespace-nowrap">
+                    <Building2 className="h-3 w-3 text-primary" />
+                    <span className="text-muted-foreground">Provider:</span>
+                    <span className="font-bold text-foreground">{selectedProjectContext.companyName}</span>
+                  </div>
+                  <Badge variant="secondary" className="text-[9px] uppercase font-bold h-4 px-1 flex-none ml-auto">
+                    {tStatus(selectedProjectContext.status)}
+                  </Badge>
+                </div>
+              )}
+
+              {/* Messages List */}
+              <ScrollArea className="flex-1 px-4 py-2">
+                <div className="space-y-4 py-2">
+                  {messages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`flex ${msg.senderId === user?.id ? 'justify-end' : 'justify-start'
+                        }`}
+                    >
+                      <div
+                        className={`flex gap-2 max-w-[85%] sm:max-w-[75%] ${msg.senderId === user?.id ? 'flex-row-reverse' : 'flex-row'
                           }`}
                       >
-                        <Avatar className="h-10 w-10 shrink-0">
-                          <AvatarImage src={conv.partner.image || undefined} />
-                          <AvatarFallback>{conv.partner.name?.[0]}</AvatarFallback>
+                        <Avatar className="h-7 w-7 mt-0.5 shrink-0 border border-background shadow-sm">
+                          <AvatarImage src={msg.sender.image || undefined} />
+                          <AvatarFallback className="text-[10px] font-bold">{msg.sender.name?.[0]}</AvatarFallback>
                         </Avatar>
-                        <div className="flex-1 min-w-0 text-start">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-semibold truncate">{conv.partner.name}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {new Date(conv.lastMessage.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <p className="text-sm text-muted-foreground truncate">
-                            {conv.lastMessage.content}
-                          </p>
-                          {conv.unreadCount > 0 && (
-                            <Badge variant="default" className="mt-1 h-5 min-w-[20px] justify-center px-1">
-                              {conv.unreadCount}
-                            </Badge>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </ScrollArea>
-            </div>
-
-            {/* Chat Area */}
-            <div
-              className={`flex-1 flex flex-col min-w-0 ${selectedConversation ? 'flex' : 'hidden md:flex'
-                }`}
-            >
-              {selectedConversation && selectedPartner ? (
-                <>
-                  {/* Chat Header */}
-                  <div className="p-3 border-b flex items-center gap-4 shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="md:hidden"
-                      onClick={() => setSelectedConversation(null)}
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </Button>
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage src={selectedPartner.image || undefined} />
-                      <AvatarFallback>{selectedPartner.name?.[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="font-semibold truncate">{selectedPartner.name}</h2>
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
-                        Online
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Project Context Sidebar/Header */}
-                  {selectedProjectContext && (
-                    <div className="px-4 py-2 border-b bg-muted/30 flex flex-wrap items-center gap-4 shrink-0">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Briefcase className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Project:</span>
-                        <span className="font-medium text-foreground">{selectedProjectContext.title}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Building2 className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Company:</span>
-                        <span className="font-medium text-foreground">{selectedProjectContext.companyName}</span>
-                      </div>
-                      <Badge variant="outline" className="text-[10px] uppercase tracking-wider h-5">
-                        {tStatus(selectedProjectContext.status)}
-                      </Badge>
-                    </div>
-                  )}
-
-                  {/* Messages List */}
-                  <ScrollArea className="flex-1 p-4">
-                    <div className="space-y-4">
-                      {messages.map((msg) => (
                         <div
-                          key={msg.id}
-                          className={`flex ${msg.senderId === user?.id ? 'justify-end' : 'justify-start'
+                          className={`flex flex-col ${msg.senderId === user?.id ? 'items-end' : 'items-start'
                             }`}
                         >
                           <div
-                            className={`flex gap-3 max-w-[80%] ${msg.senderId === user?.id ? 'flex-row-reverse' : 'flex-row'
+                            className={`rounded-2xl px-3.5 py-2 text-sm shadow-sm leading-relaxed ${msg.senderId === user?.id
+                              ? 'bg-primary text-primary-foreground rounded-tr-none'
+                              : 'bg-muted/80 backdrop-blur-sm rounded-tl-none text-foreground'
                               }`}
                           >
-                            <Avatar className="h-8 w-8 mt-0.5 shrink-0">
-                              <AvatarImage src={msg.sender.image || undefined} />
-                              <AvatarFallback>{msg.sender.name?.[0]}</AvatarFallback>
-                            </Avatar>
-                            <div
-                              className={`flex flex-col ${msg.senderId === user?.id ? 'items-end' : 'items-start'
-                                }`}
-                            >
-                              <div
-                                className={`rounded-2xl px-4 py-2 text-sm ${msg.senderId === user?.id
-                                  ? 'bg-primary text-primary-foreground rounded-tr-none'
-                                  : 'bg-muted rounded-tl-none'
-                                  }`}
-                              >
-                                {msg.content}
-                              </div>
-                              <span className="text-[10px] text-muted-foreground mt-1 px-1">
-                                {new Date(msg.createdAt).toLocaleTimeString([], {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                })}
-                              </span>
-                            </div>
+                            {msg.content}
                           </div>
+                          <span className="text-[9px] text-muted-foreground mt-1 px-1 font-medium opacity-70">
+                            {new Date(msg.createdAt).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
                         </div>
-                      ))}
-                      <div ref={messagesEndRef} />
+                      </div>
                     </div>
-                  </ScrollArea>
-
-                  {/* Message Input */}
-                  <div className="p-4 border-t shrink-0">
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        sendMessage();
-                      }}
-                      className="flex gap-2"
-                    >
-                      <Input
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Type your message..."
-                        disabled={isSending}
-                        className="flex-1"
-                      />
-                      <Button type="submit" size="icon" disabled={isSending || !newMessage.trim()}>
-                        {isSending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Send className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </form>
-                  </div>
-                </>
-              ) : (
-                <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-                  <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mb-4">
-                    <MessageSquare className="h-10 w-10 text-muted-foreground" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{t('selectConversation')}</h3>
-                  <p className="text-muted-foreground max-w-xs">{t('selectConversationDesc')}</p>
+                  ))}
+                  <div ref={messagesEndRef} className="h-1" />
                 </div>
-              )}
+              </ScrollArea>
+
+              {/* Message Input (Always at bottom) */}
+              <div className="p-3 border-t bg-background shrink-0 mt-auto">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    sendMessage();
+                  }}
+                  className="flex gap-2 items-center"
+                >
+                  <Input
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type your message..."
+                    disabled={isSending}
+                    className="flex-1 bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary h-10 rounded-full px-4 text-sm"
+                  />
+                  <Button 
+                    type="submit" 
+                    size="icon" 
+                    disabled={isSending || !newMessage.trim()} 
+                    className="rounded-full h-10 w-10 shrink-0 shadow-md"
+                   >
+                    {isSending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
+                  </Button>
+                </form>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted/5">
+              <div className="h-16 w-16 rounded-full bg-primary/5 flex items-center justify-center mb-4 shadow-sm">
+                <MessageSquare className="h-8 w-8 text-primary/40" />
+              </div>
+              <h3 className="text-lg font-bold mb-1">{t('selectConversation')}</h3>
+              <p className="text-xs text-muted-foreground max-w-[200px] leading-relaxed">{t('selectConversationDesc')}</p>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

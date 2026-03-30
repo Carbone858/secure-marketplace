@@ -208,6 +208,18 @@
     background-color: hsl(var(--background));
   }
 
+  /* Messaging Page Overrides to ensure one-screen experience */
+  .messages-page-active footer {
+    display: none !important;
+  }
+
+  .messages-page-active main {
+    padding-bottom: 0 !important;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
   input::placeholder,
   textarea::placeholder {
     color: hsl(var(--muted-foreground));
