@@ -1019,46 +1019,46 @@
         "cancel": "Cancel Request",
         "share": "Share",
         "report": "Report"
+      }
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PENDING": "Pending",
+      "ACTIVE": "Active",
+      "MATCHING": "Matching",
+      "REVIEWING_OFFERS": "Reviewing Offers",
+      "ACCEPTED": "Accepted",
+      "IN_PROGRESS": "In Progress",
+      "DELIVERED": "Delivered",
+      "UNDER_REVIEW": "Needs Review",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled",
+      "EXPIRED": "Expired"
+    },
+    "completion": {
+      "banner": {
+        "title": "Project Delivered",
+        "description": "The company has marked this project as finished. Please review and confirm within {days} days.",
+        "deadlineWarning": "This project will be automatically completed on {date} if no action is taken.",
+        "autoCompleted": "This project was automatically completed because the review period expired."
       },
-      "status": {
-        "DRAFT": "Draft",
-        "PENDING": "Pending",
-        "ACTIVE": "Active",
-        "MATCHING": "Matching",
-        "REVIEWING_OFFERS": "Reviewing Offers",
-        "ACCEPTED": "Accepted",
-        "IN_PROGRESS": "In Progress",
-        "DELIVERED": "Delivered",
-        "UNDER_REVIEW": "Needs Review",
-        "COMPLETED": "Completed",
-        "CANCELLED": "Cancelled",
-        "EXPIRED": "Expired"
+      "actions": {
+        "reviewConfirm": "Review & Confirm",
+        "requestChanges": "Request Changes",
+        "submitComplete": "Submit & Complete",
+        "cancel": "Cancel",
+        "confirmTitle": "Confirm Project Completion",
+        "confirmDescription": "Please rate your experience and provide feedback to finalize the project."
       },
-      "completion": {
-        "banner": {
-          "title": "Project Delivered",
-          "description": "The company has marked this project as finished. Please review and confirm within {days} days.",
-          "deadlineWarning": "This project will be automatically completed on {date} if no action is taken.",
-          "autoCompleted": "This project was automatically completed because the review period expired."
-        },
-        "actions": {
-          "reviewConfirm": "Review & Confirm",
-          "requestChanges": "Request Changes",
-          "submitComplete": "Submit & Complete",
-          "cancel": "Cancel",
-          "confirmTitle": "Confirm Project Completion",
-          "confirmDescription": "Please rate your experience and provide feedback to finalize the project."
-        },
-        "review": {
-          "ratingLabel": "How would you rate the service?",
-          "reviewLabel": "Tell us more about your experience (optional)",
-          "reviewRequiredLabel": "Please tell us why you gave this rating (required)",
-          "feedbackLabel": "What changes are needed?",
-          "feedbackPlaceholder": "Describe the revisions or missing work in detail...",
-          "submitting": "Submitting...",
-          "success": "Project successfully completed!",
-          "rejected": "Changes requested. The company has been notified."
-        }
+      "review": {
+        "ratingLabel": "How would you rate the service?",
+        "reviewLabel": "Tell us more about your experience (optional)",
+        "reviewRequiredLabel": "Please tell us why you gave this rating (required)",
+        "feedbackLabel": "What changes are needed?",
+        "feedbackPlaceholder": "Describe the revisions or missing work in detail...",
+        "submitting": "Submitting...",
+        "success": "Project successfully completed!",
+        "rejected": "Changes requested. The company has been notified."
       }
     },
     "offer": {
