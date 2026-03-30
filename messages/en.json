@@ -1640,6 +1640,13 @@
         "deleted": "Request deleted successfully",
         "deleteFailed": "Failed to delete request"
       },
+      "completion": {
+        "actions": {
+          "reviewConfirm": "Review & Confirm",
+          "requestChanges": "Request Changes",
+          "submitComplete": "Submit & Complete"
+        }
+      },
       "noOffers": "No offers yet"
     }
   },
