@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { toast } from 'sonner';
-import { Loader2, Plus, FileText, MessageSquare, Eye, Edit, Trash2, DollarSign, Calendar } from 'lucide-react';
+import { Loader2, Plus, FileText, MessageSquare, Eye, Edit, Trash2, DollarSign, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -69,29 +69,26 @@ export default function MyRequestsPage() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
-  const [fadeClass, setFadeClass] = useState('scroll-fade-right');
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     const isAtStart = target.scrollLeft <= 10;
     const isAtEnd = target.scrollLeft + target.clientWidth >= target.scrollWidth - 10;
 
-    if (isAtStart && isAtEnd) setFadeClass('');
-    else if (isAtStart) setFadeClass('scroll-fade-right');
-    else if (isAtEnd) setFadeClass('scroll-fade-left');
-    else setFadeClass('scroll-fade-right scroll-fade-left');
+    setShowLeftArrow(!isAtStart);
+    setShowRightArrow(!isAtEnd && target.scrollWidth > target.clientWidth);
   };
 
   useEffect(() => {
     const checkScroll = () => {
       const el = document.getElementById('dashboard-tabs-container');
       if (el) {
-        const isAtStart = el.scrollLeft <= 5;
-        const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 5;
-        if (isAtStart && isAtEnd) setFadeClass('');
-        else if (isAtStart) setFadeClass('scroll-fade-right');
-        else if (isAtEnd) setFadeClass('scroll-fade-left');
-        else setFadeClass('scroll-fade-right scroll-fade-left');
+        const isAtStart = el.scrollLeft <= 10;
+        const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
+        setShowLeftArrow(!isAtStart);
+        setShowRightArrow(!isAtEnd && el.scrollWidth > el.clientWidth);
       }
     };
     const timer = setTimeout(checkScroll, 100);
@@ -178,10 +175,17 @@ export default function MyRequestsPage() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <div className="relative">
+        <div className="relative group">
+          {/* Left Arrow Indicator */}
+          <div 
+            className={`absolute left-0 top-0 bottom-0 z-10 w-8 flex items-center justify-start bg-gradient-to-r from-background to-transparent pointer-events-none transition-opacity duration-300 ${showLeftArrow ? 'opacity-100' : 'opacity-0'}`}
+          >
+            <ChevronLeft className="h-4 w-4 text-primary animate-pulse" />
+          </div>
+
           <div 
             id="dashboard-tabs-container"
-            className={`overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 transition-opacity duration-300 ${fadeClass}`}
+            className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 transition-all duration-300 scroll-smooth"
             onScroll={handleScroll}
           >
             <TabsList className="inline-flex h-11 w-full sm:w-auto justify-start bg-muted/50 p-1 mb-2">
@@ -201,6 +205,13 @@ export default function MyRequestsPage() {
               <TabsTrigger value="completed" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.completed')}</TabsTrigger>
               <TabsTrigger value="cancelled" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.cancelled')}</TabsTrigger>
             </TabsList>
+          </div>
+
+          {/* Right Arrow Indicator */}
+          <div 
+            className={`absolute right-0 top-0 bottom-0 z-10 w-8 flex items-center justify-end bg-gradient-to-l from-background to-transparent pointer-events-none transition-opacity duration-300 ${showRightArrow ? 'opacity-100' : 'opacity-0'}`}
+          >
+            <ChevronRight className="h-4 w-4 text-primary animate-pulse" />
           </div>
         </div>
 

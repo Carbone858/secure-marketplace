@@ -4,7 +4,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { LogOut } from 'lucide-react';
 import { DynamicBreadcrumbs } from '@/components/ui/DynamicBreadcrumbs';
+import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -36,6 +38,24 @@ export default async function DashboardLayout({
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'nav' });
 
+  const companyNavItems = [
+    { href: `/${locale}/company/dashboard`, label: t('companyMenu.dashboard') },
+    { href: `/${locale}/company/dashboard/browse`, label: t('companyMenu.browse') },
+    { href: `/${locale}/company/dashboard/offers`, label: t('companyMenu.offers') },
+    { href: `/${locale}/company/dashboard/projects`, label: t('companyMenu.projects') },
+    { href: `/${locale}/dashboard/messages`, label: t('userMenu.messages') },
+  ];
+
+  const userNavItems = [
+    { href: `/${locale}/dashboard`, label: t('userMenu.dashboard') },
+    { href: `/${locale}/dashboard/requests`, label: t('userMenu.requests') },
+    { href: `/${locale}/dashboard/messages`, label: t('userMenu.messages') },
+    { href: `/${locale}/dashboard/profile`, label: t('userMenu.profile') },
+    { href: `/${locale}/dashboard/settings`, label: t('userMenu.settings') },
+  ];
+
+  const navItems = session.user?.role === 'COMPANY' ? companyNavItems : userNavItems;
+
   return (
     <div className="min-h-screen bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Dashboard Header */}
@@ -52,73 +72,15 @@ export default async function DashboardLayout({
 
             {/* Navigation — hidden on mobile */}
             <nav className="hidden sm:flex items-center gap-4 md:gap-6">
-              {session.user?.role === 'COMPANY' ? (
-                <>
-                  <Link
-                    href={`/${locale}/company/dashboard`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('companyMenu.dashboard')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/company/dashboard/browse`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('companyMenu.browse')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/company/dashboard/offers`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('companyMenu.offers')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/company/dashboard/projects`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('companyMenu.projects')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/dashboard/messages`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium text-primary"
-                  >
-                    {t('userMenu.messages')}
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href={`/${locale}/dashboard`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('userMenu.dashboard')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/dashboard/requests`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('userMenu.requests')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/dashboard/messages`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('userMenu.messages')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/dashboard/profile`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('userMenu.profile')}
-                  </Link>
-                  <Link
-                    href={`/${locale}/dashboard/settings`}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {t('userMenu.settings')}
-                  </Link>
-                </>
-              )}
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
 
             {/* User Menu */}
@@ -129,8 +91,9 @@ export default async function DashboardLayout({
               <form action="/api/auth/logout" method="POST">
                 <button
                   type="submit"
-                  className="text-sm text-destructive hover:text-destructive transition-colors"
+                  className="text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-destructive flex items-center gap-1.5 transition-colors"
                 >
+                  <LogOut className="h-3.5 w-3.5" />
                   {t('userMenu.logout')}
                 </button>
               </form>
@@ -138,75 +101,7 @@ export default async function DashboardLayout({
           </div>
 
           {/* Mobile navigation — visible on small screens */}
-          <nav className="sm:hidden flex items-center gap-4 pb-3 overflow-x-auto">
-            {session.user?.role === 'COMPANY' ? (
-              <>
-                <Link
-                  href={`/${locale}/company/dashboard`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('companyMenu.dashboard')}
-                </Link>
-                <Link
-                  href={`/${locale}/company/dashboard/browse`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('companyMenu.browse')}
-                </Link>
-                <Link
-                  href={`/${locale}/company/dashboard/offers`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('companyMenu.offers')}
-                </Link>
-                <Link
-                  href={`/${locale}/company/dashboard/projects`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('companyMenu.projects')}
-                </Link>
-                <Link
-                  href={`/${locale}/dashboard/messages`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('userMenu.messages')}
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href={`/${locale}/dashboard`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('userMenu.dashboard')}
-                </Link>
-                <Link
-                  href={`/${locale}/dashboard/requests`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('userMenu.requests')}
-                </Link>
-                <Link
-                  href={`/${locale}/dashboard/messages`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('userMenu.messages')}
-                </Link>
-                <Link
-                  href={`/${locale}/dashboard/profile`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('userMenu.profile')}
-                </Link>
-                <Link
-                  href={`/${locale}/dashboard/settings`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-                >
-                  {t('userMenu.settings')}
-                </Link>
-              </>
-            )}
-          </nav>
+          <DashboardMobileNav items={navItems} />
         </div>
       </header>
 

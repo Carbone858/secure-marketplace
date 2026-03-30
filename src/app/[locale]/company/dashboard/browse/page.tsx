@@ -273,61 +273,77 @@ export default function BrowseRequestsPage() {
 
       {/* Results */}
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin" />
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : requests.length === 0 ? (
-        <Card>
+        <Card className="border-dashed">
           <CardContent className="p-12 text-center">
-            <Search className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">{isRTL ? 'لا توجد نتائج' : 'No requests found'}</h3>
-            <p className="text-muted-foreground mt-1">
+            <Search className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+            <h3 className="text-lg font-medium tracking-tight">{isRTL ? 'لا توجد نتائج' : 'No requests found'}</h3>
+            <p className="text-sm text-muted-foreground mt-1">
               {filterByCategories && companyCategories.length > 0
                 ? (isRTL ? 'لم يتم العثور على طلبات في تخصصاتك. جرب إيقاف التصفية لعرض كل المشاريع.' : 'No requests match your company categories. Try turning off the filter to see all projects.')
                 : (isRTL ? 'جرب البحث بكلمات مختلفة' : 'Try searching with different keywords')}
             </p>
             {filterByCategories && companyCategories.length > 0 && (
-              <Button variant="outline" className="mt-4" onClick={() => setFilterByCategories(false)}>
+              <Button variant="outline" className="mt-6 w-full sm:w-auto" onClick={() => setFilterByCategories(false)}>
                 {isRTL ? 'عرض جميع المشاريع' : 'Show All Projects'}
               </Button>
             )}
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           {requests.map((req) => (
-            <Card key={req.id} className="hover:shadow-md transition-shadow">
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg line-clamp-2">{req.title}</CardTitle>
-                  <Badge variant="secondary" className="flex-shrink-0 ms-2">
+            <Card key={req.id} className="card-interactive overflow-hidden flex flex-col h-full">
+              <CardHeader className="pb-3 border-b border-border/50">
+                <div className="flex items-start justify-between gap-4">
+                  <CardTitle className="text-base sm:text-lg tracking-tight line-clamp-2 leading-snug">{req.title}</CardTitle>
+                  <Badge className={`flex-shrink-0 w-fit px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${req.status === 'ACTIVE' ? 'bg-success/10 text-success border-success/20' : 'bg-muted/50'}`}>
                     {req.status === 'ACTIVE' ? (isRTL ? 'نشط' : 'Active') : req.status}
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-sm text-muted-foreground line-clamp-3">{req.description}</p>
-                <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-                  {req.budgetMax && (
-                    <span className="flex items-center gap-1">
-                      <DollarSign className="h-3 w-3" />{req.budgetMin ? `${req.budgetMin}-` : ''}{req.budgetMax} {req.currency}
+              <CardContent className="p-4 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">{req.description}</p>
+                  
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
+                    {req.budgetMax && (
+                      <span className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50">
+                        <DollarSign className="h-3.5 w-3.5 text-primary" />
+                        {req.budgetMin ? `${req.budgetMin}-` : ''}{req.budgetMax} {req.currency}
+                      </span>
+                    )}
+                    {req.city && (
+                      <span className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50">
+                        <MapPin className="h-3.5 w-3.5 text-primary" />
+                        {isRTL && req.city.nameAr ? req.city.nameAr : req.city.nameEn}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50 ms-auto">
+                      <Calendar className="h-3.5 w-3.5 text-primary opacity-70" />
+                      <span className="opacity-70">{new Date(req.createdAt).toLocaleDateString()}</span>
                     </span>
+                  </div>
+                  
+                  {req.category && (
+                    <div className="pt-2">
+                       <Badge variant="secondary" className="font-medium text-xs rounded-md">
+                         {isRTL && req.category.nameAr ? req.category.nameAr : req.category.nameEn}
+                       </Badge>
+                    </div>
                   )}
-                  {req.city && (
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3" />{isRTL && req.city.nameAr ? req.city.nameAr : req.city.nameEn}
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />{new Date(req.createdAt).toLocaleDateString()}
-                  </span>
                 </div>
-                {req.category && (
-                  <Badge variant="outline">{isRTL && req.category.nameAr ? req.category.nameAr : req.category.nameEn}</Badge>
-                )}
-                <Link href={`/${locale}/requests/${req.id}?from=company-browse`}>
-                  <Button className="w-full mt-2">{isRTL ? 'عرض التفاصيل' : 'View Details'}</Button>
-                </Link>
+
+                <div className="pt-4 border-t border-border/50 mt-auto">
+                  <Link href={`/${locale}/requests/${req.id}?from=company-browse`} className="block w-full">
+                    <Button variant="outline" className="w-full text-xs h-9">
+                      {isRTL ? 'عرض التفاصيل' : 'View Details'}
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -335,12 +351,18 @@ export default function BrowseRequestsPage() {
       )}
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <Button variant="outline" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>{isRTL ? 'السابق' : 'Previous'}</Button>
-          <span className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 mt-6 border-t border-border/50">
+          <span className="text-sm font-medium text-muted-foreground order-2 sm:order-none">
             {isRTL ? `صفحة ${page} من ${totalPages}` : `Page ${page} of ${totalPages}`}
           </span>
-          <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>{isRTL ? 'التالي' : 'Next'}</Button>
+          <div className="flex items-center gap-2 order-1 sm:order-none w-full sm:w-auto">
+            <Button variant="outline" className="flex-1 sm:flex-none" onClick={() => setPage(p => p - 1)} disabled={page <= 1}>
+              {isRTL ? 'السابق' : 'Previous'}
+            </Button>
+            <Button variant="outline" className="flex-1 sm:flex-none bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground" onClick={() => setPage(p => p + 1)} disabled={page >= totalPages}>
+              {isRTL ? 'التالي' : 'Next'}
+            </Button>
+          </div>
         </div>
       )}
     </div>
