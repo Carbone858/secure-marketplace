@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
@@ -12,6 +13,7 @@ import {
   ChevronLeft,
   Briefcase,
   Building2,
+  LayoutDashboard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -220,6 +222,14 @@ export default function MessagesPage() {
         >
           <div className="p-3 border-b shrink-0 flex items-center justify-between">
             <h1 className="font-bold text-base">{t('title')}</h1>
+            <Button variant="ghost" size="sm" asChild className="h-8 gap-1.5 px-2 hover:bg-primary/5 hover:text-primary">
+              <Link href={user?.role === 'COMPANY' ? `/${locale}/company/dashboard` : `/${locale}/dashboard`}>
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                <span className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline">
+                  {locale === 'ar' ? 'الرئيسية' : 'Dashboard'}
+                </span>
+              </Link>
+            </Button>
           </div>
           
           <div className="p-3 border-b shrink-0">
