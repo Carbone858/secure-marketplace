@@ -1715,6 +1715,8 @@
       "created": "تاريخ الإنشاء: {date}",
       "viewRequest": "عرض الطلب",
       "messageUser": "مراسلة العميل",
+      "waitingOnClient": "بانتظار العميل",
+      "markAsFinished": "تحديد كمنتهٍ",
       "loadFailed": "فشل تحميل المشاريع"
     },
     "reviews": {
@@ -1748,6 +1750,8 @@
       "PENDING": "قيد الانتظار",
       "ACTIVE": "نشط",
       "IN_PROGRESS": "قيد التنفيذ",
+      "DELIVERED": "تم التسليم",
+      "UNDER_REVIEW": "قيد المراجعة",
       "COMPLETED": "مكتمل",
       "CANCELLED": "ملغى",
       "ON_HOLD": "معلق",

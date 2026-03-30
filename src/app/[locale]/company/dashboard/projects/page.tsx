@@ -134,8 +134,8 @@ export default function CompanyProjectsPage() {
                       disabled={['DELIVERED', 'UNDER_REVIEW'].includes(project.status) || isCompleting === project.requestId}
                     >
                       {['DELIVERED', 'UNDER_REVIEW'].includes(project.status)
-                        ? (locale === 'ar' ? 'بانتظار العميل' : 'Waiting on Client')
-                        : (locale === 'ar' ? 'تحديد كمنتهٍ' : 'Mark as Finished')
+                        ? t('projects.waitingOnClient')
+                        : t('projects.markAsFinished')
                       }
                     </Button>
                   )}

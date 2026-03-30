@@ -1714,6 +1714,9 @@
       "files": "{count} files",
       "created": "Created: {date}",
       "viewRequest": "View Request",
+      "messageUser": "Message Client",
+      "waitingOnClient": "Waiting on Client",
+      "markAsFinished": "Mark as Finished",
       "loadFailed": "Failed to load projects"
     },
     "reviews": {
@@ -1747,6 +1750,8 @@
       "PENDING": "Pending",
       "ACTIVE": "Active",
       "IN_PROGRESS": "In Progress",
+      "DELIVERED": "Delivered",
+      "UNDER_REVIEW": "Under Review",
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled",
       "ON_HOLD": "On Hold",

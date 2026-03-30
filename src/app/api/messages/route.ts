@@ -21,6 +21,22 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const conversationWith = searchParams.get('with');
 
+    // Fetch all relevant projects once to provide context for conversations
+    const userProjects = await prisma.project.findMany({
+      where: {
+        OR: [
+          { userId: user.id },
+          { company: { userId: user.id } }
+        ]
+      },
+      include: {
+        company: {
+          select: { id: true, name: true, logo: true, userId: true }
+        }
+      },
+      orderBy: { updatedAt: 'desc' }
+    });
+
     if (conversationWith) {
       // Get conversation with specific user
       const messages = await prisma.message.findMany({
@@ -59,7 +75,21 @@ export async function GET(request: NextRequest) {
         data: { isRead: true },
       });
 
-      return NextResponse.json({ messages });
+      // Find relevant project for this specific context
+      const contextProject = userProjects.find(p => 
+        (p.userId === user.id && p.company.userId === conversationWith) ||
+        (p.userId === conversationWith && p.company.userId === user.id)
+      );
+
+      return NextResponse.json({ 
+        messages,
+        contextProject: contextProject ? {
+            id: contextProject.id,
+            title: contextProject.title,
+            status: contextProject.status,
+            companyName: contextProject.company.name
+        } : null
+      });
     }
 
     // Get all conversations
@@ -101,10 +131,22 @@ export async function GET(request: NextRequest) {
       };
 
       if (!conversationMap.has(partnerId)) {
+        // Find best matching project for this partner context
+        const partnerProject = userProjects.find(p => 
+            (p.userId === user.id && p.company.userId === partnerId) ||
+            (p.userId === partnerId && p.company.userId === user.id)
+        );
+
         conversationMap.set(partnerId, {
           partner: partnerData,
           lastMessage: msg,
           unreadCount: msg.recipientId === user.id && !msg.isRead ? 1 : 0,
+          projectContext: partnerProject ? {
+            id: partnerProject.id,
+            title: partnerProject.title,
+            status: partnerProject.status,
+            companyName: partnerProject.company.name
+          } : null
         });
       } else if (msg.recipientId === user.id && !msg.isRead) {
         const conv = conversationMap.get(partnerId);
@@ -119,10 +161,21 @@ export async function GET(request: NextRequest) {
         select: { id: true, name: true, avatar: true, image: true },
       });
       if (ensureUser) {
+        const partnerProject = userProjects.find(p => 
+            (p.userId === user.id && p.company.userId === ensureUserId) ||
+            (p.userId === ensureUserId && p.company.userId === user.id)
+        );
+
         conversationMap.set(ensureUserId, {
           partner: { ...ensureUser, image: ensureUser.image || ensureUser.avatar },
           lastMessage: { content: '', senderId: '', recipientId: '', createdAt: new Date() },
           unreadCount: 0,
+          projectContext: partnerProject ? {
+            id: partnerProject.id,
+            title: partnerProject.title,
+            status: partnerProject.status,
+            companyName: partnerProject.company.name
+          } : null
         });
       }
     }
