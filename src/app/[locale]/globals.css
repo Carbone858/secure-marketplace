@@ -209,15 +209,19 @@
   }
 
   /* Messaging Page Overrides to ensure one-screen experience */
-  .messages-page-active footer {
+  body:has(.messages-page-active) footer,
+  body:has(.messages-page-active) .dashboard-layout-header,
+  body:has(.messages-page-active) .dashboard-breadcrumbs-container {
     display: none !important;
   }
 
-  .messages-page-active main {
+  body:has(.messages-page-active) main {
+    padding-top: 0 !important;
     padding-bottom: 0 !important;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    height: calc(100dvh - 64px); /* Subtract only main Navbar height */
+    overflow: hidden;
   }
 
   input::placeholder,

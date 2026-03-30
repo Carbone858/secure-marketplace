@@ -39,7 +39,7 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Dashboard Header */}
-      <header className="bg-card shadow-sm border-b">
+      <header className="bg-card shadow-sm border-b dashboard-layout-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -213,7 +213,7 @@ export default async function DashboardLayout({
       {/* Main Content */}
       <main className="py-4 sm:py-6 lg:py-8">
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 dashboard-breadcrumbs-container">
             <DynamicBreadcrumbs />
           </div>
           {children}

@@ -204,25 +204,24 @@ export default function MessagesPage() {
 
   if (isLoading || authLoading) {
     return (
-      <div className="flex items-center justify-center h-[calc(100dvh-64px)]">
+      <div className="flex items-center justify-center h-full w-full">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="messages-page-active flex flex-col h-[calc(100dvh-64px)] overflow-hidden bg-background">
-      {/* Header section is compact */}
-      <div className="px-4 py-3 border-b flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold leading-none">{t('title')}</h1>
-      </div>
-
+    <div className="messages-page-active flex flex-col h-full w-full overflow-hidden bg-background">
       <div className="flex-1 flex overflow-hidden">
         {/* Conversations List */}
         <aside
-          className={`w-full md:w-72 lg:w-80 border-e flex flex-col shrink-0 bg-muted/10 ${selectedConversation ? 'hidden md:flex' : 'flex'
+          className={`w-full md:w-72 lg:w-80 border-e flex flex-col shrink-0 bg-muted/5 ${selectedConversation ? 'hidden md:flex' : 'flex'
             }`}
         >
+          <div className="p-3 border-b shrink-0 flex items-center justify-between">
+            <h1 className="font-bold text-base">{t('title')}</h1>
+          </div>
+          
           <div className="p-3 border-b shrink-0">
             <div className="relative">
               <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -230,7 +229,7 @@ export default function MessagesPage() {
                 placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="ps-10 h-9 bg-background"
+                className="ps-10 h-9 bg-background focus-visible:ring-1"
               />
             </div>
           </div>
@@ -249,17 +248,17 @@ export default function MessagesPage() {
                         setSelectedConversation(conv.partner.id);
                         fetchMessages(conv.partner.id, true);
                     }}
-                    className={`w-full p-3 flex items-start gap-3 transition-colors hover:bg-muted/50 ${selectedConversation === conv.partner.id ? 'bg-muted shadow-inner' : ''
+                    className={`w-full p-4 flex items-start gap-3 transition-all hover:bg-muted/50 ${selectedConversation === conv.partner.id ? 'bg-muted/80 shadow-inner' : ''
                       }`}
                   >
-                    <Avatar className="h-10 w-10 shrink-0 border border-background shadow-sm">
+                    <Avatar className="h-11 w-11 shrink-0 border-2 border-background shadow-sm">
                       <AvatarImage src={conv.partner.image || undefined} />
                       <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">{conv.partner.name?.[0]}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0 text-start">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <span className="font-semibold text-sm truncate">{conv.partner.name}</span>
-                        <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-sm truncate">{conv.partner.name}</span>
+                        <span className="text-[10px] text-muted-foreground font-medium">
                           {new Date(conv.lastMessage.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </span>
                       </div>
@@ -267,7 +266,7 @@ export default function MessagesPage() {
                         {conv.lastMessage.content || 'No messages yet'}
                       </p>
                       {conv.unreadCount > 0 && (
-                        <Badge variant="default" className="mt-1.5 h-4 min-w-[16px] justify-center px-1 text-[9px] font-bold">
+                        <Badge variant="default" className="mt-2 h-4.5 min-w-[20px] justify-center px-1 text-[10px] font-bold">
                           {conv.unreadCount}
                         </Badge>
                       )}
@@ -287,116 +286,121 @@ export default function MessagesPage() {
           {selectedConversation && selectedPartner ? (
             <>
               {/* Chat Header */}
-              <div className="p-2.5 border-b flex items-center gap-3 shrink-0 bg-background/95 backdrop-blur-sm z-10 shadow-sm">
+              <div className="p-3 border-b flex items-center gap-3 shrink-0 bg-background/95 backdrop-blur-sm z-10 shadow-sm">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden h-8 w-8"
+                  className="md:hidden h-9 w-9"
                   onClick={() => setSelectedConversation(null)}
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </Button>
                 <div className="relative">
-                    <Avatar className="h-9 w-9 border shadow-sm">
+                    <Avatar className="h-10 w-10 border shadow-sm">
                       <AvatarImage src={selectedPartner.image || undefined} />
-                      <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">{selectedPartner.name?.[0]}</AvatarFallback>
+                      <AvatarFallback className="bg-primary/5 text-primary text-sm font-bold">{selectedPartner.name?.[0]}</AvatarFallback>
                     </Avatar>
-                    <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-green-500 shadow-sm" />
+                    <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-background bg-green-500 shadow-sm" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h2 className="font-bold text-sm truncate leading-none mb-0.5">{selectedPartner.name}</h2>
-                  <span className="text-[10px] text-muted-foreground">Active now</span>
+                  <h2 className="font-bold text-sm truncate leading-none mb-1">{selectedPartner.name}</h2>
+                  <div className="flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Active now</span>
+                  </div>
                 </div>
               </div>
 
               {/* Project Context (Integrated) */}
               {selectedProjectContext && (
-                <div className="px-4 py-1.5 border-b bg-muted/20 flex items-center gap-4 shrink-0 overflow-x-auto no-scrollbar">
-                  <div className="flex items-center gap-1.5 text-[11px] whitespace-nowrap">
-                    <Briefcase className="h-3 w-3 text-primary" />
-                    <span className="text-muted-foreground">Project:</span>
+                <div className="px-4 py-2 border-b bg-primary/5 flex items-center gap-6 shrink-0 overflow-x-auto no-scrollbar">
+                  <div className="flex items-center gap-2 text-[11px] whitespace-nowrap">
+                    <Briefcase className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-muted-foreground font-medium">Project:</span>
                     <span className="font-bold text-foreground">{selectedProjectContext.title}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] whitespace-nowrap">
-                    <Building2 className="h-3 w-3 text-primary" />
-                    <span className="text-muted-foreground">Provider:</span>
+                  <div className="flex items-center gap-2 text-[11px] whitespace-nowrap">
+                    <Building2 className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-muted-foreground font-medium">Provider:</span>
                     <span className="font-bold text-foreground">{selectedProjectContext.companyName}</span>
                   </div>
-                  <Badge variant="secondary" className="text-[9px] uppercase font-bold h-4 px-1 flex-none ml-auto">
+                  <Badge variant="outline" className="text-[10px] font-bold h-5 px-2 flex-none ml-auto bg-background/50 border-primary/20 text-primary">
                     {tStatus(selectedProjectContext.status)}
                   </Badge>
                 </div>
               )}
 
-              {/* Messages List */}
-              <ScrollArea className="flex-1 px-4 py-2">
-                <div className="space-y-4 py-2">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`flex ${msg.senderId === user?.id ? 'justify-end' : 'justify-start'
-                        }`}
-                    >
+              {/* Messages List Area */}
+              <div className="flex-1 overflow-hidden flex flex-col relative">
+                <ScrollArea className="flex-1 p-4 h-full">
+                  <div className="space-y-5 py-2">
+                    {messages.map((msg) => (
                       <div
-                        className={`flex gap-2 max-w-[85%] sm:max-w-[75%] ${msg.senderId === user?.id ? 'flex-row-reverse' : 'flex-row'
+                        key={msg.id}
+                        className={`flex ${msg.senderId === user?.id ? 'justify-end' : 'justify-start'
                           }`}
                       >
-                        <Avatar className="h-7 w-7 mt-0.5 shrink-0 border border-background shadow-sm">
-                          <AvatarImage src={msg.sender.image || undefined} />
-                          <AvatarFallback className="text-[10px] font-bold">{msg.sender.name?.[0]}</AvatarFallback>
-                        </Avatar>
                         <div
-                          className={`flex flex-col ${msg.senderId === user?.id ? 'items-end' : 'items-start'
+                          className={`flex gap-3 max-w-[85%] sm:max-w-[70%] ${msg.senderId === user?.id ? 'flex-row-reverse' : 'flex-row'
                             }`}
                         >
+                          <Avatar className="h-8 w-8 mt-1 shrink-0 border border-background shadow-sm">
+                            <AvatarImage src={msg.sender.image || undefined} />
+                            <AvatarFallback className="text-[10px] font-bold">{msg.sender.name?.[0]}</AvatarFallback>
+                          </Avatar>
                           <div
-                            className={`rounded-2xl px-3.5 py-2 text-sm shadow-sm leading-relaxed ${msg.senderId === user?.id
-                              ? 'bg-primary text-primary-foreground rounded-tr-none'
-                              : 'bg-muted/80 backdrop-blur-sm rounded-tl-none text-foreground'
+                            className={`flex flex-col ${msg.senderId === user?.id ? 'items-end' : 'items-start'
                               }`}
                           >
-                            {msg.content}
+                            <div
+                              className={`rounded-2xl px-4 py-2.5 text-sm shadow-sm leading-relaxed ${msg.senderId === user?.id
+                                ? 'bg-primary text-primary-foreground rounded-tr-none font-medium'
+                                : 'bg-muted rounded-tl-none text-foreground'
+                                }`}
+                            >
+                              {msg.content}
+                            </div>
+                            <span className="text-[10px] text-muted-foreground mt-1.5 px-1 font-medium italic opacity-80">
+                              {new Date(msg.createdAt).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
                           </div>
-                          <span className="text-[9px] text-muted-foreground mt-1 px-1 font-medium opacity-70">
-                            {new Date(msg.createdAt).toLocaleTimeString([], {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  <div ref={messagesEndRef} className="h-1" />
-                </div>
-              </ScrollArea>
+                    ))}
+                    <div ref={messagesEndRef} className="h-4" />
+                  </div>
+                </ScrollArea>
+              </div>
 
-              {/* Message Input (Always at bottom) */}
-              <div className="p-3 border-t bg-background shrink-0 mt-auto">
+              {/* Message Input (Always at very bottom) */}
+              <div className="p-4 border-t bg-background shrink-0 mt-auto">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     sendMessage();
                   }}
-                  className="flex gap-2 items-center"
+                  className="flex gap-3 items-center max-w-4xl mx-auto w-full"
                 >
                   <Input
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Type your message..."
                     disabled={isSending}
-                    className="flex-1 bg-muted/40 border-none focus-visible:ring-1 focus-visible:ring-primary h-10 rounded-full px-4 text-sm"
+                    className="flex-1 bg-muted/30 border-none focus-visible:ring-2 focus-visible:ring-primary/20 h-11 rounded-full px-5 text-sm"
                   />
                   <Button 
                     type="submit" 
                     size="icon" 
                     disabled={isSending || !newMessage.trim()} 
-                    className="rounded-full h-10 w-10 shrink-0 shadow-md"
+                    className="rounded-full h-11 w-11 shrink-0 shadow-lg hover:scale-105 transition-transform"
                    >
                     {isSending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
-                      <Send className="h-4 w-4" />
+                      <Send className="h-5 w-5" />
                     )}
                   </Button>
                 </form>
@@ -404,11 +408,11 @@ export default function MessagesPage() {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-muted/5">
-              <div className="h-16 w-16 rounded-full bg-primary/5 flex items-center justify-center mb-4 shadow-sm">
-                <MessageSquare className="h-8 w-8 text-primary/40" />
+              <div className="h-20 w-20 rounded-full bg-primary/5 flex items-center justify-center mb-6 shadow-sm">
+                <MessageSquare className="h-10 w-10 text-primary/30" />
               </div>
-              <h3 className="text-lg font-bold mb-1">{t('selectConversation')}</h3>
-              <p className="text-xs text-muted-foreground max-w-[200px] leading-relaxed">{t('selectConversationDesc')}</p>
+              <h3 className="text-xl font-bold mb-2">{t('selectConversation')}</h3>
+              <p className="text-sm text-muted-foreground max-w-[260px] leading-relaxed">{t('selectConversationDesc')}</p>
             </div>
           )}
         </main>
