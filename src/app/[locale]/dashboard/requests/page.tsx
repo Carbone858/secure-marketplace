@@ -69,6 +69,38 @@ export default function MyRequestsPage() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
+  const [fadeClass, setFadeClass] = useState('scroll-fade-right');
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const isAtStart = target.scrollLeft <= 10;
+    const isAtEnd = target.scrollLeft + target.clientWidth >= target.scrollWidth - 10;
+
+    if (isAtStart && isAtEnd) setFadeClass('');
+    else if (isAtStart) setFadeClass('scroll-fade-right');
+    else if (isAtEnd) setFadeClass('scroll-fade-left');
+    else setFadeClass('scroll-fade-right scroll-fade-left');
+  };
+
+  useEffect(() => {
+    const checkScroll = () => {
+      const el = document.getElementById('dashboard-tabs-container');
+      if (el) {
+        const isAtStart = el.scrollLeft <= 5;
+        const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 5;
+        if (isAtStart && isAtEnd) setFadeClass('');
+        else if (isAtStart) setFadeClass('scroll-fade-right');
+        else if (isAtEnd) setFadeClass('scroll-fade-left');
+        else setFadeClass('scroll-fade-right scroll-fade-left');
+      }
+    };
+    const timer = setTimeout(checkScroll, 100);
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [requests, isLoading, authLoading]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [requestToDelete, setRequestToDelete] = useState<string | null>(null);
 
@@ -147,7 +179,11 @@ export default function MyRequestsPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <div className="relative">
-          <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div 
+            id="dashboard-tabs-container"
+            className={`overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 transition-opacity duration-300 ${fadeClass}`}
+            onScroll={handleScroll}
+          >
             <TabsList className="inline-flex h-11 w-full sm:w-auto justify-start bg-muted/50 p-1 mb-2">
               <TabsTrigger value="all" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.all')}</TabsTrigger>
               <TabsTrigger value="active" className="px-4 py-2 text-xs font-bold uppercase tracking-wider">{t('tabs.active')}</TabsTrigger>
