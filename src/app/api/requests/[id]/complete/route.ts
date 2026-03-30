@@ -6,8 +6,8 @@ import { assertValidRequestTransition, InvalidTransitionError, type RequestStatu
 
 /**
  * PUT /api/requests/[id]/complete
- * Initiates or Confirms project completion.
- * Requires both User and Company to confirm.
+ * Initiated by the Company to mark work as finished.
+ * Transitions status: IN_PROGRESS -> UNDER_REVIEW
  */
 export async function PUT(
     request: NextRequest,
@@ -42,47 +42,76 @@ export async function PUT(
             return NextResponse.json({ error: 'project.notFound', message: 'No active project found for this request.' }, { status: 404 });
         }
 
-        const isOwner = session.user.id === serviceRequest.userId;
         const isCompany = session.user.id === project.company.userId;
         const isAdmin = session.user.role === 'ADMIN' || session.user.role === 'SUPER_ADMIN';
 
-        if (!isOwner && !isCompany && !isAdmin) {
-            return NextResponse.json({ error: 'forbidden', message: 'You are not part of this project.' }, { status: 403 });
+        if (!isCompany && !isAdmin) {
+            return NextResponse.json({ error: 'forbidden', message: 'Only the company or an admin can mark the project as finished.' }, { status: 403 });
         }
 
-        // Guard transition
-        try {
-            assertValidRequestTransition(serviceRequest.status as RequestStatus, 'COMPLETED');
-        } catch (err) {
-            if (err instanceof InvalidTransitionError) {
-                return NextResponse.json({ error: err.errorCode, message: 'This project is not in a state that can be completed.' }, { status: 400 });
+        // If company marks as finished
+        if (isCompany && !isAdmin) {
+            // Guard transition: Must be in a state that can be delivered
+            const currentStatus = serviceRequest.status as RequestStatus;
+            if (currentStatus !== 'IN_PROGRESS' && currentStatus !== 'ACCEPTED' && currentStatus !== 'ACTIVE') {
+                 return NextResponse.json({ error: 'invalid.status', message: 'This project is not in a state that can be marked as finished.' }, { status: 400 });
             }
-            throw err;
-        }
 
-        // Determine flag updates
-        const updateData: any = {};
-        if (isOwner) updateData.completedByUser = true;
-        if (isCompany) updateData.completedByCompany = true;
-        if (isAdmin) {
-            // Admins can force complete
-            updateData.completedByUser = true;
-            updateData.completedByCompany = true;
-        }
+            const reviewDeadline = new Date();
+            reviewDeadline.setDate(reviewDeadline.getDate() + 10); // 10 days timeout
 
-        const updatedProject = await prisma.project.update({
-            where: { id: project.id },
-            data: updateData,
-        });
-
-        const isFullyCompleted = (updatedProject as any).completedByUser && (updatedProject as any).completedByCompany;
-
-        if (isFullyCompleted) {
-            // Transition both project and request to COMPLETED
             await prisma.$transaction([
                 prisma.project.update({
                     where: { id: project.id },
-                    data: { status: 'COMPLETED', progress: 100 },
+                    data: { 
+                        status: 'DELIVERED', 
+                        completedByCompany: true,
+                        deliveredAt: new Date(),
+                        reviewDeadline: reviewDeadline,
+                        progress: 90 // Visual indicator it's almost done
+                    },
+                }),
+                prisma.serviceRequest.update({
+                    where: { id: serviceRequest.id },
+                    data: { status: 'UNDER_REVIEW' },
+                }),
+            ]);
+
+            // Notify User
+            await prisma.notification.create({
+                data: {
+                    userId: serviceRequest.userId,
+                    type: 'PROJECT_DELIVERED',
+                    title: 'Project Delivered - Review Required',
+                    message: `The company has marked the project "${project.title}" as finished. You have 10 days to review and confirm. After that, it will be automatically completed.`,
+                    data: { 
+                        projectId: project.id, 
+                        requestId: id, 
+                        action: 'CONFIRM_COMPLETION',
+                        deadline: reviewDeadline
+                    },
+                },
+            });
+
+            return NextResponse.json({
+                success: true,
+                message: 'Project marked as delivered. Waiting for client review.',
+                data: { status: 'UNDER_REVIEW', reviewDeadline }
+            });
+        }
+
+        // Admin force complete
+        if (isAdmin) {
+            await prisma.$transaction([
+                prisma.project.update({
+                    where: { id: project.id },
+                    data: { 
+                        status: 'COMPLETED', 
+                        completedByCompany: true, 
+                        completedByUser: true,
+                        completedAt: new Date(),
+                        progress: 100 
+                    },
                 }),
                 prisma.serviceRequest.update({
                     where: { id: serviceRequest.id },
@@ -90,55 +119,14 @@ export async function PUT(
                 }),
             ]);
 
-            // Notify both parties
-            const notifyUser = prisma.notification.create({
-                data: {
-                    userId: project.userId,
-                    type: 'SYSTEM',
-                    title: 'Project Completed',
-                    message: `The project "${project.title}" has been marked as completed successfully!`,
-                    data: { projectId: project.id, requestId: id },
-                },
-            });
-
-            const notifyCompany = prisma.notification.create({
-                data: {
-                    userId: project.company.userId,
-                    type: 'SYSTEM',
-                    title: 'Project Completed',
-                    message: `The project "${project.title}" has been marked as completed successfully!`,
-                    data: { projectId: project.id, requestId: id },
-                },
-            });
-
-            await Promise.allSettled([notifyUser, notifyCompany]);
-
             return NextResponse.json({
                 success: true,
-                message: 'Project is now fully completed.',
-                data: { project: updatedProject, status: 'COMPLETED' },
+                message: 'Project force-completed by admin.',
+                data: { status: 'COMPLETED' }
             });
         }
 
-        // Single-sided initiation
-        const targetUserId = isOwner ? project.company.userId : project.userId;
-        const waitingOn = isOwner ? 'the company' : 'the client';
-
-        await prisma.notification.create({
-            data: {
-                userId: targetUserId,
-                type: 'SYSTEM',
-                title: 'Project Completion Initiated',
-                message: `The ${isOwner ? 'client' : 'company'} has marked the project "${project.title}" as completed. Please confirm to finalize.`,
-                data: { projectId: project.id, requestId: id, action: 'CONFIRM_COMPLETION' },
-            },
-        });
-
-        return NextResponse.json({
-            success: true,
-            message: `Completion initiated. Waiting for ${waitingOn} to confirm.`,
-            data: { project: updatedProject, status: 'WAITING_CONFIRMATION' },
-        });
+        return NextResponse.json({ error: 'invalid.action', message: 'Invalid completion action.' }, { status: 400 });
 
     } catch (error: any) {
         console.error('[PUT /api/requests/[id]/complete] ERROR:', error?.message);

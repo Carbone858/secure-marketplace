@@ -12,6 +12,7 @@ import { OfferActions } from '@/components/requests/OfferActions';
 import { BackButton } from '@/components/ui/BackButton';
 import { StatusBadge } from '@/components/ui/composite';
 import { AdminRequestActions } from '@/components/admin/AdminRequestActions';
+import { RequestDeliveryBanner } from '@/components/requests/RequestDeliveryBanner';
 
 interface RequestDetailPageProps {
   params: { locale: string; id: string };
@@ -101,10 +102,18 @@ export default async function RequestDetailPage({ params: { locale, id }, search
         },
       },
       projects: {
-        include: {
+        select: {
+          id: true,
+          status: true,
+          deliveredAt: true,
+          reviewDeadline: true,
+          completedAt: true,
+          isAutoCompleted: true,
           company: {
             select: {
-              userId: true
+              id: true,
+              userId: true,
+              name: true
             }
           }
         }
@@ -197,19 +206,14 @@ export default async function RequestDetailPage({ params: { locale, id }, search
           />
         </Suspense>
 
-        {/* Pending Approval Banner — visible only to owner while project awaits admin review */}
-        {isOwner && request.status === 'PENDING' && (
-          <div className={`mb-4 flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800`}>
-            <AlertCircle className="w-5 h-5 flex-shrink-0 text-amber-500" />
-            <div>
-              <p className="font-medium text-sm">
-                {isRTL ? 'طلبك قيد المراجعة من قِبل الإدارة' : 'Your project is pending admin approval'}
-              </p>
-              <p className="text-xs text-amber-700 mt-0.5">
-                {isRTL ? 'سيصبح مرئياً للشركات بعد الموافقة عليه' : 'It will become visible to companies after it is approved.'}
-              </p>
-            </div>
-          </div>
+        {/* Project Delivery Banner */}
+        {isOwner && request.status === 'UNDER_REVIEW' && project && (
+          <RequestDeliveryBanner 
+            requestId={id} 
+            deliveredAt={project.deliveredAt} 
+            reviewDeadline={project.reviewDeadline}
+            isAutoCompleted={project.isAutoCompleted}
+          />
         )}
 
         {/* Main Content */}

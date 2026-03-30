@@ -88,10 +88,12 @@ export default function CompanyProjectsPage() {
                     </p>
                   </div>
                   <Badge className={
-                    project.status === 'ACTIVE' ? 'bg-success' :
-                      project.status === 'PENDING' ? 'bg-warning' :
-                        project.status === 'COMPLETED' ? 'bg-primary' :
-                          project.status === 'CANCELLED' ? 'bg-destructive' : 'bg-muted'
+                        project.status === 'ACTIVE' || project.status === 'IN_PROGRESS' ? 'bg-info' :
+                        project.status === 'PENDING' ? 'bg-warning' :
+                        project.status === 'DELIVERED' ? 'bg-purple-600' :
+                        project.status === 'UNDER_REVIEW' ? 'bg-orange-500' :
+                        project.status === 'COMPLETED' ? 'bg-success' :
+                        project.status === 'CANCELLED' ? 'bg-destructive' : 'bg-muted'
                   }>
                     {t(`status.${project.status}`)}
                   </Badge>
@@ -124,16 +126,16 @@ export default function CompanyProjectsPage() {
                     </Button>
                   </Link>
                   {/* Completion Button */}
-                  {project.status === 'ACTIVE' && project.requestId && (
+                  {['ACTIVE', 'IN_PROGRESS', 'DELIVERED', 'UNDER_REVIEW'].includes(project.status) && project.requestId && (
                     <Button
-                      variant={project.completedByCompany ? "secondary" : "default"}
+                      variant={['DELIVERED', 'UNDER_REVIEW'].includes(project.status) ? "secondary" : "default"}
                       size="sm"
                       onClick={() => handleComplete(project.requestId)}
-                      disabled={project.completedByCompany || isCompleting === project.requestId}
+                      disabled={['DELIVERED', 'UNDER_REVIEW'].includes(project.status) || isCompleting === project.requestId}
                     >
-                      {project.completedByCompany
-                        ? (locale === 'ar' ? 'في انتظار العميل' : 'Waiting on Client')
-                        : (locale === 'ar' ? 'تحديد كمكتمل' : 'Mark Completed')
+                      {['DELIVERED', 'UNDER_REVIEW'].includes(project.status)
+                        ? (locale === 'ar' ? 'بانتظار العميل' : 'Waiting on Client')
+                        : (locale === 'ar' ? 'تحديد كمنتهٍ' : 'Mark as Finished')
                       }
                     </Button>
                   )}

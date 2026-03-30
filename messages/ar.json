@@ -1028,6 +1028,8 @@
         "REVIEWING_OFFERS": "مراجعة العروض",
         "ACCEPTED": "مقبول",
         "IN_PROGRESS": "قيد التنفيذ",
+        "DELIVERED": "تم التسليم",
+        "UNDER_REVIEW": "بانتظار المراجعة",
         "COMPLETED": "مكتمل",
         "CANCELLED": "ملغى",
         "EXPIRED": "منتهي الصلاحية"
@@ -1593,11 +1595,39 @@
         "REVIEWING_OFFERS": "مراجعة",
         "ACCEPTED": "مقبول",
         "IN_PROGRESS": "قيد التنفيذ",
+        "DELIVERED": "تم التسليم",
+        "UNDER_REVIEW": "قيد المراجعة",
         "COMPLETED": "مكتمل",
         "CANCELLED": "ملغي",
         "REJECTED": "مرفوض",
         "CLOSED": "مغلق",
         "EXPIRED": "منتهي"
+      },
+      "completion": {
+        "banner": {
+          "title": "تم تسليم المشروع",
+          "description": "قامت الشركة بتحديد هذا المشروع كمنتهٍ. يرجى المراجعة والتأكيد خلال {days} أيام.",
+          "deadlineWarning": "سيتم إكمال هذا المشروع تلقائياً في {date} إذا لم يتم اتخاذ أي إجراء.",
+          "autoCompleted": "تم إكمال هذا المشروع تلقائياً بسبب انتهاء فترة المراجعة."
+        },
+        "actions": {
+          "reviewConfirm": "المراجعة والتأكيد",
+          "requestChanges": "طلب تعديلات",
+          "submitComplete": "إرسال وإكمال",
+          "cancel": "إلغاء",
+          "confirmTitle": "تأكيد إكمال المشروع",
+          "confirmDescription": "يرجى تقييم تجربتك وتقديم ملاحظاتك لإنهاء المشروع."
+        },
+        "review": {
+          "ratingLabel": "كيف تقيم الخدمة؟",
+          "reviewLabel": "أخبرنا المزيد عن تجربتك (اختياري)",
+          "reviewRequiredLabel": "يرجى إخبارنا سبب هذا التقييم (مطلوب)",
+          "feedbackLabel": "ما هي التعديلات المطلوبة؟",
+          "feedbackPlaceholder": "صف التعديلات أو العمل الناقص بالتفصيل...",
+          "submitting": "جاري الإرسال...",
+          "success": "تم إكمال المشروع بنجاح!",
+          "rejected": "تم طلب التعديلات. تم إخطار الشركة."
+        }
       },
       "urgency": {
         "LOW": "منخفض",

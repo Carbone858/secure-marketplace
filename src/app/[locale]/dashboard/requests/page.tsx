@@ -44,6 +44,8 @@ const statusColors: Record<string, string> = {
   REVIEWING_OFFERS: 'bg-warning',
   ACCEPTED: 'bg-success',
   IN_PROGRESS: 'bg-info',
+  DELIVERED: 'bg-purple-600',
+  UNDER_REVIEW: 'bg-orange-500',
   COMPLETED: 'bg-success',
   CANCELLED: 'bg-destructive',
   REJECTED: 'bg-destructive',
@@ -116,8 +118,9 @@ export default function MyRequestsPage() {
   const filteredRequests = requests.filter(request => {
     if (activeTab === 'all') return true;
     if (activeTab === 'active') {
-      return ['PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS', 'ACCEPTED', 'IN_PROGRESS'].includes(request.status);
+      return ['PENDING', 'ACTIVE', 'MATCHING', 'REVIEWING_OFFERS', 'ACCEPTED', 'IN_PROGRESS', 'DELIVERED', 'UNDER_REVIEW'].includes(request.status);
     }
+    if (activeTab === 'needsReview') return request.status === 'UNDER_REVIEW';
     if (activeTab === 'completed') return request.status === 'COMPLETED';
     if (activeTab === 'cancelled') return ['CANCELLED', 'REJECTED', 'EXPIRED'].includes(request.status);
     if (activeTab === 'hasOffers') return request._count.offers > 0;
@@ -146,6 +149,14 @@ export default function MyRequestsPage() {
         <TabsList className="mb-6">
           <TabsTrigger value="all">{t('tabs.all')}</TabsTrigger>
           <TabsTrigger value="active">{t('tabs.active')}</TabsTrigger>
+          {requests.some(r => r.status === 'UNDER_REVIEW') && (
+            <TabsTrigger value="needsReview" className="text-orange-600 font-bold">
+              {td('status.UNDER_REVIEW')}
+              <Badge variant="secondary" className="ms-2 bg-orange-100 text-orange-700 border-orange-200">
+                {requests.filter(r => r.status === 'UNDER_REVIEW').length}
+              </Badge>
+            </TabsTrigger>
+          )}
           <TabsTrigger value="hasOffers">{t('tabs.hasOffers')}</TabsTrigger>
           <TabsTrigger value="completed">{t('tabs.completed')}</TabsTrigger>
           <TabsTrigger value="cancelled">{t('tabs.cancelled')}</TabsTrigger>
@@ -231,6 +242,16 @@ export default function MyRequestsPage() {
                           <Eye className="h-4 w-4 me-2" />
                           {t('view')}
                         </Button>
+                        {request.status === 'UNDER_REVIEW' && (
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="bg-orange-600 hover:bg-orange-700 text-white"
+                            onClick={() => router.push(`/${locale}/requests/${request.id}`)}
+                          >
+                            {td('completion.actions.reviewConfirm')}
+                          </Button>
+                        )}
                         {['DRAFT', 'PENDING', 'ACTIVE', 'CANCELLED', 'REJECTED'].includes(request.status) && (
                           <Button
                             variant={request.status === 'REJECTED' ? 'default' : 'outline'}

@@ -23,6 +23,8 @@ enum RequestStatus {
   REVIEWING_OFFERS
   ACCEPTED
   IN_PROGRESS
+  DELIVERED
+  UNDER_REVIEW
   COMPLETED
   CANCELLED
   REJECTED
@@ -54,6 +56,8 @@ enum ProjectStatus {
   PENDING
   ACTIVE
   ON_HOLD
+  DELIVERED
+  UNDER_REVIEW
   COMPLETED
   CANCELLED
 }
@@ -83,6 +87,10 @@ enum NotificationType {
   OFFER
   REQUEST
   SYSTEM
+  PROJECT_DELIVERED
+  PROJECT_COMPLETED
+  PROJECT_AUTO_COMPLETED
+  PROJECT_CHANGES_REQUESTED
 }
 
 enum SubscriptionPlan {
@@ -441,6 +449,12 @@ model Project {
   progress    Int           @default(0)
   completedByUser Boolean   @default(false)
   completedByCompany Boolean @default(false)
+  reviewDeadline DateTime?
+  deliveredAt    DateTime?
+  completedAt    DateTime?
+  rating         Int?
+  review         String?       @db.Text
+  isAutoCompleted Boolean      @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
