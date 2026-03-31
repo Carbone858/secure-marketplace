@@ -5,9 +5,9 @@ description: Start server, pull changes, and log session (Start of Day Routine)
 This workflow is triggered when the user says "start session" or "let's work" or "/start_session".
 
 1. Environment & Vercel Verification.
-   - Check the **Vercel Master Link**: `https://secure-marketplace-macm.vercel.app`
+   - Check the **Vercel Master Link**: `https://secure-marketplace.vercel.app`
    - Check **Vercel Dashboard** for `SMTP_USER`, `SMTP_PASSWORD` and other email variables.
-   - Run the **Diagnostic tool**: `https://secure-marketplace-macm.vercel.app/api/debug/email`
+   - Run the **Diagnostic tool**: `https://secure-marketplace.vercel.app/api/debug/email`
 
 2. Synchronize Local Code.
    Fetch the latest changes from GitHub (pushed by Vercel syncs or other sessions).

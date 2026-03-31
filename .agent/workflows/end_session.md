@@ -34,4 +34,4 @@ This workflow is triggered when the user says "we are finish for today save ever
    ```
 
 5. Final Status.
-   Ensure the user knows their website is currently deploying on Vercel and check `https://secure-marketplace-macm.vercel.app` for the final result.
+   Ensure the user knows their website is currently deploying on Vercel and check `https://secure-marketplace.vercel.app` for the final result.
