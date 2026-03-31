@@ -4,6 +4,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getSession } from '@/lib/auth-session/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { LogOut } from 'lucide-react';
+import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav';
 
 interface CompanyDashboardLayoutProps {
   children: ReactNode;
@@ -29,6 +31,14 @@ export default async function CompanyDashboardLayout({
 
   const isRTL = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'nav' });
+
+  const navItems = [
+    { href: `/${locale}/company/dashboard`, label: t('companyMenu.dashboard') },
+    { href: `/${locale}/company/dashboard/browse`, label: t('companyMenu.browse') },
+    { href: `/${locale}/company/dashboard/offers`, label: t('companyMenu.offers') },
+    { href: `/${locale}/company/dashboard/projects`, label: t('companyMenu.projects') },
+    { href: `/${locale}/company/dashboard/profile`, label: t('companyMenu.profile') },
+  ];
 
   return (
     <div className="min-h-screen bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -86,8 +96,9 @@ export default async function CompanyDashboardLayout({
               <form action={`/${locale}/api/auth/logout`} method="POST">
                 <button
                   type="submit"
-                  className="text-sm text-destructive hover:text-destructive transition-colors"
+                  className="text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-destructive flex items-center gap-1.5 transition-colors"
                 >
+                  <LogOut className="h-3.5 w-3.5" />
                   {t('userMenu.logout')}
                 </button>
               </form>
@@ -95,38 +106,7 @@ export default async function CompanyDashboardLayout({
           </div>
 
           {/* Mobile navigation — visible on small screens */}
-          <nav className="sm:hidden flex items-center gap-4 pb-3 overflow-x-auto">
-            <Link
-              href={`/${locale}/company/dashboard`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-            >
-              {t('companyMenu.dashboard')}
-            </Link>
-            <Link
-              href={`/${locale}/company/dashboard/browse`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-            >
-              {t('companyMenu.browse')}
-            </Link>
-            <Link
-              href={`/${locale}/company/dashboard/offers`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-            >
-              {t('companyMenu.offers')}
-            </Link>
-            <Link
-              href={`/${locale}/company/dashboard/projects`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-            >
-              {t('companyMenu.projects')}
-            </Link>
-            <Link
-              href={`/${locale}/company/dashboard/profile`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-            >
-              {t('companyMenu.profile')}
-            </Link>
-          </nav>
+          <DashboardMobileNav items={navItems} />
         </div>
       </header>
 
