@@ -223,6 +223,13 @@
     overflow: hidden;
   }
 
+  @media (max-width: 768px) {
+    body:has(.messages-page-active) main {
+      /* Subtract 192px = 64 (Navbar) + 64 (Dashboard Header) + 64 (MobileNav) */
+      height: calc(100dvh - 192px) !important;
+    }
+  }
+
   input::placeholder,
   textarea::placeholder {
     color: hsl(var(--muted-foreground));
