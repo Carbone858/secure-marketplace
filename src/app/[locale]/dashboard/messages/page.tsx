@@ -14,10 +14,21 @@ import {
   Briefcase,
   Building2,
   LayoutDashboard,
+  MoreHorizontal,
+  Trash2,
+  BellOff,
+  UserX,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -213,7 +224,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="messages-page-active flex flex-col h-full w-full overflow-hidden bg-background">
+    <div className="messages-page-active flex flex-col h-full grow w-full overflow-hidden bg-background">
       <div className="flex-1 flex overflow-hidden">
         {/* Conversations List */}
         <aside
@@ -311,6 +322,30 @@ export default function MessagesPage() {
                     <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Active now</span>
                   </div>
                 </div>
+
+                {/* More Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <MoreHorizontal className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem className="text-xs flex items-center gap-2">
+                       <BellOff className="h-3.5 w-3.5" />
+                       Mute Notifications
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-xs flex items-center gap-2">
+                       <UserX className="h-3.5 w-3.5" />
+                       Block User
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-xs text-destructive flex items-center gap-2">
+                       <Trash2 className="h-3.5 w-3.5" />
+                       Delete Conversation
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               {/* Project Context (Integrated) */}
