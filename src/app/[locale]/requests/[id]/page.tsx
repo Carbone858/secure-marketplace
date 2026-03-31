@@ -200,6 +200,8 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                 ? `/${locale}/dashboard/requests`
                 : searchParams?.from === 'company-browse'
                 ? `/${locale}/company/dashboard/browse`
+                : searchParams?.from === 'company-projects'
+                ? `/${locale}/company/dashboard/projects`
                 : `/${locale}/requests`
             }
             label={t('detail.backToList')}
@@ -456,7 +458,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                           ? `${request.budgetMin.toLocaleString()} - ${request.budgetMax.toLocaleString()}`
                           : request.budgetMin
                             ? `${t('detail.budgetFrom')} ${request.budgetMin.toLocaleString()}`
-                            : `${t('detail.budgetUpTo')} ${request.budgetMax.toLocaleString()}`}
+                            : `${t('detail.budgetUpTo')} ${request.budgetMax?.toLocaleString()}`}
                         <span className="text-xs ms-1 font-bold uppercase tracking-widest text-muted-foreground">{request.currency}</span>
                       </p>
                     </div>

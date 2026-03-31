@@ -131,7 +131,7 @@ export default function CompanyProjectsPage() {
 
                 <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 pt-4 border-t border-border/50">
                   <Button variant="outline" size="sm" asChild className="w-full sm:w-auto text-xs h-9">
-                    <Link href={`/${locale}/requests/${project.requestId}`}>
+                    <Link href={`/${locale}/requests/${project.requestId}?from=company-projects`}>
                       {t('projects.viewRequest')}
                     </Link>
                   </Button>
