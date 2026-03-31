@@ -188,8 +188,8 @@ export default async function RequestDetailPage({ params: { locale, id }, search
   };
 
   return (
-    <div className="min-h-screen bg-muted/50 py-8" dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-muted/50 py-6 lg:py-10" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Back Link */}
         <Suspense fallback={<div className="mb-6 h-6" />}>
           <BackButton
@@ -216,239 +216,294 @@ export default async function RequestDetailPage({ params: { locale, id }, search
           />
         )}
 
-        {/* Main Content */}
-        <div className="bg-card rounded-xl shadow-lg overflow-hidden">
-          {/* Header */}
-          <div className="p-6 border-b">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                  <StatusBadge variant={request.status.toLowerCase()}>
-                    {td(`status.${request.status}`)}
-                  </StatusBadge>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getUrgencyColor(request.urgency)}`}>
-                    {t('list.filters.urgency')}: {t(`urgency.${request.urgency.toLowerCase()}`)}
-                  </span>
-                  <span className="text-sm text-muted-foreground ml-2">
-                    {new Date(request.createdAt).toLocaleDateString(locale)}
-                  </span>
-                </div>
-                <h1 className="text-2xl font-bold text-foreground mb-4">{request.title}</h1>
-                {/* @ts-ignore */}
-                {request.status === 'REJECTED' && request.rejectionReason && (
-                  <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3 mb-2 max-w-xl">
-                    <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="text-destructive font-semibold block mb-0.5">{isRTL ? 'سبب الرفض מן الإدارة:' : 'Admin Rejection Reason:'}</span>
-                      {/* @ts-ignore */}
-                      <p className="text-sm text-destructive/90">{request.rejectionReason}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
-                {hasAlreadyOffered && request.status === 'ACCEPTED' && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-success/10 text-success rounded-lg border border-success/20">
-                    <CheckCircle className="w-5 h-5" />
-                    <span className="font-medium">{isRTL ? 'تم قبول عرضك' : 'Offer Accepted'}</span>
-                  </div>
-                )}
-                {isOwner && (
-                  <RequestOwnerActions
-                    requestId={id}
-                    status={request.status}
-                    deleteLabel={isRTL ? 'حذف' : 'Delete'}
-                    editHref={['CANCELLED', 'REJECTED', 'EXPIRED'].includes(request.status) ? `/${locale}/requests/new?clone=${id}` : `/${locale}/requests/${id}/edit`}
-                    editLabel={isRTL ? 'تعديل' : 'Edit'}
-                    repostLabel={isRTL ? 'إعادة نشر' : 'Repost / Duplicate'}
-                  />
-                )}
-                {isAdmin && (
-                  <AdminRequestActions requestId={id} status={request.status} />
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="p-6">
-            {/* Description */}
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-foreground mb-3">{t('detail.description')}</h2>
-              <p className="text-foreground whitespace-pre-wrap">{request.description}</p>
-            </div>
-
-            {/* Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div>
-                <h2 className="text-lg font-semibold text-foreground mb-3">{t('detail.details')}</h2>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Briefcase className="w-5 h-5 text-muted-foreground/60" />
-                    <span className="text-muted-foreground">{isRTL ? request.category?.nameAr : request.category?.nameEn}</span>
-                    {request.subcategory && (
-                      <span className="text-muted-foreground/60">› {isRTL ? request.subcategory.nameAr : request.subcategory.nameEn}</span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-muted-foreground/60" />
-                    <span className="text-muted-foreground">
-                      {isRTL ? request.city?.nameAr : request.city?.nameEn}, {isRTL ? request.country?.nameAr : request.country?.nameEn}
-                    </span>
-                  </div>
-                  {(request.budgetMin || request.budgetMax) && (
-                    <div className="flex items-center gap-3">
-                      <DollarSign className="w-5 h-5 text-muted-foreground/60" />
-                      <span className="text-muted-foreground">
-                        {request.budgetMin && request.budgetMax
-                          ? `${request.budgetMin} - ${request.budgetMax} ${request.currency}`
-                          : request.budgetMin
-                            ? `${t('detail.budgetFrom')} ${request.budgetMin} ${request.currency}`
-                            : `${t('detail.budgetUpTo')} ${request.budgetMax} ${request.currency}`}
-                      </span>
-                    </div>
-                  )}
-                  {request.deadline && (
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-muted-foreground/60" />
-                      <span className="text-muted-foreground">
-                        {t('detail.deadline')}: {new Date(request.deadline).toLocaleDateString()}
-                      </span>
-                    </div>
-                  )}
-                  {request.allowRemote && (
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-success" />
-                      <span className="text-success">{t('detail.remoteAllowed')}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Posted By */}
-              <div>
-                <h2 className="text-lg font-semibold text-foreground mb-3">{t('detail.postedBy')}</h2>
-                <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-primary" />
-                  </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Main Column (Left) */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-card rounded-xl shadow-sm border overflow-hidden">
+              <div className="p-6 border-b">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div>
-                    <p className="font-medium text-foreground">{request.user.name}</p>
-                    <p className="text-sm text-muted-foreground">{t('detail.memberSince')} {new Date(request.createdAt).getFullYear()}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Images */}
-            {Array.isArray(request.images) && request.images.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-foreground mb-3">{t('detail.images')}</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {(request.images as string[]).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt=""
-                      className="w-full aspect-square object-cover rounded-lg"
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Tags */}
-            {request.tags.filter(tag => !tag.startsWith('lang:')).length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-foreground mb-3">{t('detail.tags')}</h2>
-                <div className="flex flex-wrap gap-2">
-                  {request.tags.filter(tag => !tag.startsWith('lang:')).map((tag) => (
-                    <span key={tag} className="px-3 py-1 bg-muted text-foreground rounded-full text-sm">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Offers Section */}
-          <div className="border-t p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-foreground">
-                {t('detail.offers')} ({request._count.offers})
-              </h2>
-              {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
-            </div>
-
-            {request._count.offers === 0 ? (
-              <div className="text-center py-8 bg-muted/50 rounded-lg">
-                <Building2 className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-muted-foreground">{t('detail.noOffers')}</p>
-              </div>
-            ) : visibleOffers.length === 0 ? (
-              <div className="text-center py-10 bg-muted/30 rounded-lg border border-dashed">
-                <Shield className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-                <p className="font-medium text-foreground">{isRTL ? 'العروض مخفية' : 'Offers are hidden'}</p>
-                <p className="text-sm text-muted-foreground mt-1 max-w-md mx-auto">
-                  {isRTL ? 'حفاظاً على الخصوصية والمنافسة العادلة، يمكن لصاحب الطلب فقط رؤية تفاصيل العروض.' : 'To maintain privacy and fair competition, only the request owner can see the offer details.'}
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {visibleOffers.map((offer) => (
-                  <div key={offer.id} className="border rounded-lg p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                          {offer.company.logo ? (
-                            <img src={offer.company.logo} alt="" className="w-full h-full object-cover rounded-lg" />
-                          ) : (
-                            <Building2 className="w-6 h-6 text-primary" />
-                          )}
-                        </div>
-                        <div>
-                          <p className="font-medium text-foreground">{offer.company.name}</p>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <span className="text-warning">★</span> {offer.company.rating.toFixed(1)}
-                            </span>
-                            <span>({offer.company.reviewCount} {t('detail.reviews')})</span>
-                            {offer.company.verificationStatus === 'VERIFIED' && (
-                              <span className="text-success flex items-center gap-1">
-                                <CheckCircle className="w-4 h-4" /> {t('detail.verified')}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-primary">
-                          {offer.price} {offer.currency}
-                        </p>
-                        {offer.estimatedDays && (
-                          <p className="text-sm text-muted-foreground">
-                            {t('detail.estimatedDays', { days: offer.estimatedDays })}
-                          </p>
-                        )}
-                      </div>
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                      <StatusBadge variant={request.status.toLowerCase()}>
+                        {td(`status.${request.status}`)}
+                      </StatusBadge>
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-tight ${getUrgencyColor(request.urgency)}`}>
+                        {t(`urgency.${request.urgency.toLowerCase()}`)}
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5" />
+                        {new Date(request.createdAt).toLocaleDateString(locale)}
+                      </span>
                     </div>
-                    {offer.description && (
-                      <p className="mt-3 text-muted-foreground">{offer.description}</p>
+                    <h1 className="text-2xl font-bold text-foreground mb-4 break-words leading-tight">{request.title}</h1>
+                    
+                    {request.status === 'REJECTED' && (request as any).rejectionReason && (
+                      <div className="flex items-start gap-2 bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3 mb-2 max-w-xl animate-in fade-in slide-in-from-top-4 duration-500">
+                        <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                        <div>
+                          <span className="text-secondary-foreground font-bold block mb-0.5 text-sm">{isRTL ? 'سبب الرفض من الإدارة:' : 'Admin Rejection Reason:'}</span>
+                          <p className="text-sm text-destructive font-medium">{(request as any).rejectionReason}</p>
+                        </div>
+                      </div>
                     )}
-                    {isOwner && offer.status === 'PENDING' && (
-                      <OfferActions
-                        offerId={offer.id}
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
+                    {hasAlreadyOffered && request.status === 'ACCEPTED' && (
+                      <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-600 rounded-lg border border-emerald-500/20">
+                        <CheckCircle className="w-5 h-5" />
+                        <span className="font-bold text-sm tracking-tight">{isRTL ? 'تم قبول عرضك' : 'Offer Accepted'}</span>
+                      </div>
+                    )}
+                    {isOwner && (
+                      <RequestOwnerActions
                         requestId={id}
-                        acceptLabel={isRTL ? 'قبول العرض' : 'Accept Offer'}
-                        rejectLabel={isRTL ? 'رفض العرض' : 'Reject Offer'}
+                        status={request.status}
+                        deleteLabel={isRTL ? 'حذف' : 'Delete'}
+                        editHref={['CANCELLED', 'REJECTED', 'EXPIRED'].includes(request.status) ? `/${locale}/requests/new?clone=${id}` : `/${locale}/requests/${id}/edit`}
+                        editLabel={isRTL ? 'تعديل' : 'Edit'}
+                        repostLabel={isRTL ? 'إعادة نشر' : 'Repost / Duplicate'}
                       />
                     )}
+                    {isAdmin && (
+                      <AdminRequestActions requestId={id} status={request.status} />
+                    )}
                   </div>
-                ))}
+                </div>
               </div>
-            )}
+
+              <div className="p-6 space-y-8">
+                {/* Description */}
+                <div>
+                  <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60 mb-3">{t('detail.description')}</h2>
+                  <p className="text-foreground text-lg leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere">{request.description}</p>
+                </div>
+
+                {/* Images */}
+                {Array.isArray(request.images) && request.images.length > 0 && (
+                  <div>
+                    <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60 mb-3">{t('detail.images')}</h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {(request.images as string[]).map((image, index) => (
+                        <div key={index} className="aspect-square relative overflow-hidden rounded-xl border border-border/50 group cursor-pointer">
+                          <img
+                            src={image}
+                            alt=""
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tags */}
+                {request.tags.filter(tag => !tag.startsWith('lang:')).length > 0 && (
+                  <div>
+                    <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60 mb-3">{t('detail.tags')}</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {request.tags.filter(tag => !tag.startsWith('lang:')).map((tag) => (
+                        <span key={tag} className="px-4 py-1.5 bg-secondary text-secondary-foreground rounded-full text-xs font-bold tracking-tight">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Offers Section (In Main Col) */}
+            <div className="bg-card rounded-xl shadow-sm border p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold tracking-tight">
+                  {t('detail.offers')} ({request._count.offers})
+                </h2>
+                {canSendOffer && <SendOfferButton requestId={id} variant="page" />}
+              </div>
+
+              {request._count.offers === 0 ? (
+                <div className="text-center py-10 bg-muted/30 rounded-xl border border-dashed">
+                  <Building2 className="w-12 h-12 text-muted-foreground/20 mx-auto mb-3" />
+                  <p className="text-muted-foreground font-medium">{t('detail.noOffers')}</p>
+                </div>
+              ) : visibleOffers.length === 0 ? (
+                <div className="text-center py-12 bg-muted/30 rounded-xl border border-dashed">
+                  <Shield className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                  <p className="font-bold text-lg text-foreground">{isRTL ? 'العروض مخفية' : 'Offers are hidden'}</p>
+                  <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto leading-relaxed">
+                    {isRTL ? 'حفاظاً على الخصوصية والمنافسة العادلة، يمكن لصاحب الطلب فقط رؤية تفاصيل العروض.' : 'To maintain privacy and fair competition, only the request owner can see the offer details.'}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {visibleOffers.map((offer) => (
+                    <div key={offer.id} className="border border-border/60 bg-card rounded-xl p-5 hover:border-primary/30 transition-all duration-300">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 bg-primary/5 rounded-xl border border-primary/10 flex items-center justify-center overflow-hidden shrink-0">
+                            {offer.company.logo ? (
+                              <img src={offer.company.logo} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <Building2 className="w-7 h-7 text-primary/40" />
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-bold text-foreground text-lg tracking-tight">{offer.company.name}</p>
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1 font-medium">
+                              <span className="flex items-center gap-1">
+                                <span className="text-warning text-lg leading-none">★</span> {offer.company.rating.toFixed(1)}
+                              </span>
+                              <span className="opacity-40">|</span>
+                              <span>{offer.company.reviewCount} {t('detail.reviews')}</span>
+                              {offer.company.verificationStatus === 'VERIFIED' && (
+                                <>
+                                  <span className="opacity-40">|</span>
+                                  <span className="text-emerald-600 flex items-center gap-1">
+                                    <CheckCircle className="w-4 h-4 fill-emerald-500/10" /> {t('detail.verified')}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right sm:pt-1">
+                          <div className="text-2xl font-black text-primary leading-none">
+                            {offer.price.toLocaleString()} <span className="text-sm font-bold uppercase tracking-widest">{offer.currency}</span>
+                          </div>
+                          {offer.estimatedDays && (
+                            <p className="text-xs font-bold text-muted-foreground/70 mt-1 uppercase tracking-widest">
+                              {t('detail.estimatedDays', { days: offer.estimatedDays })}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      {offer.description && (
+                        <div className="mt-4 p-4 bg-muted/20 rounded-lg border border-border/30">
+                          <p className="text-foreground/80 leading-relaxed break-words overflow-wrap-anywhere whitespace-pre-wrap">{offer.description}</p>
+                        </div>
+                      )}
+                      {isOwner && offer.status === 'PENDING' && (
+                        <div className="mt-5 pt-5 border-t border-border/40">
+                          <OfferActions
+                            offerId={offer.id}
+                            requestId={id}
+                            acceptLabel={isRTL ? 'قبول العرض' : 'Accept Offer'}
+                            rejectLabel={isRTL ? 'رفض العرض' : 'Reject Offer'}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Sidebar Column (Right) */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Quick Details Sidebar Card */}
+            <div className="bg-card rounded-xl shadow-sm border p-6 sticky top-24">
+              <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60 mb-5">{t('detail.details')}</h2>
+              
+              <div className="space-y-5">
+                {/* Category */}
+                <div className="flex items-start gap-4">
+                  <div className="p-2 bg-primary/5 rounded-lg text-primary shrink-0">
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">Category</p>
+                    <p className="font-bold text-sm">
+                      {isRTL ? request.category?.nameAr : request.category?.nameEn}
+                    </p>
+                    {request.subcategory && (
+                      <p className="text-xs text-muted-foreground font-medium">
+                        {isRTL ? request.subcategory.nameAr : request.subcategory.nameEn}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div className="flex items-start gap-4">
+                  <div className="p-2 bg-accent/10 rounded-lg text-accent-foreground shrink-0">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">Location</p>
+                    <p className="font-bold text-sm">
+                      {isRTL ? request.city?.nameAr : request.city?.nameEn}
+                    </p>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      {isRTL ? request.country?.nameAr : request.country?.nameEn}
+                      {request.area && `, ${isRTL ? request.area.nameAr : request.area.nameEn}`}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Budget */}
+                {(request.budgetMin || request.budgetMax) && (
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-600 shrink-0">
+                      <DollarSign className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">Estimated Budget</p>
+                      <p className="font-black text-lg text-foreground">
+                        {request.budgetMin && request.budgetMax
+                          ? `${request.budgetMin.toLocaleString()} - ${request.budgetMax.toLocaleString()}`
+                          : request.budgetMin
+                            ? `${t('detail.budgetFrom')} ${request.budgetMin.toLocaleString()}`
+                            : `${t('detail.budgetUpTo')} ${request.budgetMax.toLocaleString()}`}
+                        <span className="text-xs ms-1 font-bold uppercase tracking-widest text-muted-foreground">{request.currency}</span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Deadline */}
+                {request.deadline && (
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-orange-500/10 rounded-lg text-orange-600 shrink-0">
+                      <Calendar className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">{t('detail.deadline')}</p>
+                      <p className="font-bold text-sm">
+                        {new Date(request.deadline).toLocaleDateString(locale, { dateStyle: 'long' })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Remote Support */}
+                {request.allowRemote && (
+                  <div className="flex items-start gap-4 p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10">
+                    <CheckCircle className="w-5 h-5 text-emerald-600 mt-0.5" />
+                    <div>
+                      <p className="font-bold text-sm text-emerald-700 leading-tight">Remote Ready</p>
+                      <p className="text-[10px] text-emerald-600/80 font-bold uppercase tracking-tight mt-0.5">{t('detail.remoteAllowed')}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Poster Info (Part of Sidebar) */}
+              <div className="mt-10 pt-8 border-t">
+                <h2 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-4">{t('detail.postedBy')}</h2>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-foreground rounded-full flex items-center justify-center text-white font-bold shadow-sm">
+                    {request.user.name?.[0]?.toUpperCase() || <User className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm text-foreground">{request.user.name}</p>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight">{t('detail.memberSince')} {new Date(request.createdAt).getFullYear()}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
