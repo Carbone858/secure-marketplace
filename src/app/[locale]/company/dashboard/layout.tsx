@@ -111,11 +111,11 @@ export default async function CompanyDashboardLayout({
       </header>
 
       {/* Main Content */}
-      <main className="py-4 sm:py-6 lg:py-8">
+      <div className="py-4 sm:py-6 lg:py-8">
         <NextIntlClientProvider messages={messages} locale={locale}>
           {children}
         </NextIntlClientProvider>
-      </main>
+      </div>
     </div>
   );
 }

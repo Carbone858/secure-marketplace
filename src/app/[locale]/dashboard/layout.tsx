@@ -106,14 +106,14 @@ export default async function DashboardLayout({
       </header>
 
       {/* Main Content */}
-      <main className="py-4 sm:py-6 lg:py-8">
+      <div className="py-4 sm:py-6 lg:py-8">
         <NextIntlClientProvider messages={messages} locale={locale}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 dashboard-breadcrumbs-container">
             <DynamicBreadcrumbs />
           </div>
           {children}
         </NextIntlClientProvider>
-      </main>
+      </div>
     </div>
   );
 }
