@@ -1640,6 +1640,7 @@
         "deleted": "Request deleted successfully",
         "deleteFailed": "Failed to delete request"
       },
+      "messagePartner": "Message Company",
       "completion": {
         "actions": {
           "reviewConfirm": "Review & Confirm",

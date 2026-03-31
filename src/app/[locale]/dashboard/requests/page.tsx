@@ -31,6 +31,14 @@ interface Request {
   currency: string;
   createdAt: string;
   rejectionReason?: string | null;
+  attachments?: any;
+  tags?: string[];
+  projects?: {
+    id: string;
+    company: {
+      userId: string;
+    };
+  }[];
   _count: {
     offers: number;
   };
@@ -301,6 +309,18 @@ export default function MyRequestsPage() {
                           <Eye className="h-4 w-4 me-2" />
                           {t('view')}
                         </Button>
+                        
+                        {request.projects && request.projects.length > 0 && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 lg:flex-none h-10 font-bold border-primary/20 text-primary hover:bg-primary/5 shadow-sm"
+                            onClick={() => router.push(`/${locale}/dashboard/messages?with=${request.projects![0].company.userId}`)}
+                          >
+                            <MessageSquare className="h-4 w-4 me-2" />
+                            {td('messagePartner') || 'Message'}
+                          </Button>
+                        )}
                         
                         {request.status === 'UNDER_REVIEW' && (
                           <Button

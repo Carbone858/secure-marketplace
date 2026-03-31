@@ -142,6 +142,16 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
               nameAr: true,
             },
           },
+          projects: {
+            select: {
+              id: true,
+              company: {
+                select: {
+                  userId: true,
+                },
+              },
+            },
+          },
           _count: {
             select: {
               offers: true,
