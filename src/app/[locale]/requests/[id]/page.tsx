@@ -93,6 +93,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
               verificationStatus: true,
             },
           },
+          attachments: true,
         },
         orderBy: { createdAt: 'desc' },
       },
@@ -384,6 +385,25 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                       {offer.description && (
                         <div className="mt-4 p-4 bg-muted/20 rounded-lg border border-border/30">
                           <p className="text-foreground/80 leading-relaxed break-words overflow-wrap-anywhere whitespace-pre-wrap">{offer.description}</p>
+                        </div>
+                      )}
+                      
+                      {/* Offer Attachments */}
+                      {Array.isArray(offer.attachments) && offer.attachments.length > 0 && (
+                        <div className="mt-4">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-2">{t('detail.images')}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {(offer.attachments as string[]).map((url, i) => (
+                              <div key={i} className="w-16 h-16 relative rounded-lg border border-border/50 overflow-hidden cursor-pointer group">
+                                <img 
+                                  src={url} 
+                                  alt="" 
+                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                  onClick={() => window.open(url, '_blank')}
+                                />
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                       {isOwner && offer.status === 'PENDING' && (
