@@ -1000,7 +1000,20 @@
       "reject": "Reject",
       "estimatedDays": "{days} days",
       "offersList": {
-        "title": "Offers"
+        "title": "Offers",
+        "count": "{count} offers",
+        "noOffers": "No offers yet",
+        "noOffersDesc": "Be the first to submit an offer",
+        "submitOffer": "Submit Offer",
+        "yourOffer": "Your Offer",
+        "editOffer": "Edit Offer",
+        "withdrawOffer": "Withdraw",
+        "status": {
+          "PENDING": "Pending",
+          "ACCEPTED": "Accepted",
+          "REJECTED": "Rejected",
+          "WITHDRAWN": "Withdrawn"
+        }
       },
       "actions": {
         "edit": "Edit Request",
