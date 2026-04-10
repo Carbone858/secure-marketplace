@@ -1047,8 +1047,8 @@
         "currency": "العملة",
         "description": "وصف العرض",
         "descriptionPlaceholder": "صف نهجك والجدول الزمني ولماذا أنت الخيار الأفضل...",
-        "timeline": "الجدول الزمني المتوقع",
-        "timelinePlaceholder": "مثال: أسبوعين",
+        "timeline": "الجدول الزمني المتوقع (بالأيام)",
+        "timelinePlaceholder": "مثال: 14",
         "attachments": "المرفقات (اختياري)",
         "attachmentsHint": "ارفع مستندات ذات صلة، معرض أعمال، إلخ"
       },

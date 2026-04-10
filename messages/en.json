@@ -1073,8 +1073,8 @@
         "currency": "Currency",
         "description": "Proposal Description",
         "descriptionPlaceholder": "Describe your approach, timeline, and why you're the best choice...",
-        "timeline": "Estimated Timeline",
-        "timelinePlaceholder": "e.g., 2 weeks",
+        "timeline": "Estimated Timeline (in days)",
+        "timelinePlaceholder": "e.g. 14",
         "attachments": "Attachments (Optional)",
         "attachmentsHint": "Upload relevant documents, portfolios, etc."
       },

@@ -320,7 +320,7 @@ export default function SubmitOfferPage() {
                         type="number"
                         min={1}
                         {...register('estimatedDays', { valueAsNumber: true })}
-                        placeholder="e.g. 14"
+                        placeholder={t('fields.timelinePlaceholder')}
                         className="pl-10 h-11 rounded-xl"
                       />
                     </div>
