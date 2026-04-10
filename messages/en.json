@@ -2141,5 +2141,20 @@
     "checkAgain": "Check Again",
     "systemStatus": "System Status",
     "rightsReserved": "All rights reserved."
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "requests": "Service Requests",
+    "messages": "Messages",
+    "profile": "Profile",
+    "settings": "Settings",
+    "details": "Details",
+    "new": "Create Request",
+    "edit": "Edit Request",
+    "offers": "My Offers",
+    "projects": "My Projects",
+    "browse": "Browse Requests",
+    "company": "Company Profile"
   }
 }
