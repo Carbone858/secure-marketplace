@@ -13,6 +13,8 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = params;
+    const { searchParams } = new URL(request.url);
+    const locale = searchParams.get('locale') || 'en';
 
     const cities = await prisma.city.findMany({
       where: { countryId: id },
@@ -32,7 +34,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         data: {
           cities: cities.map((city) => ({
             id: city.id,
-            name: city.nameEn,
+            name: locale === 'ar' ? city.nameAr : city.nameEn,
             nameEn: city.nameEn,
             nameAr: city.nameAr,
           })),

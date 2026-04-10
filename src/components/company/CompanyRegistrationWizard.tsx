@@ -105,7 +105,7 @@ export function CompanyRegistrationWizard({ countries }: CompanyRegistrationWiza
     
     if (countryId) {
       try {
-        const response = await fetch(`/api/countries/${countryId}/cities`);
+        const response = await fetch(`/api/countries/${countryId}/cities?locale=${locale}`);
         const data = await response.json();
         if (data.success) {
           setCities(data.data.cities);

@@ -341,7 +341,7 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
         setFormData(prev => ({ ...prev, countryId, cityId: '', operationAreas: [] }));
         if (countryId) {
             try {
-                const res = await fetch(`/api/countries/${countryId}/cities`);
+                const res = await fetch(`/api/countries/${countryId}/cities?locale=${locale}`);
                 const data = await res.json();
                 if (data.success) setCities(data.data.cities);
             } catch (e) { console.error(e); }
