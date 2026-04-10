@@ -1000,7 +1000,8 @@
       "reject": "Reject",
       "estimatedDays": "{days} days",
       "offersList": {
-        "title": "Offers",
+        "title": "Offers"
+      },
       "actions": {
         "edit": "Edit Request",
         "cancel": "Cancel Request",
