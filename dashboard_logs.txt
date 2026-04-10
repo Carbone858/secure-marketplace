@@ -1,0 +1,14 @@
+﻿node.exe : Retrieving projectΓÇª
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Retrieving projectΓÇª:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Resolving deployment "secure-marketplace.vercel.app"
+Fetching logs...
+TIME         HOST                           LEVEL                                   STATUS  MESSAGE                    
+ 
+18:13:55.42  secure-marketplace.vercel.app  info   ╬╡ GET /ar/dashboard/requests     307     (no message)              
+  
+Fetched 1 logs for carbone858s-projects/secure-marketplace

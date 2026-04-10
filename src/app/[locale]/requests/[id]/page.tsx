@@ -393,14 +393,13 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                           <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-2">{t('detail.images')}</p>
                           <div className="flex flex-wrap gap-2">
                             {(offer.attachments as string[]).map((url, i) => (
-                              <div key={i} className="w-16 h-16 relative rounded-lg border border-border/50 overflow-hidden cursor-pointer group">
+                              <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-16 h-16 relative rounded-lg border border-border/50 overflow-hidden cursor-pointer group block">
                                 <img 
                                   src={url} 
                                   alt="" 
                                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                  onClick={() => window.open(url, '_blank')}
                                 />
-                              </div>
+                              </a>
                             ))}
                           </div>
                         </div>
