@@ -1691,6 +1691,8 @@
     "browse": {
       "title": "Browse Requests",
       "subtitle": "Find service requests to submit offers",
+      "relatedProjects": "Related Projects",
+      "allProjects": "All Projects",
       "searchPlaceholder": "Search requests by title, description...",
       "noResults": "No open requests found",
       "noResultsDesc": "Check back later for new opportunities",
