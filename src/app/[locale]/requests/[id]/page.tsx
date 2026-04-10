@@ -416,7 +416,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                     <Briefcase className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">Category</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">{t('detail.category')}</p>
                     <p className="font-bold text-sm">
                       {isRTL ? request.category?.nameAr : request.category?.nameEn}
                     </p>
@@ -434,7 +434,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">Location</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">{t('detail.location')}</p>
                     <p className="font-bold text-sm">
                       {isRTL ? request.city?.nameAr : request.city?.nameEn}
                     </p>
@@ -452,7 +452,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                       <DollarSign className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">Estimated Budget</p>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 mb-0.5">{t('detail.budget')}</p>
                       <p className="font-black text-lg text-foreground">
                         {request.budgetMin && request.budgetMax
                           ? `${request.budgetMin.toLocaleString()} - ${request.budgetMax.toLocaleString()}`
@@ -485,7 +485,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                   <div className="flex items-start gap-4 p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10">
                     <CheckCircle className="w-5 h-5 text-emerald-600 mt-0.5" />
                     <div>
-                      <p className="font-bold text-sm text-emerald-700 leading-tight">Remote Ready</p>
+                      <p className="font-bold text-sm text-emerald-700 leading-tight">{t('detail.remoteReady')}</p>
                       <p className="text-[10px] text-emerald-600/80 font-bold uppercase tracking-tight mt-0.5">{t('detail.remoteAllowed')}</p>
                     </div>
                   </div>
