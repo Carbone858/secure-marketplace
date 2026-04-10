@@ -4,12 +4,15 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from '@/i18n/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Sparkles, Gift } from 'lucide-react';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 export default function MembershipPage() {
   const t = useTranslations('membership');
   const router = useRouter();
   const locale = useLocale();
+  const { user } = useAuth();
   const isRTL = locale === 'ar';
+  const isCompany = user?.role === 'COMPANY';
 
   return (
     <div
@@ -49,9 +52,15 @@ export default function MembershipPage() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" onClick={() => router.push('/requests/new')}>
-            {t('postRequest')}
-          </Button>
+          {isCompany ? (
+            <Button size="lg" onClick={() => router.push('/requests')}>
+              {t('browseRequests')}
+            </Button>
+          ) : (
+            <Button size="lg" onClick={() => router.push('/requests/new')}>
+              {t('postRequest')}
+            </Button>
+          )}
           <Button size="lg" variant="outline" onClick={() => router.push('/contact')}>
             {t('contactUs')}
           </Button>
