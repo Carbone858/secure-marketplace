@@ -9,8 +9,15 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = 'ar';
   }
   
+  let messages = {};
+  try {
+    messages = (await import(`../messages/${locale}.json`)).default;
+  } catch (error) {
+    console.warn(`[i18n] Failed to load messages for locale: ${locale}. Falling back to empty object.`);
+  }
+
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages,
   };
 });

@@ -1010,6 +1010,19 @@
           "cancel": "Cancel Request",
           "share": "Share",
           "report": "Report"
+        },
+        "count": "{count} عروض",
+        "noOffers": "لا توجد عروض بعد",
+        "noOffersDesc": "كن أول من يقدم عرضاً",
+        "submitOffer": "تقديم عرض",
+        "yourOffer": "عرضك",
+        "editOffer": "تعديل العرض",
+        "withdrawOffer": "سحب",
+        "status": {
+          "PENDING": "قيد الانتظار",
+          "ACCEPTED": "مقبول",
+          "REJECTED": "مرفوض",
+          "WITHDRAWN": "مسحوب"
         }
       },
       "status": {
@@ -1091,6 +1104,12 @@
         },
         "progressRestored": "Progress Restored",
         "progressRestoredDesc": "We have loaded your last draft."
+      },
+      "actions": {
+        "edit": "تعديل الطلب",
+        "cancel": "إلغاء الطلب",
+        "share": "مشاركة",
+        "report": "إبلاغ"
       }
     },
     "dashboard_pages": {
@@ -1170,6 +1189,46 @@
         },
         "noOffers": "No offers yet"
       }
+    },
+    "offer": {
+      "meta": {
+        "title": "تقديم عرض - سوق الخدمات",
+        "description": "تقديم عرض لطلب خدمة"
+      },
+      "title": "تقديم عرض",
+      "requestInfo": "معلومات الطلب",
+      "fields": {
+        "price": "سعرك",
+        "currency": "العملة",
+        "description": "وصف العرض",
+        "descriptionPlaceholder": "صف نهجك والجدول الزمني ولماذا أنت الخيار الأفضل...",
+        "timeline": "الجدول الزمني المتوقع (بالأيام)",
+        "timelinePlaceholder": "مثال: 14",
+        "attachments": "المرفقات (اختياري)",
+        "attachmentsHint": "ارفع مستندات ذات صلة، معرض أعمال، إلخ"
+      },
+      "errors": {
+        "priceRequired": "السعر مطلوب",
+        "pricePositive": "يجب أن يكون السعر أكبر من 0",
+        "descriptionRequired": "الوصف مطلوب",
+        "descriptionMinLength": "يجب أن يكون الوصف 50 حرفاً على الأقل",
+        "general": "حدث خطأ. يرجى المحاولة مرة أخرى لاحقاً."
+      },
+      "submit": {
+        "button": "تقديم العرض",
+        "loading": "جاري التقديم..."
+      },
+      "success": {
+        "title": "تم تقديم العرض!",
+        "message": "تم تقديم عرضك بنجاح.",
+        "viewRequest": "عرض الطلب"
+      },
+      "common": {
+        "back": "رجوع",
+        "cancel": "إلغاء"
+      },
+      "progressRestored": "تم استعادة التقدم",
+      "progressRestoredDesc": "لقد قمنا بتحميل آخر مسودة لك."
     }
   },
   "dashboard_pages": {
@@ -2115,7 +2174,25 @@
     },
     "stillQuestions": "Still have questions?",
     "contactSupport": "Our support team is ready to help you with anything you need.",
-    "contactButton": "Contact Us"
+    "contactButton": "Contact Us",
+    "breadcrumbs": {
+      "home": "الرئيسية",
+      "dashboard": "لوحة التحكم",
+      "admin": "الإدارة",
+      "companies": "الشركات",
+      "requests": "الطلبات",
+      "messages": "الرسائل",
+      "projects": "المشاريع",
+      "reviews": "المراجعات",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "new": "جديد",
+      "edit": "تعديل",
+      "verification": "التحقق",
+      "company": "الشركة",
+      "offer": "عرض",
+      "details": "التفاصيل"
+    }
   },
   "membership": {
     "badge": "Launch Announcement",

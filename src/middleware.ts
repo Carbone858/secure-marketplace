@@ -201,8 +201,8 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match all routes except static files and Next.js internals
-    '/((?!_next|_vercel|.*\\..*).*)',
+    // Match all routes except static files, Next.js internals, and Vercel internals
+    '/((?!_next|_vercel|api|static|.*\\..*).*)',
     // Explicitly match all API routes
     '/api/:path*',
   ]
