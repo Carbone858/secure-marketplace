@@ -959,7 +959,11 @@
       "noResults": "لم يتم العثور على طلبات",
       "noResultsDesc": "حاول تعديل عوامل التصفية أو معايير البحث",
       "clearFilters": "مسح عوامل التصفية",
-      "createRequest": "إنشاء طلب"
+      "createRequest": "إنشاء طلب",
+      "meta": {
+        "title": "تصفح الطلبات",
+        "description": "ابحث وقدم عروضك على طلبات الخدمات"
+      }
     },
     "urgency": {
       "low": "منخفض",

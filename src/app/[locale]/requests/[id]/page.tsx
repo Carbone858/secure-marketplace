@@ -93,7 +93,6 @@ export default async function RequestDetailPage({ params: { locale, id }, search
               verificationStatus: true,
             },
           },
-          attachments: true,
         },
         orderBy: { createdAt: 'desc' },
       },

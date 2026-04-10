@@ -959,7 +959,11 @@
       "noResults": "No requests found",
       "noResultsDesc": "Try adjusting your filters or search criteria",
       "clearFilters": "Clear Filters",
-      "createRequest": "Create Request"
+      "createRequest": "Create Request",
+      "meta": {
+        "title": "Browse Requests",
+        "description": "Find and bid on service requests"
+      }
     },
     "urgency": {
       "low": "Low",
