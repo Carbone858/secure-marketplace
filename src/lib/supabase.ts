@@ -9,8 +9,8 @@ if (!supabaseUrl || !supabaseKey) {
 
 // Service role client for server-side operations (bypasses RLS)
 export const supabase = createClient(
-  supabaseUrl || '',
-  supabaseKey || '',
+  supabaseUrl || 'https://dummy.supabase.co',
+  supabaseKey || 'dummy-key',
   {
     auth: {
       persistSession: false,
