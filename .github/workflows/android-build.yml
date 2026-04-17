@@ -31,7 +31,7 @@ jobs:
       - name: Prepare Assets Shim
         run: |
           mkdir -p out
-          echo "<html><head><meta http-equiv='refresh' content='0;url=https://secure-marketplace.com'></head><body>Redirecting to Marketplace...</body></html>" > out/index.html
+          echo "<html><head><meta http-equiv='refresh' content='0;url=https://secure-marketplace.vercel.app'></head><body>Redirecting to Marketplace...</body></html>" > out/index.html
 
       - name: Clean Slate - Re-init Android
         run: |

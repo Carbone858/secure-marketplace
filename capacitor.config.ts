@@ -5,8 +5,8 @@ const config: CapacitorConfig = {
   appName: 'Secure Marketplace',
   webDir: 'out',
   server: {
-    // Replace with your actual production URL when ready
-    url: 'https://secure-marketplace.com',
+    // Points to the live production site
+    url: 'https://secure-marketplace.vercel.app',
     cleartext: true
   }
 };
