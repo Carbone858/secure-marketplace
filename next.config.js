@@ -16,8 +16,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
-  // Output configuration
-  output: process.env.NEXT_PUBLIC_EXPORT === 'true' ? 'export' : 'standalone',
+  // Use standalone output to reduce build size and time on Vercel
+  output: 'standalone',
 
   // Experimental: reduce static generation work to avoid timeout
   experimental: {
@@ -27,7 +27,6 @@ const nextConfig = {
 
   // Image optimization settings
   images: {
-    unoptimized: process.env.NEXT_PUBLIC_EXPORT === 'true',
     remotePatterns: [
       {
         protocol: 'https',
