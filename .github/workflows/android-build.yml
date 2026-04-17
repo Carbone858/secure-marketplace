@@ -14,7 +14,6 @@ jobs:
       NODE_OPTIONS: "--max_old_space_size=4096"
       DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
       JWT_SECRET: "placeholder-secret-at-least-32-chars-long"
-      JWT_SECRET: "placeholder-secret-at-least-32-chars-long"
     
     steps:
       - name: Checkout Code
