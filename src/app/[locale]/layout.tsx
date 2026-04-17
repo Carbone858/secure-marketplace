@@ -28,6 +28,12 @@ const notoSansArabic = Noto_Sans_Arabic({
 export const metadata: Metadata = {
   title: 'Service Marketplace',
   description: 'Leading service marketplace platform in the Arab world',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Secure Marketplace',
+  },
 };
 
 export default async function RootLayout({
