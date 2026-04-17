@@ -7,8 +7,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NODE_OPTIONS: "--max_old_space_size=4096"
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -32,10 +35,12 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
-          # Add other env vars if needed for build time
 
       - name: Capacitor Sync
         run: npx cap sync android
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
 
       - name: Build Android
         run: |
@@ -48,3 +53,4 @@ jobs:
         with:
           name: secure-marketplace-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
