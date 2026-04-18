@@ -9,7 +9,8 @@ import { Footer } from '@/components/layout/Footer';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
+import { SERVER_URL } from '@/lib/constants'; // Optional, but for completeness
+import { IOSInstallPrompt } from '@/components/layout/IOSInstallPrompt';
 import { authOptions } from '@/lib/next-auth-options';
 
 
@@ -77,6 +78,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="dns-prefetch" href="https://www.gstatic.com" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body
         className={`${inter.variable} ${notoSansArabic.variable} ${isRTL ? 'font-arabic' : 'font-sans'} min-h-screen flex flex-col antialiased`}
@@ -85,6 +87,7 @@ export default async function RootLayout({
           <Providers>
             <Navbar />
             <MobileNav />
+            <IOSInstallPrompt />
             <main className="flex-1">
               {children}
             </main>
