@@ -39,7 +39,7 @@ export default function DownloadPage() {
     return (
         <div className="min-h-screen pb-20 overflow-x-hidden">
             {/* Hero Section */}
-            <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-slate-950 text-white">
+            <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-slate-50 dark:bg-slate-900/50 transition-colors">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full">
                     <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px]" />
                     <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[100px]" />
@@ -50,24 +50,24 @@ export default function DownloadPage() {
                         <Badge variant="secondary" className="px-4 py-1.5 text-sm font-semibold bg-primary/20 text-primary border-primary/20 backdrop-blur-md">
                             {t('mockup.badge')}
                         </Badge>
-                        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight lg:leading-[1.1]">
+                        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight lg:leading-[1.1] text-slate-900 dark:text-white">
                             {t('title')}
                         </h1>
-                        <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto lg:mx-0">
+                        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
                             {t('subtitle')}
                         </p>
                         
                         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <ShieldCheck className="w-5 h-5 text-green-400" />
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background border shadow-sm backdrop-blur-sm text-slate-700 dark:text-slate-300">
+                                <ShieldCheck className="w-5 h-5 text-green-500" />
                                 <span className="text-sm font-medium">Verified Security</span>
                             </div>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <Zap className="w-5 h-5 text-yellow-400" />
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background border shadow-sm backdrop-blur-sm text-slate-700 dark:text-slate-300">
+                                <Zap className="w-5 h-5 text-yellow-500" />
                                 <span className="text-sm font-medium">Instant Updates</span>
                             </div>
-                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <Lock className="w-5 h-5 text-blue-400" />
+                            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background border shadow-sm backdrop-blur-sm text-slate-700 dark:text-slate-300">
+                                <Lock className="w-5 h-5 text-blue-500" />
                                 <span className="text-sm font-medium">Safe 256-bit Encryption</span>
                             </div>
                         </div>
