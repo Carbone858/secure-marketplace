@@ -7,10 +7,13 @@ import { useLocale } from 'next-intl';
 
 export function IOSInstallPrompt() {
     const [isVisible, setIsVisible] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     const locale = useLocale();
     const isRTL = locale === 'ar';
 
     useEffect(() => {
+        setIsMounted(true);
+        
         // 1. Detect if it's an iOS device
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
         
@@ -33,6 +36,8 @@ export function IOSInstallPrompt() {
         setIsVisible(false);
         localStorage.setItem('ios-install-prompt-dismissed', 'true');
     };
+
+    if (!isMounted || !isVisible) return null;
 
     return (
         <div className="fixed bottom-6 left-4 right-4 z-[100] animate-in fade-in slide-in-from-bottom-8 duration-700">
