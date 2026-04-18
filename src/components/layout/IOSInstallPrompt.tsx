@@ -34,41 +34,47 @@ export function IOSInstallPrompt() {
         localStorage.setItem('ios-install-prompt-dismissed', 'true');
     };
 
-    if (!isVisible) return null;
-
     return (
-        <div className="fixed bottom-20 left-4 right-4 z-[100] animate-in fade-in slide-in-from-bottom-5 duration-500">
-            <div className="bg-card border shadow-2xl rounded-2xl p-4 relative overflow-hidden">
-                {/* Background Decoration */}
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/5 rounded-full blur-2xl" />
-                
+        <div className="fixed bottom-6 left-4 right-4 z-[100] animate-in fade-in slide-in-from-bottom-8 duration-700">
+            {/* Pulsing Arrow pointing to Safari navigation bar */}
+            <div className="flex justify-center mb-2 animate-bounce">
+                <div className="bg-primary text-white p-2 rounded-full shadow-lg">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 5v14M19 12l-7 7-7-7"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div className="bg-card border-2 border-primary/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-2xl p-5 relative overflow-hidden">
                 <button 
                     onClick={handleDismiss}
-                    className="absolute top-2 end-2 p-1 rounded-full hover:bg-muted transition-colors"
+                    className="absolute top-2 end-2 p-2 rounded-full hover:bg-muted transition-colors"
                 >
                     <X className="h-4 w-4 text-muted-foreground" />
                 </button>
 
                 <div className="flex gap-4">
-                    <div className="flex-shrink-0 h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                        <PlusSquare className="h-6 w-6" />
+                    <div className="flex-shrink-0 h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                        <PlusSquare className="h-8 w-8" />
                     </div>
                     
-                    <div className="flex-1 space-y-1 pe-6">
-                        <h3 className="font-bold text-sm">
-                            {isRTL ? 'تثبيت التطبيق' : 'Install App'}
+                    <div className="flex-1 space-y-2 pe-6">
+                        <h3 className="font-bold text-base">
+                            {isRTL ? 'ثبت التطبيق على هاتفك' : 'Install on iPhone'}
                         </h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
+                        <p className="text-xs text-muted-foreground leading-relaxed font-medium">
                             {isRTL 
-                                ? 'للوصول السريع، اضغط على أيقونة المشاركة ثم "إضافة إلى الشاشة الرئيسية"'
-                                : 'For quick access, tap the Share icon and then "Add to Home Screen"'}
+                                ? 'هذا الموقع يعمل كـتطبيق! اضغط على أيقونة المشاركة في أسفل الشاشة ثم اختر "إضافة إلى الشاشة الرئيسية".'
+                                : 'This site works as an app! Tap the Share icon at the very bottom of your screen and select "Add to Home Screen".'}
                         </p>
                     </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-center gap-3 py-2 bg-muted/50 rounded-lg text-[10px] font-medium text-muted-foreground italic">
-                    <Share className="h-3 w-3" />
-                    <span>{isRTL ? 'أيقونة المشاركة في شريط Safari السفلي' : 'Share icon in Safari bottom bar'}</span>
+                <div className="mt-4 flex items-center justify-center gap-3 py-3 bg-primary/5 rounded-xl border border-primary/10">
+                    <div className="flex items-center gap-2 text-xs font-bold text-primary">
+                        <Share className="h-4 w-4" />
+                        <span>{isRTL ? 'أيقونة المشاركة في متصفح Safari' : 'Safari Share Button'}</span>
+                    </div>
                 </div>
             </div>
         </div>
