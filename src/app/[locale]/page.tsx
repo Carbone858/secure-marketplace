@@ -64,7 +64,10 @@ export default async function HomePage({ params: { locale } }: { params: { local
       {/* 9. Supply Side - How it Works for Companies */}
       <CompanyProcess />
 
-      {/* 10. Education - FAQ */}
+      {/* 10. Mobile App - Download & Install Guide */}
+      <AppShowcase />
+
+      {/* 11. Education - FAQ */}
       <FAQSection />
 
       {/* 11. Final CTA - Call to Action */}

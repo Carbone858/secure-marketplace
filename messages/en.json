@@ -2233,5 +2233,37 @@
     "projects": "My Projects",
     "browse": "Browse Requests",
     "company": "Company Profile"
+  },
+  "download": {
+    "title": "Experience the Marketplace on Mobile",
+    "subtitle": "Get our app for a faster, smoother, and more secure experience. Access all features on the go.",
+    "android": {
+      "title": "Android Version",
+      "p": "Install our app directly on your Android device for instant access to services.",
+      "button": "Download APK for Android",
+      "guide": {
+        "title": "How to Install on Android",
+        "step1": "Download the APK file by clicking the button below.",
+        "step2": "Tap on the downloaded file in your browser's 'Downloads' list.",
+        "step3": "If prompted, allow 'Install from Unknown Sources' in settings.",
+        "step4": "Tap 'Install' and then 'Open' to start using the app."
+      }
+    },
+    "ios": {
+      "title": "iPhone Version (iOS)",
+      "p": "No download needed! Add our marketplace to your home screen in seconds.",
+      "button": "Installation Guide",
+      "guide": {
+        "title": "How to Install on iPhone",
+        "step1": "Open this website in your **Safari** browser.",
+        "step2": "Tap the **Share** button (Square with arrow up) at the bottom.",
+        "step3": "Scroll down and tap **'Add to Home Screen'**.",
+        "step4": "Tap 'Add' in the top right corner. The icon is now on your home screen!"
+      }
+    },
+    "mockup": {
+      "alt": "Secure Marketplace App Mockup",
+      "badge": "100% Secure & Verified"
+    }
   }
 }
