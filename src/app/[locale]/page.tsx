@@ -16,6 +16,7 @@ const UserProcess = dynamic(() => import('@/components/home/UserProcess'), { ssr
 const FeaturedCompanies = dynamic(() => import('@/components/home/FeaturedCompanies'), { ssr: true });
 const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'), { ssr: true });
 const TrustSafety = dynamic(() => import('@/components/home/TrustSafety'), { ssr: true });
+const AppShowcase = dynamic(() => import('@/components/home/AppShowcase'), { ssr: true });
 const FAQSection = dynamic(() => import('@/components/home/FAQSection'), { ssr: true });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
