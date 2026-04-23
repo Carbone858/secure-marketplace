@@ -31,9 +31,12 @@ export function SmartAppBanner() {
     // 3. Check Dismissed Status
     const isDismissed = localStorage.getItem('smart-app-banner-dismissed');
 
-    if ((isAndroid || isIOS) && !isStandalone && !isDismissed) {
-      setDeviceType(isAndroid ? 'android' : 'ios');
-      // Show after a small delay to not feel like an aggressive popup
+    if (!isStandalone && !isDismissed) {
+      if (isAndroid) setDeviceType('android');
+      else if (isIOS) setDeviceType('ios');
+      else setDeviceType(null); // Fallback for Desktop (will use redirect logic)
+      
+      // Show after a small delay
       const timer = setTimeout(() => setIsVisible(true), 1500);
       return () => clearTimeout(timer);
     }
@@ -44,9 +47,11 @@ export function SmartAppBanner() {
     localStorage.setItem('smart-app-banner-dismissed', 'true');
   };
 
-  if (!isMounted || !isVisible || !deviceType) return null;
+  if (!isMounted || !isVisible) return null;
 
-  const downloadUrl = deviceType === 'android' 
+  // Logic: Android gets direct APK, iOS and Desktop get the Guide/Download page
+  const isDirectDownload = deviceType === 'android';
+  const downloadUrl = isDirectDownload 
     ? '/downloads/android.apk' 
     : `/${locale}/download`;
 
@@ -90,9 +95,9 @@ export function SmartAppBanner() {
           >
             <Link 
               href={downloadUrl} 
-              download={deviceType === 'android'}
+              download={isDirectDownload}
             >
-              {deviceType === 'android' 
+              {isDirectDownload 
                 ? (locale === 'ar' ? 'تحميل' : 'DOWNLOAD')
                 : (locale === 'ar' ? 'عرض' : 'VIEW')
               }
