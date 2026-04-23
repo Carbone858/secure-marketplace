@@ -76,8 +76,10 @@ export function Navbar() {
 
           {/* Right Side Tools & User Menu */}
           <div className={`flex items-center gap-2 md:gap-4 ${isRTL ? 'order-1' : 'order-3'}`}>
-            <div className="hidden md:flex items-center gap-4">
-              <ThemeToggle />
+            <div className="flex items-center gap-1 md:gap-4">
+              <div className="hidden md:flex items-center">
+                <ThemeToggle />
+              </div>
               <LanguageSwitcher />
             </div>
 

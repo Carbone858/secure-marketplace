@@ -42,8 +42,9 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="flex items-center gap-2">
-          <Globe className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="flex items-center gap-1 px-2">
+          <Globe className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs font-bold md:hidden uppercase">{locale}</span>
           <span className="hidden md:inline font-medium">{currentLanguage?.name}</span>
         </Button>
       </DropdownMenuTrigger>
