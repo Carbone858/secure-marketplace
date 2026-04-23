@@ -74,9 +74,6 @@ export function SmartAppBanner() {
               <h4 className="text-xs font-bold truncate">
                 {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Secure Marketplace'}
               </h4>
-              <p className="text-[10px] text-muted-foreground truncate">
-                {locale === 'ar' ? 'تطبيق السوق الآمن' : 'Faster, smoother experience'}
-              </p>
             </div>
           </div>
           <Button size="sm" className="h-8 px-4 text-[11px] font-bold rounded-full" asChild>
@@ -109,9 +106,6 @@ export function SmartAppBanner() {
               <h4 className="font-bold text-sm">
                 {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Mobile App'}
               </h4>
-              <p className="text-xs text-muted-foreground leading-tight">
-                {locale === 'ar' ? 'سوق الخدمات في جيبك' : 'The Marketplace in your pocket'}
-              </p>
             </div>
           </div>
           
