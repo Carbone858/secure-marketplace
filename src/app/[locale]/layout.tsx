@@ -89,7 +89,6 @@ export default async function RootLayout({
             <SmartAppBanner />
             <Navbar />
             <MobileNav />
-            <IOSInstallPrompt />
             <main className="flex-1">
               {children}
             </main>

@@ -71,15 +71,17 @@ export function SmartAppBanner() {
               <Image src="/apple-touch-icon.png" alt="App Icon" width={40} height={40} className="object-cover" />
             </div>
             <div className="min-w-0">
-              <h4 className="text-xs font-bold truncate">Secure Marketplace</h4>
+              <h4 className="text-xs font-bold truncate">
+                {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Secure Marketplace'}
+              </h4>
               <p className="text-[10px] text-muted-foreground truncate">
-                {locale === 'ar' ? 'تجربة أسرع وأكثر سلاسة' : 'Faster, smoother experience'}
+                {locale === 'ar' ? 'تطبيق السوق الآمن' : 'Faster, smoother experience'}
               </p>
             </div>
           </div>
           <Button size="sm" className="h-8 px-4 text-[11px] font-bold rounded-full" asChild>
             <Link href={downloadUrl} download={isDirectDownload}>
-              {isDirectDownload ? (locale === 'ar' ? 'تحميل' : 'DOWNLOAD') : (locale === 'ar' ? 'عرض' : 'VIEW')}
+              {locale === 'ar' ? 'تحميل التطبيق' : (isDirectDownload ? 'DOWNLOAD' : 'VIEW')}
             </Link>
           </Button>
         </div>
@@ -104,9 +106,11 @@ export function SmartAppBanner() {
               <Image src="/apple-touch-icon.png" alt="App Icon" width={48} height={48} className="object-cover" />
             </div>
             <div>
-              <h4 className="font-bold text-sm">Mobile App</h4>
+              <h4 className="font-bold text-sm">
+                {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Mobile App'}
+              </h4>
               <p className="text-xs text-muted-foreground leading-tight">
-                {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Use the platform on your phone'}
+                {locale === 'ar' ? 'سوق الخدمات في جيبك' : 'The Marketplace in your pocket'}
               </p>
             </div>
           </div>
