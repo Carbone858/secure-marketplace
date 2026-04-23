@@ -79,15 +79,15 @@ export default function TrustSafety() {
                 <div className="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-50 grayscale hover:grayscale-0 transition-all cursor-default select-none">
                     <div className="flex items-center gap-2 font-bold text-gray-400">
                         <ShieldCheck className="w-5 h-5 text-green-500" />
-                        <span>{t('ssl')}</span>
+                        <span>SSL SECURED</span>
                     </div>
                     <div className="flex items-center gap-2 font-bold text-gray-400">
                         <ShieldCheck className="w-5 h-5 text-blue-500" />
-                        <span>{t('id')}</span>
+                        <span>ID VERIFIED</span>
                     </div>
                     <div className="flex items-center gap-2 font-bold text-gray-400">
                         <ShieldCheck className="w-5 h-5 text-purple-500" />
-                        <span>{t('chat')}</span>
+                        <span>ENCRYPTED CHAT</span>
                     </div>
                 </div>
             </div>
