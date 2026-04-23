@@ -94,7 +94,7 @@ export default function DownloadPage() {
             <section className="container px-4 mx-auto -mt-12 lg:-mt-16">
                 <div className="grid lg:grid-cols-2 gap-8">
                     {/* Android Card */}
-                    <Card className="border-2 shadow-2xl relative overflow-hidden group">
+                    <Card className="border-2 shadow-2xl relative overflow-hidden group flex flex-col h-full">
                         <CardHeader className="bg-slate-50 dark:bg-slate-900 border-b pb-8 pt-10">
                             <div className="flex items-center justify-between gap-4 mb-4">
                                 <div className="h-14 w-14 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-600 border border-green-500/20">
@@ -109,23 +109,25 @@ export default function DownloadPage() {
                                 {t('android.p')}
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className="pt-8 space-y-8">
-                            <div className="space-y-4">
-                                <h4 className="font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100 italic">
-                                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                                    {t('android.guide.title')}
-                                </h4>
-                                <div className="space-y-6">
-                                    {androidSteps.map((step, idx) => (
-                                        <div key={idx} className="flex gap-4 group/step">
-                                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-500 group-hover/step:bg-primary group-hover/step:text-primary-foreground transition-colors">
-                                                {idx + 1}
+                        <CardContent className="pt-8 flex flex-col flex-1">
+                            <div className="space-y-8 flex-1 mb-8">
+                                <div className="space-y-4">
+                                    <h4 className="font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100 italic">
+                                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                                        {t('android.guide.title')}
+                                    </h4>
+                                    <div className="space-y-6">
+                                        {androidSteps.map((step, idx) => (
+                                            <div key={idx} className="flex gap-4 group/step">
+                                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-500 group-hover/step:bg-primary group-hover/step:text-primary-foreground transition-colors">
+                                                    {idx + 1}
+                                                </div>
+                                                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 pt-1">
+                                                    {step}
+                                                </p>
                                             </div>
-                                            <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 pt-1">
-                                                {step}
-                                            </p>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
@@ -144,7 +146,7 @@ export default function DownloadPage() {
                     </Card>
 
                     {/* iOS Card */}
-                    <Card className="border-2 shadow-2xl relative overflow-hidden group">
+                    <Card className="border-2 shadow-2xl relative overflow-hidden group flex flex-col h-full">
                         <CardHeader className="bg-slate-50 dark:bg-slate-900 border-b pb-8 pt-10">
                             <div className="flex items-center justify-between gap-4 mb-4">
                                 <div className="h-14 w-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 border border-blue-500/20">
@@ -159,37 +161,39 @@ export default function DownloadPage() {
                                 {t('ios.p')}
                             </CardDescription>
                         </CardHeader>
-                        <CardContent className="pt-8 space-y-8">
-                            <div className="space-y-4">
-                                <h4 className="font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100 italic">
-                                    <CheckCircle2 className="w-5 h-5 text-blue-500" />
-                                    {t('ios.guide.title')}
-                                </h4>
-                                <div className="space-y-6">
-                                    {iosSteps.map((step, idx) => (
-                                        <div key={idx} className="flex gap-4 group/step">
-                                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-500 group-hover/step:bg-primary group-hover/step:text-primary-foreground transition-colors">
-                                                {idx + 1}
+                        <CardContent className="pt-8 flex flex-col flex-1">
+                            <div className="space-y-8 flex-1 mb-8">
+                                <div className="space-y-4">
+                                    <h4 className="font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100 italic">
+                                        <CheckCircle2 className="w-5 h-5 text-blue-500" />
+                                        {t('ios.guide.title')}
+                                    </h4>
+                                    <div className="space-y-6">
+                                        {iosSteps.map((step, idx) => (
+                                            <div key={idx} className="flex gap-4 group/step">
+                                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-sm text-slate-500 group-hover/step:bg-primary group-hover/step:text-primary-foreground transition-colors">
+                                                    {idx + 1}
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 pt-1">
+                                                        {step}
+                                                    </p>
+                                                    {idx === 1 && (
+                                                        <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-md bg-muted inline-flex">
+                                                            <Share className="w-3.5 h-3.5 text-blue-500" />
+                                                            <span className="text-[10px] uppercase font-bold text-muted-foreground">Safari Share Icon</span>
+                                                        </div>
+                                                    )}
+                                                    {idx === 2 && (
+                                                        <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-md bg-muted inline-flex">
+                                                            <PlusSquare className="w-3.5 h-3.5 text-primary" />
+                                                            <span className="text-[10px] uppercase font-bold text-muted-foreground">Add to Home Screen</span>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div className="space-y-1">
-                                                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 pt-1">
-                                                    {step}
-                                                </p>
-                                                {idx === 1 && (
-                                                    <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-md bg-muted inline-flex">
-                                                        <Share className="w-3.5 h-3.5 text-blue-500" />
-                                                        <span className="text-[10px] uppercase font-bold text-muted-foreground">Safari Share Icon</span>
-                                                    </div>
-                                                )}
-                                                {idx === 2 && (
-                                                    <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-md bg-muted inline-flex">
-                                                        <PlusSquare className="w-3.5 h-3.5 text-primary" />
-                                                        <span className="text-[10px] uppercase font-bold text-muted-foreground">Add to Home Screen</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
