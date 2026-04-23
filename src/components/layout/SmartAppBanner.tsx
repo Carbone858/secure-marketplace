@@ -29,7 +29,7 @@ export function SmartAppBanner() {
       ua.includes('capacitor');
 
     // 3. Check Dismissed Status
-    const isDismissed = localStorage.getItem('smart-app-banner-dismissed');
+    const isDismissed = localStorage.getItem('app-promo-banner-v1');
 
     if (!isStandalone && !isDismissed) {
       if (isAndroid) setDeviceType('android');
@@ -44,7 +44,7 @@ export function SmartAppBanner() {
 
   const handleDismiss = () => {
     setIsVisible(false);
-    localStorage.setItem('smart-app-banner-dismissed', 'true');
+    localStorage.setItem('app-promo-banner-v1', 'true');
   };
 
   if (!isMounted || !isVisible) return null;
