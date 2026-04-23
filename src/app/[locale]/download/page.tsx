@@ -101,7 +101,7 @@ export default function DownloadPage() {
                                     <Smartphone className="h-8 w-8" />
                                 </div>
                                 <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-green-200">
-                                    Official APK Release
+                                    {t('android.badge')}
                                 </Badge>
                             </div>
                             <CardTitle className="text-2xl font-bold">{t('android.title')}</CardTitle>
@@ -139,7 +139,7 @@ export default function DownloadPage() {
                                     </Button>
                                 </a>
                                 <p className="text-center mt-4 text-[11px] text-muted-foreground italic">
-                                    Current Version: 1.0.0 (Build 14) • 8.2 MB
+                                    {t('android.version', { version: '1.0.0', build: '14', size: '8.2 MB' })}
                                 </p>
                             </div>
                         </CardContent>
@@ -153,7 +153,7 @@ export default function DownloadPage() {
                                     <Apple className="h-8 w-8" />
                                 </div>
                                 <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-blue-200">
-                                    PWA Instant Native
+                                    {t('ios.badge')}
                                 </Badge>
                             </div>
                             <CardTitle className="text-2xl font-bold">{t('ios.title')}</CardTitle>
@@ -181,13 +181,13 @@ export default function DownloadPage() {
                                                     {idx === 1 && (
                                                         <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-md bg-muted inline-flex">
                                                             <Share className="w-3.5 h-3.5 text-blue-500" />
-                                                            <span className="text-[10px] uppercase font-bold text-muted-foreground">Safari Share Icon</span>
+                                                            <span className="text-[10px] uppercase font-bold text-muted-foreground">{t('ios.shareLabel')}</span>
                                                         </div>
                                                     )}
                                                     {idx === 2 && (
                                                         <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-md bg-muted inline-flex">
                                                             <PlusSquare className="w-3.5 h-3.5 text-primary" />
-                                                            <span className="text-[10px] uppercase font-bold text-muted-foreground">Add to Home Screen</span>
+                                                            <span className="text-[10px] uppercase font-bold text-muted-foreground">{t('ios.addLabel')}</span>
                                                         </div>
                                                     )}
                                                 </div>

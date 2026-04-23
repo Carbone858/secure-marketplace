@@ -34,14 +34,14 @@ export default function AppShowcase() {
                             <Button size="lg" className="rounded-2xl px-8 h-14 font-bold shadow-xl shadow-primary/20 gap-3 group" asChild>
                                 <Link href={`/${locale}/download`}>
                                     <Smartphone className="w-5 h-5" />
-                                    <span>{isRTL ? 'تحميل تطبيق أندرويد' : 'Get for Android'}</span>
+                                    <span>{t('mockup.buttons.android')}</span>
                                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </Button>
                             <Button size="lg" variant="outline" className="rounded-2xl px-8 h-14 font-bold gap-3 border-2" asChild>
                                 <Link href={`/${locale}/download`}>
                                     <Apple className="w-5 h-5" />
-                                    <span>{isRTL ? 'تثبيت للآيفون' : 'Install on iPhone'}</span>
+                                    <span>{t('mockup.buttons.ios')}</span>
                                 </Link>
                             </Button>
                         </div>

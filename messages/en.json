@@ -82,8 +82,11 @@
       },
       "dispute": {
         "title": "Dispute Resolution",
-        "desc": "Our team is always available to intervene if there is any misunderstanding between parties."
-      }
+        "desc": "Our team is here to help resolve any misunderstandings between parties."
+      },
+      "ssl": "SSL SECURED",
+      "id": "ID VERIFIED",
+      "chat": "ENCRYPTED CHAT"
     },
     "faq": {
       "title": "Have Questions? We Have Answers",
@@ -2241,6 +2244,8 @@
       "title": "Android Version",
       "p": "Install our app directly on your Android device for instant access to services.",
       "button": "Download APK for Android",
+      "badge": "Official APK Release",
+      "version": "Current Version: {version} (Build {build}) • {size}",
       "guide": {
         "title": "How to Install on Android",
         "step1": "Download the APK file by clicking the button below.",
@@ -2253,6 +2258,9 @@
       "title": "iPhone Version (iOS)",
       "p": "No download needed! Add our marketplace to your home screen in seconds.",
       "button": "Installation Guide",
+      "badge": "PWA Instant Native",
+      "shareLabel": "Safari Share Icon",
+      "addLabel": "Add to Home Screen",
       "guide": {
         "title": "How to Install on iPhone",
         "step1": "Open this website in your **Safari** browser.",
@@ -2270,6 +2278,10 @@
         "encryption": "Safe 256-bit Encryption",
         "malware": "Malware Free",
         "fast": "Fast Access"
+      },
+      "buttons": {
+        "android": "Get for Android",
+        "ios": "Install on iPhone"
       }
     }
   }
