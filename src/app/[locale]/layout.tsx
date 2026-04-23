@@ -11,6 +11,7 @@ import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 import { redirect } from 'next/navigation';
 import { SERVER_URL } from '@/lib/constants'; // Optional, but for completeness
 import { IOSInstallPrompt } from '@/components/layout/IOSInstallPrompt';
+import { SmartAppBanner } from '@/components/layout/SmartAppBanner';
 import { authOptions } from '@/lib/next-auth-options';
 
 
@@ -85,6 +86,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers>
+            <SmartAppBanner />
             <Navbar />
             <MobileNav />
             <IOSInstallPrompt />
