@@ -51,13 +51,13 @@ export default function AppShowcase() {
                                 <div className="h-5 w-5 rounded-full bg-green-500/20 flex items-center justify-center">
                                     <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
                                 </div>
-                                <span className="text-xs font-semibold text-muted-foreground">Malware Free</span>
+                                <span className="text-xs font-semibold text-muted-foreground">{t('mockup.labels.malware')}</span>
                              </div>
                              <div className="flex items-center gap-2">
                                 <div className="h-5 w-5 rounded-full bg-blue-500/20 flex items-center justify-center">
                                     <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
                                 </div>
-                                <span className="text-xs font-semibold text-muted-foreground">Fast Access</span>
+                                <span className="text-xs font-semibold text-muted-foreground">{t('mockup.labels.fast')}</span>
                              </div>
                         </div>
                     </div>

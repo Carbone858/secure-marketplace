@@ -2263,7 +2263,14 @@
     },
     "mockup": {
       "alt": "Secure Marketplace App Mockup",
-      "badge": "100% Secure & Verified"
+      "badge": "100% Secure & Verified",
+      "labels": {
+        "verified": "Verified Security",
+        "updates": "Instant Updates",
+        "encryption": "Safe 256-bit Encryption",
+        "malware": "Malware Free",
+        "fast": "Fast Access"
+      }
     }
   }
 }

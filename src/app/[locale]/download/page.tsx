@@ -60,15 +60,15 @@ export default function DownloadPage() {
                         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
                             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background border shadow-sm backdrop-blur-sm text-slate-700 dark:text-slate-300">
                                 <ShieldCheck className="w-5 h-5 text-green-500" />
-                                <span className="text-sm font-medium">Verified Security</span>
+                                <span className="text-sm font-medium">{t('mockup.labels.verified')}</span>
                             </div>
                             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background border shadow-sm backdrop-blur-sm text-slate-700 dark:text-slate-300">
                                 <Zap className="w-5 h-5 text-yellow-500" />
-                                <span className="text-sm font-medium">Instant Updates</span>
+                                <span className="text-sm font-medium">{t('mockup.labels.updates')}</span>
                             </div>
                             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-background border shadow-sm backdrop-blur-sm text-slate-700 dark:text-slate-300">
                                 <Lock className="w-5 h-5 text-blue-500" />
-                                <span className="text-sm font-medium">Safe 256-bit Encryption</span>
+                                <span className="text-sm font-medium">{t('mockup.labels.encryption')}</span>
                             </div>
                         </div>
                     </div>
