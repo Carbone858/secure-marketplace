@@ -2,10 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaTelegram } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useEffect } from "react";
+import Script from "next/script";
 
 declare global {
     interface Window {
@@ -45,7 +46,9 @@ export function SocialLogin() {
                     </span>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            
+            {/* Social Buttons Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                 <Button
                     variant="outline"
                     onClick={() => handleLogin('google')}
@@ -64,35 +67,28 @@ export function SocialLogin() {
                     <FaFacebook className="w-5 h-5 text-blue-600 sm:me-2" />
                     <span className="sm:inline">{t("facebook")}</span>
                 </Button>
-                
-                {/* Telegram Login Button Wrapper */}
-                <div className="flex justify-center items-center border rounded-md hover:bg-sky-50 dark:hover:bg-sky-900/20 transition-colors cursor-pointer relative py-6 sm:py-2 h-full min-h-[44px]">
-                    {/* The custom visual button */}
-                    <div className="flex items-center justify-center w-full h-full absolute inset-0 z-0 pointer-events-none">
-                        <FaTelegram className="w-5 h-5 text-sky-500 sm:me-2" />
-                        <span className="text-sm font-medium sm:inline">{t("telegram")}</span>
-                    </div>
+            </div>
 
-                    {/* The actual Telegram widget overlayed and invisible to capture clicks */}
-                    <div 
-                        className="opacity-0 absolute inset-0 z-10 overflow-hidden flex justify-center items-center [&>iframe]:!w-[300%] [&>iframe]:!h-[300%] [&>iframe]:!max-w-none [&>iframe]:!scale-[2] [&>iframe]:!cursor-pointer"
-                    >
-                        {botName && (
-                            <div key={botName}>
-                                <script 
-                                    async 
-                                    src="https://telegram.org/js/telegram-widget.js?22" 
-                                    data-telegram-login={botName}
-                                    data-size="large" 
-                                    data-onauth="onTelegramAuth(user)" 
-                                    data-request-access="write"
-                                    data-userpic="false"
-                                ></script>
-                            </div>
-                        )}
+            {/* Telegram - Dedicated Row for Reliability */}
+            {botName ? (
+                <div className="flex flex-col items-center justify-center pt-2">
+                    <div id="telegram-widget-wrapper" className="min-h-[44px] flex items-center justify-center">
+                        <Script
+                            src="https://telegram.org/js/telegram-widget.js?22"
+                            strategy="afterInteractive"
+                            data-telegram-login={botName}
+                            data-size="large"
+                            data-onauth="onTelegramAuth(user)"
+                            data-request-access="write"
+                            data-userpic="false"
+                        />
                     </div>
                 </div>
-            </div>
+            ) : (
+                <div className="text-center text-xs text-muted-foreground">
+                    Telegram Login Unavailable (Bot name missing)
+                </div>
+            )}
         </div>
     );
 }
