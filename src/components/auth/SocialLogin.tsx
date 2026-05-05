@@ -28,6 +28,7 @@ export function SocialLogin() {
         if (provider === 'google') {
             authParams.hl = locale;
         } else if (provider === 'facebook') {
+            // Facebook expects the full locale string like ar_AR or en_US
             authParams.locale = locale === 'ar' ? 'ar_AR' : 'en_US';
         }
 
@@ -36,8 +37,8 @@ export function SocialLogin() {
 
     const handleTelegramLogin = () => {
         const origin = window.location.origin;
-        // Adding hl parameter for Telegram language support
-        const telegramUrl = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=1&request_access=write&hl=${locale}`;
+        // Some Telegram OAuth versions prefer 'lang' over 'hl'
+        const telegramUrl = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=1&request_access=write&lang=${locale}`;
         
         const width = 550;
         const height = 470;
