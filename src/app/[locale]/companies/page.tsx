@@ -405,8 +405,11 @@ export default function CompaniesPage() {
         </div>
       </div>
 
-      {/* Page Description */}
-      <div className="container mx-auto px-4 mt-6">
+      {/* Page Header */}
+      <div className="container mx-auto px-4 mt-10 mb-2">
+        <h1 className="text-3xl font-bold text-foreground mb-3">
+          {t('title')}
+        </h1>
         <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed">
           {t('pageDescription')}
         </p>
