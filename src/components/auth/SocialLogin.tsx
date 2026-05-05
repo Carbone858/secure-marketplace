@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTelegram } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -16,18 +16,28 @@ declare global {
 
 export function SocialLogin() {
     const t = useTranslations("auth.social");
+    const locale = useLocale();
     const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "SecureMarketplace_login_Bot";
     // Extract Bot ID from token if available, otherwise use hardcoded one from the token provided
     // 8630387079:AAGN4koTvyHUQOckDjpoGtvyz7aD6hDBeqE -> 8630387079
     const botId = "8630387079"; 
 
     const handleLogin = (provider: string) => {
-        signIn(provider, { callbackUrl: "/dashboard" });
+        // For Google we use 'hl', for Facebook we use 'locale'
+        const authParams: any = {};
+        if (provider === 'google') {
+            authParams.hl = locale;
+        } else if (provider === 'facebook') {
+            authParams.locale = locale === 'ar' ? 'ar_AR' : 'en_US';
+        }
+
+        signIn(provider, { callbackUrl: "/dashboard" }, authParams);
     };
 
     const handleTelegramLogin = () => {
         const origin = window.location.origin;
-        const telegramUrl = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=1&request_access=write`;
+        // Adding hl parameter for Telegram language support
+        const telegramUrl = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=1&request_access=write&hl=${locale}`;
         
         const width = 550;
         const height = 470;
@@ -39,12 +49,6 @@ export function SocialLogin() {
             'telegram_login',
             `width=${width},height=${height},left=${left},top=${top},status=0,location=0,menubar=0,toolbar=0`
         );
-
-        // Listen for the callback from Telegram
-        // When using embed=1, Telegram will redirect back to origin with query params
-        // But since it's a popup, we need to poll or handle the redirect in a separate route.
-        // Actually, the most standard way for custom buttons is to use their widget, 
-        // but since that's failing, we'll use a redirect-to-auth approach.
         
         if (popup) {
             const checkPopup = setInterval(() => {
