@@ -32,11 +32,18 @@ const PROTECTED_API_PATTERNS = [
   /^\/api\/matching\//,
   /^\/api\/membership\/subscribe/,
   /^\/api\/company\/dashboard/,
+  /^\/api\/upload/,
+  /^\/api\/cms\//,
+  /^\/api\/requests/,
 ];
 
 // API routes that are always public (bypass auth even if they match above)
 const PUBLIC_API_WHITELIST: RegExp[] = [
-  // Add any truly public stateless API endpoints here if needed
+  /^\/api\/auth\//,
+  /^\/api\/status/,
+  /^\/api\/categories/,
+  /^\/api\/countries/,
+  /^\/api\/companies(\/search|\/[^/]+)?$/, // Allow search and detail, but protect documents/portfolio via route logic
 ];
 
 import { getToken } from 'next-auth/jwt';
@@ -99,6 +106,11 @@ export default async function middleware(request: NextRequest) {
     const isWhitelisted = PUBLIC_API_WHITELIST.some(p => p.test(pathname));
     const isProtectedApi = !isWhitelisted && PROTECTED_API_PATTERNS.some(p => p.test(pathname));
     if (isProtectedApi) {
+      // Allow GET on /api/requests for public listing
+      if (pathname === '/api/requests' && request.method === 'GET') {
+        return NextResponse.next();
+      }
+
       // Verify auth token (supporting Cookie, Bearer, and NextAuth)
       const user = await verifyTokenFromCookie(request);
 

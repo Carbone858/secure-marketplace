@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
 import { z } from 'zod';
+import { messagingLimiter, checkRateLimit } from '@/lib/rate-limit';
 
 const messageSchema = z.object({
   recipientId: z.string(),
@@ -200,6 +201,13 @@ export async function POST(request: NextRequest) {
 
     const { user } = auth;
 
+    // Rate Limiting
+    const rateLimit = await checkRateLimit(request, messagingLimiter, {
+      userId: user.id,
+      type: 'SUSPICIOUS_ACTIVITY'
+    });
+    if (rateLimit instanceof Response) return rateLimit;
+
     const body = await request.json();
     const validatedData = messageSchema.parse(body);
 
@@ -259,6 +267,14 @@ export async function POST(request: NextRequest) {
         { error: 'forbidden', message: 'All projects between you and this user are completed. Communication is now read-only.' },
         { status: 403 }
       );
+    }
+
+    // Verify the provided projectId/requestId match the authorized relationship
+    if (validatedData.projectId) {
+      const authorizedProject = projects.find(p => p.id === validatedData.projectId);
+      if (!authorizedProject) {
+        return NextResponse.json({ error: 'Invalid project ID for this conversation' }, { status: 403 });
+      }
     }
 
     const message = await prisma.message.create({

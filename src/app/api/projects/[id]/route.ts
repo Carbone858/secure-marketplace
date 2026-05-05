@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic';
+// Security Hardening: Project Detail API
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
@@ -12,6 +13,8 @@ const updateProjectSchema = z.object({
   endDate: z.string().optional(),
   budget: z.number().min(0).optional(),
   progress: z.number().min(0).max(100).optional(),
+  completedByUser: z.boolean().optional(),
+  completedByCompany: z.boolean().optional(),
 });
 
 // Valid status transitions for project lifecycle
@@ -152,8 +155,20 @@ export async function PUT(
     const body = await request.json();
     const validatedData = updateProjectSchema.parse(body);
 
+    const isUser = project.userId === user.id;
+    const isCompany = project.companyId === company?.id;
+    const isAdmin = user.role === 'ADMIN' || user.role === 'SUPER_ADMIN';
+
     // Validate status transitions
     if (validatedData.status) {
+      // Direct status update only allowed for Admin or specific non-COMPLETED states
+      if (validatedData.status === 'COMPLETED' && !isAdmin) {
+        return NextResponse.json(
+          { error: 'Project completion requires both parties to agree. Use completedByUser/completedByCompany flags.' },
+          { status: 400 }
+        );
+      }
+
       const currentStatus = project.status;
       const allowed = VALID_STATUS_TRANSITIONS[currentStatus] || [];
       if (!allowed.includes(validatedData.status)) {
@@ -164,10 +179,29 @@ export async function PUT(
       }
     }
 
+    // Role-based field protection
+    if (validatedData.completedByUser !== undefined && !isUser && !isAdmin) {
+      return NextResponse.json({ error: 'Only the project owner can mark completedByUser' }, { status: 403 });
+    }
+    if (validatedData.completedByCompany !== undefined && !isCompany && !isAdmin) {
+      return NextResponse.json({ error: 'Only the assigned company can mark completedByCompany' }, { status: 403 });
+    }
+
+    // Determine final status based on completion flags
+    let finalStatus = validatedData.status || project.status;
+    const nextCompletedByUser = validatedData.completedByUser ?? (project as any).completedByUser;
+    const nextCompletedByCompany = validatedData.completedByCompany ?? (project as any).completedByCompany;
+
+    if (nextCompletedByUser && nextCompletedByCompany && project.status !== 'COMPLETED') {
+      finalStatus = 'COMPLETED';
+    }
+
     const updatedProject = await prisma.project.update({
       where: { id },
       data: {
         ...validatedData,
+        status: finalStatus,
+        completedAt: finalStatus === 'COMPLETED' && project.status !== 'COMPLETED' ? new Date() : undefined,
         startDate: validatedData.startDate
           ? new Date(validatedData.startDate)
           : undefined,
@@ -187,7 +221,7 @@ export async function PUT(
     });
 
     // If completed, also update the linked service request
-    if (validatedData.status === 'COMPLETED' && project.requestId) {
+    if (finalStatus === 'COMPLETED' && project.requestId) {
       await prisma.serviceRequest.update({
         where: { id: project.requestId },
         data: { status: 'COMPLETED' },
@@ -195,7 +229,7 @@ export async function PUT(
     }
 
     // If cancelled, reopen the request
-    if (validatedData.status === 'CANCELLED' && project.requestId) {
+    if (finalStatus === 'CANCELLED' && project.requestId) {
       await prisma.serviceRequest.update({
         where: { id: project.requestId },
         data: { status: 'CANCELLED' },
@@ -203,19 +237,19 @@ export async function PUT(
     }
 
     // Notify the other party about status change
-    if (validatedData.status) {
+    if (validatedData.status || finalStatus !== project.status) {
       const notifyUserId =
         project.userId === user.id ? project.companyId : project.userId;
       const companyUser = await prisma.company.findUnique({
-        where: { id: notifyUserId },
+        where: { id: notifyUserId as string },
       });
 
       await prisma.notification.create({
         data: {
-          userId: companyUser?.userId || notifyUserId,
+          userId: companyUser?.userId || (notifyUserId as string),
           type: 'PROJECT',
           title: 'Project Update',
-          message: `Project "${project.title}" status changed to ${validatedData.status}`,
+          message: `Project "${project.title}" status changed to ${finalStatus}`,
           data: { projectId: project.id },
         },
       });

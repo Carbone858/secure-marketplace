@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { createRequestSchema, requestFilterSchema } from '@/lib/validations/request';
 import { isRequestLimitActive, isPaidPlanActive, isRequestAutoApproveActive } from '@/lib/feature-flags';
+import { projectCreationLimiter, checkRateLimit } from '@/lib/rate-limit';
 
 import { withErrorMonitoring } from '@/lib/monitoring/withErrorMonitoring';
 
@@ -34,7 +35,7 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50);
     const skip = (page - 1) * limit;
     const locale = searchParams.get('locale');
-    console.log('[API DEBUG] Received Locale:', locale, 'Params:', searchParams.toString());
+
 
     // Build where clause
     const where: Record<string, any> = {};
@@ -213,6 +214,13 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
         { status: 401 }
       );
     }
+
+    // Rate Limiting
+    const rateLimit = await checkRateLimit(request, projectCreationLimiter, {
+      userId: session.user.id,
+      type: 'SUSPICIOUS_ACTIVITY'
+    });
+    if (rateLimit instanceof Response) return rateLimit;
 
     // Only USER role can create requests — COMPANY accounts are providers, not requesters
     if (session.user.role === 'COMPANY') {

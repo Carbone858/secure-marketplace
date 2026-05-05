@@ -306,6 +306,27 @@ export const strictLimiter = createRateLimiter({
   keyPrefix: 'strict',
 });
 
+/** Project Creation: 10 per hour (prevent spam) */
+export const projectCreationLimiter = createRateLimiter({
+  interval: 3600_000,
+  maxRequests: 10,
+  keyPrefix: 'project_create',
+});
+
+/** Offer Submission: 30 per 24 hours (prevent spam) */
+export const offerSubmissionLimiter = createRateLimiter({
+  interval: 24 * 3600 * 1000,
+  maxRequests: 30,
+  keyPrefix: 'offer_submit',
+});
+
+/** Messaging: 100 per hour */
+export const messagingLimiter = createRateLimiter({
+  interval: 3600_000,
+  maxRequests: 100,
+  keyPrefix: 'messaging',
+});
+
 // ──────────────────────────────────────────────
 // Helper utilities
 // ──────────────────────────────────────────────

@@ -253,7 +253,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     body = await request.json();
-    console.log('[PUT /api/requests] Raw body keys:', Object.keys(body));
+
 
     // ── Pre-sanitize before Zod validation ──────────────────────────────────
     // Convert empty strings to undefined so Zod optional() passes cleanly
@@ -280,7 +280,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
     }
 
-    console.log('[PUT /api/requests] Sanitized body keys:', Object.keys(sanitized));
+
 
     const validationResult = updateRequestSchema.safeParse(sanitized);
 
@@ -315,7 +315,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // images / attachments — Prisma stores as Json, send as array which Prisma accepts
     // No conversion needed; Prisma Json field accepts JS arrays directly
 
-    console.log('[PUT /api/requests] Final updateData keys:', Object.keys(updateData));
+
 
     const isResubmission = serviceRequest.status === 'REJECTED';
 

@@ -10,10 +10,10 @@ const nextConfig = {
   },
 
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
 
   // Use standalone output to reduce build size and time on Vercel
@@ -83,9 +83,9 @@ const nextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "img-src 'self' data: blob: https:",
+              "img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.supabase.in",
               "font-src 'self' data: https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
+              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in",
               "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/",
               "frame-ancestors 'none'",
               "base-uri 'self'",

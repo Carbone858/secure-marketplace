@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/db/client';
 import { getSession } from '@/lib/auth-session/session';
 import { offerSchema } from '@/lib/validations/request';
+import { offerSubmissionLimiter, checkRateLimit } from '@/lib/rate-limit';
 
 interface RouteParams {
   params: { id: string };
@@ -104,6 +105,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         { status: 401 }
       );
     }
+
+    // Rate Limiting
+    const rateLimit = await checkRateLimit(request, offerSubmissionLimiter, {
+      userId: session.user.id,
+      type: 'SUSPICIOUS_ACTIVITY'
+    });
+    if (rateLimit instanceof Response) return rateLimit;
 
     const { id } = params;
 

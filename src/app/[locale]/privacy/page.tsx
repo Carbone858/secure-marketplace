@@ -1,69 +1,52 @@
 import { getTranslations } from 'next-intl/server';
-import { useTranslations } from 'next-intl';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-    const t = await getTranslations({ locale, namespace: 'privacy' });
-    return {
-        title: t('meta.title'),
-        description: t('meta.description'),
-    };
+  const t = await getTranslations({ locale, namespace: 'privacy' });
+  return {
+    title: t('meta.title'),
+    description: t('meta.description'),
+  };
 }
 
-export default function PrivacyPage() {
-    const t = useTranslations('privacy');
+export default async function PrivacyPage({ params: { locale } }: { params: { locale: string } }) {
+  const t = await getTranslations({ locale, namespace: 'privacy' });
 
-    return (
-        <div className="min-h-screen bg-background py-16 px-4">
-            <div className="container mx-auto max-w-3xl">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
-                    <p className="text-muted-foreground">{t('lastUpdated')}</p>
-                </div>
+  return (
+    <div className="container mx-auto px-4 py-16 max-w-4xl">
+      <h1 className="text-4xl font-bold mb-8">{t('title')}</h1>
+      <p className="text-muted-foreground mb-8">{t('lastUpdated')}</p>
 
-                <div className="prose prose-lg dark:prose-invert max-w-none">
-                    <p>{t('intro')}</p>
+      <div className="prose prose-slate dark:prose-invert max-w-none">
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">{t('sections.collection.title')}</h2>
+          <p>{t('sections.collection.content')}</p>
+        </section>
 
-                    <h2>{t('sections.collection.title')}</h2>
-                    <p>
-                        {t('sections.collection.content')}
-                    </p>
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">{t('sections.usage.title')}</h2>
+          <p>{t('sections.usage.content')}</p>
+          <ul className="list-disc pl-6 space-y-2">
+            {(t.raw('sections.usage.points') as string[]).map((point, i) => (
+              <li key={i}>{point}</li>
+            ))}
+          </ul>
+        </section>
 
-                    <h2>{t('sections.usage.title')}</h2>
-                    <p>
-                        {t('sections.usage.content')}
-                        <ul className="list-disc ml-6 mt-2">
-                            {(t.raw('sections.usage.points') as string[]).map((point, index) => (
-                                <li key={index}>{point}</li>
-                            ))}
-                        </ul>
-                    </p>
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">{t('sections.sharing.title')}</h2>
+          <p>{t('sections.sharing.content')}</p>
+        </section>
 
-                    <h2>{t('sections.sharing.title')}</h2>
-                    <p>
-                        {t('sections.sharing.content')}
-                    </p>
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">{t('sections.security.title')}</h2>
+          <p>{t('sections.security.content')}</p>
+        </section>
 
-                    <h2>{t('sections.cookies.title')}</h2>
-                    <p>
-                        {t('sections.cookies.content')}
-                    </p>
-
-                    <h2>{t('sections.security.title')}</h2>
-                    <p>
-                        {t('sections.security.content')}
-                    </p>
-
-                    <h2>{t('sections.rights.title')}</h2>
-                    <p>
-                        {t('sections.rights.content')}
-                    </p>
-
-                    <h2>{t('sections.updates.title')}</h2>
-                    <p>
-                        {t('sections.updates.content')}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">{t('sections.rights.title')}</h2>
+          <p>{t('sections.rights.content')}</p>
+        </section>
+      </div>
+    </div>
+  );
 }
