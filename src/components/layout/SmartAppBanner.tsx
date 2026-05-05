@@ -26,7 +26,11 @@ export function SmartAppBanner() {
     const isStandalone = 
       window.matchMedia('(display-mode: standalone)').matches || 
       (window.navigator as any).standalone ||
-      ua.includes('capacitor');
+      ua.includes('capacitor') ||
+      (window as any).Capacitor ||
+      (window as any)._cap_initialized || // Capacitor internal flag
+      ua.includes('wv') || // Common in Android WebViews
+      (ua.includes('android') && !ua.includes('chrome')); // Stock Android Browser/WebView often lacks 'chrome'
 
     // 3. Check Dismissed Status
     const isDismissed = localStorage.getItem('app-promo-banner-v1');
