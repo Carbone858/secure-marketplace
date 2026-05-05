@@ -47,6 +47,12 @@ export function SmartAppBanner() {
     localStorage.setItem('app-promo-banner-v1', 'true');
   };
 
+  const handleDownload = () => {
+    // If they click download, we assume they are installing it, so hide the banner forever
+    localStorage.setItem('app-promo-banner-v1', 'true');
+    setIsVisible(false);
+  };
+
   if (!isMounted || !isVisible) return null;
 
   // Logic: Android gets direct APK, iOS and Desktop get the Guide/Download page
@@ -74,11 +80,19 @@ export function SmartAppBanner() {
               <h4 className="text-xs font-bold truncate">
                 {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Secure Marketplace'}
               </h4>
+              <p className="text-[10px] text-muted-foreground truncate">
+                {locale === 'ar' ? 'تطبيق الهاتف متاح الآن' : 'Mobile app is available'}
+              </p>
             </div>
           </div>
-          <Button size="sm" className="h-8 px-4 text-[11px] font-bold rounded-full" asChild>
+          <Button 
+            size="sm" 
+            className="h-8 px-4 text-[11px] font-bold rounded-full" 
+            onClick={handleDownload}
+            asChild
+          >
             <Link href={downloadUrl} download={isDirectDownload}>
-              {locale === 'ar' ? 'تحميل التطبيق' : (isDirectDownload ? 'DOWNLOAD' : 'VIEW')}
+              {locale === 'ar' ? 'تحميل' : (isDirectDownload ? 'DOWNLOAD' : 'VIEW')}
             </Link>
           </Button>
         </div>
@@ -106,10 +120,17 @@ export function SmartAppBanner() {
               <h4 className="font-bold text-sm">
                 {locale === 'ar' ? 'استخدم المنصة على هاتفك' : 'Mobile App'}
               </h4>
+              <p className="text-xs text-muted-foreground">
+                {locale === 'ar' ? 'للحصول على تجربة أسرع وأفضل' : 'For a faster experience'}
+              </p>
             </div>
           </div>
           
-          <Button className="w-full font-bold py-5 rounded-xl shadow-lg shadow-primary/20" asChild>
+          <Button 
+            className="w-full font-bold py-5 rounded-xl shadow-lg shadow-primary/20" 
+            onClick={handleDownload}
+            asChild
+          >
             <Link href={downloadUrl}>
               <Download className="mr-2 h-4 w-4" />
               {locale === 'ar' ? 'تحميل التطبيق' : 'Get the App'}
