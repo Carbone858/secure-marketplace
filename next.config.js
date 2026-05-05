@@ -81,12 +81,12 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://telegram.org",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.supabase.in",
+              "img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.supabase.in https://telegram.org",
               "font-src 'self' data: https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in",
-              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/",
+              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in https://telegram.org",
+              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/ https://oauth.telegram.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'"
