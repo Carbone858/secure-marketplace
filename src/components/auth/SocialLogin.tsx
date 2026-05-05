@@ -23,14 +23,11 @@ export function SocialLogin() {
     const botId = "8630387079"; 
 
     const handleLogin = (provider: string) => {
-        // For Google we use 'hl', for Facebook we use 'locale'
-        const authParams: any = {};
-        if (provider === 'google') {
-            authParams.hl = locale;
-        } else if (provider === 'facebook') {
-            // Facebook expects the full locale string like ar_AR or en_US
-            authParams.locale = locale === 'ar' ? 'ar_AR' : 'en_US';
-        }
+        const authParams: any = {
+            hl: locale,
+            language: locale,
+            locale: locale === 'ar' ? 'ar_AR' : 'en_US'
+        };
 
         signIn(provider, { callbackUrl: "/dashboard" }, authParams);
     };
