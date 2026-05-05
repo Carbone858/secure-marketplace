@@ -122,7 +122,8 @@
     "social": {
       "or": "Or continue with",
       "google": "Google",
-      "facebook": "Facebook"
+      "facebook": "Facebook",
+      "telegram": "Telegram"
     },
     "password": {
       "strength": {

@@ -122,7 +122,8 @@
     "social": {
       "or": "أو المتابعة عبر",
       "google": "Google",
-      "facebook": "Facebook"
+      "facebook": "Facebook",
+      "telegram": "Telegram"
     },
     "password": {
       "strength": {

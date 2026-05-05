@@ -1,9 +1,11 @@
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/db/client';
 import { UserRole } from '@prisma/client';
 import { hashEmail } from '@/lib/validations/auth';
+import { verifyTelegramHash } from '@/lib/validations/telegram';
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -14,6 +16,67 @@ export const authOptions: NextAuthOptions = {
         FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID || 'mock_client_id',
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET || 'mock_client_secret',
+        }),
+        CredentialsProvider({
+            id: 'telegram',
+            name: 'Telegram',
+            credentials: {
+                hash: { type: 'text' },
+            },
+            async authorize(credentials, req) {
+                const botToken = process.env.TELEGRAM_BOT_TOKEN;
+                if (!botToken || !credentials) return null;
+
+                // Extract all query params from req to verify the hash
+                // NextAuth provides req.query in some versions, but here we might need to pass data through credentials
+                // For simplicity, we assume the client sends all telegram fields in the credentials object
+                const isValid = verifyTelegramHash(credentials, botToken);
+
+                if (!isValid) {
+                    console.error('Telegram Auth Failed: Invalid Hash');
+                    return null;
+                }
+
+                const telegramData = credentials as any;
+                const telegramId = telegramData.id;
+                const email = `${telegramId}@telegram.user`; // Placeholder email since Telegram doesn't provide one
+
+                try {
+                    let user = await prisma.user.findUnique({
+                        where: { email },
+                    });
+
+                    if (!user) {
+                        // Create new user for Telegram
+                        const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-10) + '!TG';
+                        const hashedEmail = await hashEmail(email);
+
+                        user = await prisma.user.create({
+                            data: {
+                                email,
+                                emailHash: hashedEmail,
+                                name: telegramData.first_name + (telegramData.last_name ? ` ${telegramData.last_name}` : ''),
+                                avatar: telegramData.photo_url as string || null,
+                                role: UserRole.USER,
+                                emailVerified: new Date(),
+                                password: randomPassword,
+                                isActive: true,
+                            },
+                        });
+                    }
+
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name,
+                        image: user.avatar,
+                        role: user.role,
+                    };
+                } catch (error) {
+                    console.error('Telegram DB Error:', error);
+                    return null;
+                }
+            },
         }),
     ],
     session: {
