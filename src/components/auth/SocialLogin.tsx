@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import { FaFacebook, FaTelegram } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useEffect } from "react";
@@ -16,17 +16,67 @@ declare global {
 
 export function SocialLogin() {
     const t = useTranslations("auth.social");
-    const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "SecureMarketplace_login_Bot"; // Hardcoded fallback for testing
-
-    useEffect(() => {
-        console.log('DEBUG: Telegram Bot Name:', botName);
-    }, [botName]);
+    const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "SecureMarketplace_login_Bot";
+    // Extract Bot ID from token if available, otherwise use hardcoded one from the token provided
+    // 8630387079:AAGN4koTvyHUQOckDjpoGtvyz7aD6hDBeqE -> 8630387079
+    const botId = "8630387079"; 
 
     const handleLogin = (provider: string) => {
         signIn(provider, { callbackUrl: "/dashboard" });
     };
 
-    // Callback for Telegram
+    const handleTelegramLogin = () => {
+        const origin = window.location.origin;
+        const telegramUrl = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&embed=1&request_access=write`;
+        
+        const width = 550;
+        const height = 470;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+        
+        const popup = window.open(
+            telegramUrl,
+            'telegram_login',
+            `width=${width},height=${height},left=${left},top=${top},status=0,location=0,menubar=0,toolbar=0`
+        );
+
+        // Listen for the callback from Telegram
+        // When using embed=1, Telegram will redirect back to origin with query params
+        // But since it's a popup, we need to poll or handle the redirect in a separate route.
+        // Actually, the most standard way for custom buttons is to use their widget, 
+        // but since that's failing, we'll use a redirect-to-auth approach.
+        
+        if (popup) {
+            const checkPopup = setInterval(() => {
+                if (popup.closed) {
+                    clearInterval(checkPopup);
+                    return;
+                }
+                
+                try {
+                    const params = new URLSearchParams(popup.location.search);
+                    const hash = params.get('hash');
+                    if (hash) {
+                        const userData: any = {};
+                        params.forEach((value, key) => {
+                            userData[key] = value;
+                        });
+                        
+                        signIn('telegram', {
+                            ...userData,
+                            callbackUrl: "/dashboard"
+                        });
+                        popup.close();
+                        clearInterval(checkPopup);
+                    }
+                } catch (e) {
+                    // Cross-origin errors are expected until redirect back to origin
+                }
+            }, 500);
+        }
+    };
+
+    // Callback for Telegram (for the widget fallback if it works)
     useEffect(() => {
         (window as any).onTelegramAuth = (user: any) => {
             if (user) {
@@ -52,7 +102,7 @@ export function SocialLogin() {
             </div>
             
             {/* Social Buttons Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                 <Button
                     variant="outline"
                     onClick={() => handleLogin('google')}
@@ -71,28 +121,16 @@ export function SocialLogin() {
                     <FaFacebook className="w-5 h-5 text-blue-600 sm:me-2" />
                     <span className="sm:inline">{t("facebook")}</span>
                 </Button>
+                <Button
+                    variant="outline"
+                    onClick={handleTelegramLogin}
+                    className="w-full hover:bg-sky-50 dark:hover:bg-sky-900/20 transition-colors py-6 sm:py-2"
+                    type="button"
+                >
+                    <FaTelegram className="w-5 h-5 text-sky-500 sm:me-2" />
+                    <span className="sm:inline">{t("telegram")}</span>
+                </Button>
             </div>
-
-            {/* Telegram - Dedicated Row for Reliability */}
-            {botName ? (
-                <div className="flex flex-col items-center justify-center pt-2">
-                    <div id="telegram-widget-wrapper" className="min-h-[44px] flex items-center justify-center">
-                        <Script
-                            src="https://telegram.org/js/telegram-widget.js?22"
-                            strategy="afterInteractive"
-                            data-telegram-login={botName}
-                            data-size="large"
-                            data-onauth="onTelegramAuth(user)"
-                            data-request-access="write"
-                            data-userpic="false"
-                        />
-                    </div>
-                </div>
-            ) : (
-                <div className="text-center text-xs text-muted-foreground">
-                    Telegram Login Unavailable (Bot name missing)
-                </div>
-            )}
         </div>
     );
 }
