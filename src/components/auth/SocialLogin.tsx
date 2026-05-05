@@ -16,7 +16,11 @@ declare global {
 
 export function SocialLogin() {
     const t = useTranslations("auth.social");
-    const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME;
+    const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "SecureMarketplace_login_Bot"; // Hardcoded fallback for testing
+
+    useEffect(() => {
+        console.log('DEBUG: Telegram Bot Name:', botName);
+    }, [botName]);
 
     const handleLogin = (provider: string) => {
         signIn(provider, { callbackUrl: "/dashboard" });
