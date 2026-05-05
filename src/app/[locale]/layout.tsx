@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getServerSession } from 'next-auth';
 import { Inter, Noto_Sans_Arabic } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
@@ -9,7 +10,6 @@ import { Footer } from '@/components/layout/Footer';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 import { redirect } from 'next/navigation';
-import { SERVER_URL } from '@/lib/constants'; // Optional, but for completeness
 import { IOSInstallPrompt } from '@/components/layout/IOSInstallPrompt';
 import { SmartAppBanner } from '@/components/layout/SmartAppBanner';
 import { authOptions } from '@/lib/next-auth-options';

@@ -74,7 +74,7 @@ async function autoCompleteProjects() {
             type: 'PROJECT_AUTO_COMPLETED',
             title: 'Project Automatically Completed',
             message: `The project "${project.request.title}" has been automatically marked as completed by the system.`,
-            metadata: {
+            data: {
               requestId: project.requestId,
               projectId: project.id,
             },

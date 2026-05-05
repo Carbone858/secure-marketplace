@@ -225,11 +225,12 @@ export async function POST(request: NextRequest) {
     // STRICT ENFORCEMENT: Messaging globally locked unless part of an accepted pair (ACTIVE/DELIVERED/COMPLETED project)
     let validPair = false;
     let isReadOnly = false;
+    let projects: any[] = [];
 
     if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
       validPair = true;
     } else {
-      const projects = await prisma.project.findMany({
+      projects = await prisma.project.findMany({
         where: {
           OR: [
             { userId: user.id, company: { userId: recipient.id } },
@@ -270,8 +271,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify the provided projectId/requestId match the authorized relationship
-    if (validatedData.projectId) {
-      const authorizedProject = projects.find(p => p.id === validatedData.projectId);
+    if (validatedData.projectId && (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+      const authorizedProject = projects.find((p: any) => p.id === validatedData.projectId);
       if (!authorizedProject) {
         return NextResponse.json({ error: 'Invalid project ID for this conversation' }, { status: 403 });
       }

@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logApiError } from './apiErrorLogger';
 
-type RouteHandler = (req: NextRequest, ctx: any) => Promise<NextResponse> | NextResponse;
+type RouteHandler = (req: NextRequest, ctx: any) => Promise<Response> | Response;
 
 /**
  * Wrap a Next.js App Router route handler with automatic error monitoring.
@@ -26,7 +26,7 @@ export function withErrorMonitoring(
     category: string,
     serviceName: string
 ): RouteHandler {
-    return async function wrappedHandler(req: NextRequest, ctx: any): Promise<NextResponse> {
+    return async function wrappedHandler(req: NextRequest, ctx: any): Promise<Response> {
         const startMs = Date.now();
         try {
             const response = await handler(req, ctx);
