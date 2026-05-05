@@ -933,6 +933,7 @@
     "list": {
       "title": "Service Requests",
       "subtitle": "{count} requests available",
+      "pageDescription": "Explore active service requests from clients or post your own project to start receiving bids from qualified service providers.",
       "newRequest": "Post a Request",
       "searchPlaceholder": "Search requests...",
       "allCategories": "All Categories",
@@ -1928,6 +1929,7 @@
   "companies": {
     "title": "Company Directory",
     "subtitle": "Find verified companies for your projects",
+    "pageDescription": "Connect with verified companies and professionals across all industries including construction, plumbing, electrical, and maintenance.",
     "verified": "Verified",
     "searchPlaceholder": "Search companies, services...",
     "searchButton": "Search",

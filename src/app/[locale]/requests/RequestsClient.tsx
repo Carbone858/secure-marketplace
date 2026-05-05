@@ -196,6 +196,9 @@ export default function RequestsClient({ categories, countries, allCities, defau
                     <div>
                         <h1 className="text-3xl font-bold text-foreground">{t('list.title')}</h1>
                         <p className="text-muted-foreground mt-1">{t('list.subtitle', { count: total })}</p>
+                        <p className="text-sm text-muted-foreground/80 mt-3 max-w-2xl leading-relaxed">
+                            {t('list.pageDescription')}
+                        </p>
                     </div>
                     <Link
                         href={`/${locale}/requests/new`}

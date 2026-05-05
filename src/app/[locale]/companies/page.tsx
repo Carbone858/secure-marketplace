@@ -405,6 +405,13 @@ export default function CompaniesPage() {
         </div>
       </div>
 
+      {/* Page Description */}
+      <div className="container mx-auto px-4 mt-6">
+        <p className="text-sm text-muted-foreground max-w-3xl leading-relaxed">
+          {t('pageDescription')}
+        </p>
+      </div>
+
       {/* Results Grid */}
       <div className="container mx-auto px-4 py-8">
         {isLoading ? (
