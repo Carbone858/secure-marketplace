@@ -16,6 +16,11 @@ export const authOptions: NextAuthOptions = {
         FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID || 'mock_client_id',
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET || 'mock_client_secret',
+            authorization: {
+                params: {
+                    locale: "en_US",
+                }
+            }
         }),
         CredentialsProvider({
             id: 'telegram',

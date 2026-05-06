@@ -23,11 +23,13 @@ export function SocialLogin() {
     const botId = "8630387079"; 
 
     const handleLogin = (provider: string) => {
-        const authParams: any = {
-            hl: locale,
-            language: locale,
-            locale: locale === 'ar' ? 'ar_AR' : 'en_US'
-        };
+        let authParams: any = {};
+        
+        if (provider === 'google') {
+            authParams = { hl: locale };
+        } else if (provider === 'facebook') {
+            authParams = { locale: locale === 'ar' ? 'ar_AR' : 'en_US' };
+        }
 
         signIn(provider, { callbackUrl: "/dashboard" }, authParams);
     };
