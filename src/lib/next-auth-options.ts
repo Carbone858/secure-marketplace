@@ -30,7 +30,12 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials, req) {
                 const botToken = process.env.TELEGRAM_BOT_TOKEN;
-                if (!botToken || !credentials) return null;
+                if (!botToken || !credentials) {
+                    console.error('Telegram Auth Failed: Missing Token or Credentials');
+                    return null;
+                }
+
+                console.log('[Telegram Auth] Verifying hash for user:', (credentials as any).id);
 
                 // Extract all query params from req to verify the hash
                 // NextAuth provides req.query in some versions, but here we might need to pass data through credentials
@@ -38,9 +43,11 @@ export const authOptions: NextAuthOptions = {
                 const isValid = verifyTelegramHash(credentials, botToken);
 
                 if (!isValid) {
-                    console.error('Telegram Auth Failed: Invalid Hash');
+                    console.error('Telegram Auth Failed: Invalid Hash. This usually means the Bot Token is incorrect or the data was tampered with.');
                     return null;
                 }
+
+                console.log('[Telegram Auth] Hash verified successfully.');
 
                 const telegramData = credentials as any;
                 const telegramId = telegramData.id;
