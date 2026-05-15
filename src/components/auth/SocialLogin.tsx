@@ -127,9 +127,26 @@ export function SocialLogin() {
                     ref={telegramWrapperRef} 
                     className="flex justify-center min-h-[40px] w-full transform hover:scale-[1.02] transition-transform"
                 />
-                <div className="bg-sky-50 dark:bg-sky-900/10 border border-sky-100 dark:border-sky-900/30 rounded-lg p-3 flex items-start gap-3 text-xs text-sky-700 dark:text-sky-400">
-                    <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <p>Click the button above to receive a confirmation message in your Telegram app.</p>
+                
+                <div className="w-full space-y-2">
+                    <div className="bg-sky-50 dark:bg-sky-900/10 border border-sky-100 dark:border-sky-900/30 rounded-lg p-3 flex items-start gap-3 text-xs text-sky-700 dark:text-sky-400">
+                        <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                        <p>Click the button above to receive a confirmation message in your Telegram app.</p>
+                    </div>
+
+                    <div className="text-center">
+                        <p className="text-[10px] text-muted-foreground">
+                            Still not getting the message? 
+                            <a 
+                                href={`https://t.me/${botName}`} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="ml-1 text-sky-600 hover:underline font-bold"
+                            >
+                                Try messaging the bot directly
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
