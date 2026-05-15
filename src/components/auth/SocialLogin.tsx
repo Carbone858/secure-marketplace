@@ -18,9 +18,7 @@ export function SocialLogin() {
     const t = useTranslations("auth.social");
     const locale = useLocale();
     const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || "SecureMarketplace_login_Bot";
-    // Extract Bot ID from token if available, otherwise use hardcoded one from the token provided
-    // 8630387079:AAGN4koTvyHUQOckDjpoGtvyz7aD6hDBeqE -> 8630387079
-    const botId = "8630387079"; 
+    const botId = process.env.NEXT_PUBLIC_TELEGRAM_BOT_ID || "8630387079"; 
 
     const handleLogin = (provider: string) => {
         let authParams: any = {};
