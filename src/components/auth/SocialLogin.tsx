@@ -33,8 +33,26 @@ export function SocialLogin() {
             authParams = { locale: locale === 'ar' ? 'ar_AR' : 'en_US' };
         }
 
-        signIn(provider, { callbackUrl: "/dashboard" }, authParams);
-    };
+    // Check for telegram_data in URL (from redirect callback)
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const telegramDataStr = urlParams.get('telegram_data');
+        
+        if (telegramDataStr) {
+            try {
+                const userData = JSON.parse(telegramDataStr);
+                console.log(`[Telegram Auth] Redirect Success! Logging in...`);
+                signIn('telegram', {
+                    ...userData,
+                    callbackUrl: "/dashboard"
+                });
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch (e) {
+                console.error('Failed to parse telegram data', e);
+            }
+        }
+    }, []);
 
     // Initialize Official Telegram Widget
     useEffect(() => {
@@ -43,24 +61,15 @@ export function SocialLogin() {
             telegramWrapperRef.current.innerHTML = '';
         }
 
-        // Define the callback globally
-        (window as any).onTelegramAuth = (user: any) => {
-            if (user) {
-                console.log(`[Telegram Auth] Official Widget Success!`);
-                signIn('telegram', {
-                    ...user,
-                    callbackUrl: "/dashboard"
-                });
-            }
-        };
-
         // Create the script element
         const script = document.createElement('script');
         script.src = "https://telegram.org/js/telegram-widget.js?22";
         script.setAttribute('data-telegram-login', botName);
         script.setAttribute('data-size', 'large');
         script.setAttribute('data-radius', '8');
-        script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+        // Use direct callback URL instead of JS function for maximum reliability
+        const authUrl = `${window.location.origin}/api/auth/callback/telegram`;
+        script.setAttribute('data-auth-url', authUrl);
         script.setAttribute('data-request-access', 'write');
         script.async = true;
 
