@@ -81,15 +81,15 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://telegram.org",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://telegram.org https://accounts.google.com https://connect.facebook.net",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.supabase.in https://telegram.org",
+              "img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.supabase.in https://telegram.org https://www.facebook.com https://lh3.googleusercontent.com",
               "font-src 'self' data: https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in https://telegram.org https://oauth.telegram.org",
-              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/ https://oauth.telegram.org https://telegram.org",
+              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in https://telegram.org https://oauth.telegram.org https://accounts.google.com https://www.facebook.com",
+              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/ https://oauth.telegram.org https://telegram.org https://accounts.google.com https://www.facebook.com",
               "frame-ancestors 'self' https://oauth.telegram.org",
               "base-uri 'self'",
-              "form-action 'self' https://oauth.telegram.org https://telegram.org"
+              "form-action 'self' https://oauth.telegram.org https://telegram.org https://accounts.google.com https://www.facebook.com"
             ].join('; '),
           },
         ],
