@@ -32,6 +32,8 @@ export function SocialLogin() {
         } else if (provider === 'facebook') {
             authParams = { locale: locale === 'ar' ? 'ar_AR' : 'en_US' };
         }
+        signIn(provider, { callbackUrl: "/dashboard" }, authParams);
+    };
 
     // Check for telegram_data in URL (from redirect callback)
     useEffect(() => {
