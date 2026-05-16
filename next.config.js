@@ -85,11 +85,11 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https://images.unsplash.com https://*.supabase.co https://*.supabase.in https://telegram.org",
               "font-src 'self' data: https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in https://telegram.org",
-              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/ https://oauth.telegram.org",
-              "frame-ancestors 'none'",
+              "connect-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.supabase.co https://*.supabase.in https://telegram.org https://oauth.telegram.org",
+              "frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/ https://oauth.telegram.org https://telegram.org",
+              "frame-ancestors 'self' https://oauth.telegram.org",
               "base-uri 'self'",
-              "form-action 'self'"
+              "form-action 'self' https://oauth.telegram.org https://telegram.org"
             ].join('; '),
           },
         ],
