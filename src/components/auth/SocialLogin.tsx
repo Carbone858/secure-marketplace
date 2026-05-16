@@ -1,4 +1,5 @@
 "use client";
+// Triggering redeploy with new bot token configuration
 
 import { useTranslations, useLocale } from "next-intl";
 import { FcGoogle } from "react-icons/fc";
