@@ -95,7 +95,10 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-card rounded-xl shadow p-6">
+        <Link
+          href={`/${locale}/dashboard/requests`}
+          className="bg-card rounded-xl shadow p-6 border border-transparent hover:border-primary/30 hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer block"
+        >
           <div className="flex items-center justify-between">
             <div>
               <div className="text-3xl font-bold text-primary">{activeRequests}</div>
@@ -103,8 +106,11 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
             </div>
             <FileText className="w-8 h-8 text-primary/30" />
           </div>
-        </div>
-        <div className="bg-card rounded-xl shadow p-6">
+        </Link>
+        <Link
+          href={`/${locale}/dashboard/requests`}
+          className="bg-card rounded-xl shadow p-6 border border-transparent hover:border-success/30 hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer block"
+        >
           <div className="flex items-center justify-between">
             <div>
               <div className="text-3xl font-bold text-success">{offersCount}</div>
@@ -112,8 +118,11 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
             </div>
             <Star className="w-8 h-8 text-success/30" />
           </div>
-        </div>
-        <div className="bg-card rounded-xl shadow p-6">
+        </Link>
+        <Link
+          href={`/${locale}/dashboard/messages`}
+          className="bg-card rounded-xl shadow p-6 border border-transparent hover:border-info/30 hover:shadow-md transition-all duration-200 active:scale-[0.98] cursor-pointer block"
+        >
           <div className="flex items-center justify-between">
             <div>
               <div className="text-3xl font-bold text-info">{messagesCount}</div>
@@ -121,7 +130,7 @@ export default async function DashboardPage({ params: { locale } }: DashboardPag
             </div>
             <MessageSquare className="w-8 h-8 text-info/30" />
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Menu Grid */}
