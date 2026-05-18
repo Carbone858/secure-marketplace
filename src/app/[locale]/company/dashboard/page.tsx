@@ -95,10 +95,10 @@ export default function CompanyDashboardPage() {
   }
 
   const statCards = [
-    { title: t('stats.totalProjects'), value: data.stats.totalProjects, icon: Briefcase, color: 'text-primary' },
-    { title: t('stats.activeProjects'), value: data.stats.activeProjects, icon: Clock, color: 'text-warning' },
-    { title: t('stats.completed'), value: data.stats.completedProjects, icon: CheckCircle, color: 'text-success' },
-    { title: t('stats.totalOffers'), value: data.stats.totalOffers, icon: FileText, color: 'text-info' },
+    { title: t('stats.totalProjects'), value: data.stats.totalProjects, icon: Briefcase, color: 'text-primary', href: '/company/dashboard/projects' },
+    { title: t('stats.activeProjects'), value: data.stats.activeProjects, icon: Clock, color: 'text-warning', href: '/company/dashboard/projects?status=ACTIVE' },
+    { title: t('stats.completed'), value: data.stats.completedProjects, icon: CheckCircle, color: 'text-success', href: '/company/dashboard/projects?status=COMPLETED' },
+    { title: t('stats.totalOffers'), value: data.stats.totalOffers, icon: FileText, color: 'text-info', href: '/company/dashboard/offers' },
   ];
 
   return (
@@ -162,7 +162,11 @@ export default function CompanyDashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {statCards.map((card) => (
-          <Card key={card.title}>
+          <Card 
+            key={card.title}
+            className="cursor-pointer hover:shadow-md hover:border-primary/30 transition-all duration-200 active:scale-[0.98]"
+            onClick={() => router.push(card.href)}
+          >
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
