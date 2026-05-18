@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Bell, CheckCheck, Trash2, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 
 interface Notification {
     id: string;
@@ -11,7 +13,54 @@ interface Notification {
     message: string;
     isRead: boolean;
     createdAt: string;
+    link?: string;
+    data?: any;
 }
+
+const getNotificationLink = (notification: Notification) => {
+    let link = notification.link;
+
+    if (!link) {
+        let data: any = {};
+        if (notification.data) {
+            try {
+                data = typeof notification.data === 'string'
+                    ? JSON.parse(notification.data)
+                    : notification.data;
+            } catch (e) {
+                console.error('Failed to parse notification data', e);
+            }
+        }
+
+        const { requestId, senderId } = data;
+
+        switch (notification.type) {
+            case 'MESSAGE':
+                link = senderId ? `/dashboard/messages?with=${senderId}` : `/dashboard/messages`;
+                break;
+            case 'OFFER':
+            case 'REQUEST':
+            case 'PROJECT':
+            case 'PROJECT_DELIVERED':
+            case 'PROJECT_COMPLETED':
+            case 'PROJECT_AUTO_COMPLETED':
+            case 'PROJECT_CHANGES_REQUESTED':
+                link = requestId ? `/requests/${requestId}` : `/dashboard/requests`;
+                break;
+            default:
+                link = requestId ? `/requests/${requestId}` : `/dashboard/notifications`;
+                break;
+        }
+    }
+
+    // Strip locale prefix if it's already there (e.g. from database legacy link) to prevent double locale prepending
+    if (link) {
+        const localePrefixRegex = /^\/(ar|en)(\/|$)/;
+        link = link.replace(localePrefixRegex, '/');
+    }
+
+    return link;
+};
 
 const TYPE_COLORS: Record<string, string> = {
     MESSAGE: 'bg-blue-500/10 text-blue-600',
@@ -22,6 +71,9 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export default function NotificationsPage() {
+    const params = useParams();
+    const locale = (params?.locale as string) || 'en';
+    const router = useRouter();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -175,8 +227,16 @@ export default function NotificationsPage() {
                     {notifications.map((notification) => (
                         <div
                             key={notification.id}
-                            className={`relative bg-card rounded-xl p-4 shadow-sm border transition-colors ${!notification.isRead ? 'border-primary/30 bg-primary/5' : 'border-transparent'
-                                }`}
+                            className={`relative bg-card rounded-xl p-4 shadow-sm border cursor-pointer hover:border-primary/30 hover:shadow-md active:scale-[0.99] transition-all duration-200 ${
+                                !notification.isRead ? 'border-primary/30 bg-primary/5' : 'border-transparent'
+                            }`}
+                            onClick={() => {
+                                if (!notification.isRead) markOneRead(notification.id);
+                                const resolvedLink = getNotificationLink(notification);
+                                if (resolvedLink) {
+                                    router.push(resolvedLink);
+                                }
+                            }}
                         >
                             <div className="flex items-start gap-3">
                                 {/* Type badge */}
@@ -204,13 +264,16 @@ export default function NotificationsPage() {
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center gap-2 mt-3 justify-end">
+                            <div className="flex items-center gap-2 mt-3 justify-end relative z-10">
                                 {!notification.isRead && (
                                     <Button
                                         variant="ghost"
                                         size="sm"
                                         className="h-7 text-xs"
-                                        onClick={() => markOneRead(notification.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            markOneRead(notification.id);
+                                        }}
                                     >
                                         <CheckCheck className="h-3 w-3 mr-1" />
                                         Mark read
@@ -220,7 +283,10 @@ export default function NotificationsPage() {
                                     variant="ghost"
                                     size="sm"
                                     className="h-7 text-xs text-destructive hover:text-destructive"
-                                    onClick={() => deleteNotification(notification.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteNotification(notification.id);
+                                    }}
                                 >
                                     <Trash2 className="h-3 w-3" />
                                 </Button>

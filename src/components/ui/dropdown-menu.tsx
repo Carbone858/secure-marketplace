@@ -35,18 +35,15 @@ export function DropdownMenu({
 
   React.useEffect(() => {
     if (currentOpen) {
-      const handleScroll = () => setOpen(false);
       const handleClickOutside = (event: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
           setOpen(false);
         }
       };
 
-      window.addEventListener('scroll', handleScroll, { capture: true });
       window.addEventListener('mousedown', handleClickOutside);
       
       return () => {
-        window.removeEventListener('scroll', handleScroll, { capture: true });
         window.removeEventListener('mousedown', handleClickOutside);
       };
     }
@@ -148,8 +145,9 @@ export function DropdownMenuItem({
     return React.cloneElement(children, {
       ...props,
       onClick: (event: React.MouseEvent) => {
-        (children.props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
         close();
+        (children.props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
+        (props as { onClick?: (event: React.MouseEvent) => void }).onClick?.(event);
       },
       className: cn(
         'flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors ' +
@@ -168,8 +166,11 @@ export function DropdownMenuItem({
         'hover:bg-accent hover:text-accent-foreground',
         className
       )}
-      onClick={() => close()}
       {...props}
+      onClick={(event) => {
+        close();
+        props.onClick?.(event);
+      }}
     >
       {children}
     </div>

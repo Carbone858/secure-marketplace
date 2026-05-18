@@ -6,6 +6,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { ar, enUS } from 'date-fns/locale';
+import { useRouter } from '@/i18n/navigation';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -27,11 +28,58 @@ interface Notification {
     isRead: boolean;
     createdAt: string;
     link?: string;
+    data?: any;
 }
+
+const getNotificationLink = (notification: Notification) => {
+    let link = notification.link;
+
+    if (!link) {
+        let data: any = {};
+        if (notification.data) {
+            try {
+                data = typeof notification.data === 'string'
+                    ? JSON.parse(notification.data)
+                    : notification.data;
+            } catch (e) {
+                console.error('Failed to parse notification data', e);
+            }
+        }
+
+        const { requestId, senderId } = data;
+
+        switch (notification.type) {
+            case 'MESSAGE':
+                link = senderId ? `/dashboard/messages?with=${senderId}` : `/dashboard/messages`;
+                break;
+            case 'OFFER':
+            case 'REQUEST':
+            case 'PROJECT':
+            case 'PROJECT_DELIVERED':
+            case 'PROJECT_COMPLETED':
+            case 'PROJECT_AUTO_COMPLETED':
+            case 'PROJECT_CHANGES_REQUESTED':
+                link = requestId ? `/requests/${requestId}` : `/dashboard/requests`;
+                break;
+            default:
+                link = requestId ? `/requests/${requestId}` : `/dashboard/notifications`;
+                break;
+        }
+    }
+
+    // Strip locale prefix if it's already there (e.g. from database legacy link) to prevent double locale prepending
+    if (link) {
+        const localePrefixRegex = /^\/(ar|en)(\/|$)/;
+        link = link.replace(localePrefixRegex, '/');
+    }
+
+    return link;
+};
 
 export function NotificationDropdown() {
     const t = useTranslations('');
     const locale = useLocale();
+    const router = useRouter();
     const isRTL = locale === 'ar';
     const dateLocale = isRTL ? ar : enUS;
 
@@ -167,8 +215,9 @@ export function NotificationDropdown() {
                                     // @ts-ignore
                                     onClick={(e) => {
                                         if (!notification.isRead) markAsRead(notification.id);
-                                        if (notification.link) {
-                                            window.location.href = notification.link;
+                                        const resolvedLink = getNotificationLink(notification);
+                                        if (resolvedLink) {
+                                            router.push(resolvedLink);
                                         }
                                     }}
                                 >
