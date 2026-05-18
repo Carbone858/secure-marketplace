@@ -551,3 +551,5 @@
 - Changes committed and pushed to GitHub
 - Session ended successfully
 
+T e l e g r a m   L o g i n   i m p l e m e n t e d   w i t h   R e d i r e c t   M e t h o d .   A w a i t i n g   c u s t o m   d o m a i n   f o r   f i n a l   v e r i f i c a t i o n .   C o d e   i s   r e a d y .  
+ 

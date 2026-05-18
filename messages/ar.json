@@ -1291,6 +1291,7 @@
       "requests": "الطلبات"
     },
     "userMenu": {
+      "myAccount": "حسابي",
       "dashboard": "لوحة التحكم",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",

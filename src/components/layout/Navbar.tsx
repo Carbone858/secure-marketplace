@@ -102,7 +102,7 @@ export function Navbar() {
                           <AvatarImage src={user.image || undefined} />
                           <AvatarFallback className="bg-primary/10 text-primary">{user.name?.[0] || 'U'}</AvatarFallback>
                         </Avatar>
-                        <span className="max-w-[100px] truncate hidden lg:inline-block font-medium">{user.name}</span>
+                        <span className="max-w-[100px] truncate hidden lg:inline-block font-medium">{t('nav.userMenu.myAccount')}</span>
                         <ChevronDown className="h-4 w-4 text-muted-foreground" />
                       </Button>
                     </DropdownMenuTrigger>

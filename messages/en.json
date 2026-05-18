@@ -1388,6 +1388,7 @@
       "requests": "Requests"
     },
     "userMenu": {
+      "myAccount": "My Account",
       "dashboard": "Dashboard",
       "profile": "Profile",
       "settings": "Settings",
