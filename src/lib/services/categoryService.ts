@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma';
+import { unstable_cache } from 'next/cache';
 
-export async function getFeaturedCategories(locale: string = 'en', limit: number = 8) {
+// Internal function that does the actual DB query
+async function _getFeaturedCategories(locale: string = 'en', limit: number = 8) {
   try {
     const categories = await prisma.category.findMany({
       where: {
@@ -35,3 +37,11 @@ export async function getFeaturedCategories(locale: string = 'en', limit: number
     return [];
   }
 }
+
+// Cached wrapper — revalidates every 1 hour
+export const getFeaturedCategories = unstable_cache(
+  _getFeaturedCategories,
+  ['featured-categories'],
+  { revalidate: 3600, tags: ['categories'] }
+);
+

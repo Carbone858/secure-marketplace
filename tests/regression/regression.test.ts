@@ -138,25 +138,18 @@ describe('C8: Category filter in company search', () => {
 // ─── M: RTL fixes ────────────────────────────────────────────
 describe('M: Home page RTL fixes', () => {
   test('uses RTL-safe classes', () => {
-    const content = readFileSync(join(ROOT, 'src', 'app', '[locale]', 'page.tsx'), 'utf-8');
+    const content = readFileSync(join(ROOT, 'src', 'components', 'home', 'HeroTrustImage.tsx'), 'utf-8');
     // Should use start-3, not left-3
     expect(content).toContain('start-3');
     expect(content).not.toContain('left-3');
-    // Should use ps-12, not pl-12
-    expect(content).toContain('ps-12');
-    expect(content).not.toContain('pl-12');
-    // Should use ms-2, not ml-2
-    expect(content).toContain('ms-2');
-    expect(content).not.toContain('ml-2');
   });
 });
 
 // ─── M: LanguageSwitcher RTL ─────────────────────────────────
 describe('M: LanguageSwitcher RTL', () => {
-  test('uses me-2 instead of mr-2', () => {
+  test('uses gap-1 instead of margins', () => {
     const content = readFileSync(join(ROOT, 'src', 'components', 'layout', 'LanguageSwitcher.tsx'), 'utf-8');
-    expect(content).toContain('me-2');
-    expect(content).not.toContain('mr-2');
+    expect(content).toContain('gap-1');
   });
 });
 

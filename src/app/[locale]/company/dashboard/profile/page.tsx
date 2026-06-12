@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface Category {
   id: string;
@@ -54,6 +54,7 @@ interface Company {
 export default function CompanyProfilePage() {
   const locale = useLocale();
   const isRTL = locale === 'ar';
+  const t = useTranslations('company_dashboard');
 
   const [company, setCompany] = useState<Company | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);

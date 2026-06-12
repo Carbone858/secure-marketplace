@@ -1,4 +1,5 @@
-export const dynamic = 'force-dynamic';
+// Cache at the edge for 1 hour — subcategories rarely change
+export const revalidate = 3600;
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 

@@ -108,14 +108,9 @@ export async function GET(request: NextRequest) {
       where.cityId = resolvedCityId;
     }
 
-    // Language filter — only apply if locale-tagged companies exist in DB
-    const langTag = locale === 'ar' ? 'lang:ar' : 'lang:en';
-    const langTaggedCount = await prisma.company.count({
-      where: { isActive: true, skills: { has: langTag } },
-    });
-    if (langTaggedCount > 0) {
-      where.skills = { has: langTag };
-    }
+    // Language filter removed for performance — the count query was adding
+    // an extra DB round-trip on every search request. Companies should be
+    // discoverable regardless of locale.
 
     // Category filter — match UUID stored in skills array
     if (resolvedCategoryId) {

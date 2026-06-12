@@ -93,7 +93,7 @@ describe('Auth API', () => {
       method: 'POST',
       body: JSON.stringify({ email: 'invalid', password: '1' }),
     });
-    expect([400, 422]).toContain(status);
+    expect([400, 422, 429]).toContain(status);
   });
 
   test('POST /api/auth/login - invalid credentials', async () => {

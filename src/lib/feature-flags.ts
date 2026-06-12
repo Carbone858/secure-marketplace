@@ -38,17 +38,17 @@ export async function getFeatureFlag(key: string): Promise<boolean> {
   // Refresh cache if stale
   if (now - cacheTimestamp > CACHE_TTL) {
     try {
-      console.log('[FEATURE FLAGS] Cache stale, fetching all flags from DB...');
+
       const flags = await prisma.featureFlag.findMany();
       flagCache = new Map(flags.map(f => [f.key, f.value]));
       cacheTimestamp = now;
-      console.log(`[FEATURE FLAGS] Loaded ${flags.length} flags into cache.`);
+
     } catch (error) {
       console.error('Failed to load feature flags:', error);
       // Return cached value or false
     }
   } else {
-    console.log(`[FEATURE FLAGS] Using cached value for ${key}:`, flagCache.get(key) ?? false);
+
   }
 
   return flagCache.get(key) ?? false;

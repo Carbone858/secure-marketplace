@@ -4,10 +4,23 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, readFileSync, statSync } from 'fs';
+import { existsSync, readFileSync, statSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 const ROOT = join(__dirname, '..', '..');
+
+// Helper to get backups list
+function getBackupFiles() {
+  const dir = process.platform === 'win32' ? 'C:\\workspaces' : '/workspaces';
+  if (!existsSync(dir)) return [];
+  try {
+    return readdirSync(dir)
+      .filter(f => f.startsWith('secure-marketplace-') && f.endsWith('.tar.gz'))
+      .map(f => join(dir, f));
+  } catch {
+    return [];
+  }
+}
 
 // ─── 1. GIT REPOSITORY STATE ─────────────────────────────────
 describe('Git Repository', () => {
@@ -61,37 +74,29 @@ describe('Git Repository', () => {
 // ─── 2. BACKUP ARCHIVES ──────────────────────────────────────
 describe('Backup Archives', () => {
   test('backup archive exists', () => {
-    const backups = execSync('ls /workspaces/secure-marketplace-*.tar.gz 2>/dev/null || true')
-      .toString().trim().split('\n').filter(Boolean);
-    // At least one backup should exist
+    const backups = getBackupFiles();
     if (backups.length === 0) {
-      console.warn('No backup archives found in /workspaces/');
+      console.warn('No backup archives found in workspaces directory');
     }
   });
 
   test('backup archives are non-empty', () => {
-    try {
-      const backups = execSync('ls /workspaces/secure-marketplace-*.tar.gz 2>/dev/null')
-        .toString().trim().split('\n').filter(Boolean);
-      for (const backup of backups) {
-        const stat = statSync(backup);
-        expect(stat.size).toBeGreaterThan(100_000); // At least 100KB
-      }
-    } catch {
-      // No backups found
+    const backups = getBackupFiles();
+    for (const backup of backups) {
+      const stat = statSync(backup);
+      expect(stat.size).toBeGreaterThan(100_000); // At least 100KB
     }
   });
 
   test('backup can be listed (archive integrity)', () => {
-    try {
-      const backups = execSync('ls /workspaces/secure-marketplace-*.tar.gz 2>/dev/null')
-        .toString().trim().split('\n').filter(Boolean);
-      if (backups.length > 0) {
-        const result = execSync(`tar tzf "${backups[backups.length - 1]}" | head -5`).toString();
+    const backups = getBackupFiles();
+    if (backups.length > 0) {
+      try {
+        const result = execSync(`tar tzf "${backups[backups.length - 1]}"`).toString();
         expect(result).toContain('secure-marketplace/');
+      } catch {
+        // tar might not be available or command failed
       }
-    } catch {
-      // Archive may not exist
     }
   });
 });

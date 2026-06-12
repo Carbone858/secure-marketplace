@@ -1,4 +1,5 @@
-export const dynamic = 'force-dynamic';
+// Cache at the edge for 24 hours — countries almost never change
+export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 

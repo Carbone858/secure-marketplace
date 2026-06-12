@@ -20,7 +20,8 @@ interface Category {
 export default function BrowseRequestsPage() {
   const locale = useLocale();
   const isRTL = locale === 'ar';
-  const tb = useTranslations('company_dashboard.browse');
+  const t = useTranslations('company_dashboard');
+  const tb = (key: string) => t(`browse.${key}` as any);
 
   const [requests, setRequests] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
