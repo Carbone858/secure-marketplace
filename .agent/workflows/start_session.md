@@ -5,11 +5,11 @@ description: Start server, pull changes, and log session (Start of Day Routine)
 This workflow is triggered when the user says "start session" or "let's work" or "/start_session".
 
 1. Environment & Vercel Verification.
-   - Run the **Site Health Check**: `https://secure-marketplace.vercel.app/api/admin/health/run`
+   - Run the **Site Health Check**: `https://www.wassitt.com/api/admin/health/run`
    - Verify the site returns `OK`. If `CRITICAL`, stop and consider a `/rollback`.
-   - Check the **Vercel Master Link**: `https://secure-marketplace.vercel.app`
+   - Check the **Vercel Master Link**: `https://www.wassitt.com`
    - Check **Vercel Dashboard** for `SMTP_USER`, `SMTP_PASSWORD` and other email variables.
-   - Run the **Diagnostic tool**: `https://secure-marketplace.vercel.app/api/debug/email`
+   - Run the **Diagnostic tool**: `https://www.wassitt.com/api/debug/email`
 
 2. Synchronize Local Code.
    Fetch the latest changes from GitHub (pushed by Vercel syncs or other sessions).

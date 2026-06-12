@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     // Points to the live production site
-    url: 'https://secure-marketplace.vercel.app',
+    url: 'https://www.wassitt.com',
     cleartext: true
   }
 };
