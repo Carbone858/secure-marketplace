@@ -1949,7 +1949,10 @@
       }
     },
     "cards": {
-      "emailDesc": "فريقنا الودود هنا لمساعدتك.",
+      "emailGeneralTitle": "استفسارات عامة",
+      "emailGeneralDesc": "للشراكات، واستفسارات الأعمال، أو الملاحظات العامة.",
+      "emailSupportTitle": "الدعم والمساعدة",
+      "emailSupportDesc": "للمساعدة في الحساب، والتوثيق، والدعم الفني.",
       "phoneDesc": "من الإثنين إلى الجمعة، 8 ص - 5 م.",
       "officeDesc": "تفضل بزيارتنا في مقرنا الرئيسي."
     },
@@ -1959,7 +1962,8 @@
       "getInTouch": "تواصل معنا"
     },
     "info": {
-      "email": "support@servicemarket.com",
+      "emailGeneral": "hello@wassitt.com",
+      "emailSupport": "help@wassitt.com",
       "phone": "+963 11 000 0000",
       "address": "دمشق، سوريا"
     }

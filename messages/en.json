@@ -1949,7 +1949,10 @@
       }
     },
     "cards": {
-      "emailDesc": "Our friendly team is here to help.",
+      "emailGeneralTitle": "General Inquiries",
+      "emailGeneralDesc": "For partnerships, business inquiries, or general feedback.",
+      "emailSupportTitle": "Support & Assistance",
+      "emailSupportDesc": "For account help, verification, and technical support.",
       "phoneDesc": "Mon-Fri from 8am to 5pm.",
       "officeDesc": "Come say hello at our office HQ."
     },
@@ -1959,7 +1962,8 @@
       "getInTouch": "Get in touch"
     },
     "info": {
-      "email": "support@servicemarket.com",
+      "emailGeneral": "hello@wassitt.com",
+      "emailSupport": "help@wassitt.com",
       "phone": "+1 (555) 123-4567",
       "address": "123 Market St, Tech City"
     }

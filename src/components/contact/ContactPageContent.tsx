@@ -64,16 +64,33 @@ export default function ContactPageContent() {
                     <div className="lg:col-span-5 space-y-8">
                         {/* Info Cards */}
                         <motion.div className="grid gap-6">
+                            {/* General Inquiries */}
                             <motion.div variants={item}>
                                 <Card className="p-6 flex items-start hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-primary/10 bg-card/60 backdrop-blur-md group cursor-pointer overflow-hidden">
                                     <div className="p-4 bg-primary/10 rounded-2xl text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300 z-10 me-4">
                                         <Mail className="w-6 h-6" />
                                     </div>
                                     <div className="flex-1 min-w-0 z-10 relative">
-                                        <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">{t('form.email')}</h3>
-                                        <p className="text-muted-foreground text-sm mb-2">{t('cards.emailDesc')}</p>
-                                        <a href={`mailto:${t('info.email')}`} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 duration-300">
-                                            {t('info.email')} <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity rtl:rotate-180" />
+                                        <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">{t('cards.emailGeneralTitle')}</h3>
+                                        <p className="text-muted-foreground text-sm mb-2">{t('cards.emailGeneralDesc')}</p>
+                                        <a href={`mailto:${t('info.emailGeneral')}`} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 duration-300">
+                                            {t('info.emailGeneral')} <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity rtl:rotate-180" />
+                                        </a>
+                                    </div>
+                                </Card>
+                            </motion.div>
+
+                            {/* Technical Support */}
+                            <motion.div variants={item}>
+                                <Card className="p-6 flex items-start hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-primary/10 bg-card/60 backdrop-blur-md group cursor-pointer overflow-hidden">
+                                    <div className="p-4 bg-primary/10 rounded-2xl text-primary shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300 z-10 me-4">
+                                        <Mail className="w-6 h-6" />
+                                    </div>
+                                    <div className="flex-1 min-w-0 z-10 relative">
+                                        <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">{t('cards.emailSupportTitle')}</h3>
+                                        <p className="text-muted-foreground text-sm mb-2">{t('cards.emailSupportDesc')}</p>
+                                        <a href={`mailto:${t('info.emailSupport')}`} className="text-foreground font-medium hover:text-primary transition-colors flex items-center gap-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 duration-300">
+                                            {t('info.emailSupport')} <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity rtl:rotate-180" />
                                         </a>
                                     </div>
                                 </Card>
