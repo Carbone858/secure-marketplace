@@ -39,13 +39,23 @@ export default function ContactForm() {
     async function onSubmit(data: ContactFormValues) {
         setIsSubmitting(true);
         try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
 
-            console.log('Form Submitted:', data);
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error || 'Failed to send message');
+            }
+
             toast.success(t('success'));
             reset();
         } catch (error) {
+            console.error('Contact submission error:', error);
             toast.error(t('error'));
         } finally {
             setIsSubmitting(false);
