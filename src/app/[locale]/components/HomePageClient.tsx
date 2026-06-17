@@ -179,7 +179,7 @@ export default function HomePageClient({ locale }: HomePageClientProps) {
               <div className="flex items-center gap-2 mb-4">
                 <Building2 className="w-8 h-8 text-primary/70" />
                 <span className="font-bold text-xl">
-                  {isRTL ? 'سوق الخدمات' : 'Service Marketplace'}
+                  {isRTL ? 'وسيط - سوق الخدمات' : 'Wassitt - Service Marketplace'}
                 </span>
               </div>
               <p className="text-muted-foreground/60">
@@ -211,7 +211,7 @@ export default function HomePageClient({ locale }: HomePageClientProps) {
           </div>
           
           <div className="border-t border-foreground/80 mt-8 pt-8 text-center text-muted-foreground/60">
-            © 2024 Service Marketplace. {isRTL ? 'جميع الحقوق محفوظة' : 'All rights reserved.'}
+            © 2024 Wassitt - Service Marketplace. {isRTL ? 'جميع الحقوق محفوظة' : 'All rights reserved.'}
           </div>
         </div>
       </footer>

@@ -3,7 +3,7 @@
     "hero": {
       "title": "Get Quotes from Top Service Providers",
       "subtitle": "Describe what you need — receive competitive offers from verified service providers, free of charge.",
-      "badge": "#1 Service Marketplace in the Arab World",
+      "badge": "#1 Wassitt - Service Marketplace in the Arab World",
       "searchPlaceholder": "What service do you need?",
       "searchButton": "Search",
       "postRequest": "Post a Request",
@@ -62,7 +62,7 @@
       "registerCompany": "Provide Services"
     },
     "meta": {
-      "title": "Service Marketplace | Find Verified Professionals for Home & Business",
+      "title": "Wassitt - Service Marketplace | Find Verified Professionals for Home & Business",
       "description": "The leading marketplace for verified services in the Arab world. Get free quotes for AC maintenance, plumbing, electrical, cleaning, and more. Compare prices and hire the best."
     },
     "trust": {
@@ -145,7 +145,7 @@
     },
     "register": {
       "meta": {
-        "title": "Create an Account | Join the Leading Service Marketplace",
+        "title": "Create an Account | Join the Leading Wassitt - Service Marketplace",
         "description": "Register today to post service requests, receive competitive offers, and connect with top-rated verified professionals."
       },
       "fields": {
@@ -244,7 +244,7 @@
     },
     "verifyEmail": {
       "meta": {
-        "title": "Verify Email - Service Marketplace",
+        "title": "Verify Email - Wassitt - Service Marketplace",
         "description": "Verify your email address to complete registration"
       },
       "loading": {
@@ -282,7 +282,7 @@
     },
     "login": {
       "meta": {
-        "title": "Login | Access Your Service Marketplace Account",
+        "title": "Login | Access Your Wassitt - Service Marketplace Account",
         "description": "Sign in to manage your service requests, view offers from professionals, and track your projects."
       },
       "fields": {
@@ -331,8 +331,8 @@
     },
     "forgotPassword": {
       "meta": {
-        "title": "Forgot Password - Service Marketplace",
-        "description": "Reset your Service Marketplace account password"
+        "title": "Forgot Password - Wassitt - Service Marketplace",
+        "description": "Reset your Wassitt - Service Marketplace account password"
       },
       "description": "Enter your email address and we'll send you a link to reset your password.",
       "fields": {
@@ -358,7 +358,7 @@
     },
     "resetPassword": {
       "meta": {
-        "title": "Reset Password - Service Marketplace",
+        "title": "Reset Password - Wassitt - Service Marketplace",
         "description": "Create a new password for your account"
       },
       "fields": {
@@ -399,12 +399,12 @@
     },
     "profile": {
       "meta": {
-        "title": "My Profile - Service Marketplace",
+        "title": "My Profile - Wassitt - Service Marketplace",
         "description": "Manage your profile information"
       },
       "settings": {
         "meta": {
-          "title": "Settings - Service Marketplace",
+          "title": "Settings - Wassitt - Service Marketplace",
           "description": "Manage your account settings"
         },
         "title": "Settings",
@@ -614,7 +614,7 @@
   },
   "dashboard": {
     "meta": {
-      "title": "Dashboard - Service Marketplace",
+      "title": "Dashboard - Wassitt - Service Marketplace",
       "description": "Your personal dashboard"
     },
     "welcome": "Welcome, {name}!",
@@ -664,8 +664,8 @@
     },
     "registration": {
       "meta": {
-        "title": "Register as a Service Provider - Service Marketplace",
-        "description": "Register your service provider profile on Service Marketplace"
+        "title": "Register as a Service Provider - Wassitt - Service Marketplace",
+        "description": "Register your service provider profile on Wassitt - Service Marketplace"
       },
       "steps": {
         "basic": {
@@ -733,7 +733,7 @@
     },
     "documents": {
       "meta": {
-        "title": "Upload Documents - Service Marketplace",
+        "title": "Upload Documents - Wassitt - Service Marketplace",
         "description": "Upload verification documents for your company"
       },
       "uploadTitle": "Upload Verification Documents",
@@ -768,19 +768,19 @@
     },
     "dashboard": {
       "meta": {
-        "title": "Company Dashboard - Service Marketplace",
+        "title": "Company Dashboard - Wassitt - Service Marketplace",
         "description": "Manage your company profile and activities"
       }
     }
   },
   "requests": {
     "meta": {
-      "title": "Service Requests - Service Marketplace",
+      "title": "Service Requests - Wassitt - Service Marketplace",
       "description": "Browse and manage service requests"
     },
     "new": {
       "meta": {
-        "title": "New Request - Service Marketplace",
+        "title": "New Request - Wassitt - Service Marketplace",
         "description": "Create a new service request"
       },
       "title": "Create New Request",
@@ -912,7 +912,7 @@
     },
     "myRequests": {
       "meta": {
-        "title": "My Requests - Service Marketplace",
+        "title": "My Requests - Wassitt - Service Marketplace",
         "description": "Manage your service requests"
       },
       "title": "My Requests",
@@ -975,7 +975,7 @@
     },
     "detail": {
       "meta": {
-        "title": "{title} - Service Marketplace",
+        "title": "{title} - Wassitt - Service Marketplace",
         "description": "View service request details"
       },
       "backToList": "Back to Requests",
@@ -1069,7 +1069,7 @@
       },
       "offer": {
         "meta": {
-          "title": "Submit Offer - Service Marketplace",
+          "title": "Submit Offer - Wassitt - Service Marketplace",
           "description": "Submit an offer for a service request"
         },
         "title": "Submit Offer",
@@ -1361,7 +1361,7 @@
       "pricing": "Pricing",
       "successStories": "Success Stories"
     },
-    "copyright": "© {year} ServiceMarket. All rights reserved."
+    "copyright": "© {year} Wassitt - Service Marketplace. All rights reserved."
   },
   "admin": {
     "title": "Admin Dashboard",
@@ -1966,16 +1966,16 @@
   },
   "terms": {
     "meta": {
-      "title": "Terms of Service | Secure Service Marketplace",
-      "description": "Read our terms and conditions for using the Service Marketplace platform."
+      "title": "Terms of Service | Secure Wassitt - Service Marketplace",
+      "description": "Read our terms and conditions for using the Wassitt - Service Marketplace platform."
     },
     "title": "Terms of Service",
     "lastUpdated": "Last updated: March 16, 2026",
-    "intro": "Welcome to Secure Service Marketplace. By using our website and services, you agree to these Terms of Service. Please read them carefully.",
+    "intro": "Welcome to Secure Wassitt - Service Marketplace. By using our website and services, you agree to these Terms of Service. Please read them carefully.",
     "sections": {
       "intro": {
         "title": "1. Introduction",
-        "content": "These Terms of Service govern your use of the Secure Service Marketplace platform. By accessing our site, you agree to be bound by these terms. If you do not agree, please do not use our services."
+        "content": "These Terms of Service govern your use of the Secure Wassitt - Service Marketplace platform. By accessing our site, you agree to be bound by these terms. If you do not agree, please do not use our services."
       },
       "accounts": {
         "title": "2. User Accounts",
@@ -1995,7 +1995,7 @@
       },
       "liability": {
         "title": "6. Limitation of Liability",
-        "content": "Secure Service Marketplace is not liable for any direct or indirect damages arising from service quality, payment disputes between parties, or platform downtime."
+        "content": "Secure Wassitt - Service Marketplace is not liable for any direct or indirect damages arising from service quality, payment disputes between parties, or platform downtime."
       },
       "changes": {
         "title": "7. Changes to Terms",
@@ -2054,7 +2054,7 @@
   },
   "faq": {
     "meta": {
-      "title": "FAQ - Service Marketplace",
+      "title": "FAQ - Wassitt - Service Marketplace",
       "description": "Frequently Asked Questions about our secure service marketplace."
     },
     "title": "Frequently Asked Questions",
@@ -2067,7 +2067,7 @@
     },
     "questions": {
       "q1": {
-        "question": "How does Service Marketplace work?",
+        "question": "How does Wassitt - Service Marketplace work?",
         "answer": "Post your service needs—from AC repair to design work. Verified companies will view your request and send you offers. You compare profiles, reviews, and prices to pick the perfect pro."
       },
       "q2": {
@@ -2146,7 +2146,7 @@
   },
   "maintenance": {
     "title": "Under Maintenance",
-    "description": "Service Marketplace is currently undergoing scheduled improvements. We'll be back shortly with better tools to serve you.",
+    "description": "Wassitt - Service Marketplace is currently undergoing scheduled improvements. We'll be back shortly with better tools to serve you.",
     "estimatedTime": "Estimated Time",
     "approxTime": "Approx. 2 hours",
     "contactSupport": "Contact Support",

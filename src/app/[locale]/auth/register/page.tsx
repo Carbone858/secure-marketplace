@@ -29,8 +29,8 @@ export default function RegisterPage({ params: { locale } }: RegisterPageProps) 
         </h1>
         <p className="text-muted-foreground">
           {isRTL
-            ? 'انضم إلى سوق الخدمات واحصل على عروض أسعار من أفضل الشركات'
-            : 'Join Service Marketplace and get quotes from top companies'}
+            ? 'انضم إلى وسيط - سوق الخدمات واحصل على عروض أسعار من أفضل الشركات'
+            : 'Join Wassitt - Service Marketplace and get quotes from top companies'}
         </p>
       </div>
 

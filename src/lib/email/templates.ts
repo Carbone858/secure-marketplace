@@ -141,7 +141,7 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
                     <div class="container">
                         <div class="header">
                             <a href="${process.env.NEXT_PUBLIC_APP_URL || '#'}" class="logo">
-                                ${isRTL ? 'سوق الخدمات الموثوق' : 'Service Marketplace'}
+                                ${isRTL ? 'وسيط - سوق الخدمات الموثوق' : 'Wassitt - Service Marketplace'}
                             </a>
                         </div>
                         <div class="content">
@@ -152,7 +152,7 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
                                 ${isRTL ? 'دائماً في خدمتك' : 'Always here for you'}
                             </p>
                             <p style="margin: 0;">
-                                ${isRTL ? 'حقوق النشر © 2024 سوق الخدمات. جميع الحقوق محفوظة.' : '© 2024 Service Marketplace. All rights reserved.'}
+                                ${isRTL ? 'حقوق النشر © 2024 وسيط - سوق الخدمات. جميع الحقوق محفوظة.' : '© 2024 Wassitt - Service Marketplace. All rights reserved.'}
                             </p>
                         </div>
                     </div>
@@ -174,7 +174,7 @@ export function getVerificationEmailTemplate(
   locale: string = 'en'
 ): EmailTemplate {
   const isRTL = locale === 'ar';
-  const subject = isRTL ? 'تفعيل حسابك - سوق الخدمات' : 'Activate Your Account - Service Marketplace';
+  const subject = isRTL ? 'تفعيل حسابك - وسيط - سوق الخدمات' : 'Activate Your Account - Wassitt - Service Marketplace';
   
   const content = `
     <h1 class="h1">${isRTL ? 'مرحباً،' : 'Hello,'} ${name}</h1>
@@ -213,7 +213,7 @@ export function getWelcomeEmailTemplate(
 ): EmailTemplate {
   const isRTL = locale === 'ar';
   const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/dashboard`;
-  const subject = isRTL ? 'أهلاً بك في سوق الخدمات! 🎉' : 'Welcome to Service Marketplace! 🎉';
+  const subject = isRTL ? 'أهلاً بك في وسيط - سوق الخدمات! 🎉' : 'Welcome to Wassitt - Service Marketplace! 🎉';
   
   const content = `
     <h1 class="h1">${isRTL ? 'تم تفعيل حسابك بنجاح!' : 'Your account is ready!'}</h1>
@@ -245,7 +245,7 @@ export function getWelcomeCompanyEmailTemplate(
   ): EmailTemplate {
     const isRTL = locale === 'ar';
     const uploadUrl = `${process.env.NEXT_PUBLIC_APP_URL || '#'}/${locale}/company/dashboard/documents`;
-    const subject = isRTL ? 'خطوتك التالية كشركة في سوق الخدمات' : 'Next Steps for Your Company - Service Marketplace';
+    const subject = isRTL ? 'خطوتك التالية كشركة في وسيط - سوق الخدمات' : 'Next Steps for Your Company - Wassitt - Service Marketplace';
     
     const content = `
       <h1 class="h1">${isRTL ? 'أهلاً بشركة' : 'Welcome'} ${companyName}!</h1>

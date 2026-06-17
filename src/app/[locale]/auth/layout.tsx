@@ -41,7 +41,7 @@ export default async function AuthLayout({
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-2 text-lg font-bold">
           <Building2 className="h-6 w-6 text-primary" />
-          <span>{isRTL ? 'سوق الخدمات' : 'Service Marketplace'}</span>
+          <span>{isRTL ? 'وسيط - سوق الخدمات' : 'Wassitt - Service Marketplace'}</span>
         </div>
 
         {/* Quote/Content */}
@@ -70,7 +70,7 @@ export default async function AuthLayout({
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center text-foreground font-bold text-xl">
             <Building2 className="h-6 w-6 text-primary" />
-            <span>{isRTL ? 'سوق الخدمات' : 'Service Marketplace'}</span>
+            <span>{isRTL ? 'وسيط - سوق الخدمات' : 'Wassitt - Service Marketplace'}</span>
           </div>
 
           {/* Back Code / Navigation (Optional) */}

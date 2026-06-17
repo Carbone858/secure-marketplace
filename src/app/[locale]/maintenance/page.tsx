@@ -68,8 +68,8 @@ export default function MaintenancePage() {
           
           <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
             {isRTL 
-              ? 'سوق الخدمات يخضع حالياً لبعض التحسينات المجدولة. سنعود قريباً بأدوات أفضل لمساعدتكم.'
-              : 'Service Marketplace is currently undergoing scheduled improvements. We\'ll be back shortly with better tools to serve you.'}
+              ? 'وسيط - سوق الخدمات يخضع حالياً لبعض التحسينات المجدولة. سنعود قريباً بأدوات أفضل لمساعدتكم.'
+              : 'Wassitt - Service Marketplace is currently undergoing scheduled improvements. We\'ll be back shortly with better tools to serve you.'}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -116,7 +116,7 @@ export default function MaintenancePage() {
           transition={{ delay: 1, duration: 1 }}
           className="mt-16 pt-8 border-t border-border/50 text-sm text-muted-foreground"
         >
-          &copy; {new Date().getFullYear()} ServiceMarket. {isRTL ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
+          &copy; {new Date().getFullYear()} Wassitt - Service Marketplace. {isRTL ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
         </motion.div>
       </div>
     </div>

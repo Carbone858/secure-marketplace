@@ -15,7 +15,7 @@ export async function generateMetadata({
     const t = await getTranslations({ locale, namespace: 'company.registration' });
 
     return {
-        title: locale === 'ar' ? 'تسجيل كمقدم خدمة - سوق الخدمات' : 'Register as a Service Provider - Service Marketplace',
+        title: locale === 'ar' ? 'تسجيل كمقدم خدمة - وسيط - سوق الخدمات' : 'Register as a Service Provider - Wassitt - Service Marketplace',
         description: t('meta.description'),
     };
 }
