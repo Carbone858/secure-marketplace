@@ -1303,7 +1303,7 @@
     }
   },
   "nav": {
-    "brand": "ServiceMarket",
+    "brand": "Wassitt - Service Marketplace",
     "links": {
       "home": "Home",
       "companies": "Companies",
@@ -1333,7 +1333,7 @@
     }
   },
   "footer": {
-    "brand": "Service Marketplace",
+    "brand": "Wassitt - Service Marketplace",
     "tagline": "Founded in Syria with a global vision, connecting customers with the best verified professionals across Syria and Europe.",
     "contact": {
       "location": "Syria | Sweden | Netherlands | Germany"
