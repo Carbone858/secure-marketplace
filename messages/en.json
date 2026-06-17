@@ -1897,13 +1897,21 @@
     },
     "title": "About Us",
     "subtitle": "Connecting Vision with Reality Globally",
-    "mission": {
-      "title": "Our Mission",
-      "description": "To create a seamless, trustworthy environment where customers can find reliable service providers for any task, and where professionals can grow their business through merit across borders."
-    },
+    "paragraphs": [
+      "At the heart of our platform lies a firm belief that Syria’s future will be built by its people.",
+      "We created this platform to contribute to Syria’s reconstruction and development by empowering citizens to access job opportunities and connect with the services they need in a simple and reliable way. We believe that every individual with skills or expertise deserves the opportunity to work, grow, develop, and contribute to serving their community.",
+      "Our mission is to provide a professional, secure, and trusted platform that connects service seekers with service providers. Whether you are looking for a job opportunity, offering your services, or searching for a trusted professional, we strive to make the process of connecting easier, more efficient, and safer, while helping to build professional relationships founded on trust and professionalism.",
+      "By supporting local talent, creating new opportunities, and strengthening connections within communities, we aspire to contribute to Syria’s economic recovery and sustainable development.",
+      "Together, we are creating opportunities, empowering individuals, and contributing to a stronger and more prosperous future for Syria."
+    ],
     "story": {
       "title": "Our Story",
-      "description": "Founded in 2026 with our first launch in Syria, we have rapidly expanded to become a global marketplace for trusted services. We believe in transparency and quality above all, which is why we proudly operate branches in Sweden, the Netherlands, and Germany today."
+      "paragraphs": [
+        "Our story began with a group of Syrian youth who were brought together by displacement and the experience of living abroad, spread across different cities and countries such as Sweden, the Netherlands, Canada, Germany, and others. Despite the distance, Syria has always remained the bond that unites us and the dream that connects us.",
+        "Through our journeys in the diaspora and the diverse experiences we gained in different fields, we felt a strong responsibility to be part of the solution and to contribute something meaningful to our people and our country. From this vision, the idea of “Wassitt” was born.",
+        "We came together with one shared goal: to provide the best services in Syria in a modern, simple, and secure way, and to connect people with each other in a reliable and efficient manner. We aimed to build a bridge between skilled professionals and those in need of services, creating new opportunities for everyone.",
+        "“Wassitt” is not just a platform; it is the result of passion, experience, and a determination to remain part of Syria’s future. Even if we are physically far away, we remain close in purpose, commitment, and action."
+      ]
     }
   },
   "contact": {

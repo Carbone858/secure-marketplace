@@ -31,29 +31,41 @@ export default function AboutPage() {
             </div>
 
             <div className="container mx-auto px-4 py-16 max-w-5xl">
-                {/* Mission Section */}
-                <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
-                    <div>
-                        <h2 className="text-3xl font-bold mb-6 text-foreground">{t('mission.title')}</h2>
-                        <p className="text-lg text-muted-foreground leading-relaxed">
-                            {t('mission.description')}
-                        </p>
-                    </div>
-                    <div className="relative aspect-video rounded-2xl overflow-hidden bg-muted shadow-xl hover:shadow-2xl transition-shadow duration-500">
-                        {/* Placeholder for About Image - Used a div with gradient for now */}
-                        <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                            <span className="text-muted-foreground/50 font-medium">Mission Image</span>
+                {/* About Us Section */}
+                <div className="grid md:grid-cols-12 gap-12 items-center mb-24">
+                    <div className="md:col-span-7 flex flex-col justify-center">
+                        <h2 className="text-3xl font-bold mb-6 text-foreground border-b pb-2 inline-block max-w-max">
+                            {t('title')}
+                        </h2>
+                        <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed text-start">
+                            {(t.raw('paragraphs') as string[]).map((para, i) => (
+                                <p key={i} className={i === 0 ? "text-lg md:text-xl font-medium text-foreground border-l-4 border-primary pl-4 rtl:border-l-0 rtl:border-r-4 rtl:pl-0 rtl:pr-4" : ""}>
+                                    {para}
+                                </p>
+                            ))}
                         </div>
+                    </div>
+                    <div className="md:col-span-5 relative aspect-square md:aspect-auto md:h-[500px] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-500 border bg-card">
+                        <Image
+                            src="/images/about_us_hero.png"
+                            alt={t('title')}
+                            fill
+                            className="object-cover"
+                            sizes="(max-w-768px) 100vw, 33vw"
+                            priority
+                        />
                     </div>
                 </div>
 
                 {/* Story Section */}
-                <div className="bg-card rounded-3xl p-8 md:p-12 shadow-sm border mb-20">
-                    <h2 className="text-3xl font-bold mb-6 text-center">{t('story.title')}</h2>
-                    <div className="max-w-3xl mx-auto text-center">
-                        <p className="text-lg text-muted-foreground leading-relaxed">
-                            {t('story.description')}
-                        </p>
+                <div className="bg-card rounded-3xl p-8 md:p-12 shadow-sm border mb-24">
+                    <h2 className="text-3xl font-bold mb-8 text-center text-foreground">{t('story.title')}</h2>
+                    <div className="max-w-3xl mx-auto space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed text-start">
+                        {(t.raw('story.paragraphs') as string[]).map((para, i) => (
+                            <p key={i}>
+                                {para}
+                            </p>
+                        ))}
                     </div>
                 </div>
 
