@@ -6,8 +6,8 @@ const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
 const SMTP_PORT = parseInt(process.env.SMTP_PORT || '587');
 const SMTP_USER = process.env.SMTP_USER || '';
 const SMTP_PASSWORD = process.env.SMTP_PASSWORD || '';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@servicemarketplace.com';
-const FROM_NAME = process.env.FROM_NAME || 'Service Marketplace';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'help@wassitt.com';
+const FROM_NAME = process.env.FROM_NAME || 'Wassitt Support';
 
 // Create transporter
 const transporter = nodemailer.createTransport({

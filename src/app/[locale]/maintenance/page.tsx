@@ -88,7 +88,7 @@ export default function MaintenancePage() {
               </div>
               <div className="text-start">
                 <p className="text-sm text-muted-foreground">{isRTL ? 'تواصل معنا' : 'Contact Support'}</p>
-                <p className="font-bold text-foreground">support@servicemarket.com</p>
+                <p className="font-bold text-foreground">help@wassitt.com</p>
               </div>
             </div>
           </div>

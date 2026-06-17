@@ -137,7 +137,7 @@ export default function AdminSettingsPage() {
                   <p className="font-medium">{t('settings_mgmt.platformName')}</p>
                   <p className="text-sm text-muted-foreground">{t('settings_mgmt.platformNameDesc')}</p>
                 </div>
-                <Input defaultValue="ServiceMarket" className="max-w-xs" disabled />
+                <Input defaultValue="Wassitt - Service Marketplace" className="max-w-xs" disabled />
               </div>
               <div className="flex items-center justify-between py-3 border-b">
                 <div>

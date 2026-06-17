@@ -52,10 +52,14 @@ export function Footer() {
               {t('tagline')}
             </p>
             <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-3 text-zinc-400">
-                <Mail className="h-4 w-4 shrink-0" />
-                <span dir="ltr">support@servicemarket.com</span>
-              </div>
+                <div className="flex items-center gap-3 text-zinc-400">
+                  <Mail className="h-4 w-4 shrink-0" />
+                  <a href="mailto:hello@wassitt.com" dir="ltr" className="hover:text-white transition-colors">hello@wassitt.com</a>
+                </div>
+                <div className="flex items-center gap-3 text-zinc-400">
+                  <Mail className="h-4 w-4 shrink-0" />
+                  <a href="mailto:help@wassitt.com" dir="ltr" className="hover:text-white transition-colors">help@wassitt.com</a>
+                </div>
               <div className="flex items-center gap-3 text-zinc-400">
                 <Phone className="h-4 w-4 shrink-0" />
                 <span dir="ltr">+963 11 000 0000</span>
