@@ -43,6 +43,26 @@ export const authOptions: NextAuthOptions = {
                 const isValid = verifyTelegramHash(credentials, botToken);
 
                 if (!isValid) {
+                    const credentialsCopy = { ...credentials } as any;
+                    const receivedHash = credentialsCopy.hash;
+                    delete credentialsCopy.hash;
+                    delete credentialsCopy.csrfToken;
+                    delete credentialsCopy.callbackUrl;
+                    delete credentialsCopy.redirect;
+                    
+                    const checkString = Object.keys(credentialsCopy)
+                        .sort()
+                        .map(key => `${key}=${credentialsCopy[key]}`)
+                        .join('\n');
+                        
+                    console.error('[Telegram Auth Error Debug] Detailed Info:', {
+                        tokenLength: botToken.length,
+                        tokenPreview: botToken.substring(0, 6) + '...' + botToken.substring(botToken.length - 6),
+                        checkString: checkString.replace(/\n/g, '\\n'),
+                        receivedHash: receivedHash,
+                        credentialsReceived: credentials,
+                    });
+                    
                     console.error('Telegram Auth Failed: Invalid Hash. This usually means the Bot Token is incorrect or the data was tampered with.');
                     return null;
                 }
