@@ -21,7 +21,14 @@ export function verifyTelegramHash(data: Record<string, any>, botToken: string):
     // 1. Create a data_check_string
     // Sort keys alphabetically and join them as key=value\n
     const checkString = Object.keys(checkData)
-        .filter(key => telegramFields.includes(key))
+        .filter(key => 
+            telegramFields.includes(key) && 
+            checkData[key] !== undefined && 
+            checkData[key] !== null && 
+            checkData[key] !== '' && 
+            checkData[key] !== 'undefined' && 
+            checkData[key] !== 'null'
+        )
         .sort()
         .map(key => `${key}=${checkData[key]}`)
         .join('\n');
