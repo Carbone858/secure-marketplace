@@ -34,7 +34,7 @@ export function verifyTelegramHash(data: Record<string, any>, botToken: string):
         .update(checkString)
         .digest('hex');
 
-    console.log('[Telegram Auth Validation] Debug Info:', {
+    console.error('[Telegram Auth Validation] Debug Info:', {
         tokenLength: botToken.length,
         tokenPreview: botToken.substring(0, 6) + '...' + botToken.substring(botToken.length - 6),
         checkString: checkString.replace(/\n/g, '\\n'),
