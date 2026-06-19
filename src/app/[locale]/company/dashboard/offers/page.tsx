@@ -144,7 +144,7 @@ export default function CompanyOffersPage() {
                     }`}>
                       {t(`status.${offer.status}`)}
                     </Badge>
-                    <Link href={`/${locale}/requests/${offer.requestId}`}>
+                    <Link href={`/${locale}/requests/${offer.requestId}?from=company-offers`}>
                       <Button variant="outline" size="sm" className="h-9">
                         <Eye className="h-4 w-4 sm:me-2" />
                         <span className="hidden sm:inline">{t('offers.viewRequest')}</span>

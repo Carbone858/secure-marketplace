@@ -11,6 +11,7 @@ interface BackButtonProps {
 
 const FROM_ROUTES: Record<string, (locale: string) => string> = {
     'company-browse': (locale) => `/${locale}/company/dashboard/browse`,
+    'company-offers': (locale) => `/${locale}/company/dashboard/offers`,
     'owner-dashboard': (locale) => `/${locale}/dashboard/requests`,
     'admin-requests': (locale) => `/${locale}/admin/requests`,
 };
