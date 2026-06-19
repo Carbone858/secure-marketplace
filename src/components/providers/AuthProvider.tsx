@@ -76,8 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await signOut({ redirect: false });
     } finally {
       setUser(null);
-      // Optional: Refresh page or redirect to ensure clean state
-      // window.location.href = '/'; 
+      window.location.href = '/';
     }
   };
 
