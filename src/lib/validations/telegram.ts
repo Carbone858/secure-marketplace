@@ -12,9 +12,13 @@ export function verifyTelegramHash(data: Record<string, any>, botToken: string):
     
     if (!hash || !botToken) return false;
 
+    // Only include fields that are officially sent by Telegram Login Widget
+    const telegramFields = ['id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date'];
+
     // 1. Create a data_check_string
     // Sort keys alphabetically and join them as key=value\n
     const checkString = Object.keys(checkData)
+        .filter(key => telegramFields.includes(key))
         .sort()
         .map(key => `${key}=${checkData[key]}`)
         .join('\n');
