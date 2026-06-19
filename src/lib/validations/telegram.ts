@@ -10,7 +10,10 @@ import { createHash, createHmac } from 'crypto';
 export function verifyTelegramHash(data: Record<string, any>, botToken: string): boolean {
     const { hash, ...checkData } = data;
     
-    if (!hash || !botToken) return false;
+    if (!hash || !botToken) {
+        console.error('[Telegram Auth Validation] Missing hash or botToken:', { hasHash: !!hash, hasToken: !!botToken });
+        return false;
+    }
 
     // Only include fields that are officially sent by Telegram Login Widget
     const telegramFields = ['id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date'];
@@ -30,6 +33,15 @@ export function verifyTelegramHash(data: Record<string, any>, botToken: string):
     const hmac = createHmac('sha256', secretKey)
         .update(checkString)
         .digest('hex');
+
+    console.log('[Telegram Auth Validation] Debug Info:', {
+        tokenLength: botToken.length,
+        tokenPreview: botToken.substring(0, 6) + '...' + botToken.substring(botToken.length - 6),
+        checkString: checkString.replace(/\n/g, '\\n'),
+        receivedHash: hash,
+        calculatedHmac: hmac,
+        matches: hmac === hash
+    });
 
     // 4. Compare with the received hash
     return hmac === hash;
