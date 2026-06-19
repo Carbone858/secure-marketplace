@@ -71,7 +71,7 @@ export function SocialLogin() {
         script.setAttribute('data-size', 'large');
         script.setAttribute('data-radius', '8');
         // Use direct callback URL instead of JS function for maximum reliability
-        const authUrl = `${window.location.origin}/api/auth/callback/telegram`;
+        const authUrl = `${window.location.origin}/api/auth/telegram-callback`;
         script.setAttribute('data-auth-url', authUrl);
         script.setAttribute('data-request-access', 'write');
         script.async = true;
