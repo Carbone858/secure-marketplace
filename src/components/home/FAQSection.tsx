@@ -110,7 +110,7 @@ export default function FAQSection() {
                                     
                                     <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400 font-medium px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
                                         <Phone className="w-4 h-4 text-primary" />
-                                        <span dir="ltr">+963 11 000 0000</span>
+                                        <span dir="ltr">0997782049</span>
                                     </div>
                                 </div>
                             </div>
