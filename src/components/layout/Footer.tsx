@@ -32,10 +32,10 @@ export function Footer() {
 
 
   const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: '#' },
+    { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/wassitt86' },
     { name: 'Twitter', icon: Twitter, href: '#' },
     { name: 'LinkedIn', icon: Linkedin, href: '#' },
-    { name: 'Instagram', icon: Instagram, href: '#' },
+    { name: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/wassitt.sy/' },
   ];
 
   return (
