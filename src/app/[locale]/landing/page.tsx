@@ -119,7 +119,7 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
             src="/images/hero-wassitt-syria.jpg"
             alt="Wassitt - Syrian service marketplace professionals"
             fill
-            className="object-cover object-center opacity-70"
+            className="object-cover object-right opacity-70"
             priority
             sizes="100vw"
           />

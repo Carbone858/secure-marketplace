@@ -17,8 +17,8 @@
 
   /* ──────────── LIGHT THEME (Luxury Professional) ──────────── */
   :root {
-    /* Primary: Deep Royal Blue #1E40AF */
-    --primary: 226 71% 40%;
+    /* Primary: Emerald Teal */
+    --primary: 163 94% 24%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary: Dark Navy (Headings) #0F172A */
@@ -67,10 +67,10 @@
     /* Borders: #E2E8F0 */
     --border: 210 40% 91%;
     --input: 210 40% 91%;
-    --ring: 226 71% 40%;
+    --ring: 163 94% 24%;
 
     /* Chart colors */
-    --chart-1: 226 71% 40%;
+    --chart-1: 163 94% 24%;
     --chart-2: 38 92% 50%;
     --chart-3: 142 71% 45%;
     --chart-4: 222 47% 11%;
@@ -79,12 +79,12 @@
     /* Sidebar specific tokens */
     --sidebar-background: 210 40% 98%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 226 71% 40%;
+    --sidebar-primary: 163 94% 24%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 96.1%;
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 210 40% 91%;
-    --sidebar-ring: 226 71% 40%;
+    --sidebar-ring: 163 94% 24%;
 
     /* Status indicator tokens */
     --status-verified: 142 71% 45%;
@@ -94,7 +94,7 @@
     --status-closed: 215 16% 47%;
     --status-active: 142 71% 45%;
     --status-cancelled: 0 84% 60%;
-    --status-completed: 226 71% 40%;
+    --status-completed: 163 94% 24%;
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
@@ -106,8 +106,8 @@
 
   /* ──────────── DARK THEME (Luxury Professional) ──────────── */
   .dark {
-    /* Primary: Bright Blue #3B82F6 */
-    --primary: 217 91% 60%;
+    /* Primary: Bright Emerald Teal */
+    --primary: 160 84% 39%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary: Darker Surface */
