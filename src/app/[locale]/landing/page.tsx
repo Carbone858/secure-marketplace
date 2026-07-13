@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -86,6 +85,14 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
     'raqqa',
     'deir',
     'hasakah',
+    'qamishli',
+    'jableh',
+    'baniyas',
+    'safita',
+    'salamiyah',
+    'douma',
+    'manbij',
+    'afrin',
   ];
 
   // Why Wassitt cards map
@@ -99,37 +106,40 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
 
   return (
     <div className="w-full overflow-x-hidden bg-background min-h-screen">
-      {/* 1. Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center py-20 px-4 md:px-8 border-b bg-slate-950 overflow-hidden">
-        {/* Background Image with Dark Overlay */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/hero-wassitt-syria.jpg"
-            alt="Wassitt Syria Hero Backdrop"
-            fill
-            className="object-cover opacity-35 object-center scale-105"
-            priority
-            sizes="100vw"
+      {/* 1. Hero Section — Light Premium Style */}
+      <section className="relative min-h-[85vh] flex items-center py-20 px-4 md:px-8 border-b overflow-hidden bg-gradient-to-br from-blue-50 via-white to-emerald-50">
+        {/* Light Decorative Background Blobs */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute -top-32 -start-32 w-96 h-96 rounded-full bg-blue-100/60 blur-3xl" />
+          <div className="absolute top-20 end-0 w-80 h-80 rounded-full bg-emerald-100/50 blur-3xl" />
+          <div className="absolute bottom-0 start-1/3 w-72 h-72 rounded-full bg-indigo-100/40 blur-3xl" />
+        </div>
+
+        {/* SVG Illustration — right side */}
+        <div className="absolute inset-y-0 end-0 z-0 hidden lg:block w-1/2 max-w-2xl">
+          <img
+            src="/images/hero-wassitt-light.svg"
+            alt="Wassitt Syria service marketplace illustration"
+            className="h-full w-full object-contain object-end opacity-95"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/80 z-1" />
         </div>
 
         {/* Hero Content */}
         <div className="container mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-8 space-y-6 text-start max-w-3xl">
             {/* Branding Accent */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 backdrop-blur-sm text-primary-foreground font-semibold text-xs md:text-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-semibold text-xs md:text-sm">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span>{t('hero.title')}</span>
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] md:leading-[1.2]">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-[1.15] md:leading-[1.2]">
               {t('hero.subtitle')}
             </h1>
 
             {/* Sub-headline */}
-            <p className="text-lg md:text-xl text-slate-200 leading-relaxed font-normal">
+            <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-normal">
               {t('hero.description')}
             </p>
 
@@ -148,7 +158,7 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
                 asChild
                 variant="outline"
                 size="lg"
-                className="bg-white/10 hover:bg-white/20 border-white/20 text-white font-bold text-lg px-8 py-6 rounded-xl h-auto backdrop-blur-sm transition-transform hover:-translate-y-0.5"
+                className="bg-white hover:bg-slate-50 border-slate-300 text-foreground font-bold text-lg px-8 py-6 rounded-xl h-auto shadow-sm transition-transform hover:-translate-y-0.5"
               >
                 <Link href={`/${locale}/companies`}>
                   {t('hero.cta.find')}
