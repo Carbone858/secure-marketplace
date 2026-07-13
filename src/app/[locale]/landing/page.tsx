@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import AppShowcase from '@/components/home/AppShowcase';
 import {
   Hammer,
   Zap,
@@ -105,7 +106,7 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
     { key: 'allInOne', icon: ShieldCheck, color: 'bg-primary/5 text-primary' },
     { key: 'saveTime', icon: Clock, color: 'bg-accent/10 text-accent-foreground' },
     { key: 'compareOffers', icon: ThumbsUp, color: 'bg-green-500/5 text-green-600' },
-    { key: 'localizedSearch', icon: MapPin, color: 'bg-blue-500/5 text-blue-600' },
+    { key: 'localizedSearch', icon: MapPin, color: 'bg-primary/5 text-primary' },
     { key: 'newOpportunities', icon: TrendingUp, color: 'bg-purple-500/5 text-purple-600' },
   ];
 
@@ -177,7 +178,7 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
                 {locale === 'ar' ? 'شركات موثقة' : 'Verified Companies'}
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80 text-sm font-medium backdrop-blur-sm">
-                <span className="text-blue-400">✓</span>
+                <span className="text-primary">✓</span>
                 {locale === 'ar' ? 'عروض مجانية' : 'Free Quotes'}
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/80 text-sm font-medium backdrop-blur-sm">
@@ -321,7 +322,7 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
             <Card className="border-border/60 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-card">
               <CardContent className="p-6 space-y-4">
                 <div className="flex justify-between items-start">
-                  <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600">
+                  <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-600">
                     <UserPlus className="w-6 h-6" />
                   </div>
                   <span className="text-4xl font-black text-muted-foreground/15">01</span>
@@ -434,7 +435,7 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
             </div>
           </div>
           <div className="lg:col-span-5 relative flex justify-center">
-            <div className="w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-primary to-blue-600 p-1 shadow-2xl overflow-hidden">
+            <div className="w-full max-w-md aspect-square rounded-3xl bg-gradient-to-tr from-primary to-emerald-600 p-1 shadow-2xl overflow-hidden">
               <div className="w-full h-full rounded-[22px] bg-slate-950 flex flex-col items-center justify-center p-8 text-center text-white relative">
                 {/* Visual Graphic Representation */}
                 <div className="absolute top-4 start-4 text-xs font-bold text-slate-400">وسيط App</div>
@@ -598,16 +599,19 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
         </div>
       </section>
 
+      {/* App Showcase Section */}
+      <AppShowcase />
+
       {/* 8. Final CTA Section */}
       <section className="relative py-24 overflow-hidden bg-primary">
         {/* Subtle Background Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-primary to-indigo-800 opacity-90 z-0" />
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-800 via-primary to-teal-950 opacity-90 z-0" />
 
         <div className="container mx-auto px-4 relative z-10 text-center space-y-8 max-w-3xl">
           <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
             {t('footerCta.title')}
           </h2>
-          <p className="text-lg md:text-xl text-blue-100 leading-relaxed font-normal">
+          <p className="text-lg md:text-xl text-emerald-100 leading-relaxed font-normal">
             {locale === 'ar'
               ? 'انضم إلى آلاف المستخدمين والشركات في سوريا وابدأ بتسهيل إنجاز أعمالك اليوم.'
               : 'Join thousands of users and companies in Syria and start getting things done today.'}
