@@ -2211,5 +2211,109 @@
         "fast": "Fast Access"
       }
     }
+  },
+  "landing": {
+    "hero": {
+      "title": "Wassitt - Service Marketplace",
+      "subtitle": "Find services and companies easily",
+      "description": "Post your project and receive offers from professionals and companies, or search directly for service providers by city and category.",
+      "cta": {
+        "post": "Post Your Project",
+        "find": "Find Companies & Services"
+      }
+    },
+    "howItWorks": {
+      "title": "How Wassitt Works",
+      "customer": {
+        "title": "For Customers",
+        "step1": "Post your project or service request",
+        "step2": "Receive offers from professionals and companies",
+        "step3": "Compare and choose the best offer"
+      },
+      "search": {
+        "title": "Search Directly",
+        "intro": "Search companies and professionals by:",
+        "city": "City",
+        "category": "Category",
+        "type": "Service type"
+      }
+    },
+    "forCustomers": {
+      "title": "Need a service?",
+      "description": "Create your project, describe what you need, receive competitive offers, compare prices, and hire the best professionals safely.",
+      "cta": "Start Now"
+    },
+    "forCompanies": {
+      "title": "Are you a company or professional?",
+      "description": "Create your profile, showcase your services, receive customer requests, and grow your business with high-quality local leads.",
+      "cta": "Register Your Company"
+    },
+    "categories": {
+      "title": "Explore Categories",
+      "subtitle": "Find top rated professionals for any job",
+      "list": {
+        "construction": "Construction",
+        "electrical": "Electrical",
+        "plumbing": "Plumbing",
+        "cleaning": "Cleaning",
+        "maintenance": "Maintenance",
+        "design": "Design",
+        "programming": "Programming",
+        "marketing": "Marketing",
+        "photography": "Photography",
+        "transportation": "Transportation",
+        "legal": "Legal Services",
+        "accounting": "Accounting",
+        "education": "Education",
+        "realestate": "Real Estate"
+      }
+    },
+    "cities": {
+      "title": "Available in Syrian Cities",
+      "subtitle": "Connecting customers and providers across all governorates",
+      "list": {
+        "damascus": "Damascus",
+        "aleppo": "Aleppo",
+        "homs": "Homs",
+        "hama": "Hama",
+        "latakia": "Latakia",
+        "tartus": "Tartus",
+        "idlib": "Idlib",
+        "daraa": "Daraa",
+        "sweida": "Sweida",
+        "raqqa": "Raqqa",
+        "deir": "Deir ez-Zor",
+        "hasakah": "Hasakah"
+      }
+    },
+    "whyWassitt": {
+      "title": "Why Wassitt?",
+      "subtitle": "Built for reliability, speed, and trust",
+      "cards": {
+        "allInOne": {
+          "title": "All-in-One Platform",
+          "desc": "One unified marketplace connecting customers and certified professionals seamlessly."
+        },
+        "saveTime": {
+          "title": "Save Time & Effort",
+          "desc": "No more calling around. Describe your job once and let the experts come to you."
+        },
+        "compareOffers": {
+          "title": "Compare & Save",
+          "desc": "Receive multiple competitive bids, compare reviews, and select the deal that fits your budget."
+        },
+        "localizedSearch": {
+          "title": "Search Locally",
+          "desc": "Filter providers and companies by city and specific expertise in your immediate area."
+        },
+        "newOpportunities": {
+          "title": "Grow Your Business",
+          "desc": "Unlock a consistent stream of new customer leads and expand your local reach."
+        }
+      }
+    },
+    "footerCta": {
+      "title": "Start using Wassitt today"
+    }
   }
 }
