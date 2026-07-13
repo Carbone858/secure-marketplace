@@ -2238,6 +2238,29 @@
         "type": "Service type"
       }
     },
+    "howItWorksProvider": {
+      "title": "Are You a Service Provider or Company?",
+      "subtitle": "Join Wassitt and get more customers without spending on ads",
+      "badge": "For Providers & Companies",
+      "step1": {
+        "title": "Create your free profile",
+        "desc": "Register your company or service, add your specialties, photos, and working areas."
+      },
+      "step2": {
+        "title": "Receive customer requests",
+        "desc": "Get notified of new requests that match your services in your city instantly."
+      },
+      "step3": {
+        "title": "Send your offer",
+        "desc": "Respond to requests with your price and timeline. Win more projects."
+      },
+      "step4": {
+        "title": "Build your reputation",
+        "desc": "Collect reviews from customers and grow your rating to attract more business."
+      },
+      "cta": "Register Free Now",
+      "note": "Free registration · No commission · Full control"
+    },
     "forCustomers": {
       "title": "Need a service?",
       "description": "Create your project, describe what you need, receive competitive offers, compare prices, and hire the best professionals safely.",

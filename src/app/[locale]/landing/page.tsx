@@ -28,6 +28,10 @@ import {
   ThumbsUp,
   MapPin,
   TrendingUp,
+  UserPlus,
+  Bell,
+  Send,
+  Star,
 } from 'lucide-react';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
@@ -115,13 +119,13 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
             src="/images/hero-wassitt-syria.jpg"
             alt="Wassitt - Syrian service marketplace professionals"
             fill
-            className="object-cover object-center opacity-50"
+            className="object-cover object-center opacity-70"
             priority
             sizes="100vw"
           />
-          {/* Gradient overlay: transparent on right, dark on left for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-slate-950/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/30" />
+          {/* Gradient overlay: lighter so image shows through more */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/50 to-slate-950/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/20" />
         </div>
 
         {/* Hero Content — text only, no competing SVG */}
@@ -291,6 +295,114 @@ export default async function LandingPage({ params: { locale } }: { params: { lo
                 </div>
               </div>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* 2.5 How it Works for Providers and Companies Section */}
+      <section className="py-24 bg-slate-50 dark:bg-slate-900/30 border-y border-border/40">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs md:text-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>{t('howItWorksProvider.badge')}</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+              {t('howItWorksProvider.title')}
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              {t('howItWorksProvider.subtitle')}
+            </p>
+            <div className="h-1.5 w-20 bg-emerald-500 mx-auto rounded-full" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Step 1 */}
+            <Card className="border-border/60 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-card">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600">
+                    <UserPlus className="w-6 h-6" />
+                  </div>
+                  <span className="text-4xl font-black text-muted-foreground/15">01</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground text-start">
+                  {t('howItWorksProvider.step1.title')}
+                </h4>
+                <p className="text-sm text-muted-foreground text-start leading-relaxed">
+                  {t('howItWorksProvider.step1.desc')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Step 2 */}
+            <Card className="border-border/60 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-card">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div className="p-3 rounded-xl bg-amber-500/10 text-amber-600">
+                    <Bell className="w-6 h-6" />
+                  </div>
+                  <span className="text-4xl font-black text-muted-foreground/15">02</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground text-start">
+                  {t('howItWorksProvider.step2.title')}
+                </h4>
+                <p className="text-sm text-muted-foreground text-start leading-relaxed">
+                  {t('howItWorksProvider.step2.desc')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Step 3 */}
+            <Card className="border-border/60 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-card">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-600">
+                    <Send className="w-6 h-6" />
+                  </div>
+                  <span className="text-4xl font-black text-muted-foreground/15">03</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground text-start">
+                  {t('howItWorksProvider.step3.title')}
+                </h4>
+                <p className="text-sm text-muted-foreground text-start leading-relaxed">
+                  {t('howItWorksProvider.step3.desc')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Step 4 */}
+            <Card className="border-border/60 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl bg-card">
+              <CardContent className="p-6 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div className="p-3 rounded-xl bg-purple-500/10 text-purple-600">
+                    <Star className="w-6 h-6" />
+                  </div>
+                  <span className="text-4xl font-black text-muted-foreground/15">04</span>
+                </div>
+                <h4 className="text-xl font-bold text-foreground text-start">
+                  {t('howItWorksProvider.step4.title')}
+                </h4>
+                <p className="text-sm text-muted-foreground text-start leading-relaxed">
+                  {t('howItWorksProvider.step4.desc')}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-12 text-center space-y-3">
+            <Button
+              asChild
+              size="lg"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg px-8 py-6 rounded-xl shadow-xl shadow-emerald-600/20 h-auto transition-transform hover:-translate-y-0.5"
+            >
+              <Link href={`/${locale}/companies`}>
+                {t('howItWorksProvider.cta')}
+              </Link>
+            </Button>
+            <p className="text-xs text-muted-foreground">
+              {t('howItWorksProvider.note')}
+            </p>
           </div>
         </div>
       </section>
