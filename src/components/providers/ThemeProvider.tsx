@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   useCallback,
   type ReactNode,
@@ -96,21 +97,25 @@ export function ThemeProvider({
       : 'light';
   }, []);
 
+  /* Track which CSS custom properties are currently set by the active brand theme */
+  const activeBrandKeys = useRef<string[]>([]);
+
   /* Apply CSS variable overrides from a brand theme */
   const applyBrandOverrides = useCallback((theme: BrandTheme | null) => {
     const root = document.documentElement;
-    // Remove any previous brand overrides
+
+    // Remove any previously applied brand overrides reliably
     root.removeAttribute('data-brand');
-    const existing = root.style.cssText
-      .split(';')
-      .filter((s) => !s.trim().startsWith('--'))
-      .join(';');
-    root.style.cssText = existing;
+    activeBrandKeys.current.forEach((key) => {
+      root.style.removeProperty(key);
+    });
+    activeBrandKeys.current = [];
 
     if (theme) {
       root.setAttribute('data-brand', theme.name);
       Object.entries(theme.overrides).forEach(([key, value]) => {
         root.style.setProperty(key, value);
+        activeBrandKeys.current.push(key);
       });
     }
   }, []);
