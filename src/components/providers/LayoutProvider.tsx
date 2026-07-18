@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useState,
+  useMemo,
   useCallback,
   type ReactNode,
 } from 'react';
@@ -146,15 +147,15 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
     });
   }, [persist]);
 
+  const contextValue = useMemo(() => ({
+    ...config,
+    updateLayout,
+    resetLayout,
+    toggleSidebar,
+  }), [config, updateLayout, resetLayout, toggleSidebar]);
+
   return (
-    <LayoutContext.Provider
-      value={{
-        ...config,
-        updateLayout,
-        resetLayout,
-        toggleSidebar,
-      }}
-    >
+    <LayoutContext.Provider value={contextValue}>
       {children}
     </LayoutContext.Provider>
   );

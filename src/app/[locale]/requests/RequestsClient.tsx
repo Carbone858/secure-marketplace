@@ -7,7 +7,7 @@ import { Search, MapPin, Briefcase, Clock, DollarSign, Plus, Loader2, ChevronDow
 import { SendOfferButton } from '@/components/requests/SendOfferButton';
 import { RequestCardSkeleton } from '@/components/ui/skeleton';
 
-interface Category { id: string; nameEn: string; nameAr: string; }
+interface Category { id: string; nameEn: string; nameAr: string; parentId: string | null; }
 interface Country { id: string; nameEn: string; nameAr: string; }
 interface City { id: string; nameEn: string; nameAr: string; countryId: string; }
 
@@ -115,8 +115,13 @@ export default function RequestsClient({ categories, countries, allCities, defau
     // Filters
     const [search, setSearch] = useState('');
     const [category, setCategory] = useState('');
+    const [subcategory, setSubcategory] = useState('');
     const [country, setCountry] = useState('');  // default to "All Countries" — don't pre-filter by country
     const [city, setCity] = useState('');
+
+    // Categorization scoping
+    const mainCategories = categories.filter(c => !c.parentId);
+    const activeSubcategories = category ? categories.filter(c => c.parentId === category) : [];
 
     // Cities scoped to selected country
     const activeCities = country ? allCities.filter(c => c.countryId === country) : allCities;
@@ -139,6 +144,7 @@ export default function RequestsClient({ categories, countries, allCities, defau
             params.set('locale', locale);
             if (search) params.set('search', search);
             if (category) params.set('categoryId', category);
+            if (subcategory) params.set('subcategoryId', subcategory);
             if (country) params.set('countryId', country);
             if (city) params.set('cityId', city);
 
@@ -155,13 +161,13 @@ export default function RequestsClient({ categories, countries, allCities, defau
         } finally {
             setIsLoading(false);
         }
-    }, [locale, search, category, country, city]);
+    }, [locale, search, category, subcategory, country, city]);
 
     // Re-fetch whenever filters change (reset to page 1)
     useEffect(() => {
         setCurrentPage(1);
         fetchRequests(1);
-    }, [category, country, city]);
+    }, [category, subcategory, country, city]);
 
     // Search: debounce 400ms
     useEffect(() => {
@@ -172,17 +178,24 @@ export default function RequestsClient({ categories, countries, allCities, defau
         return () => clearTimeout(timer);
     }, [search]);
 
+    // When category changes, reset subcategory
+    const handleCategoryChange = (v: string) => {
+        setCategory(v);
+        setSubcategory('');
+    };
+
     // When country changes, reset city
     const handleCountryChange = (v: string) => {
         setCountry(v);
         setCity('');
     };
 
-    const hasFilters = !!(search || category || (country && country !== defaultCountryId) || city);
+    const hasFilters = !!(search || category || subcategory || (country && country !== defaultCountryId) || city);
 
     const clearFilters = () => {
         setSearch('');
         setCategory('');
+        setSubcategory('');
         setCountry(defaultCountryId ?? '');
         setCity('');
     };
@@ -211,7 +224,7 @@ export default function RequestsClient({ categories, countries, allCities, defau
 
                 {/* Filters */}
                 <div className="bg-card rounded-xl shadow-sm p-4 mb-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
                         {/* Search */}
                         <div className="relative lg:col-span-1">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 pointer-events-none" />
@@ -228,10 +241,25 @@ export default function RequestsClient({ categories, countries, allCities, defau
                         <FilterSelect
                             label={t('list.allCategories')}
                             value={category}
-                            onChange={setCategory}
+                            onChange={handleCategoryChange}
                         >
-                            {categories.map(c => ({ id: c.id, label: isAr ? c.nameAr : c.nameEn }))}
+                            {mainCategories.map(c => ({ id: c.id, label: isAr ? c.nameAr : c.nameEn }))}
                         </FilterSelect>
+
+                        {/* Subcategory */}
+                        {category && activeSubcategories.length > 0 ? (
+                            <FilterSelect
+                                label={isAr ? 'القسم الفرعي' : 'All Subcategories'}
+                                value={subcategory}
+                                onChange={setSubcategory}
+                            >
+                                {activeSubcategories.map(c => ({ id: c.id, label: isAr ? c.nameAr : c.nameEn }))}
+                            </FilterSelect>
+                        ) : (
+                            <div className="hidden lg:flex border border-dashed border-border rounded-lg bg-muted/10 items-center justify-center p-3 text-xs text-muted-foreground/40 font-medium select-none">
+                                {isAr ? 'اختر تصنيفاً أولاً' : 'Select Category First'}
+                            </div>
+                        )}
 
                         {/* Country */}
                         <FilterSelect

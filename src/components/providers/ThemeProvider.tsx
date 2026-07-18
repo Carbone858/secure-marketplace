@@ -4,6 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   useCallback,
@@ -201,19 +202,28 @@ export function ThemeProvider({
     });
   }, []);
 
+  const contextValue = useMemo(() => ({
+    mode,
+    resolvedTheme,
+    brandTheme: activeBrand,
+    brandThemes,
+    setMode,
+    toggleTheme,
+    setBrandTheme,
+    registerBrandTheme,
+  }), [
+    mode,
+    resolvedTheme,
+    activeBrand,
+    brandThemes,
+    setMode,
+    toggleTheme,
+    setBrandTheme,
+    registerBrandTheme,
+  ]);
+
   return (
-    <ThemeContext.Provider
-      value={{
-        mode,
-        resolvedTheme,
-        brandTheme: activeBrand,
-        brandThemes,
-        setMode,
-        toggleTheme,
-        setBrandTheme,
-        registerBrandTheme,
-      }}
-    >
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );

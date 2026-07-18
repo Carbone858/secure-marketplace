@@ -38,10 +38,11 @@ async function _getFeaturedCategories(locale: string = 'en', limit: number = 8) 
   }
 }
 
-// Cached wrapper — revalidates every 1 hour
-export const getFeaturedCategories = unstable_cache(
-  _getFeaturedCategories,
-  ['featured-categories'],
-  { revalidate: 3600, tags: ['categories'] }
-);
+// Cached wrapper — revalidates every 1 hour, varying by locale and limit to prevent cross-locale translation leakage.
+export const getFeaturedCategories = (locale: string = 'en', limit: number = 8) =>
+  unstable_cache(
+    () => _getFeaturedCategories(locale, limit),
+    ['featured-categories', locale, String(limit)],
+    { revalidate: 3600, tags: ['categories'] }
+  )();
 

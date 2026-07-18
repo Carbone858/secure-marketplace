@@ -21,6 +21,7 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
     const filters: Record<string, unknown> = {};
 
     const categoryId = searchParams.get('categoryId');
+    const subcategoryId = searchParams.get('subcategoryId');
     const categoryIds = searchParams.get('categoryIds'); // Support multiple categories
     const countryId = searchParams.get('countryId');
     const cityId = searchParams.get('cityId');
@@ -70,6 +71,10 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
       }
     } else if (categoryId) {
       where.categoryId = categoryId;
+    }
+
+    if (subcategoryId) {
+      where.subcategoryId = subcategoryId;
     }
 
     // Location filters

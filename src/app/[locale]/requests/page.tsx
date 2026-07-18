@@ -21,8 +21,8 @@ export async function generateMetadata({
 export default async function RequestsPage({ params: { locale } }: RequestsPageProps) {
   const [categories, countries, allCities, syriaCountry] = await Promise.all([
     prisma.category.findMany({
-      where: { isActive: true, parentId: null },
-      select: { id: true, nameEn: true, nameAr: true },
+      where: { isActive: true },
+      select: { id: true, nameEn: true, nameAr: true, parentId: true },
     }),
     prisma.country.findMany({
       select: { id: true, nameEn: true, nameAr: true },

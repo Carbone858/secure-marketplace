@@ -19,11 +19,7 @@ const nextConfig = {
   // Use standalone output to reduce build size and time on Vercel
   output: 'standalone',
 
-  // Experimental: reduce static generation work to avoid timeout
-  experimental: {
-    workerThreads: false,
-    cpus: 1,
-  },
+
 
   // Image optimization settings
   images: {

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل التصنيفات والأقسام الفرعية - Wassitt</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #0f172a;
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #64748b;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .print-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .print-btn:hover {
+            background: #2563eb;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            background: #f8fafc;
+            page-break-inside: avoid;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card-title-ar {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin: 0;
+        }
+
+        .card-title-en {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .subcategories-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .subcategories-list li {
+            font-size: 14px;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            background: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .sub-ar {
+            font-weight: 600;
+        }
+
+        .sub-en {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .print-btn {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+
+        @media print {
+            body {
+                background-color: #ffffff;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+            .print-btn {
+                display: none;
+            }
+            .card {
+                background: #ffffff;
+                border: 1px solid #cbd5e1;
+            }
+            .subcategories-list li {
+                border: 1px solid #cbd5e1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <button class="print-btn" onclick="window.print()">حفظ كملف PDF / طباعة</button>
+        <h1>دليل التصنيفات والخدمات الفرعية الشامل</h1>
+        <p>منصة Wassitt - هيكلية الفئات الـ 12 المعتمدة في النظام وقاعدة البيانات</p>
+    </div>
+
+    <div class="grid">
+        <!-- 1 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">صيانة وخدمات المنزل</h3>
+                <span class="card-title-en">Home & Maintenance</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">كهربائي</span><span class="sub-en">Electrician</span></li>
+                <li><span class="sub-ar">سباك</span><span class="sub-en">Plumber</span></li>
+                <li><span class="sub-ar">نجار</span><span class="sub-en">Carpenter</span></li>
+                <li><span class="sub-ar">دهان</span><span class="sub-en">Painter</span></li>
+                <li><span class="sub-ar">تركيب وصيانة التكييف</span><span class="sub-en">AC Installation & Repair</span></li>
+                <li><span class="sub-ar">صيانة الأجهزة المنزلية</span><span class="sub-en">Home Appliance Repair</span></li>
+                <li><span class="sub-ar">تركيب مطبخ</span><span class="sub-en">Kitchen Installation</span></li>
+                <li><span class="sub-ar">تركيب ألمنيوم وزجاج</span><span class="sub-en">Aluminum & Glass Work</span></li>
+                <li><span class="sub-ar">حدادة ولحام</span><span class="sub-en">Blacksmithing & Welding</span></li>
+                <li><span class="sub-ar">عزل الأسطح</span><span class="sub-en">Roof Insulation</span></li>
+                <li><span class="sub-ar">مكافحة الحشرات</span><span class="sub-en">Pest Control</span></li>
+                <li><span class="sub-ar">تنظيف منازل</span><span class="sub-en">Home Cleaning</span></li>
+                <li><span class="sub-ar">تنظيف مكاتب</span><span class="sub-en">Office Cleaning</span></li>
+                <li><span class="sub-ar">تنظيف سجاد</span><span class="sub-en">Carpet Cleaning</span></li>
+                <li><span class="sub-ar">تنظيف خزانات</span><span class="sub-en">Water Tank Cleaning</span></li>
+                <li><span class="sub-ar">تنظيف واجهات</span><span class="sub-en">Window & Facade Cleaning</span></li>
+                <li><span class="sub-ar">تعقيم</span><span class="sub-en">Sterilization</span></li>
+                <li><span class="sub-ar">تنظيف بعد البناء</span><span class="sub-en">Post-Construction Cleaning</span></li>
+                <li><span class="sub-ar">تنسيق حدائق</span><span class="sub-en">Gardening & Landscaping</span></li>
+                <li><span class="sub-ar">قص أشجار</span><span class="sub-en">Tree Trimming</span></li>
+                <li><span class="sub-ar">تركيب شبكات ري</span><span class="sub-en">Irrigation Systems</span></li>
+            </ul>
+        </div>
+
+        <!-- 2 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">العقارات والإنشاءات</h3>
+                <span class="card-title-en">Real Estate & Construction</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">بيع وإيجار منازل</span><span class="sub-en">Residential Sales & Rentals</span></li>
+                <li><span class="sub-ar">بيع وإيجار محلات</span><span class="sub-en">Commercial Sales & Rentals</span></li>
+                <li><span class="sub-ar">بيع وإيجار أراضي</span><span class="sub-en">Land Sales & Rentals</span></li>
+                <li><span class="sub-ar">إدارة العقارات</span><span class="sub-en">Property Management</span></li>
+                <li><span class="sub-ar">التقييم العقاري</span><span class="sub-en">Real Estate Appraisal</span></li>
+                <li><span class="sub-ar">مقاولات</span><span class="sub-en">Contracting & Construction</span></li>
+                <li><span class="sub-ar">مهندس معماري</span><span class="sub-en">Architect</span></li>
+                <li><span class="sub-ar">مهندس مدني</span><span class="sub-en">Civil Engineer</span></li>
+                <li><span class="sub-ar">ديكور داخلي</span><span class="sub-en">Interior Design & Decor</span></li>
+                <li><span class="sub-ar">إشراف هندسي</span><span class="sub-en">Engineering Supervision</span></li>
+                <li><span class="sub-ar">مساح أراضي</span><span class="sub-en">Land Surveyor</span></li>
+            </ul>
+        </div>
+
+        <!-- 3 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">السيارات و خدمات النقل</h3>
+                <span class="card-title-en">Cars & Transport Services</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">خدمات سائق خاص للتوصيل</span><span class="sub-en">Private Driver & Delivery</span></li>
+                <li><span class="sub-ar">توصيل للمطار</span><span class="sub-en">Airport Driver</span></li>
+                <li><span class="sub-ar">نقل أثاث</span><span class="sub-en">Furniture Moving</span></li>
+                <li><span class="sub-ar">شحن داخلي</span><span class="sub-en">Local Shipping</span></li>
+                <li><span class="sub-ar">شحن دولي</span><span class="sub-en">International Shipping</span></li>
+                <li><span class="sub-ar">تخليص جمركي</span><span class="sub-en">Customs Clearance</span></li>
+                <li><span class="sub-ar">تخزين</span><span class="sub-en">Warehousing & Storage</span></li>
+                <li><span class="sub-ar">سحب سيارات</span><span class="sub-en">Car Towing & Recovery</span></li>
+                <li><span class="sub-ar">ميكانيكي سيارات</span><span class="sub-en">Car Mechanic</span></li>
+                <li><span class="sub-ar">كهربائي سيارات</span><span class="sub-en">Car Electrician</span></li>
+                <li><span class="sub-ar">غسيل سيارات متنقل</span><span class="sub-en">Mobile Car Wash</span></li>
+                <li><span class="sub-ar">تأجير سيارات</span><span class="sub-en">Car Rental</span></li>
+                <li><span class="sub-ar">بيع وشراء سيارات</span><span class="sub-en">Car Sales & Trading</span></li>
+            </ul>
+        </div>
+
+        <!-- 4 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">البرمجيات والتكنولوجيا</h3>
+                <span class="card-title-en">Tech & Software</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">الأمن السيبراني</span><span class="sub-en">Cybersecurity</span></li>
+                <li><span class="sub-ar">UI/UX</span><span class="sub-en">UI/UX Design</span></li>
+                <li><span class="sub-ar">تصميم مواقع</span><span class="sub-en">Web Design</span></li>
+                <li><span class="sub-ar">تطوير تطبيقات</span><span class="sub-en">App Development</span></li>
+                <li><span class="sub-ar">برمجة</span><span class="sub-en">Programming & Software Dev</span></li>
+                <li><span class="sub-ar">صيانة الكمبيوتر</span><span class="sub-en">Computer Repair & Maintenance</span></li>
+                <li><span class="sub-ar">صيانة هواتف</span><span class="sub-en">Phone Repair</span></li>
+                <li><span class="sub-ar">تركيب شبكات</span><span class="sub-en">Network Installation</span></li>
+                <li><span class="sub-ar">الذكاء الاصطناعي</span><span class="sub-en">Artificial Intelligence</span></li>
+                <li><span class="sub-ar">التسويق الإلكتروني</span><span class="sub-en">Digital Marketing</span></li>
+                <li><span class="sub-ar">إدارة صفحات التواصل</span><span class="sub-en">Social Media Management</span></li>
+                <li><span class="sub-ar">الإعلانات الممولة</span><span class="sub-en">Sponsored Ads & Paid Media</span></li>
+                <li><span class="sub-ar">تحسين محركات البحث</span><span class="sub-en">SEO</span></li>
+                <li><span class="sub-ar">كتابة المحتوى</span><span class="sub-en">Content Writing</span></li>
+                <li><span class="sub-ar">إدارة المتاجر الإلكترونية</span><span class="sub-en">E-Store Management</span></li>
+            </ul>
+        </div>
+
+        <!-- 5 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">التصميم والخدمات الإبداعية</h3>
+                <span class="card-title-en">Design & Creative</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">تصميم جرافيك</span><span class="sub-en">Graphic Design</span></li>
+                <li><span class="sub-ar">تصميم شعارات</span><span class="sub-en">Logo Design</span></li>
+                <li><span class="sub-ar">مونتاج فيديو</span><span class="sub-en">Video Editing & Production</span></li>
+                <li><span class="sub-ar">تصوير فوتوغرافي</span><span class="sub-en">Photography</span></li>
+                <li><span class="sub-ar">تصوير مناسبات</span><span class="sub-en">Event Photography</span></li>
+                <li><span class="sub-ar">تصوير منتجات</span><span class="sub-en">Product Photography</span></li>
+                <li><span class="sub-ar">كتابة محتوى</span><span class="sub-en">Creative Writing</span></li>
+                <li><span class="sub-ar">ترجمة</span><span class="sub-en">Translation</span></li>
+            </ul>
+        </div>
+
+        <!-- 6 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">الأعمال والخدمات القانونية</h3>
+                <span class="card-title-en">Business & Legal</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">محامون</span><span class="sub-en">Lawyers & Legal Services</span></li>
+                <li><span class="sub-ar">مستشارون قانونيون</span><span class="sub-en">Legal Consultants</span></li>
+                <li><span class="sub-ar">ترجمة محلفة</span><span class="sub-en">Certified Translation</span></li>
+                <li><span class="sub-ar">خدمات كتاب العدل</span><span class="sub-en">Notary Public Services</span></li>
+                <li><span class="sub-ar">تسجيل شركات</span><span class="sub-en">Company Registration</span></li>
+                <li><span class="sub-ar">محاسبون</span><span class="sub-en">Accountants</span></li>
+                <li><span class="sub-ar">مستشارون ماليون</span><span class="sub-en">Financial Advisors</span></li>
+                <li><span class="sub-ar">تأسيس شركات</span><span class="sub-en">Business Setup</span></li>
+                <li><span class="sub-ar">خدمات ضرائب</span><span class="sub-en">Tax & Auditing</span></li>
+                <li><span class="sub-ar">موارد بشرية</span><span class="sub-en">HR & Recruitment</span></li>
+                <li><span class="sub-ar">استشارات أعمال</span><span class="sub-en">Business Consulting</span></li>
+            </ul>
+        </div>
+
+        <!-- 7 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">الفعاليات والضيافة</h3>
+                <span class="card-title-en">Events & Catering</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">تصوير حفلات</span><span class="sub-en">Event Photography</span></li>
+                <li><span class="sub-ar">ضيافة</span><span class="sub-en">Hospitality Services</span></li>
+                <li><span class="sub-ar">زينة</span><span class="sub-en">Event Decoration</span></li>
+                <li><span class="sub-ar">تنسيق ورد</span><span class="sub-en">Flower Arrangements</span></li>
+                <li><span class="sub-ar">تأجير DJ</span><span class="sub-en">DJ & Sound System Rental</span></li>
+                <li><span class="sub-ar">تنظيم حفلات</span><span class="sub-en">Event Planning</span></li>
+                <li><span class="sub-ar">قاعات أفراح</span><span class="sub-en">Wedding Halls & Venues</span></li>
+                <li><span class="sub-ar">معدات</span><span class="sub-en">Event Equipment Rental</span></li>
+                <li><span class="sub-ar">طبخ منزلي</span><span class="sub-en">Home Cooking</span></li>
+                <li><span class="sub-ar">تموين حفلات</span><span class="sub-en">Catering Services</span></li>
+                <li><span class="sub-ar">حلويات</span><span class="sub-en">Sweets & Pastries</span></li>
+                <li><span class="sub-ar">شيف خاص</span><span class="sub-en">Private Chef</span></li>
+            </ul>
+        </div>
+
+        <!-- 8 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">الرعاية الصحية والأسرة</h3>
+                <span class="card-title-en">Healthcare & Family</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">ممرض منزلي</span><span class="sub-en">Home Nursing</span></li>
+                <li><span class="sub-ar">علاج طبيعي</span><span class="sub-en">Physical Therapy</span></li>
+                <li><span class="sub-ar">رعاية كبار السن</span><span class="sub-en">Elderly Care</span></li>
+                <li><span class="sub-ar">رعاية أطفال</span><span class="sub-en">Childcare & Babysitting</span></li>
+                <li><span class="sub-ar">طبيب منزلي</span><span class="sub-en">Home Doctor</span></li>
+                <li><span class="sub-ar">خدمات نفسية</span><span class="sub-en">Psychological Support</span></li>
+                <li><span class="sub-ar">حضانة أطفال</span><span class="sub-en">Child Nursery</span></li>
+                <li><span class="sub-ar">جليسة أطفال</span><span class="sub-en">Nanny Services</span></li>
+                <li><span class="sub-ar">رعاية ذوي الاحتياجات الخاصة</span><span class="sub-en">Special Needs Care</span></li>
+                <li><span class="sub-ar">مدرب شخصي</span><span class="sub-en">Personal Trainer</span></li>
+            </ul>
+        </div>
+
+        <!-- 9 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">التعليم والتدريب</h3>
+                <span class="card-title-en">Education & Training</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">دروس خصوصية</span><span class="sub-en">Private Tutoring</span></li>
+                <li><span class="sub-ar">مدرسون أونلاين</span><span class="sub-en">Online Tutors</span></li>
+                <li><span class="sub-ar">تعليم اللغات</span><span class="sub-en">Language Learning</span></li>
+                <li><span class="sub-ar">دورات برمجة</span><span class="sub-en">Coding Courses</span></li>
+                <li><span class="sub-ar">دورات تصميم</span><span class="sub-en">Design Courses</span></li>
+                <li><span class="sub-ar">تدريب مهني</span><span class="sub-en">Vocational Training</span></li>
+                <li><span class="sub-ar">تحضير جامعي</span><span class="sub-en">University Prep</span></li>
+                <li><span class="sub-ar">تعليم الموسيقى</span><span class="sub-en">Music Teaching</span></li>
+                <li><span class="sub-ar">تعليم قيادة السيارات</span><span class="sub-en">Driving School</span></li>
+            </ul>
+        </div>
+
+        <!-- 10 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">الجمال والعناية الشخصية</h3>
+                <span class="card-title-en">Personal Care & Beauty</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">صالونات نسائية</span><span class="sub-en">Women's Salons</span></li>
+                <li><span class="sub-ar">صالونات رجالية</span><span class="sub-en">Barber & Men's Salons</span></li>
+                <li><span class="sub-ar">مكياج</span><span class="sub-en">Makeup Artistry</span></li>
+                <li><span class="sub-ar">حلاقة منزلية</span><span class="sub-en">Home Barber</span></li>
+                <li><span class="sub-ar">عناية بالبشرة</span><span class="sub-en">Skincare & Beauty</span></li>
+                <li><span class="sub-ar">تصوير أزياء</span><span class="sub-en">Fashion Photography</span></li>
+            </ul>
+        </div>
+
+        <!-- 11 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">الحيوانات الأليفة</h3>
+                <span class="card-title-en">Pets</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">طبيب بيطري</span><span class="sub-en">Veterinary Services</span></li>
+                <li><span class="sub-ar">تدريب الحيوانات</span><span class="sub-en">Pet Training</span></li>
+                <li><span class="sub-ar">رعاية الحيوانات</span><span class="sub-en">Pet Grooming & Care</span></li>
+                <li><span class="sub-ar">بيع مستلزمات الحيوانات</span><span class="sub-en">Pet Supplies & Shop</span></li>
+            </ul>
+        </div>
+
+        <!-- 12 -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title-ar">الأمن والأنظمة الذكية</h3>
+                <span class="card-title-en">Security & Smart Systems</span>
+            </div>
+            <ul class="subcategories-list">
+                <li><span class="sub-ar">كاميرات مراقبة</span><span class="sub-en">CCTV Cameras & Installation</span></li>
+                <li><span class="sub-ar">أنظمة إنذار</span><span class="sub-en">Alarm Systems</span></li>
+                <li><span class="sub-ar">حراس أمن</span><span class="sub-en">Security Guards</span></li>
+                <li><span class="sub-ar">أقفال ذكية</span><span class="sub-en">Smart Locks & Automation</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -22,6 +22,18 @@ interface CategoryQuickSelectProps {
     maxItems?: number;
 }
 
+// Hardcoded original 8 categories to preserve the exact style, size, and layout of Hero Section
+const originalHeroCategories = [
+    { id: "home-maintenance", nameEn: "AC & HVAC", nameAr: "تكييف وتبريد", iconName: "fan", icon: "❄️" },
+    { id: "home-maintenance", nameEn: "Electrical", nameAr: "كهرباء", iconName: "electrical", icon: "⚡" },
+    { id: "home-maintenance", nameEn: "Plumbing", nameAr: "سباكة", iconName: "plumbing", icon: "🚰" },
+    { id: "home-maintenance", nameEn: "Carpentry", nameAr: "نجارة", iconName: "hammer", icon: "🔨" },
+    { id: "real-estate-construction", nameEn: "Construction", nameAr: "مقاولات", iconName: "construction", icon: "🏗️" },
+    { id: "home-maintenance", nameEn: "Cleaning", nameAr: "تنظيف", iconName: "cleaning", icon: "🧹" },
+    { id: "automotive-logistics", nameEn: "Moving", nameAr: "نقل عفش", iconName: "moving", icon: "📦" },
+    { id: "tech-programming", nameEn: "IT Support", nameAr: "دعم تقني", iconName: "it", icon: "💻" }
+];
+
 /**
  * CategoryQuickSelect — Featured category grid for the Hero section.
  * Clicking a category routes to /requests/start?categoryId=ID
@@ -34,9 +46,8 @@ export default function CategoryQuickSelect({
     const locale = useLocale();
     const t = useTranslations('home');
 
-    const displayed = categories.slice(0, maxItems);
-
-    if (displayed.length === 0) return null;
+    // We use the exact 8 original popular categories as requested by the user
+    const displayed = originalHeroCategories;
 
     return (
         <div className="w-full flex flex-col items-center lg:items-start">
@@ -44,11 +55,11 @@ export default function CategoryQuickSelect({
                 {t('hero.popularCategories')}
             </p>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-x-3 gap-y-4 w-full">
-                {displayed.map((cat) => {
-                    const label = locale === 'ar' && cat.nameAr ? cat.nameAr : cat.name;
+                {displayed.map((cat, idx) => {
+                    const label = locale === 'ar' ? cat.nameAr : cat.nameEn;
                     return (
                         <Link
-                            key={cat.id}
+                            key={idx}
                             href={`/${locale}/requests/start?categoryId=${cat.id}`}
                             className="group flex flex-col items-center gap-2 p-1 transition-transform duration-200 hover:scale-105 active:scale-95 text-center w-full"
                         >
