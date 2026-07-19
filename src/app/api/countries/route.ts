@@ -2,15 +2,12 @@
 export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { unstable_cache } from 'next/cache';
 
-// GET /api/countries - Get all countries
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const includeCities = searchParams.get('includeCities') === 'true';
-    const locale = searchParams.get('locale') || 'en';
-
-    const countries = await prisma.country.findMany({
+// Helper to query countries with caching
+const getCachedCountries = unstable_cache(
+  async (includeCities: boolean) => {
+    return prisma.country.findMany({
       where: {
         isActive: true,
       },
@@ -24,6 +21,19 @@ export async function GET(request: NextRequest) {
         : undefined,
       orderBy: { nameEn: 'asc' },
     });
+  },
+  ['countries-list'],
+  { revalidate: 86400, tags: ['countries'] }
+);
+
+// GET /api/countries - Get all countries
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const includeCities = searchParams.get('includeCities') === 'true';
+    const locale = searchParams.get('locale') || 'en';
+
+    const countries = await getCachedCountries(includeCities);
 
     const normalized = countries.map((country: any) => ({
       ...country,

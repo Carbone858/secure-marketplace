@@ -2,6 +2,30 @@
 export const revalidate = 3600;
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { unstable_cache } from 'next/cache';
+
+// Helper to query categories with caching
+const getCachedCategories = unstable_cache(
+  async (whereStr: string, limitNum: number | undefined) => {
+    const where = JSON.parse(whereStr);
+    return prisma.category.findMany({
+      where,
+      include: {
+        children: {
+          where: { isActive: true },
+          orderBy: { sortOrder: 'asc' },
+        },
+        _count: {
+          select: { requests: true },
+        },
+      },
+      orderBy: { sortOrder: 'asc' },
+      ...(limitNum ? { take: limitNum } : {}),
+    });
+  },
+  ['categories-list'],
+  { revalidate: 3600, tags: ['categories'] }
+);
 
 // GET /api/categories - Get all categories with subcategories
 // Query params: ?featured=true&limit=12&locale=ar
@@ -21,20 +45,10 @@ export async function GET(request: NextRequest) {
       where.isFeatured = true;
     }
 
-    const categories = await prisma.category.findMany({
-      where,
-      include: {
-        children: {
-          where: { isActive: true },
-          orderBy: { sortOrder: 'asc' },
-        },
-        _count: {
-          select: { requests: true },
-        },
-      },
-      orderBy: { sortOrder: 'asc' },
-      ...(limit ? { take: parseInt(limit, 10) } : {}),
-    });
+    const categories = await getCachedCategories(
+      JSON.stringify(where),
+      limit ? parseInt(limit, 10) : undefined
+    );
 
     // Normalize names based on locale
     const normalized = categories.map((cat) => ({

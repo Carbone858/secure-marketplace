@@ -1,10 +1,31 @@
-export const dynamic = 'force-dynamic';
+// Cache at the edge for 24 hours — cities almost never change
+export const revalidate = 86400;
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
+import { unstable_cache } from 'next/cache';
 
 interface RouteParams {
   params: { id: string };
 }
+
+// Helper to query cities with caching
+const getCachedCities = unstable_cache(
+  async (countryId: string) => {
+    return prisma.city.findMany({
+      where: { countryId },
+      select: {
+        id: true,
+        nameEn: true,
+        nameAr: true,
+      },
+      orderBy: {
+        nameEn: 'asc',
+      },
+    });
+  },
+  ['cities-list'],
+  { revalidate: 86400, tags: ['cities'] }
+);
 
 /**
  * GET /api/countries/[id]/cities
@@ -16,17 +37,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const { searchParams } = new URL(request.url);
     const locale = searchParams.get('locale') || 'en';
 
-    const cities = await prisma.city.findMany({
-      where: { countryId: id },
-      select: {
-        id: true,
-        nameEn: true,
-        nameAr: true,
-      },
-      orderBy: {
-        nameEn: 'asc',
-      },
-    });
+    const cities = await getCachedCities(id);
 
     return NextResponse.json(
       {
