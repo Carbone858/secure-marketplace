@@ -123,7 +123,7 @@ export default function AdminRequestsPage() {
     if (!confirm(d('Are you sure you want to delete this project? This will also withdraw all pending offers.', 'هل أنت متأكد من حذف هذا المشروع؟ سيتم أيضاً سحب جميع العروض المعلقة.'))) return;
     setActionLoading(id);
     try {
-      const res = await fetch(`/api/requests/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/requests/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Error');
       toast.success(d('Request deleted successfully', 'تم حذف الطلب بنجاح'));

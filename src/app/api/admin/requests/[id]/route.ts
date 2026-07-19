@@ -73,9 +73,16 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
+    // Disconnect any associated projects before deleting the request
+    await prisma.project.updateMany({
+      where: { requestId: params.id },
+      data: { requestId: null },
+    });
+
     await prisma.serviceRequest.delete({ where: { id: params.id } });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error('Admin delete request error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
