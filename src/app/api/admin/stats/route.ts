@@ -106,8 +106,8 @@ export async function GET(request: NextRequest) {
         SELECT 
           o."requestId" AS request_id,
           EXTRACT(EPOCH FROM (MIN(o."createdAt") - r."createdAt")) / 60 AS first_offer_minutes
-        FROM "Offer" o
-        JOIN "ServiceRequest" r ON o."requestId" = r.id
+        FROM "offers" o
+        JOIN "service_requests" r ON o."requestId" = r.id
         GROUP BY o."requestId", r."createdAt"
       `,
     ]);
