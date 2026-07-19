@@ -12,13 +12,13 @@ import Statistics from '@/components/home/Statistics';
 import AppShowcase from '@/components/home/AppShowcase';
 
 // Lazy loading below-the-fold heavy components for low-bandwidth optimization
-const ServiceDiscovery = dynamic(() => import('@/components/home/ServiceDiscovery'), { ssr: true });
-const WhyChooseUs = dynamic(() => import('@/components/home/WhyChooseUs'), { ssr: true });
-const UserProcess = dynamic(() => import('@/components/home/UserProcess'), { ssr: true });
-const FeaturedCompanies = dynamic(() => import('@/components/home/FeaturedCompanies'), { ssr: true });
-const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'), { ssr: true });
-const TrustSafety = dynamic(() => import('@/components/home/TrustSafety'), { ssr: true });
-const FAQSection = dynamic(() => import('@/components/home/FAQSection'), { ssr: true });
+const ServiceDiscovery = dynamic(() => import('@/components/home/ServiceDiscovery'), { ssr: false });
+const WhyChooseUs = dynamic(() => import('@/components/home/WhyChooseUs'), { ssr: false });
+const UserProcess = dynamic(() => import('@/components/home/UserProcess'), { ssr: false });
+const FeaturedCompanies = dynamic(() => import('@/components/home/FeaturedCompanies'), { ssr: false });
+const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'), { ssr: false });
+const TrustSafety = dynamic(() => import('@/components/home/TrustSafety'), { ssr: false });
+const FAQSection = dynamic(() => import('@/components/home/FAQSection'), { ssr: false });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });
