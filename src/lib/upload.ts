@@ -1,6 +1,7 @@
 import path from 'path';
 import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
+import sharp from 'sharp';
 
 /**
  * Upload utility - centralized upload path and security helpers
@@ -75,14 +76,15 @@ export function getFileServeUrl(category: 'documents' | 'avatars' | 'projects', 
 }
 
 /**
- * Simple "sanitizer" for image buffers to help strip basic metadata 
- * or at least identify suspicious content.
- * Real EXIF stripping usually requires libraries like 'sharp' or 'exiftool'.
+ * Sanitize image buffers to strip all EXIF metadata.
+ * If processing fails, throws an error to reject the upload.
  */
-export function sanitizeImageBuffer(buffer: Buffer): Buffer {
-  // For now, this is a placeholder for metadata stripping.
-  // In a real prod environment with 'sharp', we would use .keepMetadata(false)
-  return buffer;
+export async function sanitizeImageBuffer(buffer: Buffer): Promise<Buffer> {
+  try {
+    return await sharp(buffer).rotate().toBuffer();
+  } catch (error: any) {
+    throw new Error(`Image security sanitization failed: ${error.message}`);
+  }
 }
 
 /**

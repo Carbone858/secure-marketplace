@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { toast } from 'sonner';
 import imageCompression from 'browser-image-compression';
+import { trackEvent } from '@/lib/analytics';
 
 /* ── types ─────────────────────────────────────────── */
 interface Category {
@@ -705,6 +706,7 @@ export function RequestFormSPA({
         }
 
         setSuccess(true);
+        trackEvent('request_created', { title: requestPayload.title, isGuest: true });
         window.scrollTo({ top: 0, behavior: 'smooth' });
         // Guest mode: don't redirect, show check-email message or login button
       } else {
@@ -729,6 +731,7 @@ export function RequestFormSPA({
         }
 
         setSuccess(true);
+        trackEvent('request_created', { title: requestPayload.title, isGuest: false });
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => router.push(`/${locale}/requests/${requestId || data.data.request.id}`), 1500);
       }

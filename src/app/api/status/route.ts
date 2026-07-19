@@ -25,9 +25,13 @@ export async function GET() {
             lastChecked: string | null;
         }> = {};
 
+        const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
         for (const cat of CATEGORIES) {
             const latest = await prisma.healthLog.findFirst({
-                where: { category: cat },
+                where: { 
+                    category: cat,
+                    testedAt: { gte: oneHourAgo }
+                },
                 orderBy: { testedAt: 'desc' },
                 select: { status: true, latencyMs: true, testedAt: true },
             });

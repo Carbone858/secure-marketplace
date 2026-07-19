@@ -172,6 +172,7 @@ model Company {
   rating              Float                      @default(0)
   reviewCount         Int                        @default(0)
   currentPlan         SubscriptionPlan           @default(FREE)
+  isDemo              Boolean                    @default(false)
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
 
@@ -332,6 +333,7 @@ model ServiceRequest {
   rejectionReason    String?         @db.Text
   rejectedAt         DateTime?
   viewCount          Int             @default(0)
+  isDemo             Boolean         @default(false)
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 

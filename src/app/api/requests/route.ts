@@ -41,11 +41,17 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
     // Build where clause
     const where: Record<string, any> = {};
 
+    const isSessionOwner = session?.isAuthenticated && session.user?.id === userId;
+    const isAdmin = session?.isAuthenticated && (session.user?.role === 'ADMIN' || session.user?.role === 'SUPER_ADMIN');
+
     // If filtering for "my requests" or a specific user, we don't strictly require isActive
     if (userOnly === 'true' && session?.isAuthenticated && session.user?.id) {
       where.userId = session.user.id;
     } else if (userId) {
       where.userId = userId;
+      if (!isSessionOwner && !isAdmin) {
+        where.isActive = true;
+      }
     } else {
       where.isActive = true;
     }
@@ -55,9 +61,15 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
     // to maximize business opportunities.
 
     // Status filter
+    const isAuthorizedForPrivateStatus = isSessionOwner || isAdmin || (userOnly === 'true' && session?.isAuthenticated);
+
     if (status) {
-      where.status = status;
-    } else if (userOnly !== 'true') {
+      if (!isAuthorizedForPrivateStatus) {
+        where.status = { in: ['ACTIVE', 'MATCHING', 'REVIEWING_OFFERS'] };
+      } else {
+        where.status = status;
+      }
+    } else if (!isAuthorizedForPrivateStatus) {
       // Default: only show ACTIVE (approved) requests publicly.
       // PENDING requests are hidden until an admin approves them.
       where.status = { in: ['ACTIVE', 'MATCHING', 'REVIEWING_OFFERS'] };
@@ -115,55 +127,60 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
     }
 
     // Get requests with pagination
-    const [requests, total] = await Promise.all([
-      prisma.serviceRequest.findMany({
-        where,
-        include: {
-          user: {
+    const includeQuery: any = {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameAr: true,
+          icon: true,
+        },
+      },
+      country: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameAr: true,
+        },
+      },
+      city: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameAr: true,
+        },
+      },
+      _count: {
+        select: {
+          offers: true,
+        },
+      },
+    };
+
+    if (userOnly === 'true') {
+      includeQuery.projects = {
+        select: {
+          id: true,
+          company: {
             select: {
-              id: true,
-              name: true,
-              avatar: true,
-            },
-          },
-          category: {
-            select: {
-              id: true,
-              nameEn: true,
-              nameAr: true,
-              icon: true,
-            },
-          },
-          country: {
-            select: {
-              id: true,
-              nameEn: true,
-              nameAr: true,
-            },
-          },
-          city: {
-            select: {
-              id: true,
-              nameEn: true,
-              nameAr: true,
-            },
-          },
-          projects: {
-            select: {
-              id: true,
-              company: {
-                select: {
-                  userId: true,
-                },
-              },
-            },
-          },
-          _count: {
-            select: {
-              offers: true,
+              userId: true,
             },
           },
         },
+      };
+    }
+
+    const [requests, total] = await Promise.all([
+      prisma.serviceRequest.findMany({
+        where,
+        include: includeQuery,
         skip,
         take: limit,
         orderBy: {

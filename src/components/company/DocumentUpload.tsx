@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader2, X, FileCheck } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 interface DocumentUploadProps {
   companyId: string;
@@ -62,6 +63,7 @@ export function DocumentUpload({ companyId, existingDocuments }: DocumentUploadP
 
       setDocuments((prev) => [data.data.document, ...prev]);
       setMessage({ type: 'success', text: t('success.uploaded') });
+      trackEvent('verification_submitted', { companyId, documentId: data.data.document.id, type: selectedType });
     } catch (error) {
       console.error('Upload error:', error);
       setMessage({ type: 'error', text: t('errors.upload') });

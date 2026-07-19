@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { Loader2, Plus, X, Upload, AlertCircle, CheckCircle, MapPin, DollarSign, Calendar, Eye, Shield } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 interface Category {
   id: string;
@@ -222,6 +223,7 @@ export function RequestForm({ categories, countries }: RequestFormProps) {
       }
 
       setSuccess(true);
+      trackEvent('request_created', { title: formData.title });
       setTimeout(() => {
         router.push(`/${locale}/requests/${data.data.request.id}`);
       }, 1500);

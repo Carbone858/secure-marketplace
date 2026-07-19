@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { createOfferSchema, type CreateOfferInput } from '@/lib/validations/request';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { trackEvent } from '@/lib/analytics';
 import dynamic from 'next/dynamic';
 
 const FileUpload = dynamic(() => import('@/components/ui/FileUpload').then(mod => mod.FileUpload), {
@@ -170,6 +171,8 @@ export default function SubmitOfferPage() {
       toast.success(t('success.title'), {
         description: t('success.message'),
       });
+
+      trackEvent('offer_sent', { requestId: params.id, price: data.price, currency: data.currency });
 
       if (typeof window !== 'undefined') {
         localStorage.removeItem(`marketplace_offer_draft_${params.id}`);

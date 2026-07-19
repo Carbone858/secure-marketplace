@@ -102,6 +102,7 @@ interface Company {
   description: string | null;
   logo: string | null;
   verificationStatus: string;
+  isDemo?: boolean;
   averageRating: number;
   reviewCount: number;
   completedProjectsCount: number;
@@ -436,7 +437,7 @@ export default function CompaniesPage() {
                         <Building2 className="w-8 h-8 text-gray-400 m-4" />
                       )}
                     </div>
-                    {company.verificationStatus === 'VERIFIED' && (
+                    {company.verificationStatus === 'VERIFIED' && !company.isDemo && (
                       <Badge variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/30 dark:text-green-400">
                         <CheckCircle className="w-3 h-3 mr-1" />
                         {t('verified')}

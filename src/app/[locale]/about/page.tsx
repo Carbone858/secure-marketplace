@@ -51,7 +51,7 @@ export default function AboutPage() {
                             alt={t('title')}
                             fill
                             className="object-cover"
-                            sizes="(max-w-768px) 100vw, 33vw"
+                            sizes="(max-width: 768px) 100vw, 33vw"
                             priority
                         />
                     </div>

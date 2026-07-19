@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Sanitize image (metadata stripping)
-    fileBuffer = sanitizeImageBuffer(fileBuffer);
+    fileBuffer = await sanitizeImageBuffer(fileBuffer);
 
     // Detect Environment
     const isVercel = !!process.env.VERCEL || !!process.env.VERCEL_ENV;

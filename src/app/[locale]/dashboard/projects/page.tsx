@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/ui/composite';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 export default function UserProjectsPage() {
   const locale = useLocale();
@@ -45,6 +46,7 @@ export default function UserProjectsPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to complete project');
       toast.success(data.message || 'Project marked as completed');
+      trackEvent('request_completed', { requestId });
       fetchProjects();
     } catch (err: any) {
       toast.error(err.message || 'Failed to complete project');

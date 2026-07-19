@@ -3,8 +3,8 @@
 import {
   createContext,
   useContext,
-  useState,
   useMemo,
+  useState,
   useCallback,
   type ReactNode,
 } from 'react';
@@ -147,12 +147,15 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
     });
   }, [persist]);
 
-  const contextValue = useMemo(() => ({
-    ...config,
-    updateLayout,
-    resetLayout,
-    toggleSidebar,
-  }), [config, updateLayout, resetLayout, toggleSidebar]);
+  const contextValue = useMemo<LayoutContextValue>(
+    () => ({
+      ...config,
+      updateLayout,
+      resetLayout,
+      toggleSidebar,
+    }),
+    [config, updateLayout, resetLayout, toggleSidebar],
+  );
 
   return (
     <LayoutContext.Provider value={contextValue}>

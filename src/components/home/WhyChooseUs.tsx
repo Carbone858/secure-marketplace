@@ -1,12 +1,30 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
-import { motion } from "framer-motion";
 import { Clock, CheckCircle, Star, GitCompare, ShieldCheck } from "lucide-react";
 
 export default function WhyChooseUs() {
     const locale = useLocale();
     const isAr = locale === "ar";
+    const [isVisible, setIsVisible] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.05 }
+        );
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+        return () => observer.disconnect();
+    }, []);
 
     const features = [
         {
@@ -32,7 +50,7 @@ export default function WhyChooseUs() {
     ];
 
     return (
-        <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <section className="py-20 bg-gray-50 dark:bg-gray-900" ref={containerRef}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -49,13 +67,12 @@ export default function WhyChooseUs() {
                     {features.map((feature, idx) => {
                         const Icon = feature.icon;
                         return (
-                            <motion.div
+                            <div
                                 key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 text-center group border border-gray-100 dark:border-gray-700"
+                                className={`bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 text-center group border border-gray-100 dark:border-gray-700 transform transition-all duration-500 ease-out ${
+                                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[20px]"
+                                }`}
+                                style={{ transitionDelay: `${idx * 100}ms` }}
                             >
                                 <div className="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
                                     <Icon className="w-8 h-8 text-primary group-hover:text-white transition-colors" />
@@ -66,7 +83,7 @@ export default function WhyChooseUs() {
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                                     {isAr ? feature.desc.ar : feature.desc.en}
                                 </p>
-                            </motion.div>
+                            </div>
                         );
                     })}
                 </div>

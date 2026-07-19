@@ -1,0 +1,67 @@
+name: Verify and Test (Post-Commit CI)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    name: Build & Test Suite
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: marketplace_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: "postgresql://postgres:password@localhost:5432/marketplace_test?schema=public"
+      JWT_SECRET: "ci-test-secret-minimum-32-characters-long"
+      NEXTAUTH_SECRET: "ci-test-nextauth-secret-32-characters"
+      SMTP_HOST: "localhost"
+      SMTP_PORT: 1025
+      SMTP_USER: "test"
+      SMTP_PASSWORD: "test"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Run Database Migrations
+        run: npx prisma db push --accept-data-loss
+
+      - name: Run Type Checking
+        run: npx tsc --noEmit
+
+      - name: Run ESLint Checks
+        run: npm run lint
+
+      - name: Run Automated Test Suite
+        run: npm run test:all
+
+      - name: Run Next.js Production Build
+        run: npm run build

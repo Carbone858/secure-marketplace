@@ -7,6 +7,7 @@ import { Eye, EyeOff, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { PasswordStrength } from './PasswordStrength';
 import { SocialLogin } from './SocialLogin';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 interface RegisterFormData {
   email: string;
@@ -192,6 +193,7 @@ export function RegisterForm() {
 
       setRegResult(data.data || {});
       setIsSuccess(true);
+      trackEvent('user_signup', { email: formData.email });
     } catch (error) {
       console.error('Registration error:', error);
       setErrors({ general: t('errors.general') });

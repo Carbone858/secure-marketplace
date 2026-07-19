@@ -1,13 +1,31 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ShieldCheck, UserCheck, MessageSquare, FileCheck2 } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function TrustSafety() {
     const t = useTranslations('home.trust');
     const locale = useLocale();
     const isAr = locale === "ar";
+    const [isVisible, setIsVisible] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.05 }
+        );
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+        return () => observer.disconnect();
+    }, []);
 
     const features = [
         {
@@ -41,7 +59,7 @@ export default function TrustSafety() {
     ];
 
     return (
-        <section className="py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden">
+        <section className="py-24 bg-white dark:bg-[#0a0a0a] overflow-hidden" ref={containerRef}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
@@ -54,13 +72,12 @@ export default function TrustSafety() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {features.map((item, idx) => (
-                        <motion.div
+                        <div
                             key={idx}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="p-8 rounded-2xl border dark:border-gray-800 hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 bg-white dark:bg-gray-950/50"
+                            className={`p-8 rounded-2xl border dark:border-gray-800 hover:shadow-xl transition-all duration-300 group hover:-translate-y-1 bg-white dark:bg-gray-950/50 transform transition-all duration-500 ease-out ${
+                                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[20px]"
+                            }`}
+                            style={{ transitionDelay: `${idx * 100}ms` }}
                         >
                             <div className={`w-14 h-14 rounded-xl ${item.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                                 <item.icon className={`w-7 h-7 ${item.color}`} />
@@ -71,7 +88,7 @@ export default function TrustSafety() {
                             <p className="text-muted-foreground leading-relaxed text-sm">
                                 {item.desc}
                             </p>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
                 

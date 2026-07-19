@@ -38,7 +38,9 @@ async function _getFeaturedCategories(locale: string = 'en', limit: number = 8) 
   }
 }
 
-// Cached wrapper — revalidates every 1 hour, varying by locale and limit to prevent cross-locale translation leakage.
+// Cached wrapper — revalidates every 1 hour
+// Cache key includes locale and limit to prevent locale collision
+// (without this, the first locale requested caches for ALL locales)
 export const getFeaturedCategories = (locale: string = 'en', limit: number = 8) =>
   unstable_cache(
     () => _getFeaturedCategories(locale, limit),

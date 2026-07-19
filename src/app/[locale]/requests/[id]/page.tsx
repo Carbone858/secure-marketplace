@@ -91,6 +91,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
               rating: true,
               reviewCount: true,
               verificationStatus: true,
+              isDemo: true,
             },
           },
         },
@@ -359,7 +360,7 @@ export default async function RequestDetailPage({ params: { locale, id }, search
                               </span>
                               <span className="opacity-40">|</span>
                               <span>{offer.company.reviewCount} {t('detail.reviews')}</span>
-                              {offer.company.verificationStatus === 'VERIFIED' && (
+                              {offer.company.verificationStatus === 'VERIFIED' && !offer.company.isDemo && (
                                 <>
                                   <span className="opacity-40">|</span>
                                   <span className="text-emerald-600 flex items-center gap-1">

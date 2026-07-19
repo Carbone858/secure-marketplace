@@ -6,6 +6,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Eye, EyeOff, Loader2, AlertCircle, CheckCircle, Lock, Mail } from 'lucide-react';
 import { SocialLogin } from './SocialLogin';
 import Link from 'next/link';
+import { trackEvent } from '@/lib/analytics';
 
 interface LoginFormData {
   email: string;
@@ -100,6 +101,7 @@ export function LoginForm() {
       }
 
       // Login successful - redirect based on role
+      trackEvent('user_login', { email: formData.email });
       const callbackUrl = new URLSearchParams(window.location.search).get('callbackUrl');
       if (callbackUrl) {
         window.location.href = callbackUrl;

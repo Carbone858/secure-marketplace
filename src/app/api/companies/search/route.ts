@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
       case 'projects': orderBy = { reviewCount: 'desc' }; break;
     }
 
-    // ── Fetch companies ───────────────────────────────────────────────────────
+        // ── Fetch companies ───────────────────────────────────────────────────────
     const [companies, total] = await Promise.all([
       prisma.company.findMany({
         where,
@@ -139,7 +139,6 @@ export async function GET(request: NextRequest) {
           country: true,
           city: true,
           services: { take: 3 },
-          projects: { where: { status: 'COMPLETED' }, select: { id: true } },
         },
         orderBy,
         skip,
@@ -152,7 +151,7 @@ export async function GET(request: NextRequest) {
       ...company,
       averageRating: Math.round((company.rating || 0) * 10) / 10,
       reviewCount: company.reviewCount,
-      completedProjectsCount: company.projects.length,
+      completedProjectsCount: 0,
       country: company.country
         ? { ...company.country, name: locale === 'ar' ? company.country.nameAr : company.country.nameEn }
         : null,

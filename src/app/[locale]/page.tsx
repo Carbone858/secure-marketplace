@@ -5,18 +5,19 @@ import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
 
 import { getFeaturedCategories } from '@/lib/services/categoryService';
+import { getFeaturedCompanies } from '@/lib/services/companyService';
 import { HeroSection } from '@/components/home';
 import DynamicServicesBar from '@/components/home/DynamicServicesBar';
+import Statistics from '@/components/home/Statistics';
+import AppShowcase from '@/components/home/AppShowcase';
 
 // Lazy loading below-the-fold heavy components for low-bandwidth optimization
-const Statistics = dynamic(() => import('@/components/home/Statistics'), { ssr: true });
 const ServiceDiscovery = dynamic(() => import('@/components/home/ServiceDiscovery'), { ssr: true });
 const WhyChooseUs = dynamic(() => import('@/components/home/WhyChooseUs'), { ssr: true });
 const UserProcess = dynamic(() => import('@/components/home/UserProcess'), { ssr: true });
 const FeaturedCompanies = dynamic(() => import('@/components/home/FeaturedCompanies'), { ssr: true });
 const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'), { ssr: true });
 const TrustSafety = dynamic(() => import('@/components/home/TrustSafety'), { ssr: true });
-const AppShowcase = dynamic(() => import('@/components/home/AppShowcase'), { ssr: true });
 const FAQSection = dynamic(() => import('@/components/home/FAQSection'), { ssr: true });
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
@@ -35,6 +36,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });
   const categories = await getFeaturedCategories(locale);
+  const companies = await getFeaturedCompanies(locale);
 
   return (
     <div className="min-h-screen">
@@ -60,7 +62,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       <UserProcess />
 
       {/* 8. Validation - Featured Companies */}
-      <FeaturedCompanies />
+      <FeaturedCompanies initialCompanies={companies} />
 
       {/* 9. Supply Side - How it Works for Companies */}
       <CompanyProcess />

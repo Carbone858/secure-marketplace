@@ -202,25 +202,19 @@ export function ThemeProvider({
     });
   }, []);
 
-  const contextValue = useMemo(() => ({
-    mode,
-    resolvedTheme,
-    brandTheme: activeBrand,
-    brandThemes,
-    setMode,
-    toggleTheme,
-    setBrandTheme,
-    registerBrandTheme,
-  }), [
-    mode,
-    resolvedTheme,
-    activeBrand,
-    brandThemes,
-    setMode,
-    toggleTheme,
-    setBrandTheme,
-    registerBrandTheme,
-  ]);
+  const contextValue = useMemo<ThemeContextValue>(
+    () => ({
+      mode,
+      resolvedTheme,
+      brandTheme: activeBrand,
+      brandThemes,
+      setMode,
+      toggleTheme,
+      setBrandTheme,
+      registerBrandTheme,
+    }),
+    [mode, resolvedTheme, activeBrand, brandThemes, setMode, toggleTheme, setBrandTheme, registerBrandTheme],
+  );
 
   return (
     <ThemeContext.Provider value={contextValue}>

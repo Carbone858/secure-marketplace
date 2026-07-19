@@ -10,6 +10,7 @@ import { Footer } from '@/components/layout/Footer';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { getFeatureFlag, FEATURE_FLAG_KEYS } from '@/lib/feature-flags';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { IOSInstallPrompt } from '@/components/layout/IOSInstallPrompt';
 import { SmartAppBanner } from '@/components/layout/SmartAppBanner';
 import { authOptions } from '@/lib/next-auth-options';
@@ -28,6 +29,7 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://secure-marketplace.com'),
   title: 'Service Marketplace',
   description: 'Leading service marketplace platform in the Arab world',
   manifest: '/manifest.json',
@@ -57,9 +59,10 @@ export default async function RootLayout({
   // Maintenance Mode Check
   const isMaintenanceMode = await getFeatureFlag(FEATURE_FLAG_KEYS.isMaintenanceMode);
   if (isMaintenanceMode) {
-    const isAdminPath = (await import('next/headers')).headers().get('x-pathname')?.includes('/admin');
-    const isMaintenancePath = (await import('next/headers')).headers().get('x-pathname')?.includes('/maintenance');
-    const isAuthPath = (await import('next/headers')).headers().get('x-pathname')?.includes('/auth/');
+    const pathname = headers().get('x-pathname') || '';
+    const isAdminPath = pathname.includes('/admin');
+    const isMaintenancePath = pathname.includes('/maintenance');
+    const isAuthPath = pathname.includes('/auth/');
 
     if (!isAdminPath && !isMaintenancePath && !isAuthPath) {
       const session = await getServerSession(authOptions);

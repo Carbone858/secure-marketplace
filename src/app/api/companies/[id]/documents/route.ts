@@ -6,7 +6,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import { companyDocumentSchema } from '@/lib/validations/company';
-import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE, uploadToSupabase } from '@/lib/upload';
+import { UPLOAD_PATHS, validateFileMagicBytes, resolveUploadPath, getFileServeUrl, generateSafeFileName, MAX_FILE_SIZE, sanitizeImageBuffer, uploadToSupabase } from '@/lib/upload';
 
 interface RouteParams {
   params: { id: string };
@@ -88,10 +88,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const fileName = generateSafeFileName(file.name);
     const uploadsDir = UPLOAD_PATHS.documents;
     const filePath = path.join(uploadsDir, fileName);
-    const fileBuffer = Buffer.from(await file.arrayBuffer());
+    let fileBuffer = Buffer.from(await file.arrayBuffer()) as Buffer;
 
     if (!validateFileMagicBytes(fileBuffer, file.type)) {
       return NextResponse.json({ success: false, error: 'file.contentMismatch', message: 'Security check failed.' }, { status: 400 });
+    }
+
+    // Sanitize image if it is an image document
+    if (file.type.startsWith('image/')) {
+      fileBuffer = await sanitizeImageBuffer(fileBuffer);
     }
 
     // Detect Environment

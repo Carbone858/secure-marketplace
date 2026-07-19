@@ -90,9 +90,8 @@ export default function ServiceDiscovery() {
                                             src={sub.img}
                                             alt={isAr ? sub.title.ar : sub.title.en}
                                             fill
-                                            unoptimized
+                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                                             className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                            priority={idx < 4}
                                         />
                                         {/* Premium dark gradient overlay for text readability */}
                                         <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95" />

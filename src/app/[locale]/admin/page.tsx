@@ -11,6 +11,10 @@ import {
   CheckCircle,
   TrendingUp,
   Loader2,
+  Activity,
+  Zap,
+  BarChart3,
+  Target,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,6 +29,8 @@ interface DashboardStats {
   stats: {
     totalUsers: number;
     totalCompanies: number;
+    realCompanies: number;
+    demoCompanies: number;
     totalRequests: number;
     totalProjects: number;
     pendingVerifications: number;
@@ -33,6 +39,17 @@ interface DashboardStats {
   recentRequests: any[];
   requestsByStatus: any[];
   companiesByStatus: any[];
+  kpi: {
+    activeLiquidityRatio: number;
+    liquiditySpeedMinutes: number | null;
+    supplierEngagement: number;
+    matchingRate: number;
+    activeRequests: number;
+    completedRequests: number;
+    requestsWithOffersCount: number;
+    activeProvidersThisWeek: number;
+    verifiedCompanies: number;
+  };
 }
 
 import { DashboardSkeleton } from '@/components/ui/skeleton';
@@ -40,6 +57,7 @@ import { DashboardSkeleton } from '@/components/ui/skeleton';
 export default function AdminDashboardPage() {
   const router = useRouter();
   const locale = useLocale();
+  const isAr = locale === 'ar';
   const t = useTranslations('admin');
   const [data, setData] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -143,6 +161,66 @@ export default function AdminDashboardPage() {
           </Card>
         ))}
       </div>
+
+      {/* Marketplace KPI Metrics */}
+      {data.kpi && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-primary" />
+            {isAr ? 'مقاييس سوق العمل' : 'Marketplace KPI Metrics'}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className="border-primary/20">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm text-muted-foreground">{isAr ? 'نسبة السيولة النشطة' : 'Active Liquidity Ratio'}</p>
+                  <Activity className="h-5 w-5 text-primary" />
+                </div>
+                <p className="text-3xl font-bold">{data.kpi.activeLiquidityRatio}%</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {data.kpi.requestsWithOffersCount} / {data.kpi.activeRequests} {isAr ? 'طلب نشط بعروض' : 'active requests with offers'}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-warning/20">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm text-muted-foreground">{isAr ? 'سرعة أول عرض' : 'Liquidity Speed'}</p>
+                  <Zap className="h-5 w-5 text-warning" />
+                </div>
+                <p className="text-3xl font-bold">
+                  {data.kpi.liquiditySpeedMinutes !== null ? data.kpi.liquiditySpeedMinutes : '—'}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">{isAr ? 'دقيقة وسيط حتى أول عرض' : 'median minutes to first offer'}</p>
+              </CardContent>
+            </Card>
+            <Card className="border-success/20">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm text-muted-foreground">{isAr ? 'تفاعل الموردين' : 'Supplier Engagement'}</p>
+                  <TrendingUp className="h-5 w-5 text-success" />
+                </div>
+                <p className="text-3xl font-bold">{data.kpi.supplierEngagement}%</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {data.kpi.activeProvidersThisWeek} / {data.kpi.verifiedCompanies} {isAr ? 'شركة موثقة نشطة هذا الأسبوع' : 'verified companies active this week'}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-info/20">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm text-muted-foreground">{isAr ? 'معدل الإنجاز' : 'Transaction Match Rate'}</p>
+                  <Target className="h-5 w-5 text-info" />
+                </div>
+                <p className="text-3xl font-bold">{data.kpi.matchingRate}%</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {data.kpi.completedRequests} / {data.stats.totalRequests} {isAr ? 'طلب مكتمل' : 'requests completed'}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
       {/* Live Errors Monitoring */}
       <LiveErrorsPanel />

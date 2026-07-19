@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Building2, CheckCircle, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,14 +16,20 @@ interface Company {
     reviewCount: number;
 }
 
-export default function FeaturedCompanies() {
+interface FeaturedCompaniesProps {
+    initialCompanies?: Company[];
+}
+
+export default function FeaturedCompanies({ initialCompanies }: FeaturedCompaniesProps) {
     const locale = useLocale();
     const t = useTranslations('home');
-    const [featuredCompanies, setFeaturedCompanies] = useState<Company[]>([]);
+    const [featuredCompanies, setFeaturedCompanies] = useState<Company[]>(initialCompanies || []);
 
     useEffect(() => {
-        fetchFeaturedCompanies();
-    }, []);
+        if (!initialCompanies || initialCompanies.length === 0) {
+            fetchFeaturedCompanies();
+        }
+    }, [initialCompanies]);
 
     const fetchFeaturedCompanies = async () => {
         try {
@@ -55,12 +62,14 @@ export default function FeaturedCompanies() {
                                 className="block"
                             >
                                 <div className="flex flex-col items-center bg-card rounded-2xl shadow-sm p-8 h-full hover:shadow-lg transition-shadow">
-                                    <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4 overflow-hidden">
+                                    <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4 overflow-hidden relative">
                                         {company.logo ? (
-                                            <img
+                                            <Image
                                                 src={company.logo}
                                                 alt={company.name}
-                                                className="w-full h-full object-cover rounded-full"
+                                                fill
+                                                sizes="80px"
+                                                className="object-cover rounded-full"
                                             />
                                         ) : (
                                             <Building2 className="h-10 w-10 text-muted-foreground" />

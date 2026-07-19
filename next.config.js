@@ -19,7 +19,8 @@ const nextConfig = {
   // Use standalone output to reduce build size and time on Vercel
   output: 'standalone',
 
-
+  // Note: experimental.cpus and experimental.workerThreads removed
+  // They were throttling builds to single-threaded mode unnecessarily
 
   // Image optimization settings
   images: {

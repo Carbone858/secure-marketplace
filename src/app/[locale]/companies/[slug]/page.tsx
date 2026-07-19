@@ -27,6 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { trackEvent } from '@/lib/analytics';
 import {
   Dialog,
   DialogContent,
@@ -47,6 +48,7 @@ interface Company {
   website: string | null;
   address: string | null;
   verificationStatus: string;
+  isDemo?: boolean;
   createdAt: string;
   country: { name: string; nameAr: string | null };
   city: { name: string; nameAr: string | null };
@@ -108,6 +110,9 @@ export default function CompanyDetailPage() {
       // API returns { success, data: { company } } or { company }
       const company = data?.data?.company ?? data?.company ?? null;
       setCompany(company);
+      if (company) {
+        trackEvent('company_profile_viewed', { companyId: company.id, companySlug: company.slug, companyName: company.name });
+      }
     } catch (err) {
       toast.error('Failed to load company');
     } finally {
@@ -239,7 +244,7 @@ export default function CompanyDetailPage() {
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-2 mb-2">
                   <h1 className="text-2xl md:text-3xl font-bold">{company.name}</h1>
-                  {company.verificationStatus === 'VERIFIED' && (
+                  {company.verificationStatus === 'VERIFIED' && !company.isDemo && (
                     <Badge className="bg-primary/100">
                       <CheckCircle className="h-3 w-3 mr-1 flex-shrink-0" />
                       {isAr ? 'موثق' : 'Verified'}
@@ -267,22 +272,40 @@ export default function CompanyDetailPage() {
                   </div>
                 </div>
 
-                {company.description && (
+                 {company.description && (
                   <p className="text-muted-foreground max-w-2xl">{company.description}</p>
                 )}
 
-                <div className="flex flex-wrap gap-2 mt-4">
+                {company.isDemo && (
+                  <div className="mt-4 p-3 rounded-lg bg-muted/50 border border-border flex items-start gap-3 max-w-2xl">
+                    <div className="w-5 h-5 rounded-full bg-muted-foreground/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Building2 className="h-3 w-3 text-muted-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {isAr
+                        ? 'هذا الملف التجاري غير مُفعَّل بعد. معلومات التواصل غير متاحة حتى تنضم الشركة رسمياً للمنصة.'
+                        : 'This business profile has not been activated yet. Contact information is unavailable until the company officially joins the platform.'}
+                    </p>
+                  </div>
+                )}
 
-
-                  {company.website && (
-                    <Button variant="outline" asChild>
-                      <a href={company.website} target="_blank" rel="noopener noreferrer">
-                        <Globe className="h-4 w-4 mr-2" />
-                        {isAr ? 'الموقع الإلكتروني' : 'Website'}
-                      </a>
-                    </Button>
-                  )}
-                </div>
+                {!company.isDemo && (
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {company.website && (
+                      <Button variant="outline" asChild>
+                        <a 
+                          href={company.website} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={() => trackEvent('contact_clicked', { companyId: company.id, companyName: company.name, type: 'website_header' })}
+                        >
+                          <Globe className="h-4 w-4 mr-2" />
+                          {isAr ? 'الموقع الإلكتروني' : 'Website'}
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
@@ -463,64 +486,93 @@ export default function CompanyDetailPage() {
           <TabsContent value="contact">
             <Card>
               <CardContent className="p-6">
-                <div className="space-y-4">
-                  {company.email && (
-                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Mail className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1 overflow-hidden">
-                        <p className="text-sm text-muted-foreground">{isAr ? 'البريد الإلكتروني' : 'Email'}</p>
-                        <a href={`mailto:${company.email}`} className="font-medium truncate block hover:text-primary transition-colors">
-                          {company.email}
-                        </a>
-                      </div>
+                {company.isDemo ? (
+                  /* Demo Profile: Contact information is hidden until the company officially joins */
+                  <div className="flex flex-col items-center justify-center py-10 text-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
+                      <Building2 className="h-8 w-8 text-muted-foreground/50" />
                     </div>
-                  )}
-                  {company.phone && (
-                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Phone className="h-5 w-5 text-primary" />
-                      </div>
-                      <div className="flex-1 overflow-hidden">
-                        <p className="text-sm text-muted-foreground">{isAr ? 'رقم الهاتف' : 'Phone'}</p>
-                        <a href={`tel:${company.phone}`} dir="ltr" className="font-medium text-left truncate block hover:text-primary transition-colors">
-                          {company.phone}
-                        </a>
-                      </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">
+                        {isAr ? 'معلومات التواصل غير متاحة' : 'Contact Information Unavailable'}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mt-2 max-w-sm">
+                        {isAr
+                          ? 'لم تنضم هذه الشركة رسمياً إلى المنصة بعد. معلومات التواصل ستكون متاحة بمجرد تفعيل حساب الشركة والتحقق منه.'
+                          : 'This company has not officially joined the platform yet. Contact information will be available once the company account is activated and verified.'}
+                      </p>
                     </div>
-                  )}
-                  {company.address && (
-                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <MapPin className="h-5 w-5 text-primary" />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {company.email && (
+                      <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Mail className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                          <p className="text-sm text-muted-foreground">{isAr ? 'البريد الإلكتروني' : 'Email'}</p>
+                          <a 
+                            href={`mailto:${company.email}`} 
+                            className="font-medium truncate block hover:text-primary transition-colors"
+                            onClick={() => trackEvent('contact_clicked', { companyId: company.id, companyName: company.name, type: 'email' })}
+                          >
+                            {company.email}
+                          </a>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">{isAr ? 'العنوان' : 'Address'}</p>
-                        <p className="font-medium">{company.address}</p>
+                    )}
+                    {company.phone && (
+                      <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Phone className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                          <p className="text-sm text-muted-foreground">{isAr ? 'رقم الهاتف' : 'Phone'}</p>
+                          <a 
+                            href={`tel:${company.phone}`} 
+                            dir="ltr" 
+                            className="font-medium text-left truncate block hover:text-primary transition-colors"
+                            onClick={() => trackEvent('contact_clicked', { companyId: company.id, companyName: company.name, type: 'phone' })}
+                          >
+                            {company.phone}
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {company.website && (
-                    <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Globe className="h-5 w-5 text-primary" />
+                    )}
+                    {company.address && (
+                      <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <MapPin className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">{isAr ? 'العنوان' : 'Address'}</p>
+                          <p className="font-medium">{company.address}</p>
+                        </div>
                       </div>
-                      <div className="flex-1 overflow-hidden">
-                        <p className="text-sm text-muted-foreground">{isAr ? 'الموقع الإلكتروني' : 'Website'}</p>
-                        <a
-                          href={company.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          dir="ltr"
-                          className="font-medium text-left text-primary truncate block hover:underline"
-                        >
-                          {company.website}
-                        </a>
+                    )}
+                    {company.website && (
+                      <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/20 border">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Globe className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                          <p className="text-sm text-muted-foreground">{isAr ? 'الموقع الإلكتروني' : 'Website'}</p>
+                          <a
+                            href={company.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            dir="ltr"
+                            className="font-medium text-left text-primary truncate block hover:underline"
+                            onClick={() => trackEvent('contact_clicked', { companyId: company.id, companyName: company.name, type: 'website' })}
+                          >
+                            {company.website}
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

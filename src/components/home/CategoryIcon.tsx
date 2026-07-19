@@ -79,8 +79,8 @@ const svgIconMap: Record<string, string> = {
   'plumbing': 'Plumping .svg',
   'moving': 'moving .svg',
   'cleaning': 'Cleaning .svg',
-  'construction': 'Construction & Building.svg',
-  'building': 'Construction & Building.svg',
+  'construction': 'construction_and_building.svg',
+  'building': 'construction_and_building.svg',
   'interior-design': 'interior .svg',
   'electrical': 'Electrical.svg',
   'sparkles': 'Cleaning .svg',
@@ -88,7 +88,7 @@ const svgIconMap: Record<string, string> = {
   'cpu': 'IT .svg',
   'zap': 'Electrical.svg',
   'droplets': 'Plumping .svg',
-  'building2': 'Construction & Building.svg',
+  'building2': 'construction_and_building.svg',
 };
 
 export default function CategoryIcon({

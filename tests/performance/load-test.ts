@@ -60,6 +60,7 @@ const ENDPOINTS = [
   { name: 'GET /api/requests', path: '/api/requests' },
   { name: 'GET /api/requests?page=1&limit=10', path: '/api/requests?page=1&limit=10' },
   { name: 'GET /api/companies/search?q=test', path: '/api/companies/search?q=test' },
+  { name: 'GET /api/auth/session', path: '/api/auth/session' },
   { name: 'GET /en (home page)', path: '/en' },
 ];
 
