@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
                     cityId: data.cityId,
                     address: data.address,
                     operationAreas: data.operationAreas || [],
-                    skills: data.skills || [],
+                    skills: data.serviceIds || [],
                     verificationStatus: 'PENDING',
                     isActive: true, // Company active but pending verification
                 },

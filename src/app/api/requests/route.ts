@@ -79,10 +79,22 @@ export const GET = withErrorMonitoring(async (request: NextRequest) => {
     if (categoryIds) {
       const ids = categoryIds.split(',').filter(Boolean);
       if (ids.length > 0) {
-        where.categoryId = { in: ids };
+        if (!where.AND) where.AND = [];
+        where.AND.push({
+          OR: [
+            { categoryId: { in: ids } },
+            { subcategoryId: { in: ids } }
+          ]
+        });
       }
     } else if (categoryId) {
-      where.categoryId = categoryId;
+      if (!where.AND) where.AND = [];
+      where.AND.push({
+        OR: [
+          { categoryId: categoryId },
+          { subcategoryId: categoryId }
+        ]
+      });
     }
 
     if (subcategoryId) {
