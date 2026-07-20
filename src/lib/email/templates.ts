@@ -21,6 +21,7 @@ interface CommonProps {
  */
 export function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
     const isRTL = props.locale === 'ar';
+    const currentYear = new Date().getFullYear();
     
     // Exact colors from globals.css
     const primaryColor = '#1e40af';      // --primary: 226 71% 40%
@@ -175,7 +176,7 @@ export function renderBaseTemplate(props: CommonProps, contentHtml: string): str
                                 ${isRTL ? 'دائماً في خدمتك' : 'Always here for you'}
                             </p>
                             <p style="margin: 0; line-height: 1.5;">
-                                ${isRTL ? 'حقوق النشر © 2024 وسيط - سوق الخدمات. جميع الحقوق محفوظة.' : '© 2024 Wassitt - Service Marketplace. All rights reserved.'}
+                                ${isRTL ? `حقوق النشر © ${currentYear} وسيط - سوق الخدمات. جميع الحقوق محفوظة.` : `© ${currentYear} Wassitt - Service Marketplace. All rights reserved.`}
                             </p>
                         </div>
                     </div>
