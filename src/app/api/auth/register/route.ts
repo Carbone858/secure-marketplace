@@ -200,9 +200,9 @@ export const POST = withErrorMonitoring(async (request: NextRequest) => {
       });
 
       // Send verification email
-      const locale = request.headers.get('accept-language')?.startsWith('ar')
-        ? 'ar'
-        : 'en';
+      const locale = (body.locale === 'ar' || body.locale === 'en')
+        ? body.locale
+        : (request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en');
       const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/verify-email/${verificationToken}`;
 
       const emailTemplate = getVerificationEmailTemplate(

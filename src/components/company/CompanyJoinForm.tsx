@@ -402,10 +402,13 @@ export function CompanyJoinForm({ countries }: CompanyJoinFormProps) {
     const submitForm = async () => {
         setIsLoading(true);
         try {
-            const payload = { ...formData, companyPhone: formData.phone }; // Mapping
+            const payload = { ...formData, companyPhone: formData.phone, locale }; // Mapping
             const res = await fetch('/api/auth/register-company', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept-Language': locale
+                },
                 body: JSON.stringify(payload)
             });
             const data = await res.json();

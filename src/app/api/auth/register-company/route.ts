@@ -199,7 +199,9 @@ export async function POST(request: NextRequest) {
         let emailSent = false;
         if (isVerificationRequired) {
             // Send Email
-            const locale = request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en';
+            const locale = (body.locale === 'ar' || body.locale === 'en')
+                ? body.locale
+                : (request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en');
             const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/verify-email/${verificationToken}`;
             const emailTemplate = getVerificationEmailTemplate(data.name, verifyUrl, locale);
 

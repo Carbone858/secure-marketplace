@@ -185,8 +185,9 @@ function ResendVerificationForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': locale,
         },
-        body: JSON.stringify({ email, recaptchaToken }),
+        body: JSON.stringify({ email, recaptchaToken, locale }),
       });
 
       const data = await response.json();

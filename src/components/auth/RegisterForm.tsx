@@ -170,6 +170,7 @@ export function RegisterForm() {
           phone: formData.phone,
           termsAccepted: formData.termsAccepted,
           recaptchaToken,
+          locale,
         }),
       });
 

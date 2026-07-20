@@ -139,7 +139,9 @@ export async function POST(request: NextRequest) {
       });
 
       // Send password reset email
-      const locale = request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en';
+      const locale = (body.locale === 'ar' || body.locale === 'en')
+        ? body.locale
+        : (request.headers.get('accept-language')?.startsWith('ar') ? 'ar' : 'en');
       const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL || ''}/${locale}/auth/reset-password/${resetToken}`;
 
       const emailTemplate = getPasswordResetEmailTemplate(

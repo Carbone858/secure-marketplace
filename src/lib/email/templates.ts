@@ -19,7 +19,7 @@ interface CommonProps {
 /**
  * Base Shell for all HTML emails (Matches Website Design Tokens)
  */
-function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
+export function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
     const isRTL = props.locale === 'ar';
     
     // Exact colors from globals.css
@@ -32,7 +32,7 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
     
     return `
 <!DOCTYPE html>
-<html lang="${props.locale}" dir="${isRTL ? 'rtl' : 'ltr'}">
+<html lang="${props.locale || 'en'}" dir="${isRTL ? 'rtl' : 'ltr'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,88 +43,108 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
     </style>
     <![endif]-->
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+        
         body {
             margin: 0;
             padding: 0;
             width: 100% !important;
             height: 100% !important;
             background-color: ${bgColor};
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: ${isRTL ? "'Cairo', sans-serif" : "'Outfit', sans-serif"};
             -webkit-font-smoothing: antialiased;
         }
         .wrapper {
             width: 100%;
             table-layout: fixed;
             background-color: ${bgColor};
-            padding-bottom: 40px;
+            padding: 24px 0 48px 0;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
             background-color: ${cardBg};
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             border: 1px solid ${borderColor};
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
         }
         .header {
-            background-color: ${primaryColor};
-            padding: 48px 24px;
+            border-top: 4px solid ${primaryColor};
+            padding: 40px 40px 24px 40px;
             text-align: center;
+            background-color: ${cardBg};
         }
         .logo {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
-            color: #ffffff;
+            color: ${textColor};
             text-decoration: none;
             letter-spacing: -0.5px;
+        }
+        .logo-accent {
+            color: ${primaryColor};
+        }
+        .tagline {
+            font-size: 13px;
+            font-weight: 600;
+            color: ${mutedColor};
+            margin-top: 6px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
         }
         .content {
-            padding: 48px 40px;
+            padding: 32px 48px 48px 48px;
             color: ${textColor};
-            line-height: 1.7;
+            line-height: 1.8;
             ${isRTL ? 'text-align: right;' : 'text-align: left;'}
         }
         .h1 {
             font-size: 24px;
             font-weight: 800;
+            margin-top: 0;
             margin-bottom: 20px;
             color: ${textColor};
             letter-spacing: -0.5px;
         }
         .p {
             font-size: 16px;
+            margin-top: 0;
             margin-bottom: 24px;
             color: ${textColor};
         }
         .button-container {
-            padding: 32px 0;
+            padding: 28px 0;
             text-align: center;
         }
         .button {
             display: inline-block;
             background-color: ${primaryColor};
+            background: linear-gradient(135deg, ${primaryColor} 0%, #1d4ed8 100%);
             color: #ffffff !important;
-            padding: 18px 44px;
-            border-radius: 10px;
+            padding: 16px 40px;
+            border-radius: 8px;
             font-weight: 700;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.18);
+            transition: all 0.2s ease;
         }
         .footer {
             text-align: center;
-            padding: 40px 32px;
-            font-size: 13px;
+            padding: 32px 40px;
+            font-size: 12px;
             color: ${mutedColor};
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
+            border-top: 1px solid ${borderColor};
         }
         .divider {
             border-top: 1px solid ${borderColor};
             margin: 32px 0;
         }
         @media only screen and (max-width: 600px) {
-            .content { padding: 40px 24px; }
+            .content { padding: 32px 24px; }
+            .footer { padding: 32px 24px; }
             .h1 { font-size: 22px; }
             .button { width: 100%; box-sizing: border-box; }
         }
@@ -137,21 +157,24 @@ function renderBaseTemplate(props: CommonProps, contentHtml: string): string {
         </div>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
             <tr>
-                <td align="center" style="padding: 24px 0;">
+                <td align="center">
                     <div class="container">
                         <div class="header">
                             <a href="${process.env.NEXT_PUBLIC_APP_URL || '#'}" class="logo">
-                                ${isRTL ? 'وسيط - سوق الخدمات الموثوق' : 'Wassitt - Service Marketplace'}
+                                ${isRTL ? 'وسيط' : 'Wassitt'}<span class="logo-accent">.</span>
                             </a>
+                            <div class="tagline">
+                                ${isRTL ? 'سوق الخدمات الموثوق' : 'Service Marketplace'}
+                            </div>
                         </div>
                         <div class="content">
                             ${contentHtml}
                         </div>
                         <div class="footer">
-                            <p style="margin: 0 0 12px 0; font-weight: 600; color: ${textColor};">
+                            <p style="margin: 0 0 8px 0; font-weight: 700; color: ${textColor};">
                                 ${isRTL ? 'دائماً في خدمتك' : 'Always here for you'}
                             </p>
-                            <p style="margin: 0;">
+                            <p style="margin: 0; line-height: 1.5;">
                                 ${isRTL ? 'حقوق النشر © 2024 وسيط - سوق الخدمات. جميع الحقوق محفوظة.' : '© 2024 Wassitt - Service Marketplace. All rights reserved.'}
                             </p>
                         </div>
