@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma';
 import { CANONICAL_DOMAIN } from '@/lib/config/site';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { resolveCategory, resolveSyrianCity, getSyrianCities } from '@/lib/services/seoCategoryService';
-import { categories as mainCategoriesList } from '@/lib/services-data';
+import { categories as mainCategoriesList, subcategories as subcategoryDict } from '@/lib/services-data';
 import { 
   MapPin, 
   CheckCircle, 
@@ -20,10 +20,15 @@ import {
   HelpCircle,
   PlusCircle,
   Phone,
-  Search
+  Search,
+  Wrench,
+  AlertTriangle,
+  UserCheck,
+  Zap,
+  Tag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 interface PageProps {
@@ -53,7 +58,7 @@ export async function generateMetadata({ params: { locale, category: categoryPar
     : `${categoryName} in ${cityName} | Find Trusted Services & Companies - Wassitt`;
 
   const description = isAr
-    ? `ابحث عن أفضل خدمات ${categoryName} في ${cityName}. قارن الأسعار والتقييمات واحصل على عروض من أفضل الشركات والفنيين الموثوقين عبر منصة وسيط.`
+    ? `احصل على أفضل خدمات ${categoryName} في ${cityName}. قارن الأسعار والتقييمات بين الشركات والفنيين الموثوقين، واطلب عروض أسعار مجانية فورية عبر منصة وسيط.`
     : `Find trusted ${categoryName} services and top-rated companies in ${cityName}. Compare quotes, read customer reviews, and hire verified local professionals on Wassitt.`;
 
   const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/services/${category.slug}/${city.slug}`;
@@ -140,11 +145,31 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
     take: 6,
   });
 
-  // 3. Fetch Syrian cities for internal linking
+  // 3. Fetch Service Coverage Areas (Districts) in this Syrian city from DB
+  const cityAreas = await prisma.area.findMany({
+    where: {
+      cityId: city.id,
+      isActive: true,
+    },
+    select: {
+      id: true,
+      nameAr: true,
+      nameEn: true,
+      slug: true,
+    },
+    take: 16,
+    orderBy: { nameAr: 'asc' },
+  });
+
+  // 4. Fetch Syrian cities for internal linking
   const syrianCities = await getSyrianCities();
   const otherCities = syrianCities.filter(c => c.slug !== city.slug);
 
-  // 4. Structured Data (JSON-LD)
+  // 5. Related subcategories under parent category
+  const parentCatId = category.parentCategoryId || category.id;
+  const relatedSubcategories = subcategoryDict[parentCatId as keyof typeof subcategoryDict] || [];
+
+  // 6. Structured Data (JSON-LD)
   const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/services/${category.slug}/${city.slug}`;
 
   const breadcrumbSchema = {
@@ -214,22 +239,42 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
     mainEntity: [
       {
         '@type': 'Question',
-        name: isAr ? `كيف أحصل على أفضل خدمات ${categoryName} في ${cityName}؟` : `How do I find the best ${categoryName} services in ${cityName}?`,
+        name: isAr ? `كم تكلفة خدمات ${categoryName} في ${cityName}؟` : `How much do ${categoryName} services cost in ${cityName}?`,
         acceptedAnswer: {
           '@type': 'Answer',
           text: isAr 
-            ? `يمكنك نشر طلب خدمة مجاناً عبر منصة وسيط في ${cityName}، وستتلقى عروض أسعار تنافسية من الشركات والفنيين الموثوقين مع إمكانية مقارنة التقييمات والأعمال السابقة.`
-            : `You can post a request for free on Wassitt in ${cityName} to receive competitive quotes from verified service providers and compare reviews.`,
+            ? `تختلف التكلفة بحسب حجم ونوع العمل المطلوب. تتيح لك منصة وسيط نشر طلبك مجاناً في ${cityName} وتلقي عروض أسعار مباشرة من الفنيين والشركات المعتمدة لمقارنتها دون أي رسوم.`
+            : `Costs depend on project scale. On Wassitt in ${cityName}, you can post your job for free and receive transparent quotes directly from verified local providers.`,
         },
       },
       {
         '@type': 'Question',
-        name: isAr ? `هل خدمات ${categoryName} عبر وسيط مضمونة وموثقة في ${cityName}؟` : `Are ${categoryName} providers verified on Wassitt in ${cityName}?`,
+        name: isAr ? `كيف أجد فني أو شركة ${categoryName} موثوقة في ${cityName}؟` : `How do I find trusted ${categoryName} providers in ${cityName}?`,
         acceptedAnswer: {
           '@type': 'Answer',
           text: isAr
-            ? `نعم، تخضع جميع الشركات ومزودي الخدمات في ${cityName} لعملية تحقق وثائق وتدقيق من فريق وسيط لضمان الأمان والجودة.`
-            : `Yes, all companies and providers undergo identity and document verification by the Wassitt team.`,
+            ? `عبر منصة وسيط، يمكنك تصفح دليل الشركات في ${cityName}، والاطلاع على تقييمات العملاء السابقين، أو نشر طلب جديد لاستقبال عروض مباشرة من مزودين تم التحقق من هوياتهم وسجلاتهم.`
+            : `Through Wassitt, you can browse verified profiles in ${cityName}, read genuine reviews, or post a request to get direct offers from background-checked professionals.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: isAr ? `ما هي الخدمات المشمولة في قسم ${categoryName} بمدينة ${cityName}؟` : `What services are included under ${categoryName} in ${cityName}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: isAr
+            ? `يشمل هذا القسم كافة أعمال التركيب والصيانة الدورية والتعديلات والحلول الطارئة للمنازل والمباني السكنية والتجارية في جميع أحياء ${cityName}.`
+            : `This category covers installation, preventive maintenance, repair work, and emergency services for residential and commercial properties throughout ${cityName}.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: isAr ? `ما هو وقت الاستجابة للحصول على عروض أسعار في ${cityName}؟` : `How fast will I get responses for ${categoryName} in ${cityName}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: isAr
+            ? `عادةً ما يبدأ الفنيون والشركات المعتمدة في ${cityName} بتقديم العروض خلال دقائق معدودة من نشر الطلب عبر المنصة.`
+            : `Verified contractors and providers in ${cityName} typically begin sending quotes within minutes of posting your request.`,
         },
       },
     ],
@@ -266,8 +311,8 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 {isAr 
-                  ? `احصل على أفضل خدمات ${categoryName} في مدينة ${cityName}. تصفح الشركات الموثوقة، قارن الأسعار، واطلب عروض أسعار مجانية فورية.`
-                  : `Find top-rated ${categoryName} specialists and verified companies in ${cityName}. Compare quotes and get your job done safely.`}
+                  ? `أفضل الحلول والشركات المعتمدة في مجال ${categoryName} بمدينة ${cityName}. قارن الأسعار والتقييمات واطلب عروض أسعار مجانية فورية.`
+                  : `Find certified ${categoryName} professionals and verified companies in ${cityName}. Compare quotes and get your job done safely.`}
               </p>
             </div>
 
@@ -281,7 +326,7 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
               <Button size="lg" variant="outline" asChild>
                 <Link href={`/${locale}/companies`}>
                   <Search className="w-5 h-5 mr-2 ml-2" />
-                  {isAr ? 'تصفح دليل الشركات' : 'Browse Directory'}
+                  {isAr ? 'تصفح الشركات' : 'Browse Directory'}
                 </Link>
               </Button>
             </div>
@@ -291,19 +336,103 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
 
       <div className="container mx-auto px-4 max-w-6xl py-12 space-y-16">
 
-        {/* Introduction Section */}
-        <section className="bg-card rounded-2xl p-6 md:p-10 border shadow-sm space-y-4">
-          <h2 className="text-2xl font-bold text-foreground">
-            {isAr ? `عن خدمات ${categoryName} في ${cityName}` : `About ${categoryName} Services in ${cityName}`}
-          </h2>
-          <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-            {isAr 
-              ? `تعتبر خدمات ${categoryName} في ${cityName} من أكثر الخدمات طلباً. عبر منصة وسيط، نوفر لك إمكانية التواصل المباشر مع أفضل الفنيين والشركات المعتمدة في ${cityName} مع ضمان الشفافية والأسعار المناسبة.`
-              : `Access professional ${categoryName} solutions in ${cityName}. Wassitt links you with certified local contractors and professionals.`}
-          </p>
+        {/* 1. Dynamic Local Content & City Overview */}
+        <section className="bg-card rounded-3xl p-6 md:p-10 border shadow-sm space-y-6">
+          <div className="flex items-center gap-3 border-b pb-4">
+            <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+              <Wrench className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">
+                {isAr ? `دليل خدمات ${categoryName} في ${cityName}` : `Guide to ${categoryName} Services in ${cityName}`}
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                {isAr ? `خدمات احترافية تلبي احتياجات السكان والمباني في ${cityName}` : `Professional solutions tailored for ${cityName} residents and businesses`}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-muted-foreground text-base md:text-lg leading-relaxed">
+            <p>
+              {isAr 
+                ? `تعتبر خدمات ${categoryName} من الركائز الأساسية للمحافظة على جودة المباني والمنشآت السكنية والتجارية في مدينة ${cityName}. يسعى سكان ومؤسسات ${cityName} دائماً للوصول إلى فنيين وشركات تمتلك الخبرة الكافية، وتلتزم بالمواعيد المحددة والأسعار العادلة.`
+                : `${categoryName} services are essential for maintaining residential and commercial infrastructure in ${cityName}. Local clients require dependable, skilled contractors offering fair pricing and punctual delivery.`}
+            </p>
+            <p>
+              {isAr 
+                ? `عبر منصة وسيط، نسهل عليك عناء البحث والتردد. نوفر لك بيئة آمنة للمقارنة بين المزودين المعتمدين في ${cityName}، والاطلاع على أعمالهم السابقة وتقييمات العملاء الحقيقيين قبل اتخاذ قرار التعاقد.`
+                : `Wassitt eliminates the hassle of finding reliable help in ${cityName} by connecting you directly with background-checked local professionals.`}
+            </p>
+          </div>
         </section>
 
-        {/* Listed Verified Companies Section */}
+        {/* 2. Common Problems & Solutions Section */}
+        <section className="space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <Badge variant="outline" className="text-xs text-primary border-primary/20">
+              <AlertTriangle className="w-3.5 h-3.5 mr-1 ml-1" />
+              {isAr ? 'مشاكل وحلول شائعة' : 'Problems & Solutions'}
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-black text-foreground">
+              {isAr ? `أبرز تحديات ${categoryName} وكيف نحلها في ${cityName}` : `Common ${categoryName} Challenges Solved in ${cityName}`}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {isAr ? 'حلول هندسية وفنية مضمونة تُقدم بواسطة خبرات محلية معتمدة' : 'Guaranteed technical solutions provided by certified local experts'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="border bg-card hover:shadow-md transition-shadow">
+              <CardContent className="p-6 space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-destructive/10 text-destructive flex items-center justify-center font-bold">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-base text-foreground">
+                  {isAr ? 'صعوبة إيجاد فنيين موثوقين' : 'Finding Reliable Technicians'}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {isAr 
+                    ? `يعاني الكثيرون في ${cityName} من التعامل مع أفراد غير مؤهلين. حل منصة وسيط هو اعتماد شركات وفنيين بعد التحقق من الأوراق الثبوتية والخبرة.`
+                    : `Finding qualified technicians in ${cityName} can be difficult. Wassitt verifies credentials and background checks before listing.`}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card hover:shadow-md transition-shadow">
+              <CardContent className="p-6 space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-warning/10 text-warning flex items-center justify-center font-bold">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-base text-foreground">
+                  {isAr ? 'تفاوت وتضخم الأسعار' : 'Price Inflation & Discrepancies'}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {isAr 
+                    ? `تفاوت التكاليف وعدم وضوح التسعير يُربك العميل. تتيح لك المنصة استقبال عدة عروض أسعار شفافة لمقارنتها واختيار العرض الأنسب لميزانيتك.`
+                    : `Unclear pricing creates confusion. Wassitt allows you to receive and compare transparent quotes before committing.`}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card hover:shadow-md transition-shadow">
+              <CardContent className="p-6 space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-success/10 text-success flex items-center justify-center font-bold">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-base text-foreground">
+                  {isAr ? 'غياب الضمان والمتابعة' : 'Lack of Service Guarantees'}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {isAr 
+                    ? `يضمن وسيط إنجاز العمل وفق الشروط والاتفاقيات عبر نظام توثيق العقود والتقييمات المباشرة بعد انتهاء الخدمة.`
+                    : `Wassitt ensures work compliance through contractual documentation and verified client ratings after job completion.`}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* 3. Listed Verified Companies Section & Improved High-Value Empty State */}
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
@@ -323,24 +452,67 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
           </div>
 
           {companies.length === 0 ? (
-            <Card className="border-dashed bg-muted/20">
-              <CardContent className="py-12 text-center space-y-4">
-                <Building2 className="w-12 h-12 text-muted-foreground/40 mx-auto" />
-                <h3 className="text-lg font-bold text-foreground">
-                  {isAr ? `لم تنضم شركات جديدة لهذه الفئة في ${cityName} بعد` : `No verified companies listed in ${cityName} yet`}
+            /* Empowering, SEO-Friendly High-Value Action Hub (No negative empty message) */
+            <div className="bg-gradient-to-br from-card via-card to-primary/5 rounded-3xl border border-primary/20 p-8 md:p-12 shadow-sm space-y-8">
+              <div className="text-center max-w-2xl mx-auto space-y-3">
+                <Badge className="bg-primary/10 text-primary border-primary/20 text-xs px-3 py-1 font-bold">
+                  <UserCheck className="w-3.5 h-3.5 mr-1 ml-1" />
+                  {isAr ? `أطلب خدمة ${categoryName} فوراً في ${cityName}` : `Get Quotes for ${categoryName} in ${cityName}`}
+                </Badge>
+                <h3 className="text-2xl md:text-3xl font-black text-foreground">
+                  {isAr ? `احصل على أفضل عروض الأسعار لخدمات ${categoryName} في ${cityName}` : `Receive Top Quotes for ${categoryName} in ${cityName}`}
                 </h3>
-                <p className="text-muted-foreground text-sm max-w-md mx-auto">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {isAr
-                    ? `هل تملك شركة أو تقدم خدمات ${categoryName} في ${cityName}؟ انضم مجاناً لمنصة وسيط واحصل على عملاء جدد.`
-                    : `Do you offer ${categoryName} services in ${cityName}? Join Wassitt today and start getting client leads.`}
+                    ? `لا داعي للانتظار. أنشئ طلبك مجاناً خلال دقيقة، وسيقوم الفنيون والشركات المعتمدة في ${cityName} بتقديم عروض أسعار تنافسية ومباشرة لحسابك.`
+                    : `No waiting required. Post your project details for free, and verified contractors in ${cityName} will send direct competitive bids.`}
                 </p>
-                <Button variant="default" asChild>
-                  <Link href={`/${locale}/company/join`}>
-                    {isAr ? 'سجل شركتك الآن' : 'Register Your Business'}
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <Card className="border bg-card shadow-sm hover:border-primary/40 transition-colors">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg font-bold flex items-center gap-2">
+                      <PlusCircle className="w-5 h-5 text-primary" />
+                      {isAr ? 'لأصحاب الطلبات والعملاء' : 'For Clients & Homeowners'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {isAr
+                        ? `أضف تفاصيل عملك وميزانيتك، واستقبل عروض أسعار متعددة للمقارنة واختيار الأنسب.`
+                        : `Specify your job details and budget to receive multiple competitive offers.`}
+                    </p>
+                    <Button className="w-full font-bold shadow-md shadow-primary/20" asChild>
+                      <Link href={`/${locale}/requests/new`}>
+                        {isAr ? 'أضف طلبك الآن مجاناً' : 'Post Request Free'}
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border bg-card shadow-sm hover:border-primary/40 transition-colors">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg font-bold flex items-center gap-2">
+                      <Building2 className="w-5 h-5 text-primary" />
+                      {isAr ? 'لشركات والفنيين في ' + cityName : 'For Providers in ' + cityName}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {isAr
+                        ? `هل تملك شركة أو تقدم خدمات ${categoryName} في ${cityName}؟ سجل مجاناً لتتلقى طلبات العملاء.`
+                        : `Do you provide ${categoryName} in ${cityName}? Register free to start receiving job leads.`}
+                    </p>
+                    <Button variant="outline" className="w-full font-bold border-primary text-primary hover:bg-primary/5" asChild>
+                      <Link href={`/${locale}/company/join`}>
+                        {isAr ? 'سجل شركتك الآن' : 'Register Your Business'}
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {companies.map(comp => (
@@ -394,11 +566,39 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
           )}
         </section>
 
-        {/* Public Active Requests Section */}
+        {/* 4. Service Coverage Areas / Districts Section */}
+        {cityAreas.length > 0 && (
+          <section className="bg-card rounded-3xl p-6 md:p-10 border shadow-sm space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">
+                  {isAr ? `مناطق تغطية خدمات ${categoryName} في ${cityName}` : `Service Coverage Areas in ${cityName}`}
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  {isAr ? `يغطي الفنيون والشركات المعتمدة مختلف الأحياء والمناطق في ${cityName}` : `Coverage spans major districts and neighborhoods across ${cityName}`}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-2">
+              {cityAreas.map(area => (
+                <Badge key={area.id} variant="secondary" className="px-3.5 py-1.5 text-xs font-medium bg-muted/60 border border-border/50">
+                  <MapPin className="w-3 h-3 mr-1 ml-1 text-primary" />
+                  {isAr ? area.nameAr : area.nameEn}
+                </Badge>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 5. Public Active Requests Section */}
         {activeRequests.length > 0 && (
           <section className="space-y-6">
             <h2 className="text-2xl font-bold text-foreground">
-              {isAr ? `أحدث طلبات الخدمة في ${cityName}` : `Recent Service Requests in ${cityName}`}
+              {isAr ? `أحدث طلبات الخدمة النشطة في ${cityName}` : `Recent Active Service Requests in ${cityName}`}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {activeRequests.map(req => (
@@ -427,7 +627,7 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
           </section>
         )}
 
-        {/* Why Choose Wassitt Section */}
+        {/* 6. Why Choose Wassitt Section */}
         <section className="bg-primary/5 rounded-3xl p-8 md:p-12 border border-primary/10 space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <h2 className="text-2xl md:text-3xl font-black text-foreground">
@@ -470,21 +670,27 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
           </div>
         </section>
 
-        {/* Local FAQ Section */}
+        {/* 7. Local FAQ Section */}
         <section className="space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-            {isAr ? 'الأسئلة الشائعة' : 'Frequently Asked Questions'}
-          </h2>
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+              <HelpCircle className="w-6 h-6" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+              {isAr ? 'الأسئلة الشائعة عن الخدمة' : 'Frequently Asked Questions'}
+            </h2>
+          </div>
+
           <div className="space-y-4">
             <Card className="border">
               <CardContent className="p-6 space-y-2">
                 <h3 className="font-bold text-base text-foreground">
-                  {isAr ? `كيف أحصل على أفضل خدمات ${categoryName} في ${cityName}؟` : `How do I find top ${categoryName} professionals in ${cityName}?`}
+                  {isAr ? `كم تكلفة خدمات ${categoryName} في ${cityName}؟` : `How much do ${categoryName} services cost in ${cityName}?`}
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {isAr 
-                    ? `اضغط على زر "أضف طلبك مجاناً"، حدد تفاصيل الخدمة والميزانية، وستصلك عروض أسعار مباشرة من الفنيين والشركات المعتمدة في ${cityName}.`
-                    : `Click "Post Request Free", outline your project requirements, and receive direct competitive quotes from top providers in ${cityName}.`}
+                    ? `تختلف التكلفة بحسب حجم ونوع العمل المطلوب. تتيح لك منصة وسيط نشر طلبك مجاناً في ${cityName} وتلقي عروض أسعار مباشرة من الفنيين والشركات المعتمدة لمقارنتها دون أي رسوم.`
+                    : `Costs depend on project scale. On Wassitt in ${cityName}, you can post your job for free and receive transparent quotes directly from verified local providers.`}
                 </p>
               </CardContent>
             </Card>
@@ -492,31 +698,79 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
             <Card className="border">
               <CardContent className="p-6 space-y-2">
                 <h3 className="font-bold text-base text-foreground">
-                  {isAr ? `هل خدمات ${categoryName} عبر وسيط موثوقة في ${cityName}؟` : `Are providers verified on Wassitt in ${cityName}?`}
+                  {isAr ? `كيف أجد فني أو شركة ${categoryName} موثوقة في ${cityName}؟` : `How do I find trusted ${categoryName} providers in ${cityName}?`}
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {isAr 
-                    ? `نعم، تخضع جميع الحسابات التجارية للتدقيق والتحقق من الهوية والأوراق الثبوتية من قبل فريق وسيط.`
-                    : `Yes, service providers undergo strict document and identity verification before being listed on Wassitt.`}
+                    ? `عبر منصة وسيط، يمكنك تصفح دليل الشركات في ${cityName}، والاطلاع على تقييمات العملاء السابقين، أو نشر طلب جديد لاستقبال عروض مباشرة من مزودين تم التحقق من هوياتهم وسجلاتهم.`
+                    : `Through Wassitt, you can browse verified profiles in ${cityName}, read genuine reviews, or post a request to get direct offers from background-checked professionals.`}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border">
+              <CardContent className="p-6 space-y-2">
+                <h3 className="font-bold text-base text-foreground">
+                  {isAr ? `ما هي الخدمات المشمولة في قسم ${categoryName} بمدينة ${cityName}؟` : `What services are included under ${categoryName} in ${cityName}?`}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {isAr
+                    ? `يشمل هذا القسم كافة أعمال التركيب والصيانة الدورية والتعديلات والحلول الطارئة للمنازل والمباني السكنية والتجارية في جميع أحياء ${cityName}.`
+                    : `This category covers installation, preventive maintenance, repair work, and emergency services for residential and commercial properties throughout ${cityName}.`}
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border">
+              <CardContent className="p-6 space-y-2">
+                <h3 className="font-bold text-base text-foreground">
+                  {isAr ? `ما هو وقت الاستجابة للحصول على عروض أسعار في ${cityName}؟` : `How fast will I get responses for ${categoryName} in ${cityName}?`}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {isAr
+                    ? `عادةً ما يبدأ الفنيون والشركات المعتمدة في ${cityName} بتقديم العروض خلال دقائق معدودة من نشر الطلب عبر المنصة.`
+                    : `Verified contractors and providers in ${cityName} typically begin sending quotes within minutes of posting your request.`}
                 </p>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        {/* Internal Linking & SEO Hub Section */}
+        {/* 8. Comprehensive Internal Linking & SEO Hub Section */}
         <section className="space-y-8 pt-8 border-t">
-          {/* Other Categories in Same City */}
+          {/* Related Subcategories in Same Category */}
+          {relatedSubcategories.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+                <Tag className="w-4 h-4 text-primary" />
+                {isAr ? `خدمات فرعية ذات صلة بـ ${categoryName} في ${cityName}` : `Sub-Services Related to ${categoryName} in ${cityName}`}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {relatedSubcategories.map(sub => (
+                  <Link
+                    key={sub.id}
+                    href={`/${locale}/services/${sub.id}/${city.slug}`}
+                    className="px-3.5 py-1.5 rounded-full bg-card border text-xs font-medium hover:border-primary hover:text-primary transition-colors shadow-sm"
+                  >
+                    {isAr ? sub.title.ar : sub.title.en} في {cityName}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Other Main Categories in Same City */}
           <div className="space-y-4">
-            <h3 className="font-bold text-lg text-foreground">
-              {isAr ? `خدمات أخرى متاحة في ${cityName}` : `Other Popular Services in ${cityName}`}
+            <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-primary" />
+              {isAr ? `قطاعات خدمات أخرى في ${cityName}` : `Other Service Sectors in ${cityName}`}
             </h3>
             <div className="flex flex-wrap gap-2">
               {mainCategoriesList.map(cat => (
                 <Link
                   key={cat.id}
                   href={`/${locale}/services/${cat.id}/${city.slug}`}
-                  className="px-3.5 py-1.5 rounded-full bg-card border text-xs font-medium hover:border-primary hover:text-primary transition-colors"
+                  className="px-3.5 py-1.5 rounded-full bg-card border text-xs font-medium hover:border-primary hover:text-primary transition-colors shadow-sm"
                 >
                   {isAr ? cat.label.ar : cat.label.en} في {cityName}
                 </Link>
@@ -526,20 +780,37 @@ export default async function LocalSeoServicePage({ params: { locale, category: 
 
           {/* Same Category in Other Syrian Cities */}
           <div className="space-y-4">
-            <h3 className="font-bold text-lg text-foreground">
-              {isAr ? `خدمات ${categoryName} في المدن السورية` : `${categoryName} Services across Syrian Cities`}
+            <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-primary" />
+              {isAr ? `خدمات ${categoryName} في المدن السورية الأخرى` : `${categoryName} Services in Other Syrian Cities`}
             </h3>
             <div className="flex flex-wrap gap-2">
               {otherCities.map(otherCity => (
                 <Link
                   key={otherCity.slug}
                   href={`/${locale}/services/${category.slug}/${otherCity.slug}`}
-                  className="px-3.5 py-1.5 rounded-full bg-card border text-xs font-medium hover:border-primary hover:text-primary transition-colors"
+                  className="px-3.5 py-1.5 rounded-full bg-card border text-xs font-medium hover:border-primary hover:text-primary transition-colors shadow-sm"
                 >
                   {categoryName} في {isAr ? otherCity.nameAr : otherCity.nameEn}
                 </Link>
               ))}
             </div>
+          </div>
+
+          {/* Global SEO Navigation Footer */}
+          <div className="flex flex-wrap items-center justify-between gap-4 p-6 bg-muted/40 rounded-2xl border text-xs text-muted-foreground">
+            <div className="flex items-center gap-4">
+              <Link href={`/${locale}/services/${category.slug}`} className="hover:text-primary transition-colors font-medium">
+                ← {isAr ? `جميع خدمات ${categoryName}` : `All ${categoryName} Services`}
+              </Link>
+              <span>|</span>
+              <Link href={`/${locale}/companies`} className="hover:text-primary transition-colors font-medium">
+                {isAr ? 'دليل الشركات' : 'Companies Directory'}
+              </Link>
+            </div>
+            <Link href={`/${locale}/requests/new`} className="text-primary font-bold hover:underline">
+              + {isAr ? 'أضف طلب خدمة جديد' : 'Post New Service Request'}
+            </Link>
           </div>
         </section>
 
