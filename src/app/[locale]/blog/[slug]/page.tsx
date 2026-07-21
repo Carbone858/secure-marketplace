@@ -60,6 +60,10 @@ export async function generateMetadata({ params: { locale, slug } }: PageProps):
 
   const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/blog/${slug}`;
 
+  // Extract featured image from HTML content or use WebP default stock
+  const imgMatch = (article as any).contentAr?.match(/<img[^>]+src=["']([^"']+)["']/i);
+  const ogImageUrl = imgMatch ? imgMatch[1] : `${CANONICAL_DOMAIN}/images/blog/default-banner.webp`;
+
   return {
     title: `${title} | وسيط Wassitt`,
     description,
@@ -80,11 +84,20 @@ export async function generateMetadata({ params: { locale, slug } }: PageProps):
       siteName: 'وسيط Wassitt',
       publishedTime: article.createdAt.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImageUrl],
     },
   };
 }
