@@ -245,8 +245,38 @@ export default function CategoryPage({ params }: PageProps) {
                             );
                         })}
                     </div>
+
+                    {/* Local SEO Cities Hub Links */}
+                    <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800">
+                        <h3 className="text-xl font-bold mb-4">
+                            {isAr ? `تصفح ${isAr ? category.label.ar : category.label.en} حسب المدينة السورية` : `Browse ${category.label.en} by Syrian City`}
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {[
+                                { id: "damascus", en: "Damascus", ar: "دمشق" },
+                                { id: "rif-dimashq", en: "Rif Dimashq", ar: "ريف دمشق" },
+                                { id: "aleppo", en: "Aleppo", ar: "حلب" },
+                                { id: "homs", en: "Homs", ar: "حمص" },
+                                { id: "hama", en: "Hama", ar: "حماة" },
+                                { id: "latakia", en: "Latakia", ar: "اللاذقية" },
+                                { id: "tartous", en: "Tartous", ar: "طرطوس" },
+                                { id: "idlib", en: "Idlib", ar: "إدلب" },
+                                { id: "daraa", en: "Daraa", ar: "درعا" },
+                                { id: "as-suwayda", en: "As-Suwayda", ar: "السويداء" }
+                            ].map((c) => (
+                                <Link
+                                    key={c.id}
+                                    href={`/${locale}/services/${categoryId}/${c.id}`}
+                                    className="px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-primary hover:text-primary transition-colors shadow-sm"
+                                >
+                                    {isAr ? `${category.label.ar} في ${c.ar}` : `${category.label.en} in ${c.en}`}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
     );
 }
+

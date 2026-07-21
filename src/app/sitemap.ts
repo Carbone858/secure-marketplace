@@ -77,7 +77,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    // 3. Query ONLY Real, Active, Verified Companies (Strictly excluding demo accounts isDemo: false)
+    // 3. Dynamic Local SEO Pages for Syrian Cities (/services/[category]/[city])
+    const syrianCities = await prisma.city.findMany({
+      where: {
+        country: { code: 'SY' },
+        isActive: true,
+      },
+      select: { slug: true },
+    });
+
+    const keySeoCategories = [
+      'electrician',
+      'plumber',
+      'ac-services',
+      'home-cleaning',
+      'painter',
+      'furniture-moving',
+      'home-maintenance',
+      'real-estate-construction',
+      'contracting',
+      'engineering-supervision',
+      'automotive-logistics',
+      'airport-driver',
+      'personal-driver',
+      'business-legal',
+      'business-setup',
+      'company-registration',
+      'tech-programming',
+      'web-design',
+      'programming',
+      'cybersecurity',
+      'digital-marketing',
+    ];
+
+    for (const catSlug of keySeoCategories) {
+      for (const city of syrianCities) {
+        if (city.slug) {
+          createEntry(`/services/${catSlug}/${city.slug}`, new Date(), 'weekly', 0.75);
+        }
+      }
+    }
+
+    // 4. Query ONLY Real, Active, Verified Companies (Strictly excluding demo accounts isDemo: false)
     const realCompanies = await prisma.company.findMany({
       where: {
         isDemo: false,
@@ -97,7 +138,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    // 4. Query ONLY Real, Active, Public Service Requests (Strictly excluding demo requests isDemo: false)
+    // 5. Query ONLY Real, Active, Public Service Requests (Strictly excluding demo requests isDemo: false)
     const realRequests = await prisma.serviceRequest.findMany({
       where: {
         isDemo: false,
@@ -118,7 +159,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     }
 
-    // 5. Query Active Database Categories if additional ones exist
+    // 6. Query Active Database Categories if additional ones exist
     const dbCategories = await prisma.category.findMany({
       where: { isActive: true },
       select: { slug: true, updatedAt: true },
