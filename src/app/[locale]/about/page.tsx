@@ -2,13 +2,40 @@ import { getTranslations } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
+import { CANONICAL_DOMAIN } from '@/lib/config/site';
+
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+    const isAr = locale === 'ar';
     const t = await getTranslations({ locale, namespace: 'about' });
+    const title = `${t('meta.title')} | ${isAr ? 'وسيط' : 'Wassitt'}`;
+    const description = t('meta.description');
+    const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/about`;
+
     return {
-        title: t('meta.title'),
-        description: t('meta.description'),
+        title,
+        description,
+        alternates: {
+            canonical: canonicalUrl,
+            languages: {
+                ar: `${CANONICAL_DOMAIN}/ar/about`,
+                en: `${CANONICAL_DOMAIN}/en/about`,
+                'x-default': `${CANONICAL_DOMAIN}/ar/about`,
+            },
+        },
+        openGraph: {
+            title,
+            description,
+            url: canonicalUrl,
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary',
+            title,
+            description,
+        },
     };
 }
+
 
 export default function AboutPage() {
     const t = useTranslations('about');

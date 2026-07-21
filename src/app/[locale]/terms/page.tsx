@@ -1,12 +1,39 @@
 import { getTranslations } from 'next-intl/server';
 
+import { CANONICAL_DOMAIN } from '@/lib/config/site';
+
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  const isAr = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'terms' });
+  const title = `${t('meta.title')} | ${isAr ? 'وسيط' : 'Wassitt'}`;
+  const description = t('meta.description');
+  const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/terms`;
+
   return {
-    title: t('meta.title'),
-    description: t('meta.description'),
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ar: `${CANONICAL_DOMAIN}/ar/terms`,
+        en: `${CANONICAL_DOMAIN}/en/terms`,
+        'x-default': `${CANONICAL_DOMAIN}/ar/terms`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   };
 }
+
 
 export default async function TermsPage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'terms' });

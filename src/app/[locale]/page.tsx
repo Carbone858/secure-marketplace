@@ -20,18 +20,38 @@ const CompanyProcess = dynamic(() => import('@/components/home/CompanyProcess'),
 const TrustSafety = dynamic(() => import('@/components/home/TrustSafety'), { ssr: false });
 const FAQSection = dynamic(() => import('@/components/home/FAQSection'), { ssr: false });
 
+import { CANONICAL_DOMAIN } from '@/lib/config/site';
+
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });
+  const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}`;
+
   return {
     title: t('meta.title'),
     description: t('meta.description'),
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ar: `${CANONICAL_DOMAIN}/ar`,
+        en: `${CANONICAL_DOMAIN}/en`,
+        'x-default': `${CANONICAL_DOMAIN}/ar`,
+      },
+    },
     openGraph: {
       title: t('meta.title'),
       description: t('meta.description'),
+      url: canonicalUrl,
       type: 'website',
-    }
+      siteName: 'وسيط Wassitt',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('meta.title'),
+      description: t('meta.description'),
+    },
   };
 }
+
 
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'home' });

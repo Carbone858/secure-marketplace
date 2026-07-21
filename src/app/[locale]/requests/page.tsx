@@ -8,15 +8,43 @@ interface RequestsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
+import { CANONICAL_DOMAIN } from '@/lib/config/site';
+import { JsonLd } from '@/components/seo/JsonLd';
+
 export async function generateMetadata({
   params: { locale },
 }: RequestsPageProps): Promise<Metadata> {
+  const isAr = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'requests' });
+  const title = `${t('list.meta.title')} | ${isAr ? 'وسيط' : 'Wassitt'}`;
+  const description = t('list.meta.description');
+  const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/requests`;
+
   return {
-    title: t('list.meta.title'),
-    description: t('list.meta.description'),
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ar: `${CANONICAL_DOMAIN}/ar/requests`,
+        en: `${CANONICAL_DOMAIN}/en/requests`,
+        'x-default': `${CANONICAL_DOMAIN}/ar/requests`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   };
 }
+
 
 export default async function RequestsPage({ params: { locale } }: RequestsPageProps) {
   const [categories, countries, allCities, syriaCountry] = await Promise.all([

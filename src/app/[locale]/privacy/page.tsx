@@ -1,12 +1,39 @@
 import { getTranslations } from 'next-intl/server';
 
+import { CANONICAL_DOMAIN } from '@/lib/config/site';
+
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  const isAr = locale === 'ar';
   const t = await getTranslations({ locale, namespace: 'privacy' });
+  const title = `${t('meta.title')} | ${isAr ? 'وسيط' : 'Wassitt'}`;
+  const description = t('meta.description');
+  const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/privacy`;
+
   return {
-    title: t('meta.title'),
-    description: t('meta.description'),
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ar: `${CANONICAL_DOMAIN}/ar/privacy`,
+        en: `${CANONICAL_DOMAIN}/en/privacy`,
+        'x-default': `${CANONICAL_DOMAIN}/ar/privacy`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   };
 }
+
 
 export default async function PrivacyPage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations({ locale, namespace: 'privacy' });

@@ -19,18 +19,53 @@ interface RequestDetailPageProps {
   searchParams?: { from?: string };
 }
 
+import { CANONICAL_DOMAIN } from '@/lib/config/site';
+import { JsonLd } from '@/components/seo/JsonLd';
+
 export async function generateMetadata({
   params: { locale, id },
 }: RequestDetailPageProps): Promise<Metadata> {
+  const isAr = locale === 'ar';
   const request = await prisma.serviceRequest.findUnique({
     where: { id },
-    select: { title: true },
+    select: { title: true, description: true },
   });
 
+  if (!request) {
+    return {
+      title: isAr ? 'الطلب غير موجود' : 'Request Not Found',
+    };
+  }
+
+  const title = `${request.title} | ${isAr ? 'وسيط' : 'Wassitt'}`;
+  const description = request.description ? request.description.slice(0, 160) : title;
+  const canonicalUrl = `${CANONICAL_DOMAIN}/${locale}/requests/${id}`;
+
   return {
-    title: request?.title || 'Request Not Found',
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        ar: `${CANONICAL_DOMAIN}/ar/requests/${id}`,
+        en: `${CANONICAL_DOMAIN}/en/requests/${id}`,
+        'x-default': `${CANONICAL_DOMAIN}/ar/requests/${id}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
   };
 }
+
 
 export default async function RequestDetailPage({ params: { locale, id }, searchParams }: RequestDetailPageProps) {
   const session = await getSession();
@@ -188,9 +223,52 @@ export default async function RequestDetailPage({ params: { locale, id }, search
     }
   };
 
+  const requestSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: request.title,
+    description: request.description,
+    provider: {
+      '@type': 'Organization',
+      name: 'Wassitt',
+      url: CANONICAL_DOMAIN,
+    },
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: isRTL ? request.city?.nameAr || request.city?.nameEn : request.city?.nameEn,
+    },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: isRTL ? 'الرئيسية' : 'Home',
+        item: `${CANONICAL_DOMAIN}/${locale}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: isRTL ? 'الطلبات' : 'Requests',
+        item: `${CANONICAL_DOMAIN}/${locale}/requests`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: request.title,
+        item: `${CANONICAL_DOMAIN}/${locale}/requests/${id}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-muted/50 py-6 lg:py-10" dir={isRTL ? 'rtl' : 'ltr'}>
+      <JsonLd data={[requestSchema, breadcrumbSchema]} />
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
+
         {/* Back Link */}
         <Suspense fallback={<div className="mb-6 h-6" />}>
           <BackButton
