@@ -111,10 +111,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       'digital-marketing',
     ];
 
+    const tier1Cities = ['damascus', 'aleppo'];
+
     for (const catSlug of keySeoCategories) {
       for (const city of syrianCities) {
         if (city.slug) {
-          createEntry(`/services/${catSlug}/${city.slug}`, new Date(), 'weekly', 0.75);
+          const isTier1 = tier1Cities.includes(city.slug.toLowerCase());
+          const priority = isTier1 ? 0.9 : 0.75;
+          const changeFreq = isTier1 ? 'daily' : 'weekly';
+          createEntry(`/services/${catSlug}/${city.slug}`, new Date(), changeFreq, priority);
         }
       }
     }

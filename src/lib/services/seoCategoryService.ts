@@ -20,14 +20,22 @@ export interface ResolvedCity {
   nameAr: string;
   nameEn: string;
   countryCode: string;
+  isPriorityTier1?: boolean;
+}
+
+// Priority Syrian Cities (Tier 1 SEO Focus)
+export const TIER1_PRIORITY_CITIES = ['damascus', 'aleppo'];
+
+export function isTier1City(citySlug: string): boolean {
+  return TIER1_PRIORITY_CITIES.includes(citySlug.toLowerCase());
 }
 
 // Category Aliases mapping common search terms to normalized IDs
 const CATEGORY_ALIASES: Record<string, string> = {
   'electrician': 'electrician',
   'electricity': 'electrician',
-  'plumbing': 'plumber',
   'plumber': 'plumber',
+  'plumbing': 'plumber',
   'ac-repair': 'ac-services',
   'ac-services': 'ac-services',
   'home-cleaning': 'home-cleaning',
@@ -137,6 +145,7 @@ export async function resolveSyrianCity(citySlug: string): Promise<ResolvedCity 
         nameAr: city.nameAr,
         nameEn: city.nameEn,
         countryCode: city.country.code,
+        isPriorityTier1: isTier1City(city.slug),
       };
     }
   } catch (err) {
@@ -160,16 +169,23 @@ export async function getSyrianCities(): Promise<ResolvedCity[]> {
         nameEn: true,
         country: { select: { code: true } },
       },
-      orderBy: { nameAr: 'asc' },
     });
 
-    return cities.map(c => ({
+    const mapped = cities.map(c => ({
       id: c.id,
       slug: c.slug,
       nameAr: c.nameAr,
       nameEn: c.nameEn,
       countryCode: c.country.code,
+      isPriorityTier1: isTier1City(c.slug),
     }));
+
+    // Sort Tier 1 Priority Cities (Damascus & Aleppo) first
+    return mapped.sort((a, b) => {
+      if (a.isPriorityTier1 && !b.isPriorityTier1) return -1;
+      if (!a.isPriorityTier1 && b.isPriorityTier1) return 1;
+      return a.nameAr.localeCompare(b.nameAr, 'ar');
+    });
   } catch (err) {
     console.error('Error fetching Syrian cities:', err);
     return [];

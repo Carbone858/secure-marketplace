@@ -246,30 +246,40 @@ export default function CategoryPage({ params }: PageProps) {
                         })}
                     </div>
 
-                    {/* Local SEO Cities Hub Links */}
+                    {/* Local SEO Cities Hub Links (Damascus & Aleppo Tier-1 Priority) */}
                     <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800">
-                        <h3 className="text-xl font-bold mb-4">
-                            {isAr ? `تصفح ${isAr ? category.label.ar : category.label.en} حسب المدينة السورية` : `Browse ${category.label.en} by Syrian City`}
-                        </h3>
+                        <div className="mb-4">
+                            <h3 className="text-xl font-bold">
+                                {isAr ? `تصفح ${isAr ? category.label.ar : category.label.en} حسب المدينة السورية` : `Browse ${category.label.en} by Syrian City`}
+                            </h3>
+                            <p className="text-xs text-gray-500 mt-1">
+                                {isAr ? 'المدن الرئيسية ذات الأولوية: دمشق وحلب' : 'Primary Tier-1 Focus: Damascus & Aleppo'}
+                            </p>
+                        </div>
                         <div className="flex flex-wrap gap-2">
                             {[
-                                { id: "damascus", en: "Damascus", ar: "دمشق" },
-                                { id: "rif-dimashq", en: "Rif Dimashq", ar: "ريف دمشق" },
-                                { id: "aleppo", en: "Aleppo", ar: "حلب" },
-                                { id: "homs", en: "Homs", ar: "حمص" },
-                                { id: "hama", en: "Hama", ar: "حماة" },
-                                { id: "latakia", en: "Latakia", ar: "اللاذقية" },
-                                { id: "tartous", en: "Tartous", ar: "طرطوس" },
-                                { id: "idlib", en: "Idlib", ar: "إدلب" },
-                                { id: "daraa", en: "Daraa", ar: "درعا" },
-                                { id: "as-suwayda", en: "As-Suwayda", ar: "السويداء" }
+                                { id: "damascus", en: "Damascus", ar: "دمشق", priority: true },
+                                { id: "aleppo", en: "Aleppo", ar: "حلب", priority: true },
+                                { id: "rif-dimashq", en: "Rif Dimashq", ar: "ريف دمشق", priority: false },
+                                { id: "homs", en: "Homs", ar: "حمص", priority: false },
+                                { id: "hama", en: "Hama", ar: "حماة", priority: false },
+                                { id: "latakia", en: "Latakia", ar: "اللاذقية", priority: false },
+                                { id: "tartous", en: "Tartous", ar: "طرطوس", priority: false },
+                                { id: "idlib", en: "Idlib", ar: "إدلب", priority: false },
+                                { id: "daraa", en: "Daraa", ar: "درعا", priority: false },
+                                { id: "as-suwayda", en: "As-Suwayda", ar: "السويداء", priority: false }
                             ].map((c) => (
                                 <Link
                                     key={c.id}
                                     href={`/${locale}/services/${categoryId}/${c.id}`}
-                                    className="px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-primary hover:text-primary transition-colors shadow-sm"
+                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors shadow-sm border ${
+                                        c.priority
+                                            ? 'bg-primary/10 text-primary border-primary/30 font-bold hover:bg-primary/20'
+                                            : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-primary hover:text-primary'
+                                    }`}
                                 >
                                     {isAr ? `${category.label.ar} في ${c.ar}` : `${category.label.en} in ${c.en}`}
+                                    {c.priority && <span className="mr-1.5 ml-1.5 text-xs">⭐</span>}
                                 </Link>
                             ))}
                         </div>
