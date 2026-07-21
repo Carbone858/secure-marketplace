@@ -47,6 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. All Valid Public Static Pages (2 locales each)
   const staticPaths = [
     '/',
+    '/blog',
     '/companies',
     '/requests',
     '/about',
@@ -170,9 +171,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         createEntry(`/services/${cat.slug}`, cat.updatedAt || new Date(), 'weekly', 0.75);
       }
     }
+
+    // 7. Query Published Blog / CMS Articles
+    const blogArticles = await prisma.cMSPage.findMany({
+      where: { isPublished: true },
+      select: { slug: true, updatedAt: true },
+    });
+
+    for (const article of blogArticles) {
+      if (article.slug) {
+        createEntry(`/blog/${article.slug}`, article.updatedAt || new Date(), 'weekly', 0.7);
+      }
+    }
   } catch (error) {
     console.error('[Sitemap Generation Warning] Database query bypassed during sitemap build:', error);
   }
 
   return sitemaps;
 }
+
