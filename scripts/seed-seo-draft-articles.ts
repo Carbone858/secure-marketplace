@@ -11,12 +11,12 @@ interface DraftArticle {
 }
 
 const draftArticles: DraftArticle[] = [
-  // Article 1: Electrician in Damascus (PUBLISH BATCH 1 - EXPANDED)
+  // Article 1: Electrician in Damascus (PUBLISH BATCH 1)
   {
     slug: 'electrician-damascus-guide',
     title: 'Damascus Electrician Guide',
     titleAr: 'دليل اختيار أفضل كهربائي في دمشق: النصائح والتكاليف وشروط الأمان',
-    metaDescription: 'دليل شامل لاختيار فني كهربائي موثوق في دمشق. تعرف على أعطال الكهرباء الشائعة، نصائح الأمان، وشككات الإينفرتر وكيفية الحصول على أفضل عروض الأسعار عبر وسيط.',
+    metaDescription: 'دليل شامل لاختيار فني كهربائي موثوق في دمشق. تعرف على أعطال الكهرباء الشائعة، نصائح الأمان، وأنظمة الإينفرتر وكيفية الحصول على أفضل عروض الأسعار عبر وسيط.',
     metaKeywords: 'كهربائي دمشق, صيانة كهرباء دمشق, فني كهرباء المزة, صيانة قواطع كهربائية دمشق, تركيب اينفرتر دمشق',
     isPublished: true, // PUBLISHED IN BATCH 1
     contentAr: `
@@ -82,13 +82,13 @@ const draftArticles: DraftArticle[] = [
     `,
   },
 
-  // Article 2: AC Repair in Damascus (PUBLISH BATCH 1 - EXPANDED)
+  // Article 2: AC Repair in Damascus (PUBLISH BATCH 1 - REFINED & CLEAR ARABIC)
   {
     slug: 'ac-repair-damascus-guide',
     title: 'Damascus AC Services Guide',
-    titleAr: 'دليل صيانة وإصلاح التكييف في دمشق: التبريد الفعال وتنظيف الفلاتر',
-    metaDescription: 'دليل شامل لخدمات صيانة وإصلاح مكيفات الهواء في دمشق. تعرف على طرق تنظيف الفلاتر، شحن الفريون، واختيار أفضل فني تكييف عبر وسيط.',
-    metaKeywords: 'صيانة تكييف دمشق, تصليح مكيفات دمشق, شحن فريون دمشق, فني تكييف سبليت دمشق, غسيل مكيفات دمشق',
+    titleAr: 'دليل صيانة وإصلاح المكيفات في دمشق: كيفية الحفاظ على التبريد وحل الأعطال',
+    metaDescription: 'دليل عملي وواضح لصيانة وإصلاح المكيفات في دمشق. تعلم كيفية غسيل الفلاتر، التأكد من غاز الفريون، وحماية المكيف عند عودة التيار الكهربائي مع خبراء وسيط.',
+    metaKeywords: 'صيانة تكييف دمشق, تصليح مكيفات دمشق, شحن فريون دمشق, فني تكييف سبليت دمشق, تنظيف مكيفات دمشق',
     isPublished: true, // PUBLISHED IN BATCH 1
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
@@ -103,57 +103,66 @@ const draftArticles: DraftArticle[] = [
           className="w-full h-auto object-cover max-h-[450px]"
         />
         <figcaption className="text-xs text-center text-muted-foreground p-2 bg-muted/40">
-          خدمات فحص وشحن فريون وتنظيف المكيفات السبلت والمركزية في دمشق
+          خدمات صيانة وإصلاح المكيفات المنزلية والمكتبية في دمشق
         </figcaption>
       </figure>
 
-      <h2>أهمية الصيانة الدورية لمكيفات الهواء في دمشق</h2>
-      <p>مع حلول فصل الصيف في دمشق، يرتفع الطلب بشكل كبير على خدمات صيانة وإصلاح التكييف. الصيانة الوقائية المنتظمة للمكيفات السبلت والمركزية لا تضمن التبريد الفعال فحسب، بل تساعد أيضاً في تقليل استهلاك الطاقة الكهربائية وتمديد العمر الافتراضي للجهاز.</p>
-
-      <h2>أبرز مشاكل التكييف في دمشق وكيفية إصلاحها</h2>
+      <h2>أسباب ضعف تبريد المكيف في دمشق وكيف تعالجها</h2>
+      <p>مع ارتفاع درجات الحرارة خلال فصل الصيف في دمشق، تزداد الحاجة لتأمين تبريد قوي ومستمر من المكيف. إذا كان مكيفك لا يبرد بالشكل المطلوب، فغالباً ما يعود السبب إلى إحدى المشاكل التالية:</p>
       <ul>
-        <li><strong>ضعف التبريد وخروج هواء دافئ:</strong> نتيجة نقص غاز الفريون أو وجود تسريب في أنابيب النحاس التوصيلية.</li>
-        <li><strong>تسريب المياه داخل الغرفة:</strong> انسداد خرطوم تصريف المياه أو تراكم الأتربة في حوض التكثيف.</li>
-        <li><strong>الأصوات العالية والاهتزاز:</strong> تلف في محامل المروحة (الرولمان) أو مشكلة في ضاغط المكيف (الكومبريسور).</li>
+        <li><strong>تراكم الغبار على الفلاتر الداخلية:</strong> انسداد الفلاتر يمنع تدفق الهواء بشكل طبيعي ويقلل كفاءة التبريد.</li>
+        <li><strong>نقص غاز الفريون:</strong> حدوث تسريب بسيط في أنابيب النحاس يقلل قدرة المكيف على تبريد الهواء.</li>
+        <li><strong>اتساخ الوحدة الخارجية:</strong> تراكم الغبار على الكمبريسور والشبك الخارجي يعيق خروج الحرارة.</li>
+        <li><strong>مشاكل كهربائية أو ضعف التيار:</strong> انخفاض الفولت يؤثر على دوران الضاغط (الكومبريسور).</li>
       </ul>
 
-      <h2>جدول الصيانة الوقائية للمكيفات في دمشق</h2>
+      <h2>خطوات بسيطة لتنظيف فلاتر المكيف بالمنزل</h2>
       <div className="bg-muted/40 p-5 rounded-2xl border my-4">
-        <h3 className="text-base font-bold text-foreground mb-3">خطوات غسيل وتنظيف المكيف لضمان هواء صحي:</h3>
+        <h3 className="text-base font-bold text-foreground mb-3">خطوات العناية الدورية بالمكيف:</h3>
         <ol className="space-y-2 text-sm">
-          <li>1. غسيل فلاتر الهواء الداخلية بالماء الدافئ وتجفيفها كل أسبوعين في الصيف.</li>
-          <li>2. غسيل مبخر الوحده الداخلية بدفع المياه وإزالة الأتربة والبكتيريا.</li>
-          <li>3. تنظيف الوحدة الخارجية (المكثف) بالماء المضغوط لإزالة الأتربة المستعصية.</li>
-          <li>4. فحص ضغط غاز الفريون والتأكد من عدم وجود تسريبات في الأنابيب.</li>
+          <li>1. إيقاف تشغيل المكيف وفصل القاطع الكهربائي الخاص به تماماً.</li>
+          <li>2. فتح الغطاء الأمامي للوحدة الداخلية وسحب الفلاتر البلاستيكية برفق.</li>
+          <li>3. غسيل الفلاتر بالماء الفاتر والصابون الخفيف لإزالة العوالق والأتربة.</li>
+          <li>4. ترك الفلاتر تجف بالكامل في مكان مظلل قبل إعادتها إلى المكيف.</li>
         </ol>
       </div>
 
-      <h2>الأسئلة الشائعة</h2>
-      <h3>كم يستغرق شحن غاز الفريون للمكيف في دمشق؟</h3>
-      <p>تستغرق عملية الفحص وتعبئة الفريون ما بين 30 إلى 60 دقيقة وتتم فوراً في موقع العميل.</p>
+      <h2>كيف تحمي المكيف من تذبذب التيار الكهربائي؟</h2>
+      <p>في العديد من أحياء دمشق، قد يترافق عودة التيار الكهربائي مع فجوة فولت مرتفعة. لحماية المكيف من التلف، يُنصح بما يلي:</p>
+      <ul>
+        <li>تركيب <strong>مفتاح حماية زمنية (Delay Relay)</strong> يؤخر تشغيل المكيف لمدة 3 إلى 5 دقائق بعد عودة الكهرباء لتثبيت التيار.</li>
+        <li>التأكد من سلامة التمديدات والكابلات الموصلة للمكيف وأنها تتحمل قوة الأمبير المطلوبة.</li>
+      </ul>
+
+      <h2>الأسئلة الشائعة عن صيانة المكيفات في دمشق</h2>
+      <h3>كم مرة يحتاج المكيف للتنظيف والصيانة؟</h3>
+      <p>يُنصح بتنظيف الفلاتر مرة كل أسبوعين في الصيف، واستدعاء فني متخصص لغسيل المكيف الشامل وفحص الفريون مرة واحدة بداية كل صيف.</p>
+
+      <h3>كيف أعرف أن المكيف يحتاج إلى شحن فريون؟</h3>
+      <p>إذا كان المكيف يعمل والمروحة تدفع الهواء لكن دون تبريد، أو إذا لاحظت تكون طبقة ثلج على أنبوب النحاس الخارجي.</p>
 
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
-        <h3 className="font-bold text-lg text-foreground">هل تبحث عن صيانة تكييف مضمونة في دمشق؟</h3>
-        <p className="text-sm text-muted-foreground my-2">احصل على عروض أسعار من أفضل فنيي التكييف المعتمدين في دمشق بنقرة زر.</p>
+        <h3 className="font-bold text-lg text-foreground">هل تحتاج إلى فني تكييف موثوق في دمشق؟</h3>
+        <p className="text-sm text-muted-foreground my-2">أضف طلبك مجاناً عبر منصة وسيط واستقبل عروض أسعار مباشرة من فنيي التكييف المعتمدين بمدينتك.</p>
         <a href="/ar/services/ac-services/damascus" className="inline-block px-5 py-2.5 bg-primary text-primary-foreground font-bold rounded-xl hover:opacity-90 transition-opacity">طلب صيانة تكييف في دمشق ←</a>
       </div>
     `,
   },
 
-  // Article 3: Business Setup in Damascus (PUBLISH BATCH 1 - EXPANDED)
+  // Article 3: Business Setup in Damascus (PUBLISH BATCH 1 - TYPO FIXED: وتسجيل)
   {
     slug: 'business-setup-damascus-guide',
     title: 'Damascus Business Setup Guide',
-    titleAr: 'دليل تأسيس وتجسير الشركات في دمشق: الإجراءات القانونية والسجل التجاري',
-    metaDescription: 'دليل شامل لتأسيس الشركات والمؤسسات التجارية في دمشق. الخطوات القانونية، استخراج السجل التجاري، والاستشارات القانونية عبر وسيط.',
-    metaKeywords: 'تأسيس شركات دمشق, سجل تجاري دمشق, محامي شركات دمشق, ترخيص شركة دمشق, تأسيس شركة ذ م م دمشق',
+    titleAr: 'دليل تأسيس وتسجيل الشركات في دمشق: الإجراءات القانونية والسجل التجاري',
+    metaDescription: 'دليل شامل لتأسيس وتسجيل الشركات والمؤسسات التجارية في دمشق. الخطوات القانونية، استخراج السجل التجاري، والاستشارات القانونية عبر وسيط.',
+    metaKeywords: 'تأسيس شركات دمشق, تسجيل شركات دمشق, سجل تجاري دمشق, محامي شركات دمشق, ترخيص شركة دمشق, تأسيس شركة ذ م م دمشق',
     isPublished: true, // PUBLISHED IN BATCH 1
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
           src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop&fm=webp" 
           alt="تأسيس وتسجيل الشركات والمؤسسات التجارية في دمشق - وسيط" 
-          title="تأسيس الشركات والسجل التجاري في دمشق"
+          title="تأسيس وتسجيل الشركات والسجل التجاري في دمشق"
           width="1200"
           height="630"
           loading="lazy"
@@ -165,19 +174,19 @@ const draftArticles: DraftArticle[] = [
         </figcaption>
       </figure>
 
-      <h2>خطوات تأسيس وتراخيص الشركات في دمشق</h2>
-      <p>يعتبر تأسيس الشركات في دمشق خطوة استراتيجية هامة لأصحاب الأعمال والمستثمرين. تضمن الاستعانة بالمكاتب والمستشارين القانونيين المعتمدين إنجاز المعاملات بدقة وسرعة وبما يتوافق مع احكام قانون الشركات السوري.</p>
+      <h2>خطوات تأسيس وتسجيل الشركات في دمشق</h2>
+      <p>يعتبر تأسيس وتسجيل الشركات في دمشق خطوة استراتيجية هامة لأصحاب الأعمال والمستثمرين. تضمن الاستعانة بالمكاتب والمستشارين القانونيين المعتمدين إنجاز المعاملات بدقة وسرعة وبما يتوافق مع أحكام قانون الشركات السوري.</p>
 
       <h2>أنواع الشركات التجارية في سوريا والإجراءات</h2>
       <ul>
         <li><strong>الشركات المحدودة المسؤولية (ذ.م.م):</strong> الخيار الأكثر شيوعاً للمشاريع الناشئة والشركات المتوسطة.</li>
         <li><strong>الشركات المساهمة المغفلة:</strong> للمشاريع الكبيرة والتطوير العقاري والاستثماري.</li>
-        <li><strong>المؤسسات الفردية:</strong> للمهن الحرة والأعمال الفردية التجاري.</li>
+        <li><strong>المؤسسات الفردية:</strong> للمهن الحرة والأعمال الفردية التجارية.</li>
       </ul>
 
-      <h2>خطوات التأسيس القانونية خطوة بخطوة</h2>
+      <h2>خطوات التأسيس والتسجيل القانونية خطوة بخطوة</h2>
       <div className="bg-muted/40 p-5 rounded-2xl border my-4">
-        <h3 className="text-base font-bold text-foreground mb-3">مراحل استخراج السجل التجاري في دمشق:</h3>
+        <h3 className="text-base font-bold text-foreground mb-3">مراحل استخراج السجل التجاري وتسجيل الشركة في دمشق:</h3>
         <ol className="space-y-2 text-sm">
           <li>1. حجز الاسم التجاري لدى وزارة التجارة الداخلية وحماية المستهلك.</li>
           <li>2. تنظيم عقد تأسيس الشركة والنظام الأساسي وتوثيقه لدى الكاتب العدل.</li>
@@ -188,8 +197,8 @@ const draftArticles: DraftArticle[] = [
       </div>
 
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
-        <h3 className="font-bold text-lg text-foreground">استشر خبراء تأسيس الشركات في دمشق</h3>
-        <p className="text-sm text-muted-foreground my-2">احصل على استشارات قانونية وتنفيذ معاملات التأسيس عبر خبراء معتمدين في وسيط.</p>
+        <h3 className="font-bold text-lg text-foreground">استشر خبراء تأسيس وتسجيل الشركات في دمشق</h3>
+        <p className="text-sm text-muted-foreground my-2">احصل على استشارات قانونية وتنفيذ معاملات التأسيس والتسجيل عبر خبراء معتمدين في وسيط.</p>
         <a href="/ar/services/business-setup/damascus" className="inline-block px-5 py-2.5 bg-primary text-primary-foreground font-bold rounded-xl hover:opacity-90 transition-opacity">خدمات تأسيس الشركات في دمشق ←</a>
       </div>
     `,
@@ -388,7 +397,7 @@ const draftArticles: DraftArticle[] = [
 ];
 
 async function seedDraftArticles() {
-  console.log('--- SEEDING & PUBLISHING BATCH 1 (3 ARTICLES) + 7 DRAFTS ---');
+  console.log('--- UPSERTING REFINED BATCH 1 ARTICLES (CORRECTED TITLES & ARABIC QUALITY) ---');
 
   for (const article of draftArticles) {
     try {
@@ -414,13 +423,13 @@ async function seedDraftArticles() {
           isPublished: article.isPublished,
         },
       });
-      console.log(`[UPSERTED]: ${article.slug} (isPublished: ${article.isPublished})`);
+      console.log(`[UPSERTED REFINED]: ${article.slug} -> title: ${article.titleAr}`);
     } catch (err) {
       console.error(`Error upserting article ${article.slug}:`, err);
     }
   }
 
-  console.log('\nSUCCESS! Batch 1 (3 articles) published, 7 articles kept as drafts.');
+  console.log('\nSUCCESS! Refined title typos & updated AC guide to crystal-clear Syrian Arabic.');
 }
 
 seedDraftArticles()
