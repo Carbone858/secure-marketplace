@@ -231,7 +231,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل اختيار أفضل كهربائي في حلب: التمديدات وأعطال التابلوهات والأمان',
     metaDescription: 'دليل شامل لاختيار فني كهربائي موثوق في حلب. فحص التمديدات الكهربائية، صيانة قواطع التابلوهات، وربط شبكات الإينفرتر والمولدات في أحياء حلب عبر وسيط.',
     metaKeywords: 'كهربائي حلب, صيانة كهرباء حلب, فني كهرباء العزيزية, صيانة طابلوهات حلب, اينفرتر حلب',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
@@ -297,7 +297,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل تركيب وصيانة المكيفات في حلب: التبريد الفعال وإعادة تعبئة غاز التبريد',
     metaDescription: 'دليل خدمات صيانة وتركيب مكيفات الهواء في حلب. حلول التبريد الصيفية، تنظيف الفلاتر، وإعادة تعبئة غاز التبريد مع أفضل الفنيين في حلب.',
     metaKeywords: 'صيانة تكييف حلب, تصليح مكيفات حلب, فني مكيفات حلب, غسيل مكيفات حلب, فريون حلب',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
@@ -363,7 +363,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل خدمات تنظيف المنازل في دمشق: النظافة الشاملة والتعقيم للمنازل والمكاتب',
     metaDescription: 'دليل كامل لخدمات وشركات تنظيف المنازل في دمشق. تنظيف الشقق، جلي الأرضيات، غسيل السجاد والكنب بالبخار، والتنظيف بعد الإكساء مع خبراء وسيط.',
     metaKeywords: 'تنظيف منازل دمشق, شركة تنظيف دمشق, تنظيف سجاد دمشق, تنظيف شقق دمشق, جلي بلاط دمشق',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
@@ -429,7 +429,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل الدهان والديكور الداخلي في دمشق: اختيار الطلاء ومعالجة الرطوبة',
     metaDescription: 'دليل خدمات الدهان والطلاء والديكور الداخلي في دمشق. خطوات اختيار الدهانات المائية والزيتية، معالجة رطوبة الجدران، واختيار معلم دهان ممتاز عبر وسيط.',
     metaKeywords: 'دهان دمشق, معلم دهان دمشق, طلاء منازل دمشق, معالجة الرطوبة دمشق, ديكور داخلي دمشق',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
@@ -500,7 +500,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل تسجيل الشركات والمؤسسات في سوريا: الشروط القانونية والسجل التجاري',
     metaDescription: 'دليل خطوة بخطوة لتسجيل الشركات والمؤسسات التجارية في سوريا. الشروط الرسمية، استخراج السجل التجاري، الانتساب لغرف التجارة والتسجيل الضريبي.',
     metaKeywords: 'تسجيل شركات سوريا, السجل التجاري سوريا, قانون الشركات سوريا, ترخيص تجاري سوريا, غرفة تجارة دمشق',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
@@ -566,7 +566,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل شركات المقاولات والإكساء في حلب: مراحل البناء والترميم الهندسي',
     metaDescription: 'دليل شامل لشركات المقاولات والإكساء الهندسي في حلب. أعمال الترميم، إكساء المباني السكنية والتجارية، والإشراف الهندسي المعتمد عبر وسيط.',
     metaKeywords: 'مقاولات حلب, إكساء حلب, مهندس مدني حلب, ترميم مباني حلب, بناء حلب',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
@@ -615,7 +615,7 @@ const draftArticles: DraftArticle[] = [
       <p>يشمل الإكساء الأسود التأسيس الصحي والكهربائي واللياسة والعزل المائي للأسطح والوجائب، بينما يشمل التشطيب السيراميك والدهان والأبواب والنوافذ. اطلع على <a href="/ar/services/contracting/aleppo" className="text-primary underline font-bold">شركات المقاولات والإكساء بحلب</a> أو تصفح <a href="/ar/companies" className="text-primary underline font-bold">دليل المهندسين المعتمدين</a>.</p>
 
       <h3>كيف يتم تأمين الإشراف الهندسي على مشاريع الترميم؟</h3>
-      <p>يضمن التعاقد عبر شركات وسيط تعيين مهندس مدني مشرف يتابع مطابقة المواصفات الإنشائية في كل مرحلة. يمكنك <a href="/ar/requests/new" className="text-primary underline font-bold">نشر مشروعك الهندسي مجاناً</a>.</p>
+      <p>يضمن التعاقد مع المقاولين والشركات الهندسية المسجلة عبر منصة وسيط تعيين مهندس مدني مشرف يتابع مطابقة المواصفات الإنشائية في كل مرحلة. يمكنك <a href="/ar/requests/new" className="text-primary underline font-bold">نشر مشروعك الهندسي مجاناً عبر منصة وسيط</a>.</p>
 
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">ابحث عن أفضل شركات المقاولات في حلب</h3>
@@ -632,7 +632,7 @@ const draftArticles: DraftArticle[] = [
     titleAr: 'دليل خدمة توصيل مطار دمشق الدولي: الحجز المسبق والراحة والسلامة',
     metaDescription: 'دليل خدمات التوصيل والتنقل لمطار دمشق الدولي. حجز سيارة سائق خاص، أسعار التوصيل، متابعة مواعيد الطيران، والراحة التامة عبر وسيط.',
     metaKeywords: 'توصيل مطار دمشق, سائق مطار دمشق, تكسي مطار دمشق, توصيل المطار دمشق, حجز سيارة مطار دمشق',
-    isPublished: false,
+    isPublished: true,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
