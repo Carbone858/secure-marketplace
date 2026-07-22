@@ -23,6 +23,7 @@ import {
   Menu,
   X,
   Activity,
+  Award,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -94,6 +95,12 @@ const menuItems: { titleKey: string; href: string; icon: any; permission?: Admin
     titleKey: 'sidebar.cms',
     href: '/admin/cms',
     icon: FileText,
+    permission: 'manage_cms',
+  },
+  {
+    titleKey: 'لوحة SEO الرئيسية',
+    href: '/admin/seo',
+    icon: Award,
     permission: 'manage_cms',
   },
   {

@@ -232,12 +232,21 @@ export default async function BlogArticleDetailPage({ params: { locale, slug } }
             <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
               <span className="flex items-center gap-1.5 font-medium">
                 <User className="w-4 h-4 text-primary" />
-                {authorName}
+                {article.author || authorName} ({article.authorRole || (isAr ? 'مستشار المحتوى والخدمات' : 'Service Advisor')})
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
-                {new Date(article.createdAt).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}
+                {isAr ? 'تاريخ النشر:' : 'Published:'} {new Date(article.createdAt).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-emerald-600" />
+                {isAr ? 'آخر تحديث:' : 'Updated:'} {new Date(article.updatedAt).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5 font-bold text-primary">
+                ⏱️ {article.readingTime || 4} {isAr ? 'دقائق قراءة' : 'min read'}
               </span>
             </div>
           </div>
@@ -247,12 +256,39 @@ export default async function BlogArticleDetailPage({ params: { locale, slug } }
       {/* Article Main Body & Sidebar Layout */}
       <div className="container mx-auto px-4 max-w-4xl py-12 space-y-12">
         
+        {/* Table of Contents (TOC) */}
+        <div className="bg-card rounded-2xl p-5 border shadow-xs space-y-3">
+          <div className="font-bold text-sm text-foreground flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-primary" /> {isAr ? 'جدول المحتويات والمحاور الرئيسية' : 'Table of Contents'}
+          </div>
+          <ul className="space-y-1.5 text-xs text-muted-foreground list-disc list-inside">
+            <li>{isAr ? 'مقدمة ونظرة عامة عن الخدمة في سوريا' : 'Overview & Introduction'}</li>
+            <li>{isAr ? 'أهم الأعطال وشروط السلامة والأمان' : 'Common Issues & Safety Standards'}</li>
+            <li>{isAr ? 'خطوات التنفيذ وقائمة فحص السلامة (Checklist)' : 'Execution Steps & Checklist'}</li>
+            <li>{isAr ? 'الأسئلة الشائعة وإرشادات اختيار الخبراء' : 'Frequently Asked Questions'}</li>
+          </ul>
+        </div>
+
         {/* Main Article Content */}
         <article className="bg-card rounded-3xl p-6 md:p-10 border shadow-sm prose dark:prose-invert max-w-none text-foreground leading-relaxed">
           <div 
             dangerouslySetInnerHTML={{ __html: content }} 
             className="space-y-4 text-base md:text-lg"
           />
+
+          {/* E-E-A-T Author Box Footer */}
+          <div className="mt-10 p-6 bg-muted/40 rounded-2xl border flex items-center gap-4">
+            <div className="p-3 bg-primary/10 rounded-full text-primary font-bold">
+              <User className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="font-bold text-sm text-foreground">{article.author || authorName}</div>
+              <div className="text-xs text-muted-foreground">{article.authorRole || (isAr ? 'مستشار المحتوى والخدمات في سوريا' : 'Syria Service & Content Advisor')}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {isAr ? 'تم مراجعة وتدقيق هذا المقال من قبل فريق خبراء وسيط لضمان موثوقية المعلومات والالتزام بمعايير الأمان والسلامة في سوريا.' : 'Reviewed and verified by Wassitt Expert Team for factual accuracy and safety compliance.'}
+              </p>
+            </div>
+          </div>
         </article>
 
         {/* Internal Linking SEO Action Box */}

@@ -597,25 +597,124 @@ model Payment {
   @@map("payments")
 }
 
-model CMSPage {
-  id              String   @id @default(uuid())
-  title           String
-  titleAr         String?
-  slug            String   @unique
-  content         String   @db.Text
-  contentAr       String?
-  metaDescription String?
-  metaKeywords    String?
-  isPublished     Boolean  @default(true)
-  createdBy       String?
-  updatedBy       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+enum CMSPageStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
 
-  createdByUser   User?    @relation("CmsPageCreatedBy", fields: [createdBy], references: [id])
-  updatedByUser   User?    @relation("CmsPageUpdatedBy", fields: [updatedBy], references: [id])
+enum SocialPlatform {
+  FACEBOOK
+  INSTAGRAM
+  X
+  LINKEDIN
+  YOUTUBE
+}
+
+enum SocialPostStatus {
+  DRAFT
+  APPROVED
+  PUBLISHED
+}
+
+model CMSPage {
+  id                String            @id @default(uuid())
+  title             String
+  titleAr           String?
+  slug              String            @unique
+  content           String            @db.Text
+  contentAr         String?           @db.Text
+  metaDescription   String?
+  metaKeywords      String?
+  isPublished       Boolean           @default(true)
+  status            CMSPageStatus     @default(DRAFT)
+  lastReviewedAt     DateTime?
+  reviewNotes        String?
+  
+  // Topic Cluster
+  isPillarPage      Boolean           @default(false)
+  pillarTopic       String?
+  
+  // E-E-A-T & Keyword Cluster
+  author            String?           @default("فريق تحرير وسيط")
+  authorRole        String?           @default("مستشار المحتوى والخدمات في سوريا")
+  categoryName      String?
+  readingTime       Int?              @default(3)
+  sources           Json?
+  primaryKeyword    String?
+  secondaryKeywords Json?
+  relatedKeywords   Json?
+  searchIntent      String?
+  targetCity        String?
+  targetService     String?
+  targetUrl         String?
+
+  // GSC Ready Metrics
+  impressions       Int               @default(0)
+  clicks            Int               @default(0)
+  ctr               Float             @default(0)
+  averagePosition   Float             @default(0)
+  indexedStatus     Boolean           @default(false)
+  lastCrawlDate     DateTime?
+
+  createdBy         String?
+  updatedBy         String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  createdByUser     User?             @relation("CmsPageCreatedBy", fields: [createdBy], references: [id])
+  updatedByUser     User?             @relation("CmsPageUpdatedBy", fields: [updatedBy], references: [id])
+
+  socialPosts       SocialPost[]
+  auditHistories    SeoAuditHistory[]
+  images            CMSImage[]
 
   @@map("cms_pages")
+}
+
+model SocialPost {
+  id        String           @id @default(uuid())
+  articleId String
+  platform  SocialPlatform
+  content   String           @db.Text
+  status    SocialPostStatus @default(DRAFT)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  article   CMSPage          @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("social_posts")
+}
+
+model SeoAuditHistory {
+  id             String   @id @default(uuid())
+  articleId      String
+  score          Int
+  detectedIssues Json
+  createdAt      DateTime @default(now())
+
+  article        CMSPage  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("seo_audit_histories")
+}
+
+model CMSImage {
+  id        String   @id @default(uuid())
+  articleId String
+  url       String
+  altText   String?
+  title     String?
+  width     Int?     @default(1200)
+  height    Int?     @default(630)
+  fileSize  Int?
+  format    String?  @default("webp")
+  isOgImage Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  article   CMSPage  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("cms_images")
 }
 
 model CMSSection {
