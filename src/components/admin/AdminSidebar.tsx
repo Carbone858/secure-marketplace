@@ -98,7 +98,7 @@ const menuItems: { titleKey: string; href: string; icon: any; permission?: Admin
     permission: 'manage_cms',
   },
   {
-    titleKey: 'لوحة SEO الرئيسية',
+    titleKey: 'sidebar.seo',
     href: '/admin/seo',
     icon: Award,
     permission: 'manage_cms',

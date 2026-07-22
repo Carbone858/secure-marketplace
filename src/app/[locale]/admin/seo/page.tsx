@@ -19,7 +19,8 @@ import {
   RefreshCw,
   ExternalLink,
   Award,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -66,6 +67,7 @@ export default function AdminSeoDashboardPage() {
   const [cityFilter, setCityFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
+  const [deletedPostKeys, setDeletedPostKeys] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     fetchAuditData();
@@ -353,31 +355,95 @@ export default function AdminSeoDashboardPage() {
       {activeTab === 'audit' && (
         <div className="space-y-6">
           {filteredArticles.map(article => (
-            <Card key={article.id} className="border">
-              <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-sm font-bold">{article.titleAr}</CardTitle>
-                  <p className="text-xs text-muted-foreground mt-0.5">/{article.slug}</p>
+            <Card key={article.id} className="border shadow-xs hover:border-primary/30 transition-all">
+              <CardHeader className="pb-3 border-b bg-muted/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <CardTitle className="text-base font-black text-foreground">{article.titleAr}</CardTitle>
+                    <Badge variant="outline" className="text-[10px]">
+                      {article.targetCity === 'aleppo' ? 'حلب' : 'دمشق'} / {article.targetService || 'عام'}
+                    </Badge>
+                  </div>
+                  <p className="text-xs font-mono text-muted-foreground">https://www.wassitt.com/ar/blog/{article.slug}</p>
                 </div>
-                <Badge className={`text-xs font-black ${article.auditScore >= 80 ? 'bg-emerald-600' : 'bg-amber-600'}`}>
-                  {article.auditScore} / 100
-                </Badge>
+                <div className="flex items-center gap-3">
+                  <span className={`text-base font-black px-3 py-1 rounded-xl shadow-xs ${article.auditScore >= 80 ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-600 border border-amber-500/20'}`}>
+                    درجة الجودة: {article.auditScore} / 100
+                  </span>
+                  <a href={`/ar/blog/${article.slug}`} target="_blank" rel="noreferrer" className="p-2 border rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground">
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
               </CardHeader>
-              <CardContent className="space-y-3 text-xs">
-                {article.issues.length > 0 ? (
-                  <div>
-                    <span className="font-bold text-destructive">الملاحظات المكتشفة:</span>
-                    <ul className="list-disc list-inside space-y-1 text-muted-foreground mt-1">
-                      {article.issues.map((iss, i) => (
-                        <li key={i}>{iss}</li>
-                      ))}
-                    </ul>
+              <CardContent className="p-5 space-y-4 text-xs">
+                {/* Diagnostic Indicators Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                  <div className="p-2.5 bg-muted/30 rounded-lg text-center border">
+                    <div className="font-bold text-foreground">📝 {article.metrics?.wordCount || 0}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">عدد الكلمات</div>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-1.5 text-emerald-600 font-bold">
-                    <CheckCircle className="w-4 h-4" /> المقال يستوفي كافة معايير الجودة بنجاح!
+                  <div className="p-2.5 bg-muted/30 rounded-lg text-center border">
+                    <div className="font-bold text-foreground">🔗 {article.metrics?.internalLinkCount || 0}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">روابط داخلية</div>
                   </div>
-                )}
+                  <div className="p-2.5 bg-muted/30 rounded-lg text-center border">
+                    <div className={`font-bold ${article.metrics?.hasMetaDescription ? 'text-emerald-600' : 'text-amber-600'}`}>
+                      {article.metrics?.hasMetaDescription ? '✅ مكتمل' : '⚠️ مفقود'}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">الوصف الميتا</div>
+                  </div>
+                  <div className="p-2.5 bg-muted/30 rounded-lg text-center border">
+                    <div className={`font-bold ${article.metrics?.hasImageAlt ? 'text-emerald-600' : 'text-amber-600'}`}>
+                      {article.metrics?.hasImageAlt ? '✅ WebP/Alt' : '⚠️ بحاجة لـ Alt'}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">نص الصورة الوصفي</div>
+                  </div>
+                  <div className="p-2.5 bg-muted/30 rounded-lg text-center border">
+                    <div className={`font-bold ${article.metrics?.hasFaq ? 'text-emerald-600' : 'text-muted-foreground'}`}>
+                      {article.metrics?.hasFaq ? '✅ يوجد FAQ' : 'لا يوجد FAQ'}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">الأسئلة الشائعة</div>
+                  </div>
+                  <div className="p-2.5 bg-muted/30 rounded-lg text-center border">
+                    <div className={`font-bold ${article.metrics?.hasEeatAuthor ? 'text-emerald-600' : 'text-muted-foreground'}`}>
+                      {article.metrics?.hasEeatAuthor ? '✅ توثيق E-E-A-T' : 'افتراضي'}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">بيانات الكاتب والخبير</div>
+                  </div>
+                </div>
+
+                {/* Issues & Recommendations Split View */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                  <div className="p-4 bg-amber-500/5 rounded-xl border border-amber-500/20 space-y-2">
+                    <div className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
+                      <AlertTriangle className="w-4 h-4" /> الملاحظات والنقاط المفقودة:
+                    </div>
+                    {article.issues.length > 0 ? (
+                      <ul className="space-y-1 text-muted-foreground list-disc list-inside">
+                        {article.issues.map((iss, i) => (
+                          <li key={i}>{iss}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-emerald-600 font-bold">لا يوجد أي نقاط مفقودة - المقال ممتاز 100%!</p>
+                    )}
+                  </div>
+
+                  <div className="p-4 bg-blue-500/5 rounded-xl border border-blue-500/20 space-y-2">
+                    <div className="font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4" /> التوصيات لرفع الترتيب في Google:
+                    </div>
+                    {article.recommendations.length > 0 ? (
+                      <ul className="space-y-1 text-muted-foreground list-disc list-inside">
+                        {article.recommendations.map((rec, i) => (
+                          <li key={i}>{rec}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-emerald-600 font-bold">المقال مهيأ تماماً لشبكة سيلو وسلطة البحث!</p>
+                    )}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -389,39 +455,57 @@ export default function AdminSeoDashboardPage() {
         <div className="space-y-6">
           {filteredArticles.map(article => (
             <Card key={article.id}>
-              <CardHeader>
+              <CardHeader className="pb-3 border-b">
                 <CardTitle className="text-sm font-bold flex items-center justify-between">
                   <span>📱 مسودات التواصل الاجتماعي: {article.titleAr}</span>
-                  <Badge variant="outline" className="text-[10px]">مراجعة المشرف (Draft)</Badge>
+                  <Badge variant="outline" className="text-[10px]">مراجعة وتصدير المشرف (Draft)</Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-xs">
-                {article.socialPosts.map(post => (
-                  <div key={post.platform} className="bg-muted/30 p-3 rounded-xl border space-y-2">
-                    <div className="flex items-center justify-between font-bold">
-                      <span className="text-primary">{post.platform}</span>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 text-xs gap-1"
-                        onClick={() => handleCopy(post.content, `${article.id}-${post.platform}`)}
-                      >
-                        {copiedIndex === `${article.id}-${post.platform}` ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" /> تم النسخ
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" /> نسخ النص
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                    <p className="whitespace-pre-wrap font-sans text-muted-foreground bg-background p-3 rounded-lg border">
-                      {post.content}
-                    </p>
-                  </div>
-                ))}
+              <CardContent className="p-5 space-y-4 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {article.socialPosts.map(post => {
+                    const postKey = `${article.id}-${post.platform}`;
+                    if (deletedPostKeys[postKey]) return null;
+
+                    return (
+                      <div key={post.platform} className="bg-muted/30 p-4 rounded-xl border space-y-2 relative group">
+                        <div className="flex items-center justify-between font-bold border-b pb-2">
+                          <span className="text-primary font-black">{post.platform}</span>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 text-xs gap-1 text-muted-foreground hover:text-foreground"
+                              onClick={() => handleCopy(post.content, postKey)}
+                            >
+                              {copiedIndex === postKey ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 text-emerald-600" /> تم النسخ
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="w-3.5 h-3.5" /> نسخ النص
+                                </>
+                              )}
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                              title="حذف هذا المنشور"
+                              onClick={() => setDeletedPostKeys(prev => ({ ...prev, [postKey]: true }))}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="whitespace-pre-wrap font-sans text-muted-foreground bg-background p-3 rounded-lg border leading-relaxed">
+                          {post.content}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
               </CardContent>
             </Card>
           ))}
