@@ -93,7 +93,7 @@ const draftArticles: DraftArticle[] = [
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
-          src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1200&auto=format&fit=crop&fm=webp" 
+          src="https://images.unsplash.com/photo-1585338107529-13afc5f02586?q=80&w=1200&auto=format&fit=crop&fm=webp" 
           alt="صيانة وتنظيف مكيفات التكييف والتبريد في دمشق - وسيط" 
           title="صيانة وإصلاح التكييف في دمشق"
           width="1200"
@@ -272,7 +272,7 @@ const draftArticles: DraftArticle[] = [
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
-          src="https://images.unsplash.com/photo-1631545806606-53c4d7d34190?q=80&w=1200&auto=format&fit=crop&fm=webp" 
+          src="https://images.unsplash.com/photo-1585338107529-13afc5f02586?q=80&w=1200&auto=format&fit=crop&fm=webp" 
           alt="تركيب وصيانة مكيفات السبليت والمكيفات المركزية في حلب - وسيط" 
           title="صيانة المكيفات في حلب"
           width="1200"
