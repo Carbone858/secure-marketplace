@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/auth-middleware';
 import { SeoAuditEngineService } from '@/lib/services/seoAuditEngineService';
+import { SocialMediaGeneratorService } from '@/lib/services/socialMediaGeneratorService';
 
 export async function GET(request: NextRequest) {
   try {
@@ -55,6 +56,16 @@ export async function GET(request: NextRequest) {
       if (!audit.metrics.hasImageAlt) missingAltCount++;
       if (audit.metrics.internalLinkCount === 0) orphanPagesCount++;
 
+      const socialPosts = article.socialPosts.length > 0
+        ? article.socialPosts
+        : SocialMediaGeneratorService.generateCaptionsArray({
+            titleAr: article.titleAr,
+            title: article.title,
+            primaryKeyword: article.primaryKeyword,
+            targetCity: article.targetCity,
+            slug: article.slug,
+          });
+
       return {
         id: article.id,
         slug: article.slug,
@@ -74,7 +85,7 @@ export async function GET(request: NextRequest) {
         issues: audit.issues,
         recommendations: audit.recommendations,
         metrics: audit.metrics,
-        socialPosts: article.socialPosts,
+        socialPosts,
         images: article.images,
         updatedAt: article.updatedAt,
       };

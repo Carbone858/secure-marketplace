@@ -158,18 +158,43 @@ export class SeoAuditEngineService {
   static calculateContentGapPriority(
     service: string,
     city: string
-  ): { priorityScore: number; searchIntent: string; estimatedMonthlyValue: string } {
+  ): {
+    titleAr: string;
+    cityAr: string;
+    serviceAr: string;
+    priorityScore: number;
+    searchIntent: string;
+    estimatedMonthlyValue: string;
+  } {
     const isTier1City = city === 'damascus' || city === 'aleppo';
     const isHighDemandService = ['electrician', 'ac-services', 'business-setup', 'contracting'].includes(service);
 
-    let score = 50;
-    if (isTier1City) score += 25;
-    if (isHighDemandService) score += 25;
+    let score = 60;
+    if (isTier1City) score += 20;
+    if (isHighDemandService) score += 20;
+
+    const cityAr = city === 'aleppo' ? 'حلب' : city === 'damascus' ? 'دمشق' : 'سوريا';
+
+    const serviceNames: Record<string, string> = {
+      electrician: 'خدمات الكهرباء والتمديدات',
+      'ac-services': 'صيانة وتكييف الهواء',
+      'business-setup': 'تأسيس وتسجيل الشركات',
+      contracting: 'المقاولات والبناء والإكساء',
+      'home-cleaning': 'تنظيف المنازل والشركات',
+      painter: 'دهان وصيانة المباني',
+      'company-registration': 'السجل التجاري والأنشطة',
+      'airport-driver': 'توصيل مطار دمشق الدولي',
+    };
+
+    const serviceAr = serviceNames[service] || service;
 
     return {
+      titleAr: `دليل ${serviceAr} في ${cityAr}`,
+      cityAr,
+      serviceAr,
       priorityScore: score,
-      searchIntent: isHighDemandService ? 'Transactional / Commercial' : 'Informational',
-      estimatedMonthlyValue: isTier1City && isHighDemandService ? 'High (B2B & Premium Leads)' : 'Medium',
+      searchIntent: isHighDemandService ? 'بحث تجاري مباشر (Transactional)' : 'بحث تثقيفي وإرشادي (Informational)',
+      estimatedMonthlyValue: isTier1City && isHighDemandService ? 'عالية جداً (عملاء مميزين وشركات B2B)' : 'متوسطة',
     };
   }
 }

@@ -439,13 +439,20 @@ export default function AdminSeoDashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-xs">
               {(data?.contentGapOpportunities || []).map((opp: any, idx: number) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-card border rounded-xl">
-                  <div>
-                    <div className="font-bold text-sm text-foreground">فرصة تغطية: {opp.searchIntent}</div>
-                    <div className="text-muted-foreground mt-0.5">القيمة الشهرية المقدرة: {opp.estimatedMonthlyValue}</div>
+                <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-card border rounded-xl gap-3">
+                  <div className="space-y-1">
+                    <div className="font-bold text-sm text-foreground flex items-center gap-2">
+                      <span>🎯 {opp.titleAr || `فرصة تغطية في ${opp.cityAr}`}</span>
+                      <Badge variant="outline" className="text-[10px]">{opp.cityAr || 'سوريا'}</Badge>
+                    </div>
+                    <div className="text-muted-foreground flex flex-wrap gap-3 text-xs">
+                      <span>📌 نية البحث: <strong className="text-foreground">{opp.searchIntent}</strong></span>
+                      <span>•</span>
+                      <span>💰 القيمة المقدرة: <strong className="text-emerald-600">{opp.estimatedMonthlyValue}</strong></span>
+                    </div>
                   </div>
-                  <Badge className="bg-primary text-primary-foreground font-bold text-xs">
-                    أولوية: {opp.priorityScore} / 100
+                  <Badge className="bg-primary text-primary-foreground font-black text-xs px-3 py-1 whitespace-nowrap">
+                    درجة الأولوية: {opp.priorityScore} / 100
                   </Badge>
                 </div>
               ))}
