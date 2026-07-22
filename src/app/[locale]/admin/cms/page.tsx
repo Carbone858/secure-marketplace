@@ -10,6 +10,9 @@ interface CMSPage {
   title: string;
   titleAr: string | null;
   slug: string;
+  content?: string | null;
+  contentAr?: string | null;
+  metaDescription?: string | null;
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
@@ -141,9 +144,9 @@ export default function AdminCMSPage() {
       title: page.title,
       titleAr: page.titleAr || '',
       slug: page.slug,
-      content: '',
-      contentAr: '',
-      metaDescription: '',
+      content: page.content || '',
+      contentAr: page.contentAr || '',
+      metaDescription: page.metaDescription || '',
       isPublished: page.isPublished,
     });
     setShowForm(true);
@@ -291,9 +294,12 @@ export default function AdminCMSPage() {
                     </span>
                   </td>
                   <td className="p-3 text-muted-foreground">{new Date(page.updatedAt).toLocaleDateString()}</td>
-                  <td className="p-3 text-end">
-                    <button onClick={() => startEditPage(page)} className="p-1.5 rounded hover:bg-muted"><Edit className="w-4 h-4" /></button>
-                    <button onClick={() => handleDeletePage(page.id)} className="p-1.5 rounded hover:bg-destructive/10 text-destructive"><Trash2 className="w-4 h-4" /></button>
+                  <td className="p-3 text-end flex items-center justify-end gap-1">
+                    <a href={`/ar/blog/${page.slug}`} target="_blank" rel="noreferrer" title="Preview Article" className="p-1.5 rounded hover:bg-primary/10 text-primary">
+                      <Globe className="w-4 h-4" />
+                    </a>
+                    <button onClick={() => startEditPage(page)} title="Edit Article" className="p-1.5 rounded hover:bg-muted"><Edit className="w-4 h-4" /></button>
+                    <button onClick={() => handleDeletePage(page.id)} title="Delete Article" className="p-1.5 rounded hover:bg-destructive/10 text-destructive"><Trash2 className="w-4 h-4" /></button>
                   </td>
                 </tr>
               ))}

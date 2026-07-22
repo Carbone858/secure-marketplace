@@ -35,11 +35,11 @@ export async function generateMetadata({ params: { locale, slug } }: PageProps):
   const article = await prisma.cMSPage.findUnique({
     where: {
       slug,
-      isPublished: true,
     },
     select: {
       title: true,
       titleAr: true,
+      contentAr: true,
       metaDescription: true,
       metaKeywords: true,
       createdAt: true,
@@ -108,7 +108,6 @@ export default async function BlogArticleDetailPage({ params: { locale, slug } }
   const article = await prisma.cMSPage.findUnique({
     where: {
       slug,
-      isPublished: true,
     },
     include: {
       createdByUser: {
@@ -209,6 +208,11 @@ export default async function BlogArticleDetailPage({ params: { locale, slug } }
           </nav>
 
           <div className="space-y-4">
+            {!article.isPublished && (
+              <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/30 text-xs px-3 py-1 font-bold block w-fit">
+                ⚠️ {isAr ? 'معاينة مسودة غير منشورة (Draft Preview)' : 'Unpublished Draft Preview'}
+              </Badge>
+            )}
             <Badge variant="outline" className="text-xs text-primary border-primary/20">
               <BookOpen className="w-3.5 h-3.5 mr-1 ml-1" />
               {isAr ? 'دليل وسيط الرسمي' : 'Official Wassitt Article'}
