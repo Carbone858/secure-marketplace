@@ -196,6 +196,13 @@ const draftArticles: DraftArticle[] = [
         </ol>
       </div>
 
+      <h2>الأسئلة الشائعة عن تأسيس وتسجيل الشركات في دمشق</h2>
+      <h3>كم تستغرق إجراءات استخراج السجل التجاري في دمشق؟</h3>
+      <p>تستغرق الإجراءات عادة بين 10 إلى 15 يوماً عمل عند اكتمال كافة الأوراق الثبوتية وحجز الاسم التجاري لدى الوزارة.</p>
+
+      <h3>هل يمكن للشركاء غير السوريين تأسيس شركة في دمشق؟</h3>
+      <p>نعم، يتيح قانون الاستثمار والتجارة السوري للمستثمرين العرب والأجانب تأسيس الشركات وتملّك الحصص وفق ضوابط محددة. يمكنك الاستعانة بـ <a href="/ar/companies" className="text-primary underline font-bold">دليل الشركات والمستشارين القانونيين</a> عبر وسيط أو <a href="/ar/requests/new" className="text-primary underline font-bold">نشر طلب خدمة مجاناً</a>.</p>
+
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">استشر خبراء تأسيس وتسجيل الشركات في دمشق</h3>
         <p className="text-sm text-muted-foreground my-2">احصل على استشارات قانونية وتنفيذ معاملات التأسيس والتسجيل عبر خبراء معتمدين في وسيط.</p>
@@ -249,9 +256,12 @@ const draftArticles: DraftArticle[] = [
         </ul>
       </div>
 
-      <h2>الأسئلة الشائعة</h2>
-      <h3>هل يغطي فنيو الكهرباء كافة مناطق حلب؟</h3>
-      <p>نعم، يقدم الفنيون والشركات المعتمدة في وسيط خدمات الصيانة المنزلية والطوارئ لكافة أحياء حلب.</p>
+      <h2>الأسئلة الشائعة عن خدمات الكهرباء في حلب</h2>
+      <h3>هل يغطي فنيو الكهرباء كافة مناطق وأحياء حلب؟</h3>
+      <p>نعم، يغطي مزودو الخدمات المعتمدون كافة أحياء حلب مثل العزيزية، الشهباء، والفرقان. يمكنك الاطلاع على <a href="/ar/companies" className="text-primary underline font-bold">دليل فنيي حلب المعتمدين</a> أو <a href="/ar/requests/new" className="text-primary underline font-bold">إضافة طلب صيانة مجاناً</a>.</p>
+
+      <h3>ما هي نصائح حماية منظومة الإينفرتر والبطاريات؟</h3>
+      <p>يُنصح بتركيب قواطع حماية مخصصة وفحص البطاريات دورياً لضمان عدم التحميل الزائد واستمرارية الطاقة.</p>
 
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">هل تفتش عن كهربائي موثوق في حلب؟</h3>
@@ -306,6 +316,13 @@ const draftArticles: DraftArticle[] = [
         </ol>
       </div>
 
+      <h2>الأسئلة الشائعة عن صيانة المكيفات في حلب</h2>
+      <h3>ما هي علامات الحاجة لإعادة تعبئة غاز التبريد بالمكيف؟</h3>
+      <p>انخفاض شدة التبريد مع خروج هواء عادي، أو تكون طبقة ثلجية على أنابيب النحاس الخارجية. يمكنك طلب <a href="/ar/services/ac-services/aleppo" className="text-primary underline font-bold">فحص وصيانة التكييف في حلب</a> عبر وسيط أو تصفح <a href="/ar/companies" className="text-primary underline font-bold">شركات الصيانة المعتمدة</a>.</p>
+
+      <h3>هل تتوفر صيانة للمكيفات المركزية والسبليت؟</h3>
+      <p>نعم، تتوفر ورشات تكييف متخصصة لكافة أنواع المكيفات المركزية ومكيفات السبليت في أحياء حلب.</p>
+
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">أطلب خدمة صيانة تكييف في حلب الآن</h3>
         <p className="text-sm text-muted-foreground my-2">احصل على عروض أسعار منافسة من ورشات وفنيي التكييف المعتمدين بمدينة حلب.</p>
@@ -359,6 +376,13 @@ const draftArticles: DraftArticle[] = [
           <li>✔ معاينة النوافذ والأرضيات والمطابخ قبل استلام العمل النهائي من الفريق.</li>
         </ul>
       </div>
+
+      <h2>الأسئلة الشائعة عن تنظيف المنازل في دمشق</h2>
+      <h3>هل تشمل خدمات التنظيف غسيل السجاد والكنب بالبخار؟</h3>
+      <p>نعم، تقدم شركات التنظيف المعتمدة خدمات غسيل المفروشات والسجاد في الموقع بأحدث أجهزة البخار والتجفيف السريع. تصفح <a href="/ar/services/home-cleaning/damascus" className="text-primary underline font-bold">شركات تنظيف المنازل بدمشق</a> أو <a href="/ar/requests/new" className="text-primary underline font-bold">أضف طلبك مجاناً</a>.</p>
+
+      <h3>كم تستغرق عملية تنظيف الشقة بعد أعمال الإكساء؟</h3>
+      <p>تستغرق عادة يوماً واحداً لفريق عمل متكامل لإزالة غبار البناء وكشط البلاط وتلميع النوافذ بالكامل.</p>
 
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">احصل على خدمة تنظيف منازل موثوقة في دمشق</h3>
@@ -415,6 +439,13 @@ const draftArticles: DraftArticle[] = [
         </ol>
       </div>
 
+      <h2>الأسئلة الشائعة عن أعمال الدهان والديكور بدمشق</h2>
+      <h3>كيف يتم احتساب تكلفة أعمال الدهان في دمشق؟</h3>
+      <p>يتم الاحتساب إما بالمتر المربع أو كجملة مقطوعة بحسب مساحة الجدران ونوع الدهانات المستخدمة. تصفح <a href="/ar/services/painter/damascus" className="text-primary underline font-bold">معلمي الدهان في دمشق</a> أو تواصل عبر <a href="/ar/companies" className="text-primary underline font-bold">دليل الحرفيين المعتمدين في وسيط</a>.</p>
+
+      <h3>ما هو أفضل نوع دهان للجدران المعرضة لرطوبة خفيفة؟</h3>
+      <p>يُفضل استخدام الدهانات المائية الأكريليكية المقاومة للرطوبة فوق طبقة عازلة ومقاومة للنش.</p>
+
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">ابحث عن معلم دهان ممتاز في دمشق</h3>
         <p className="text-sm text-muted-foreground my-2">أضف طلبك مجاناً عبر منصة وسيط واستقبل عروض أسعار من أفضل حرفيي الدهان والديكور بدمشق.</p>
@@ -470,6 +501,13 @@ const draftArticles: DraftArticle[] = [
         </ol>
       </div>
 
+      <h2>الأسئلة الشائعة عن تسجيل الشركات بالسجل التجاري في سوريا</h2>
+      <h3>ما هي تكاليف ورسوم استخراج السجل التجاري في سوريا؟</h3>
+      <p>تختلف التكاليف بحسب نوع الشركة ورأس المال وطبيعة النشاط التجاري، وتتولى مكاتب المعاملات تنظيم كافة الرسوم الرسمية. تصفح <a href="/ar/services/company-registration/damascus" className="text-primary underline font-bold">خدمات تسجيل الشركات عبر وسيط</a> أو <a href="/ar/requests/new" className="text-primary underline font-bold">طلب استشارة مجانية</a>.</p>
+
+      <h3>هل يلزم وجود مقر تجاري مرخص لتسجيل الشركة؟</h3>
+      <p>نعم، يشترط القانون تقديم سند ملكية أو عقد إيجار موثق لمقر تجاري مستقل قبل صدور السجل التجاري.</p>
+
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">تواصل مع خبراء ومكاتب تسجيل الشركات في سوريا</h3>
         <p className="text-sm text-muted-foreground my-2">احصل على استشارات قانونية وتنفيذ معاملات التسجيل والسجل التجاري عبر وسيط.</p>
@@ -524,6 +562,13 @@ const draftArticles: DraftArticle[] = [
         </ul>
       </div>
 
+      <h2>الأسئلة الشائعة عن خدمات المقاولات والإكساء في حلب</h2>
+      <h3>ما الفرق بين الإكساء الأساسي (الأسود) والتشطيب النهائي؟</h3>
+      <p>يشمل الإكساء الأسود التأسيس الصحي والكهربائي واللياسة والعزل المائي، بينما يشمل التشطيب السيراميك والدهان والأبواب والنوافذ. اطلع على <a href="/ar/services/contracting/aleppo" className="text-primary underline font-bold">شركات المقاولات والإكساء بحلب</a> أو تصفح <a href="/ar/companies" className="text-primary underline font-bold">دليل المهندسين المعتمدين</a>.</p>
+
+      <h3>كيف يتم تأمين الإشراف الهندسي على مشاريع الترميم؟</h3>
+      <p>يضمن التعاقد عبر شركات وسيط تعيين مهندس مدني مشرف يتابع مطابقة المواصفات الإنشائية في كل مرحلة.</p>
+
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">ابحث عن أفضل شركات المقاولات في حلب</h3>
         <p className="text-sm text-muted-foreground my-2">أرسل طلبك مجاناً عبر منصة وسيط واستقبل عروض أسعار للمشاريع الهندسية والإكساء بمدينة حلب.</p>
@@ -577,6 +622,13 @@ const draftArticles: DraftArticle[] = [
           <li>✔ الانطلاق نحو المطار قبل الموعد المحدد برحلتك بـ 3 ساعات على الأقل لتأمين إجراءات الجوازات والأمتعة.</li>
         </ul>
       </div>
+
+      <h2>الأسئلة الشائعة عن خدمة توصيل مطار دمشق الدولي</h2>
+      <h3>كم تستغرق المسافة بين وسط دمشق ومطار دمشق الدولي؟</h3>
+      <p>تستغرق المسافة حوالي 25 إلى 35 دقيقة بالسيارة بحسب حالة المرور. تصفح <a href="/ar/services/airport-driver/damascus" className="text-primary underline font-bold">خدمات توصيل المطار بدمشق</a> أو <a href="/ar/requests/new" className="text-primary underline font-bold">حجز سيارة وسائق خاص مسبقاً</a>.</p>
+
+      <h3>هل توجد سيارات عائلية واسعة لتتسع الأمتعة الكثيرة؟</h3>
+      <p>نعم، يتيح لك السائقون المعتمدون اختيار نوع السيارة (سيدان، فان عائلي، أو سيارات فارهة) حسب احتياجك.</p>
 
       <div className="seo-cta-box bg-primary/10 p-6 rounded-2xl my-6 border border-primary/20">
         <h3 className="font-bold text-lg text-foreground">احجز توصيل مطار دمشق الدولي الآن</h3>
