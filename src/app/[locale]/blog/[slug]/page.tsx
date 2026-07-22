@@ -178,8 +178,15 @@ export default async function BlogArticleDetailPage({ params: { locale, slug } }
     dateModified: article.updatedAt.toISOString(),
   };
 
-  // Internal Linking Helper Widgets based on Priority Syria Topics
-  const relatedSyriaLinks = [
+  // Internal Linking Helper Widgets dynamically matched to article city
+  const isAleppo = slug.includes('aleppo');
+  const relatedSyriaLinks = isAleppo ? [
+    { nameAr: 'مقاولات وإكساء في حلب', nameEn: 'Contracting in Aleppo', href: '/services/contracting/aleppo' },
+    { nameAr: 'كهربائي في حلب', nameEn: 'Electrician in Aleppo', href: '/services/electrician/aleppo' },
+    { nameAr: 'صيانة تكييف في حلب', nameEn: 'AC Repair in Aleppo', href: '/services/ac-services/aleppo' },
+    { nameAr: 'تأسيس شركات في حلب', nameEn: 'Business Setup in Aleppo', href: '/services/business-setup/aleppo' },
+    { nameAr: 'سائق توصيل للمطار', nameEn: 'Airport Transfer Driver', href: '/services/airport-driver/damascus' },
+  ] : [
     { nameAr: 'كهربائي في دمشق', nameEn: 'Electrician in Damascus', href: '/services/electrician/damascus' },
     { nameAr: 'صيانة تكييف في دمشق', nameEn: 'AC Repair in Damascus', href: '/services/ac-services/damascus' },
     { nameAr: 'تنظيف منازل في دمشق', nameEn: 'Home Cleaning in Damascus', href: '/services/home-cleaning/damascus' },
