@@ -265,15 +265,15 @@ const draftArticles: DraftArticle[] = [
   {
     slug: 'ac-repair-aleppo-guide',
     title: 'Aleppo AC Repair Guide',
-    titleAr: 'دليل تركيب وصيانة المكيفات في حلب: التبريد الفعال وشحن الفريون',
-    metaDescription: 'دليل خدمات صيانة وتركيب مكيفات الهواء في حلب. حلول التبريد الصيفية، تنظيف الفلاتر، وشحن غاز الفريون المعتمد مع أفضل الفنيين في حلب.',
+    titleAr: 'دليل تركيب وصيانة المكيفات في حلب: التبريد الفعال وإعادة تعبئة غاز التبريد',
+    metaDescription: 'دليل خدمات صيانة وتركيب مكيفات الهواء في حلب. حلول التبريد الصيفية، تنظيف الفلاتر، وإعادة تعبئة غاز التبريد مع أفضل الفنيين في حلب.',
     metaKeywords: 'صيانة تكييف حلب, تصليح مكيفات حلب, فني مكيفات حلب, غسيل مكيفات حلب, فريون حلب',
     isPublished: false,
     contentAr: `
       <figure className="my-6 overflow-hidden rounded-2xl border shadow-sm">
         <img 
-          src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1200&auto=format&fit=crop&fm=webp" 
-          alt="صيانة وتنظيف المكيفات في حلب - وسيط" 
+          src="https://images.unsplash.com/photo-1631545806606-53c4d7d34190?q=80&w=1200&auto=format&fit=crop&fm=webp" 
+          alt="تركيب وصيانة مكيفات السبليت والمكيفات المركزية في حلب - وسيط" 
           title="صيانة المكيفات في حلب"
           width="1200"
           height="630"
@@ -282,7 +282,7 @@ const draftArticles: DraftArticle[] = [
           className="w-full h-auto object-cover max-h-[450px]"
         />
         <figcaption className="text-xs text-center text-muted-foreground p-2 bg-muted/40">
-          خدمات فحص وتنظيف وفك وتركيب المكيفات السبلت والمركزية في حلب
+          تركيب وصيانة مكيفات السبليت والمكيفات المركزية
         </figcaption>
       </figure>
 
